@@ -1,0 +1,9 @@
+[options]
+path=OpenglGame
+target=android-14
+arch=armeabi-v7a
+
+[libraries]
+hydra=../lib/hydra/proj.android/hydra
+facebook=../lib/hydra/lib/platform/android/facebook
+cocos2dx=../lib/cocos2dx/cocos2dx/platform/android/java

@@ -1,0 +1,11 @@
+CMakeCache.txt
+CTestTestfile.cmake
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+bin
+/proj/vstudio2012/mvcgame/Debug/*
+/proj/vstudio2012/hello/Debug/*
+/proj/vstudio2012/ipch/*
+.fuse*

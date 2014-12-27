@@ -1,0 +1,5 @@
+
+APP_STL := gnustl_shared
+APP_MODULES := app
+APP_USE_CPP0X := true
+NDK_TOOLCHAIN_VERSION=4.8
