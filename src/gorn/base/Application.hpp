@@ -11,8 +11,10 @@ namespace gorn
 	    Application();
 	    void load();
 	    void unload();
+	    void background();
+	    void foreground();
 	    void update(double dt);
 	};
 }
 
-#endif /* defined(__gorn__Application__) */
+#endif

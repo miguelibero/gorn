@@ -13,7 +13,7 @@ namespace gorn
 		GLuint _id;
 
 	public:
-		Texture(const Image& img);
+		Texture(const Image& img, GLenum target=GL_TEXTURE_2D, GLint lodLevel=0);
 		~Texture();
 		GLuint getId() const;
 	};

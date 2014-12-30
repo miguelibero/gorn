@@ -5,10 +5,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 project(gorn)
 
-# glfw
-add_subdirectory(lib/glfw)
-include_directories(lib/glfw/include)
-
 # library
 include_directories(src)
 include_directories(lib)
@@ -22,7 +18,7 @@ file(GLOB GORN_SOURCES
 	"${GORN_SOURCE_DIR}/platform/linux/*.cpp"
 )
 add_library(gorn ${GORN_SOURCES})
-target_link_libraries(gorn glfw GL GLU GLEW X11 Xxf86vm Xrandr pthread Xi )
+target_link_libraries(gorn GL GLU GLEW X11 Xxf86vm Xrandr pthread Xi png)
 
 # examples
 include_directories(examples)

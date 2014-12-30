@@ -1,5 +1,5 @@
-#ifndef __gorn__RenderSystem__
-#define __gorn__RenderSystem__
+#ifndef __gorn__Renderer__
+#define __gorn__Renderer__
 
 #include <map>
 #include <string>
@@ -51,4 +51,4 @@ namespace gorn
     };
 }
 
-#endif /* defined(__gorn__RenderSystem__) */
+#endif /* defined(__gorn__Renderer__) */

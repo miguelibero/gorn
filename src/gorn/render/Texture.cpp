@@ -3,14 +3,14 @@
 
 namespace gorn
 {
-	Texture::Texture(const Image& img):
+	Texture::Texture(const Image& img, GLenum target, GLint lodLevel):
 	_id(0)
 	{
 		glGenTextures(1, &_id);
-        glBindTexture(img.getTarget(), _id);
-        glTexImage2D(img.getTarget(), img.getLevel(), img.getInternalFormat(),
+        glBindTexture(target, _id);
+        glTexImage2D(target, lodLevel, img.getInternalFormat(),
             img.getWidth(), img.getHeight(), img.getBorder(),
-            img.getFormat(), img.getType(), img.getData());
+            img.getFormat(), img.getType(), img.getData().data());
 	}
 
 	Texture::~Texture()
