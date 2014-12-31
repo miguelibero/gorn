@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8) 
 
-set(CMAKE_CXX_FLAGS "-Wall -std=c++11 -Wno-unknown-pragmas -DGORN_PLATFORM_LINUX")
+set(CMAKE_CXX_FLAGS "-Wall -std=c++11 -Wno-unknown-pragmas -DGORN_PLATFORM_LINUX -DGORN_DEBUG_PNG_IMAGE_LOADER")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 project(gorn)

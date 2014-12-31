@@ -1,7 +1,7 @@
 #ifndef __gorn__ImageLoader__
 #define __gorn__ImageLoader__
 
-#include <memory>
+#include <future>
 
 namespace gorn
 {
@@ -14,8 +14,6 @@ namespace gorn
 		virtual ~ImageLoader(){};
 
         /**
-         * The stream should be at the start
-         *
          * @return true if the image can be loaded
          */
         virtual bool validate(const Data& data) const
@@ -24,10 +22,9 @@ namespace gorn
         }
 
         /**
-         * The stream should be at the start
-         * @return the new asset
+         * @return the new image
          */
-        virtual std::unique_ptr<Image> load(const Data& data) const = 0;
+        virtual std::future<Image> load(Data&& data) const = 0;
 	};
 }
 

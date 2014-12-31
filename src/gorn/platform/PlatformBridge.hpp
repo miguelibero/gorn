@@ -3,8 +3,11 @@
 
 #include <memory>
 #include <string>
-#include <gorn/render/Image.hpp>
+#include <future>
+#include <vector>
+#include <map>
 #include <gorn/platform/ImageLoader.hpp>
+#include <gorn/platform/FileLoader.hpp>
 
 namespace gorn
 {
@@ -12,13 +15,14 @@ namespace gorn
 	{
 	private:
 		std::vector<std::unique_ptr<ImageLoader>> _imageLoaders;
-	protected:
-		std::unique_ptr<Image> loadImage(const Data& data);
+		std::map<std::string,std::vector<std::unique_ptr<FileLoader>>> _fileLoaders;
 	public:
-	    std::unique_ptr<Data> readFile(const std::string& name);
-	    std::unique_ptr<Image> readImage(const std::string& name);
+	    std::future<Data> readFile(const std::string& name);
+	    std::future<Image> readImage(const std::string& name);
 	    void addImageLoader(std::unique_ptr<ImageLoader> loader);
+	    void addFileLoader(const std::string& tag, std::unique_ptr<FileLoader> loader);
+        void addFileLoader(std::unique_ptr<FileLoader> loader);
 	};
 }
 
-#endif /* defined(__gorn__PlatformBridge__) */
+#endif

@@ -10,7 +10,7 @@ namespace gorn {
     {
     public:
         bool validate(const Data& input) const;
-        std::unique_ptr<Image> load(const Data& input) const;
+        std::future<Image> load(Data&& input) const;
     };
 }
 

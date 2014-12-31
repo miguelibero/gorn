@@ -1,6 +1,6 @@
 #include <gorn/base/Data.hpp>
+#include <gorn/base/Exception.hpp>
 #include <cstring>
-#include <streambuf>
 
 namespace gorn
 {
@@ -13,13 +13,37 @@ namespace gorn
 		_mem.resize(size);
 	}
 
-    Data::Data(std::istream& stream)
+    Data::Data(std::initializer_list<uint8_t> list):
+    _mem(list)
     {
-        stream.seekg(0, stream.end);
-        size_t size = stream.tellg();
-        stream.seekg(0, stream.beg);
-        _mem.resize(size);
-        stream.read(reinterpret_cast<char*>(_mem.data()), size);
+    }
+
+    Data Data::readFile(const std::string& path)
+    {
+	    FILE *fh = nullptr;
+#ifdef GORN_PLATFORM_WINDOWS
+		if(fopen_s(&fh, path.c_str(), "rb") != 0)
+		{
+			fh = nullptr;
+		}
+#else
+        fh = fopen(path.c_str(), "rb");
+#endif
+		if (fh == nullptr)
+        { 
+            throw Exception("Could not open file.");
+        } 
+        fseek(fh, 0, SEEK_END);
+        size_t size = ftell(fh);
+        fseek(fh, 0, SEEK_SET);
+        Data data(size);
+        if (size != fread(data._mem.data(), 1, size, fh)) 
+        { 
+            fclose(fh);
+            throw Exception("Could not read file.");
+        } 
+        fclose(fh);
+        return data;
     }
 
 	Data::Data(const uint8_t* data, size_t size):

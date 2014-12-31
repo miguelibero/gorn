@@ -1,4 +1,5 @@
 #include <gorn/render/Renderer.hpp>
+#include <gorn/render/Image.hpp>
 #include <gorn/platform/PlatformBridge.hpp>
 #include <gorn/base/Log.hpp>
 #include <gorn/base/Exception.hpp>
@@ -30,13 +31,8 @@ namespace gorn
         {
             throw Exception("Platform bridge not set.");
         }
-        auto img = _bridge->readImage(name);
-        if(img == nullptr)
-        {
-            throw Exception(std::string("Could not load texture image '")+name+"'.");
-        }
-        
-        auto tex = std::make_shared<Texture>(*img);
+        auto img = _bridge->readImage(name).get();
+        auto tex = std::make_shared<Texture>(img);
         _textures.insert(itr, {name, tex});
         LogDebug("loaded texture '%s' into %d", name.c_str(), tex->getId());
         return tex;
@@ -53,13 +49,8 @@ namespace gorn
         {
             throw Exception("Platform bridge not set.");
         }
-        auto data = _bridge->readFile(name);
-        if(data == nullptr)
-        {
-            throw Exception(std::string("Could not load shader file '")+name+"'.");
-        }
-        
-        auto shader = std::make_shared<Shader>(*data, type);
+        auto data = _bridge->readFile(name).get();
+        auto shader = std::make_shared<Shader>(data, type);
         _shaders.insert(itr, {name, shader});
         LogDebug("loaded shader '%s' into %d", name.c_str(),shader->getId());
         return shader;

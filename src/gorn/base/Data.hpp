@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <memory>
-#include <istream>
+#include <initializer_list>
+
 
 namespace gorn
 {
@@ -14,7 +15,7 @@ namespace gorn
 
 	public:
 		Data();
-        Data(std::istream& stream);
+        Data(std::initializer_list<uint8_t> list);
 		Data(size_t size);
 		Data(const uint8_t* data, size_t size);
 		Data(const std::vector<uint8_t>& data);
@@ -27,6 +28,8 @@ namespace gorn
 		uint8_t* data();
 		const uint8_t* data() const;
 		size_t size() const;
+
+        static Data readFile(const std::string& path);
 
         friend class DataInputStream;
         friend class DataOutputStream;

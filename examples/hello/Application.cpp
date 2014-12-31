@@ -7,6 +7,7 @@
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/PngImageLoader.hpp>
+#include <gorn/platform/linux/LocalFileLoader.hpp>
 #endif
 
 namespace gorn
@@ -21,7 +22,10 @@ namespace gorn
 	void Application::load()
 	{
 #ifdef GORN_PLATFORM_LINUX
-		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(new PngImageLoader()));
+		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(
+            new PngImageLoader()));
+		_bridge.addFileLoader("texture", std::unique_ptr<FileLoader>(
+            new LocalFileLoader("../examples/assets/textures/%s.png")));
 #endif
 
 		_renderer.setPlatformBridge(_bridge);
@@ -31,9 +35,9 @@ namespace gorn
 	        .withAttributes({"position", "texCoord", "color"}));
 	    _renderer.defineMaterial("sprite",
 	        MaterialDefinition("sprite")
-	        .withTextures({"textures/checkers.jpg"}));
+	        .withTextures({"texture:img_test"}));
 
-        _renderer.loadTexture("textures/checkers.jpg");
+        _renderer.loadTexture("texture:img_test");
 	}
 
 	void Application::unload()

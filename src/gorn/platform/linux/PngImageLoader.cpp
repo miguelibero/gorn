@@ -5,6 +5,9 @@
 #include <gorn/base/Exception.hpp>
 #include <cstring>
 #include <png.h>
+#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
+#include <iostream>
+#endif
 
 /**
  * this png loader is based on this blog post
@@ -26,7 +29,8 @@ namespace gorn {
         
 #ifdef GORN_DEBUG_PNG_IMAGE_LOADER
         std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::validate " << (isPng?"yes":"no") << std::endl;
+        std::cout << "PngImageLoader::validate "
+            << (isPng?"yes":"no") << std::endl;
         std::cout << "signature " << std::hex;
         for(unsigned i=0; i<PNGSIGSIZE; i++)
         {
@@ -37,17 +41,19 @@ namespace gorn {
         return isPng;
     }
 
-    void PngImageLoaderReadData(png_structp pngPtr, png_bytep data, png_size_t length)
+    void readPngImage
+        (png_structp pngPtr, png_bytep data, png_size_t length)
     {
         png_voidp a = png_get_io_ptr(pngPtr);
         static_cast<DataInputStream*>(a)
             ->read(data, length);
     }
 
-    std::unique_ptr<Image> PngImageLoader::load(const Data& inputData) const
+    Image loadPngImage(Data&& inputData)
     {
         DataInputStream input(inputData);
-        png_structp pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+        png_structp pngPtr = png_create_read_struct(
+            PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
         if (!pngPtr)
         {
             throw Exception("Could not create png read structure.");
@@ -70,7 +76,7 @@ namespace gorn {
             }
             throw Exception("Could not create png jump buffer.");
         }
-        png_set_read_fn(pngPtr, (png_voidp)&input, PngImageLoaderReadData);
+        png_set_read_fn(pngPtr, (png_voidp)&input, readPngImage);
 
         png_read_info(pngPtr, infoPtr);
         png_uint_32 imgWidth   = png_get_image_width(pngPtr, infoPtr);
@@ -95,11 +101,13 @@ namespace gorn {
         {
             png_set_strip_16(pngPtr);            
         }
-        if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
+        if (colorType == PNG_COLOR_TYPE_GRAY ||
+            colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
         {
             png_set_gray_to_rgb(pngPtr);
         }
-        if (colorType == PNG_COLOR_TYPE_RGB_ALPHA || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
+        if (colorType == PNG_COLOR_TYPE_RGB_ALPHA ||
+            colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
         {        
             hasAlpha = true;
         }
@@ -142,15 +150,23 @@ namespace gorn {
         png_uint_32 channels = rowBytes/imgWidth;
         
         std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::load " << colorTypeStr << ", " << len << " bytes " << std::endl;
-        std::cout << "size " << imgWidth << "x" << imgHeight << ", depth " << bitDepth;
+        std::cout << "PngImageLoader::load " << colorTypeStr
+            << ", " << len << " bytes " << std::endl;
+        std::cout << "size " << imgWidth << "x" << imgHeight
+            << ", depth " << bitDepth;
         std::cout << ", channels " << channels << std::endl;
         std::cout << "<<<<" << std::endl;
 #endif
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
         GLenum format = hasAlpha ? GL_RGBA : GL_RGB;
-        return std::unique_ptr<Image>(new Image(std::move(data), imgWidth, imgHeight, format, GL_UNSIGNED_BYTE));
+        return Image(std::move(data),
+            imgWidth, imgHeight, format, GL_UNSIGNED_BYTE);
     }
 
+    std::future<Image> PngImageLoader::load(Data&& inputData) const
+    {
+        return std::async(std::launch::async,
+            &loadPngImage, std::move(inputData));
+    }
 }
