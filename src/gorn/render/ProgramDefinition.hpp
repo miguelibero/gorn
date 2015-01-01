@@ -18,8 +18,10 @@ namespace gorn
 		std::vector<std::string> _attributes;
 
 	public:
-		ProgramDefinition(const std::string& shader);
-		ProgramDefinition(const std::string& vertexShader, const std::string& fragmentShader);
+		ProgramDefinition();
+        ProgramDefinition& withShader(const std::string& shader);
+        ProgramDefinition& withVertexShader(const std::string& shader);
+        ProgramDefinition& withFragmentShader(const std::string& shader);
 		ProgramDefinition& withUniforms(std::initializer_list<std::string> list);
 		ProgramDefinition& withAttributes(std::initializer_list<std::string> list);
 

@@ -3,7 +3,7 @@
 
 #include <gorn/render/Gl.hpp>
 #include <string>
-#include <vector>
+#include <map>
 #include <initializer_list>
 
 namespace gorn
@@ -12,14 +12,16 @@ namespace gorn
 	{
 	private:
 		std::string _program;
-		std::vector<std::string> _textures;
+		std::map<std::string, std::string> _textures;
 
 	public:
-		MaterialDefinition(const std::string& program);
-		MaterialDefinition& withTextures(std::initializer_list<std::string> list);
+		MaterialDefinition();
+        MaterialDefinition& withProgram(const std::string& program);
+		MaterialDefinition& withTexture(const std::string& uniform, const std::string& name);
+		MaterialDefinition& withTexture(const std::string& name);
 
-		const std::string& getProgram();
-		const std::vector<std::string>& getTextures();
+		const std::string& getProgram() const;
+		const std::map<std::string, std::string>& getTextures() const;
 	};
 
 }

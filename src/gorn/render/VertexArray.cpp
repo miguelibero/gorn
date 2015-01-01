@@ -1,14 +1,13 @@
 
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexBuffer.hpp>
-#include <gorn/render/AttributeBinding.hpp>
+#include <gorn/render/AttributeDefinition.hpp>
 
 namespace gorn
 {
     VertexArray::VertexArray():
     _id(0)
-    {
-        
+    {   
     }
 	
 	VertexArray::~VertexArray()
@@ -33,14 +32,14 @@ namespace gorn
 		glBindVertexArray(getId());
     }
 
-    AttributeBinding VertexArray::bindAttribute(const VertexBuffer& vbo)
+    AttributeDefinition VertexArray::defineAttribute(const VertexBuffer& vbo)
     {
-        return AttributeBinding(*this, vbo);
+        return AttributeDefinition(*this, vbo);
     }
 
-    AttributeBinding VertexArray::bindAttribute(const VertexBuffer& vbo, const Program& prog)
+    AttributeDefinition VertexArray::defineAttribute(const VertexBuffer& vbo, const Program& prog)
     {
-        return AttributeBinding(*this, vbo, prog);
+        return AttributeDefinition(*this, vbo, prog);
     }
 
 	void VertexArray::bindElements(const VertexBuffer& elements)

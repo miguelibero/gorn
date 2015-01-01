@@ -44,9 +44,8 @@ namespace gorn
         RenderContext();
         void setPlatformBridge(PlatformBridge& bridge);
 
-        void defineProgram(const std::string& name, const ProgramDefinition& definition);
-        void defineProgram(const std::string& name);
-        void defineMaterial(const std::string& name, const MaterialDefinition& definition);
+        ProgramDefinition& defineProgram(const std::string& name);
+        MaterialDefinition& defineMaterial(const std::string& name);
 
         std::shared_ptr<Texture> loadTexture(const std::string& name);    
         std::shared_ptr<Shader> loadShader(const std::string& name, ShaderType type);

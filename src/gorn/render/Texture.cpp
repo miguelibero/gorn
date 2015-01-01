@@ -4,13 +4,10 @@
 namespace gorn
 {
 	Texture::Texture(const Image& img, GLenum target, GLint lodLevel):
-	_id(0)
+	_id(0), _target(target)
 	{
 		glGenTextures(1, &_id);
-        glBindTexture(target, _id);
-        glTexImage2D(target, lodLevel, img.getInternalFormat(),
-            img.getWidth(), img.getHeight(), img.getBorder(),
-            img.getFormat(), img.getType(), img.getData().ptr());
+        setImage(img);
 	}
 
 	Texture::~Texture()
@@ -21,8 +18,27 @@ namespace gorn
 		}
 	}
 
+    void Texture::setImage(const Image& img, GLint lodLevel)
+    {
+        bind();
+        glTexImage2D(_target, lodLevel, img.getInternalFormat(),
+            img.getWidth(), img.getHeight(), img.getBorder(),
+            img.getFormat(), img.getType(), img.getData().ptr());
+    }
+
 	GLuint Texture::getId() const
 	{
 		return _id;
 	}
+
+    void Texture::bind()
+    {
+        glBindTexture(_target, _id);
+    }
+
+    void Texture::activate(size_t pos)
+    {
+        bind();
+        glActiveTexture(GL_TEXTURE0 + pos);
+    }
 }

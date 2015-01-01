@@ -6,7 +6,7 @@
 namespace gorn
 {
     class VertexBuffer;
-    class AttributeBinding;
+    class AttributeDefinition;
     class Program;
 
 	class VertexArray
@@ -23,8 +23,8 @@ namespace gorn
         void bindAttribute(GLuint attribute, VertexBuffer& buffer,
             GLenum type, GLboolean normalized, GLint size,
             GLsizei stride=0, GLsizei offset=0);
-        AttributeBinding bindAttribute(const VertexBuffer& vbo);
-        AttributeBinding bindAttribute(const VertexBuffer& vbo, const Program& prog);
+        AttributeDefinition defineAttribute(const VertexBuffer& vbo);
+        AttributeDefinition defineAttribute(const VertexBuffer& vbo, const Program& prog);
 	    void bindElements(const VertexBuffer& elements);
 	    void bindTransformFeedback(GLuint index, const VertexBuffer& buffer);
     };

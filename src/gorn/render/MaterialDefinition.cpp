@@ -3,23 +3,33 @@
 namespace gorn
 {
 
-	MaterialDefinition::MaterialDefinition(const std::string& program):
-	_program(program)
+	MaterialDefinition::MaterialDefinition()
 	{
 	}
 
-	MaterialDefinition& MaterialDefinition::withTextures(std::initializer_list<std::string> list)
-	{
-		_textures.insert(_textures.end(), list.begin(), list.end());
+    MaterialDefinition& MaterialDefinition::withProgram(const std::string& program)
+    {
+        _program = program;
+        return *this;
+    }
+
+	MaterialDefinition& MaterialDefinition::withTexture(const std::string& uniform, const std::string& name)
+    {
+        _textures[uniform] = name;        
 		return *this;
-	}
+    }
 
-	const std::string& MaterialDefinition::getProgram()
+	MaterialDefinition& MaterialDefinition::withTexture(const std::string& name)
+    {
+        return withTexture(name, name);
+    }
+
+	const std::string& MaterialDefinition::getProgram() const
 	{
 		return _program;
 	}
 
-	const std::vector<std::string>& MaterialDefinition::getTextures()
+	const std::map<std::string, std::string>& MaterialDefinition::getTextures() const
 	{
 		return _textures;
 	}

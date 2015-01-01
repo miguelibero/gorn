@@ -4,7 +4,7 @@
 #include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
-#include <gorn/render/AttributeBinding.hpp>
+#include <gorn/render/AttributeDefinition.hpp>
 #include <cmath>
 
 #ifdef GORN_PLATFORM_LINUX
@@ -42,24 +42,25 @@ namespace gorn
         _timeUniform = _prog->getUniform("timeSin");
 
         _vbo.setData({
+         //  Position     Color 
              0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
              0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
         }, VertexBuffer::Usage::StaticDraw);
 
-        _vao.bindAttribute(_vbo, *_prog)
+        _vao.defineAttribute(_vbo, *_prog)
             .setAttribute("position")
             .setType(GL_FLOAT)
             .setSize(2)
             .setStride(5*sizeof(GLfloat))
-            .create();
-        _vao.bindAttribute(_vbo, *_prog)
+            .bind();
+        _vao.defineAttribute(_vbo, *_prog)
             .setAttribute("color")
             .setType(GL_FLOAT)
             .setSize(3)
             .setStride(5*sizeof(GLfloat))
             .setOffset(2*sizeof(GLfloat))
-            .create();
+            .bind();
 
 	}
 

@@ -2,7 +2,6 @@
 #include <gorn/render/Image.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/platform/PlatformBridge.hpp>
-#include <gorn/base/Log.hpp>
 #include <gorn/base/Exception.hpp>
 
 namespace gorn
@@ -35,7 +34,6 @@ namespace gorn
         auto img = _bridge->readImage(kDefaultTextureTag, name).get();
         auto tex = std::make_shared<Texture>(img);
         _textures.insert(itr, {name, tex});
-        LogDebug("loaded texture '%s' into %d", name.c_str(), tex->getId());
         return tex;
     }
 
@@ -63,7 +61,6 @@ namespace gorn
         auto data = _bridge->readFile(tag, name).get();
         auto shader = std::make_shared<Shader>(data, type);
         shaders.insert(itr, {name, shader});
-        LogDebug("loaded shader '%s' into %d", name.c_str(), shader->getId());
         return shader;
     }
 
@@ -85,7 +82,6 @@ namespace gorn
 
         auto program = std::make_shared<Program>(fragment, vertex);
         _programs.insert(itr, {name, program});
-        LogDebug("loaded program '%s' into %d", name.c_str(), program->getId());
         return program;
     }
 
@@ -104,37 +100,37 @@ namespace gorn
         MaterialDefinition& def = ditr->second;
         auto program = loadProgram(def.getProgram());
 
-        std::vector<std::shared_ptr<Texture>> textures;
+        std::map<std::string, std::shared_ptr<Texture>> textures;
+        for(auto itr = def.getTextures().begin();
+            itr != def.getTextures().end(); ++itr)
+        {
+            textures[itr->first] = loadTexture(itr->second);
+        }
 
         auto material = std::make_shared<Material>(program, textures);
         _materials.insert(itr, {name, material});
-        LogDebug("loaded material '%s'", name.c_str());
         return material;
     }
 
-    void RenderContext::defineProgram(const std::string& name, const ProgramDefinition& def)
+    ProgramDefinition& RenderContext::defineProgram(const std::string& name)
     {
         auto itr = _programDefinitions.find(name);
-        if(itr != _programDefinitions.end())
+        if(itr == _programDefinitions.end())
         {
-            throw Exception(std::string("Program '")+name+"' already defined.");
+            itr = _programDefinitions.insert(itr, {name, ProgramDefinition()});
+            itr->second.withShader(name);
         }
-        _programDefinitions.insert(itr, {name, def});
+        return itr->second;
     }
 
-    void RenderContext::defineProgram(const std::string& name)
-    {
-        defineProgram(name, ProgramDefinition(name));
-    }
-
-    void RenderContext::defineMaterial(const std::string& name, const MaterialDefinition& def)
+    MaterialDefinition& RenderContext::defineMaterial(const std::string& name)
     {
         auto itr = _materialDefinitions.find(name);
-        if(itr != _materialDefinitions.end())
+        if(itr == _materialDefinitions.end())
         {
-            throw Exception(std::string("Material '")+name+"' already defined.");
+            itr = _materialDefinitions.insert(itr, {name, MaterialDefinition()});
         }
-        _materialDefinitions.insert(itr, {name, def});
+        return itr->second;
     }
 
     void RenderContext::drawArrays(const VertexArray& vao, GLsizei size, GLint offset)

@@ -3,6 +3,7 @@
 
 #include <gorn/render/Program.hpp>
 #include <gorn/render/Texture.hpp>
+#include <map>
 
 namespace gorn
 {
@@ -10,13 +11,15 @@ namespace gorn
 	{
 	private:
 		std::shared_ptr<Program> _program;
-		std::vector<std::shared_ptr<Texture>> _textures;
+		std::map<GLint, std::shared_ptr<Texture>> _textures;
 
 	public:
-		Material(const std::shared_ptr<Program>& program, const std::vector<std::shared_ptr<Texture>>& textures);
+		Material(const std::shared_ptr<Program>& program,
+            const std::map<std::string, std::shared_ptr<Texture>>& textures);
 
-		const Program& getProgram();
-		const Texture& getTexture(size_t position);
+		const Program& getProgram() const;
+		Program& getProgram();
+        void use();
 	};
 
 }
