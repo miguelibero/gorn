@@ -14,11 +14,16 @@ namespace gorn
 	class PlatformBridge
 	{
 	private:
+        static const char* kDefaultTag;
+        static const char* kTagSeparator;
 		std::vector<std::unique_ptr<ImageLoader>> _imageLoaders;
 		std::map<std::string,std::vector<std::unique_ptr<FileLoader>>> _fileLoaders;
 	public:
+	    std::future<Data> readFile(const std::string& tag, const std::string& name);
+	    std::future<Image> readImage(const std::string& tag, const std::string& name);
 	    std::future<Data> readFile(const std::string& name);
 	    std::future<Image> readImage(const std::string& name);
+
 	    void addImageLoader(std::unique_ptr<ImageLoader> loader);
 	    void addFileLoader(const std::string& tag, std::unique_ptr<FileLoader> loader);
         void addFileLoader(std::unique_ptr<FileLoader> loader);

@@ -6,6 +6,10 @@
 
 namespace gorn
 {
+    const char* Renderer::kDefaultTextureTag = "tex";
+    const char* Renderer::kDefaultVertexShaderTag = "vsh";
+    const char* Renderer::kDefaultFragmentShaderTag = "fsh";
+
     Renderer::Renderer():
     _bridge(nullptr)
     {
@@ -31,14 +35,14 @@ namespace gorn
         {
             throw Exception("Platform bridge not set.");
         }
-        auto img = _bridge->readImage(name).get();
+        auto img = _bridge->readImage(kDefaultTextureTag, name).get();
         auto tex = std::make_shared<Texture>(img);
         _textures.insert(itr, {name, tex});
         LogDebug("loaded texture '%s' into %d", name.c_str(), tex->getId());
         return tex;
     }
 
-    std::shared_ptr<Shader> Renderer::loadShader(const std::string& name, GLenum type)
+    std::shared_ptr<Shader> Renderer::loadShader(const std::string& name, ShaderType type)
     {
         auto itr = _shaders.find(name);
         if(itr != _shaders.end())
@@ -49,7 +53,16 @@ namespace gorn
         {
             throw Exception("Platform bridge not set.");
         }
-        auto data = _bridge->readFile(name).get();
+        std::string tag;
+        if(type == ShaderType::Vertex)
+        {
+            tag = kDefaultVertexShaderTag;
+        }
+        else if(type == ShaderType::Vertex)
+        {
+            tag = kDefaultFragmentShaderTag;
+        }
+        auto data = _bridge->readFile(tag, name).get();
         auto shader = std::make_shared<Shader>(data, type);
         _shaders.insert(itr, {name, shader});
         LogDebug("loaded shader '%s' into %d", name.c_str(),shader->getId());
@@ -69,8 +82,8 @@ namespace gorn
             throw Exception(std::string("Could not find program definition '")+name+"'.");
         }
         ProgramDefinition& def = ditr->second;
-        auto vertex = loadShader(def.getVertexShader(), GL_VERTEX_SHADER);
-        auto fragment = loadShader(def.getFragmentShader(), GL_FRAGMENT_SHADER);
+        auto vertex = loadShader(def.getVertexShader(), ShaderType::Vertex);
+        auto fragment = loadShader(def.getFragmentShader(), ShaderType::Fragment);
 
         auto program = std::make_shared<Program>(fragment, vertex);
         _programs.insert(itr, {name, program});
@@ -109,6 +122,11 @@ namespace gorn
             throw Exception(std::string("Program '")+name+"' already defined.");
         }
         _programDefinitions.insert(itr, {name, def});
+    }
+
+    void Renderer::defineProgram(const std::string& name)
+    {
+        defineProgram(name, ProgramDefinition(name));
     }
 
     void Renderer::defineMaterial(const std::string& name, const MaterialDefinition& def)

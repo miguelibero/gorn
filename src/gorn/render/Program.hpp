@@ -3,6 +3,7 @@
 
 #include <gorn/render/Gl.hpp>
 #include <gorn/render/Shader.hpp>
+#include <glm/glm.hpp>
 #include <memory>
 
 namespace gorn
@@ -18,7 +19,21 @@ namespace gorn
 		GLuint getId() const;
 		const Shader& getFragmentShader() const;
 		const Shader& getVertexShader() const;
-	};
+
+        GLint getAttribute(const std::string& name) const;
+	    GLint getUniform(const std::string& name) const;
+	    void setUniform(const GLint& uniform, int value);
+	    void setUniform(const GLint& uniform, float value);
+	    void setUniform(const GLint& uniform, const glm::vec2& value);
+	    void setUniform(const GLint& uniform, const glm::vec3& value);
+	    void setUniform(const GLint& uniform, const glm::vec4& value);
+	    void setUniform(const GLint& uniform, const std::vector<float>& values);
+	    void setUniform(const GLint& uniform, const std::vector<glm::vec2>& values);
+	    void setUniform(const GLint& uniform, const std::vector<glm::vec3>& values);
+	    void setUniform(const GLint& uniform, const std::vector<glm::vec4>& values);
+	    void setUniform(const GLint& uniform, const glm::mat3& value);
+	    void setUniform(const GLint& uniform, const glm::mat4& value);
+    };
 }
 
 #endif

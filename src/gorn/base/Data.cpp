@@ -13,11 +13,6 @@ namespace gorn
 		_mem.resize(size);
 	}
 
-    Data::Data(std::initializer_list<uint8_t> list):
-    _mem(list)
-    {
-    }
-
     Data Data::readFile(const std::string& path)
     {
 	    FILE *fh = nullptr;
@@ -46,18 +41,9 @@ namespace gorn
         return data;
     }
 
-	Data::Data(const uint8_t* data, size_t size):
-	_mem(data, data+size)
-	{
-	}
-
-	Data::Data(const std::vector<uint8_t>& data):
-	_mem(data)
-	{
-	}
-
-	Data::Data(std::vector<uint8_t>&& data):
-	_mem(std::move(data))
+	Data::Data(const void* data, size_t size):
+	_mem(reinterpret_cast<const uint8_t*>(data),
+        reinterpret_cast<const uint8_t*>(data)+size)
 	{
 	}
 
@@ -70,11 +56,6 @@ namespace gorn
 	_mem(std::move(other._mem))
 	{
 	}
-
-    void Data::resize(size_t size)
-    {
-        _mem.resize(size);
-    }
 
 	uint8_t* Data::data()
 	{

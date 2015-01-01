@@ -36,15 +36,20 @@ namespace gorn
         PlatformBridge* _bridge;
 
     public:
+        static const char* kDefaultTextureTag;
+        static const char* kDefaultVertexShaderTag;
+        static const char* kDefaultFragmentShaderTag;
+
         Renderer();
         void draw();
         void setPlatformBridge(PlatformBridge& bridge);
 
         void defineProgram(const std::string& name, const ProgramDefinition& definition);
+        void defineProgram(const std::string& name);
         void defineMaterial(const std::string& name, const MaterialDefinition& definition);
 
         std::shared_ptr<Texture> loadTexture(const std::string& name);    
-        std::shared_ptr<Shader> loadShader(const std::string& name, GLenum type);
+        std::shared_ptr<Shader> loadShader(const std::string& name, ShaderType type);
         std::shared_ptr<Program> loadProgram(const std::string& name);
         std::shared_ptr<Material> loadMaterial(const std::string& name);
 

@@ -15,15 +15,20 @@ namespace gorn
 
 	public:
 		Data();
-        Data(std::initializer_list<uint8_t> list);
 		Data(size_t size);
-		Data(const uint8_t* data, size_t size);
-		Data(const std::vector<uint8_t>& data);
-		Data(std::vector<uint8_t>&& data);
+		Data(const void* data, size_t size);
 		Data(const Data& other);
 		Data(Data&& other);
+        
+        template<typename T>
+        Data(std::initializer_list<T> list);
 
-        void resize(size_t size);
+        template<typename T>
+		Data(const std::vector<T>& data);
+
+        template<typename T>
+		Data(std::vector<T>&& data);
+
 
 		uint8_t* data();
 		const uint8_t* data() const;
@@ -34,6 +39,20 @@ namespace gorn
         friend class DataInputStream;
         friend class DataOutputStream;
 	};
+
+    template<typename T>
+    Data::Data(std::initializer_list<T> list):
+    _mem(reinterpret_cast<const uint8_t*>(list.begin()),
+        reinterpret_cast<const uint8_t*>(list.end()))
+    {
+    }
+
+    template<typename T>
+	Data::Data(const std::vector<T>& data):
+	_mem(reinterpret_cast<const uint8_t*>(&data.front()),
+        reinterpret_cast<const uint8_t*>(&data.back()))
+	{
+	}
 
     class DataOutputStream;
 

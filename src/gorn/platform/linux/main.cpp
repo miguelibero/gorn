@@ -6,6 +6,7 @@
 #include <gorn/base/Exception.hpp>
 #include <gorn/render/Gl.hpp>
 #include <GL/glx.h>
+#include <GL/glew.h>
 
 #ifndef GORN_WINDOW_WIDTH
 #define GORN_WINDOW_WIDTH 640
@@ -55,6 +56,12 @@ int main(void)
     XStoreName(display, window, GORN_WINDOW_TITLE);
     glxContext = glXCreateContext(display, vi, NULL, GL_TRUE);
     glXMakeCurrent(display, window, glxContext);
+
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+        throw gorn::Exception(reinterpret_cast<const char*>(glewGetErrorString(err)));
+    }
 
     fd_set inFds;
     struct timeval tv;

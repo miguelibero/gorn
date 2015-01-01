@@ -3,10 +3,19 @@
 
 namespace gorn
 {
-	Shader::Shader(const Data& source, GLenum type):
+	Shader::Shader(const Data& source, ShaderType type):
 	_id(0)
 	{
-		_id = glCreateShader(type);
+        GLenum glType = 0;
+        if(type == ShaderType::Vertex)
+        {
+            glType = GL_VERTEX_SHADER;
+        }
+        else if(type == ShaderType::Fragment)
+        {
+            glType = GL_FRAGMENT_SHADER;
+        }
+		_id = glCreateShader(glType);
 		auto ptr = (const GLchar*)source.data();
 		auto size = (const GLint)source.size();
         glShaderSource(_id, 1, &ptr, &size);
@@ -23,7 +32,7 @@ namespace gorn
 
 	Shader::~Shader()
 	{
-
+        glDeleteShader(_id);
 	}
 
 	GLuint Shader::getId() const

@@ -65,7 +65,6 @@ namespace gorn {
             throw Exception("Could not create png info structure.");
         }
         png_bytep* rowPtrs = nullptr;
-        Data data;
 
         if (setjmp(png_jmpbuf(pngPtr)))
         {
@@ -116,7 +115,7 @@ namespace gorn {
         const png_size_t rowBytes = png_get_rowbytes(pngPtr, infoPtr);
         rowPtrs = new png_bytep[imgHeight];
         const size_t len = rowBytes * imgHeight;
-        data.resize(len);
+        Data data(len);
 
         for (size_t i = 0; i < imgHeight; i++)
         {

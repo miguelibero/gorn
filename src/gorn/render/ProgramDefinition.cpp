@@ -3,6 +3,11 @@
 namespace gorn
 {
 	
+	ProgramDefinition::ProgramDefinition(const std::string& shader):
+	_vertexShader(shader), _fragmentShader(shader)
+	{
+	}
+
 	ProgramDefinition::ProgramDefinition(const std::string& vertexShader, const std::string& fragmentShader):
 	_vertexShader(vertexShader), _fragmentShader(fragmentShader)
 	{

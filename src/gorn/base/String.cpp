@@ -3,6 +3,8 @@
 
 namespace gorn
 {
+    const size_t String::npos = -1;
+
     size_t String::replaceAll(std::string& str,
         const std::string& from, const std::string& to)
     {
@@ -20,6 +22,26 @@ namespace gorn
         }
         return found;
 	};
+
+    std::vector<std::string> String::split(const std::string& str,
+        const std::string& sep, size_t max)
+    {
+        std::vector<std::string> parts;
+        size_t pos = 0;
+        while(max==npos || parts.size() < max)    
+        {
+            size_t end = str.find(sep, pos);
+            if(end == std::string::npos)
+            {
+                break;
+            }
+            parts.push_back(str.substr(pos, end));
+            pos = end+sep.size();
+        }
+        parts.push_back(str.substr(pos));
+        return parts;
+    }
+
 
 }
 

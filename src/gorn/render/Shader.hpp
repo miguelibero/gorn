@@ -6,12 +6,20 @@
 
 namespace gorn
 {
+    enum class ShaderType
+    {
+        Vertex,
+        Fragment
+    };
+
 	class Shader
 	{
 	private:
 		GLuint _id;
 	public:
-		Shader(const Data& source, GLenum type);
+        typedef ShaderType Type;
+
+		Shader(const Data& source, ShaderType type);
 		~Shader();
 		GLuint getId() const;
 	};
