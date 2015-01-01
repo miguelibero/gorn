@@ -10,12 +10,14 @@ namespace gorn
         const VertexBuffer& vbo):
     _vao(vao), _vbo(vbo), _program(nullptr)
     {
+        init();
     }
 
     AttributeBinding::AttributeBinding(VertexArray& vao,
         const VertexBuffer& vbo, const Program& prog):
     _vao(vao), _vbo(vbo), _program(&prog)
     {
+        init();
     }
 
     void AttributeBinding::init()
@@ -87,6 +89,10 @@ namespace gorn
         }
         _vao.bind();
         _vbo.bind();
+        if(_program != nullptr)
+        {
+            _program->use();
+        }
 		glEnableVertexAttribArray(_attribute);
 		glVertexAttribPointer(_attribute, _size, _type, _normalized,
             _stride, reinterpret_cast<const GLvoid*>(_offset));

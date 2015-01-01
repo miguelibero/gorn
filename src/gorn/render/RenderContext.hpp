@@ -1,5 +1,5 @@
-#ifndef __gorn__Renderer__
-#define __gorn__Renderer__
+#ifndef __gorn__RenderContext__
+#define __gorn__RenderContext__
 
 #include <map>
 #include <string>
@@ -17,7 +17,7 @@ namespace gorn
     class PlatformBridge;
     class VertexArray;
 
-    class Renderer
+    class RenderContext
     {
     private:
         typedef std::map<std::string, std::shared_ptr<Texture>> Textures;
@@ -41,7 +41,7 @@ namespace gorn
         static const char* kDefaultVertexShaderTag;
         static const char* kDefaultFragmentShaderTag;
 
-        Renderer();
+        RenderContext();
         void setPlatformBridge(PlatformBridge& bridge);
 
         void defineProgram(const std::string& name, const ProgramDefinition& definition);

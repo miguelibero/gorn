@@ -1,10 +1,11 @@
 #include <gorn/base/Application.hpp>
 #include <gorn/platform/PlatformBridge.hpp>
-#include <gorn/render/Renderer.hpp>
+#include <gorn/render/RenderContext.hpp>
 #include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/AttributeBinding.hpp>
+#include <cmath>
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>
@@ -13,8 +14,12 @@
 namespace gorn
 {
 	PlatformBridge _bridge;
-	Renderer _renderer;
+	RenderContext _render;
     VertexArray _vao;
+    VertexBuffer _vbo;
+    std::shared_ptr<Program> _prog;
+    GLuint _timeUniform;
+    float time;
 
 	Application::Application()
 	{
@@ -30,29 +35,32 @@ namespace gorn
 
 #endif
 
-		_renderer.setPlatformBridge(_bridge);
-	    _renderer.defineProgram("shader");
+		_render.setPlatformBridge(_bridge);
+	    _render.defineProgram("shader");
 
-        auto prog = _renderer.loadProgram("shader");
+        _prog = _render.loadProgram("shader");
+        _timeUniform = _prog->getUniform("timeSin");
 
-        VertexBuffer vbo({
+        _vbo.setData({
              0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
              0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
-        }, VertexBufferUsage::StaticDraw);
+        }, VertexBuffer::Usage::StaticDraw);
 
-        _vao.bindAttribute(vbo, *prog)
+        _vao.bindAttribute(_vbo, *_prog)
             .setAttribute("position")
             .setType(GL_FLOAT)
-            .setSize(5*sizeof(float))
+            .setSize(2)
+            .setStride(5*sizeof(GLfloat))
             .create();
-        _vao.bindAttribute(vbo, *prog)
+        _vao.bindAttribute(_vbo, *_prog)
             .setAttribute("color")
             .setType(GL_FLOAT)
             .setSize(3)
-            .setStride(5*sizeof(float))
-            .setOffset(2*sizeof(float))
+            .setStride(5*sizeof(GLfloat))
+            .setOffset(2*sizeof(GLfloat))
             .create();
+
 	}
 
 	void Application::unload()
@@ -61,7 +69,9 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
-		_renderer.drawArrays(_vao, 3);
+        time += dt;
+        _prog->setUniform(_timeUniform, sinf(time));
+		_render.drawArrays(_vao, 3);
 	}
 
 }

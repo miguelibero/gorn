@@ -2,6 +2,8 @@
 
 precision highp float;
 
+uniform float timeSin;
+
 varying vec3 Color;
 
 void main()

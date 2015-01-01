@@ -1,4 +1,4 @@
-#include <gorn/render/Renderer.hpp>
+#include <gorn/render/RenderContext.hpp>
 #include <gorn/render/Image.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/platform/PlatformBridge.hpp>
@@ -7,21 +7,21 @@
 
 namespace gorn
 {
-    const char* Renderer::kDefaultTextureTag = "tex";
-    const char* Renderer::kDefaultVertexShaderTag = "vsh";
-    const char* Renderer::kDefaultFragmentShaderTag = "fsh";
+    const char* RenderContext::kDefaultTextureTag = "tex";
+    const char* RenderContext::kDefaultVertexShaderTag = "vsh";
+    const char* RenderContext::kDefaultFragmentShaderTag = "fsh";
 
-    Renderer::Renderer():
+    RenderContext::RenderContext():
     _bridge(nullptr)
     {
     }
 
-    void Renderer::setPlatformBridge(PlatformBridge& bridge)
+    void RenderContext::setPlatformBridge(PlatformBridge& bridge)
     {
         _bridge = &bridge;
     }
 
-    std::shared_ptr<Texture> Renderer::loadTexture(const std::string& name)
+    std::shared_ptr<Texture> RenderContext::loadTexture(const std::string& name)
     {
         auto itr = _textures.find(name);
         if(itr != _textures.end())
@@ -39,7 +39,7 @@ namespace gorn
         return tex;
     }
 
-    std::shared_ptr<Shader> Renderer::loadShader(const std::string& name, ShaderType type)
+    std::shared_ptr<Shader> RenderContext::loadShader(const std::string& name, ShaderType type)
     {
         auto& shaders = _shaders[type];
         auto itr = shaders.find(name);
@@ -67,7 +67,7 @@ namespace gorn
         return shader;
     }
 
-    std::shared_ptr<Program> Renderer::loadProgram(const std::string& name)
+    std::shared_ptr<Program> RenderContext::loadProgram(const std::string& name)
     {
         auto itr = _programs.find(name);
         if(itr != _programs.end())
@@ -89,7 +89,7 @@ namespace gorn
         return program;
     }
 
-    std::shared_ptr<Material> Renderer::loadMaterial(const std::string& name)
+    std::shared_ptr<Material> RenderContext::loadMaterial(const std::string& name)
     {
         auto itr = _materials.find(name);
         if(itr != _materials.end())
@@ -112,7 +112,7 @@ namespace gorn
         return material;
     }
 
-    void Renderer::defineProgram(const std::string& name, const ProgramDefinition& def)
+    void RenderContext::defineProgram(const std::string& name, const ProgramDefinition& def)
     {
         auto itr = _programDefinitions.find(name);
         if(itr != _programDefinitions.end())
@@ -122,12 +122,12 @@ namespace gorn
         _programDefinitions.insert(itr, {name, def});
     }
 
-    void Renderer::defineProgram(const std::string& name)
+    void RenderContext::defineProgram(const std::string& name)
     {
         defineProgram(name, ProgramDefinition(name));
     }
 
-    void Renderer::defineMaterial(const std::string& name, const MaterialDefinition& def)
+    void RenderContext::defineMaterial(const std::string& name, const MaterialDefinition& def)
     {
         auto itr = _materialDefinitions.find(name);
         if(itr != _materialDefinitions.end())
@@ -137,7 +137,7 @@ namespace gorn
         _materialDefinitions.insert(itr, {name, def});
     }
 
-    void Renderer::drawArrays(const VertexArray& vao, GLsizei size, GLint offset)
+    void RenderContext::drawArrays(const VertexArray& vao, GLsizei size, GLint offset)
 	{
 		glBindVertexArray(vao.getId());
 		glDrawArrays(GL_TRIANGLES, offset, size);

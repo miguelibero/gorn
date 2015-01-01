@@ -7,17 +7,28 @@ namespace gorn
     VertexBuffer::VertexBuffer(const Data& data, Usage usage, Target target):
     _id(0), _target(target)
     {
-        glGenBuffers(1, &_id);
         setData(data, usage);
+    }
+
+    VertexBuffer::VertexBuffer(Target target):
+    _id(0), _target(target)
+    {
     }
 	
 	VertexBuffer::~VertexBuffer()
     {
-        glDeleteBuffers(1, &_id);
+        if(_id != 0)
+        {
+            glDeleteBuffers(1, &_id);
+        }
     }
 
     GLuint VertexBuffer::getId() const
     {
+        if(_id == 0)
+        {
+            glGenBuffers(1, &_id);
+        }
         return _id;
 	};
 
@@ -65,7 +76,7 @@ namespace gorn
     {
         GLenum target = getGlTarget(_target);
 		glBindBuffer(target, getId());
-		glBufferData(target, data.size(), data.data(),
+		glBufferData(target, data.size(), data.ptr(),
             getGlUsage(usage));
     }
 
@@ -73,7 +84,7 @@ namespace gorn
     {
         GLenum target = getGlTarget(_target);
         glBindBuffer(target, getId());
-		glBufferSubData(target, offset, data.size(), data.data());
+		glBufferSubData(target, offset, data.size(), data.ptr());
     }
 
     Data VertexBuffer::getSubData(size_t offset, size_t size) const
@@ -81,7 +92,7 @@ namespace gorn
         GLenum target = getGlTarget(_target);
         Data data(size);
         glBindBuffer(target, getId());
-		glGetBufferSubData(target, offset, data.size(), data.data());
+		glGetBufferSubData(target, offset, data.size(), data.ptr());
         return data;
     }
 

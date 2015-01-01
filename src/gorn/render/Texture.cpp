@@ -10,7 +10,7 @@ namespace gorn
         glBindTexture(target, _id);
         glTexImage2D(target, lodLevel, img.getInternalFormat(),
             img.getWidth(), img.getHeight(), img.getBorder(),
-            img.getFormat(), img.getType(), img.getData().data());
+            img.getFormat(), img.getType(), img.getData().ptr());
 	}
 
 	Texture::~Texture()

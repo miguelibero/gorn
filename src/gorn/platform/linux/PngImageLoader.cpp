@@ -120,7 +120,7 @@ namespace gorn {
         for (size_t i = 0; i < imgHeight; i++)
         {
             png_size_t q = (imgHeight - i - 1) * rowBytes;
-            rowPtrs[i] = data.data() + q;
+            rowPtrs[i] = data.ptr() + q;
         }
         png_read_image(pngPtr, rowPtrs);
         png_read_end(pngPtr, NULL);

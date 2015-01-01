@@ -33,9 +33,14 @@ namespace gorn
 		return *_vertexShader;
 	}
 
+    void Program::use() const
+    {
+        glUseProgram(getId());
+    }
+
     GLint Program::getAttribute(const std::string& name) const
     {
-        GLint id = glGetAttribLocation(_id, name.c_str());
+        GLint id = glGetAttribLocation(getId(), name.c_str());
         if(id == -1)
         {
             throw Exception(std::string("Could not find attribure '")+name+"'.");
@@ -45,7 +50,7 @@ namespace gorn
 
 	GLint Program::getUniform(const std::string& name) const
 	{
-		GLint id = glGetUniformLocation(_id, name.c_str());
+		GLint id = glGetUniformLocation(getId(), name.c_str());
         if(id == -1)
         {
             throw Exception(std::string("Could not find uniform '")+name+"'.");

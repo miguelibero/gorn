@@ -57,12 +57,12 @@ namespace gorn
 	{
 	}
 
-	uint8_t* Data::data()
+	uint8_t* Data::ptr()
 	{
 		return _mem.data();
 	}
 
-	const uint8_t* Data::data() const
+	const uint8_t* Data::ptr() const
 	{
 		return _mem.data();
 	}
@@ -83,7 +83,7 @@ namespace gorn
 		{
 			n = _read_data.size()-_read;
 		}
-		memcpy(s, _read_data.data()+_read, n);
+		memcpy(s, _read_data.ptr()+_read, n);
 		_read += n;
 		return n;
 	}

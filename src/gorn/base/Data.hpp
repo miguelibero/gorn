@@ -30,8 +30,8 @@ namespace gorn
 		Data(std::vector<T>&& data);
 
 
-		uint8_t* data();
-		const uint8_t* data() const;
+		uint8_t* ptr();
+		const uint8_t* ptr() const;
 		size_t size() const;
 
         static Data readFile(const std::string& path);

@@ -16,6 +16,8 @@ namespace gorn
 	public:
 		Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader);
 		~Program();
+
+        void use() const;
 		GLuint getId() const;
 		const Shader& getFragmentShader() const;
 		const Shader& getVertexShader() const;

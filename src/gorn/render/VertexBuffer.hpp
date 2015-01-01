@@ -31,13 +31,14 @@ namespace gorn
         typedef VertexBufferUsage Usage;
         typedef VertexBufferTarget Target;
 	private:
-		GLuint _id;
+		mutable GLuint _id;
         Target _target;
 	public:
 
 		VertexBuffer(const Data& data,
             Usage usage=Usage::DynamicDraw,
             Target target=Target::ArrayBuffer);
+        VertexBuffer(Target target=Target::ArrayBuffer);
 		~VertexBuffer();
 		GLuint getId() const;
 
