@@ -7,6 +7,7 @@
 #include <gorn/render/Gl.hpp>
 #include <GL/glx.h>
 #include <GL/glew.h>
+#include <sys/time.h>
 
 #ifndef GORN_WINDOW_WIDTH
 #define GORN_WINDOW_WIDTH 640
@@ -57,6 +58,7 @@ int main(void)
     glxContext = glXCreateContext(display, vi, NULL, GL_TRUE);
     glXMakeCurrent(display, window, glxContext);
 
+    glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK)
     {
@@ -64,9 +66,11 @@ int main(void)
     }
 
     fd_set inFds;
-    struct timeval tv;
-    tv.tv_usec = 1000000.0f/60;
-    tv.tv_sec = 0;
+    struct timeval currTime;
+    gettimeofday(&currTime, NULL);
+    struct timeval frameRate;
+    frameRate.tv_usec = 1000000.0f/60;
+    frameRate.tv_sec = 0;
     int x11Fd = ConnectionNumber(display);
     XWindowAttributes gwa;
     XEvent xev;
@@ -75,15 +79,22 @@ int main(void)
 
     while(!finished)
     {
-        struct timeval otv(tv);
+        struct timeval lastTime(currTime);
+        gettimeofday(&currTime, NULL);
         FD_ZERO(&inFds);
         FD_SET(x11Fd, &inFds);
-        select(x11Fd+1, &inFds, 0, 0, &tv);
+        select(x11Fd+1, &inFds, 0, 0, &frameRate);
 
         XGetWindowAttributes(display, window, &gwa);
         glViewport(0, 0, gwa.width, gwa.height);
 
-        app.update(0.0f);
+        double dt = ((double)currTime.tv_sec - lastTime.tv_sec)
+            + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000*1000);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        app.update(dt);
 
         while(XPending(display))
         {

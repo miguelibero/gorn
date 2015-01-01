@@ -15,12 +15,13 @@
 namespace gorn
 {
     class PlatformBridge;
+    class VertexArray;
 
     class Renderer
     {
     private:
         typedef std::map<std::string, std::shared_ptr<Texture>> Textures;
-        typedef std::map<std::string, std::shared_ptr<Shader>> Shaders;
+        typedef std::map<ShaderType, std::map<std::string, std::shared_ptr<Shader>>> Shaders;
         typedef std::map<std::string, std::shared_ptr<Program>> Programs;
         typedef std::map<std::string, std::shared_ptr<Material>> Materials;
         typedef std::map<std::string, ProgramDefinition> ProgramDefinitions;
@@ -41,7 +42,6 @@ namespace gorn
         static const char* kDefaultFragmentShaderTag;
 
         Renderer();
-        void draw();
         void setPlatformBridge(PlatformBridge& bridge);
 
         void defineProgram(const std::string& name, const ProgramDefinition& definition);
@@ -53,7 +53,9 @@ namespace gorn
         std::shared_ptr<Program> loadProgram(const std::string& name);
         std::shared_ptr<Material> loadMaterial(const std::string& name);
 
+        void drawArrays(const VertexArray& vao, GLsizei size, GLint offset=0);
+
     };
 }
 
-#endif /* defined(__gorn__Renderer__) */
+#endif

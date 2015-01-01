@@ -1,7 +1,9 @@
 #version 100
 
-attribute vec2 position;
+precision highp float;
+
 attribute vec3 color;
+attribute vec2 position;
 
 varying vec3 Color;
 

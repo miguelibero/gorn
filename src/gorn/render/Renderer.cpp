@@ -1,5 +1,6 @@
 #include <gorn/render/Renderer.hpp>
 #include <gorn/render/Image.hpp>
+#include <gorn/render/VertexArray.hpp>
 #include <gorn/platform/PlatformBridge.hpp>
 #include <gorn/base/Log.hpp>
 #include <gorn/base/Exception.hpp>
@@ -12,10 +13,6 @@ namespace gorn
 
     Renderer::Renderer():
     _bridge(nullptr)
-    {
-    }
-
-    void Renderer::draw()
     {
     }
 
@@ -44,8 +41,9 @@ namespace gorn
 
     std::shared_ptr<Shader> Renderer::loadShader(const std::string& name, ShaderType type)
     {
-        auto itr = _shaders.find(name);
-        if(itr != _shaders.end())
+        auto& shaders = _shaders[type];
+        auto itr = shaders.find(name);
+        if(itr != shaders.end())
         {
             return itr->second;
         }
@@ -58,14 +56,14 @@ namespace gorn
         {
             tag = kDefaultVertexShaderTag;
         }
-        else if(type == ShaderType::Vertex)
+        else if(type == ShaderType::Fragment)
         {
             tag = kDefaultFragmentShaderTag;
         }
         auto data = _bridge->readFile(tag, name).get();
         auto shader = std::make_shared<Shader>(data, type);
-        _shaders.insert(itr, {name, shader});
-        LogDebug("loaded shader '%s' into %d", name.c_str(),shader->getId());
+        shaders.insert(itr, {name, shader});
+        LogDebug("loaded shader '%s' into %d", name.c_str(), shader->getId());
         return shader;
     }
 
@@ -138,5 +136,11 @@ namespace gorn
         }
         _materialDefinitions.insert(itr, {name, def});
     }
+
+    void Renderer::drawArrays(const VertexArray& vao, GLsizei size, GLint offset)
+	{
+		glBindVertexArray(vao.getId());
+		glDrawArrays(GL_TRIANGLES, offset, size);
+	}
 
 }

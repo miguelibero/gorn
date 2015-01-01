@@ -58,13 +58,13 @@ namespace gorn
     void VertexBuffer::bind() const
     {
         GLenum target = getGlTarget(_target);
-		glBindBuffer(target, _id);
+		glBindBuffer(target, getId());
     }
 
     void VertexBuffer::setData(const Data& data, Usage usage)
     {
         GLenum target = getGlTarget(_target);
-		glBindBuffer(target, _id);
+		glBindBuffer(target, getId());
 		glBufferData(target, data.size(), data.data(),
             getGlUsage(usage));
     }
@@ -72,7 +72,7 @@ namespace gorn
     void VertexBuffer::setSubData(const Data& data, size_t offset)
     {
         GLenum target = getGlTarget(_target);
-        glBindBuffer(target, _id);
+        glBindBuffer(target, getId());
 		glBufferSubData(target, offset, data.size(), data.data());
     }
 
@@ -80,7 +80,7 @@ namespace gorn
     {
         GLenum target = getGlTarget(_target);
         Data data(size);
-        glBindBuffer(target, _id);
+        glBindBuffer(target, getId());
 		glGetBufferSubData(target, offset, data.size(), data.data());
         return data;
     }

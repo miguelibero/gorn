@@ -20,10 +20,9 @@ namespace gorn
         GLint _attribute;
         bool _typeDefined;
         GLboolean _normalized;
-        bool _normalizedDefined;
         GLint _size;
         GLsizei _stride;
-        const GLvoid* _offset;
+        GLsizei _offset;
 
         void init();
 	public:
@@ -38,7 +37,7 @@ namespace gorn
         AttributeBinding& setNormalized(GLboolean enabled);
         AttributeBinding& setSize(GLint size);
         AttributeBinding& setStride(GLsizei stride);
-        AttributeBinding& setOffset(const GLvoid* offset);
+        AttributeBinding& setOffset(GLsizei offset);
 
         void create();
 	};

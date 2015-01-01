@@ -22,7 +22,7 @@ namespace gorn
     {
         _attribute = -1;
         _typeDefined = false;
-        _normalizedDefined = false;
+        _normalized = false;
         _size = 1;
         _stride = 0;
         _offset = 0;
@@ -48,12 +48,6 @@ namespace gorn
     {
         _type = type;
         _typeDefined = true;
-        if(!_normalizedDefined)
-        {
-            _normalized = type == GL_FLOAT
-                || type == GL_HALF_FLOAT
-                || type == GL_DOUBLE;
-        }
         return *this;
     }
 
@@ -75,7 +69,7 @@ namespace gorn
         return *this;
     }
 
-    AttributeBinding& AttributeBinding::setOffset(const GLvoid* offset)
+    AttributeBinding& AttributeBinding::setOffset(GLsizei offset)
     {
         _offset = offset;
         return *this;
@@ -95,6 +89,6 @@ namespace gorn
         _vbo.bind();
 		glEnableVertexAttribArray(_attribute);
 		glVertexAttribPointer(_attribute, _size, _type, _normalized,
-            _stride, _offset);
+            _stride, reinterpret_cast<const GLvoid*>(_offset));
 	}
 }

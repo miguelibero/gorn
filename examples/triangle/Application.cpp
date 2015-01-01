@@ -14,6 +14,7 @@ namespace gorn
 {
 	PlatformBridge _bridge;
 	Renderer _renderer;
+    VertexArray _vao;
 
 	Application::Application()
 	{
@@ -30,9 +31,9 @@ namespace gorn
 #endif
 
 		_renderer.setPlatformBridge(_bridge);
-	    _renderer.defineProgram("hello");
+	    _renderer.defineProgram("shader");
 
-        auto prog = _renderer.loadProgram("hello");
+        auto prog = _renderer.loadProgram("shader");
 
         VertexBuffer vbo({
              0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
@@ -40,19 +41,17 @@ namespace gorn
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
         }, VertexBufferUsage::StaticDraw);
 
-        VertexArray vao;
-        AttributeBinding(vao, vbo, *prog)
+        _vao.bindAttribute(vbo, *prog)
             .setAttribute("position")
             .setType(GL_FLOAT)
-            .setSize(2)
-            .setNormalized(true)
+            .setSize(5*sizeof(float))
             .create();
-        AttributeBinding(vao, vbo, *prog)
+        _vao.bindAttribute(vbo, *prog)
             .setAttribute("color")
             .setType(GL_FLOAT)
             .setSize(3)
-            .setStride(2)
-            .setNormalized(true)
+            .setStride(5*sizeof(float))
+            .setOffset(2*sizeof(float))
             .create();
 	}
 
@@ -62,7 +61,7 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
-		_renderer.draw();
+		_renderer.drawArrays(_vao, 3);
 	}
 
 }
