@@ -4,7 +4,7 @@
 #include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
-#include <gorn/render/AttributeDefinition.hpp>
+#include <gorn/render/AttributeBinding.hpp>
 #include <cmath>
 
 #ifdef GORN_PLATFORM_LINUX
@@ -48,19 +48,19 @@ namespace gorn
             -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
         }, VertexBuffer::Usage::StaticDraw);
 
-        _vao.defineAttribute(_vbo, *_prog)
-            .setAttribute("position")
-            .setType(GL_FLOAT)
-            .setSize(2)
-            .setStride(5*sizeof(GLfloat))
-            .bind();
-        _vao.defineAttribute(_vbo, *_prog)
-            .setAttribute("color")
-            .setType(GL_FLOAT)
-            .setSize(3)
-            .setStride(5*sizeof(GLfloat))
-            .setOffset(2*sizeof(GLfloat))
-            .bind();
+        _vao.bindAttribute(_vbo, *_prog)
+            .withAttribute("position")
+            .withType(GL_FLOAT)
+            .withSize(2)
+            .withStride(5*sizeof(GLfloat))
+            .finish();
+        _vao.bindAttribute(_vbo, *_prog)
+            .withAttribute("color")
+            .withType(GL_FLOAT)
+            .withSize(3)
+            .withStride(5*sizeof(GLfloat))
+            .withOffset(2*sizeof(GLfloat))
+            .finish();
 
 	}
 

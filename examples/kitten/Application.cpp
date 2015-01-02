@@ -4,7 +4,7 @@
 #include <gorn/render/MaterialDefinition.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
-#include <gorn/render/AttributeDefinition.hpp>
+#include <gorn/render/VertexDefinition.hpp>
 #include <cmath>
 
 #ifdef GORN_PLATFORM_LINUX
@@ -56,26 +56,24 @@ namespace gorn
             -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
         }, VertexBuffer::Usage::StaticDraw);
 
-        _vao.defineAttribute(_vbo, _material->getProgram())
-            .setAttribute("position")
-            .setType(GL_FLOAT)
-            .setSize(2)
-            .setStride(7*sizeof(GLfloat))
-            .bind();
-        _vao.defineAttribute(_vbo, _material->getProgram())
-            .setAttribute("color")
-            .setType(GL_FLOAT)
-            .setSize(3)
-            .setStride(7*sizeof(GLfloat))
-            .setOffset(2*sizeof(GLfloat))
-            .bind();
-        _vao.defineAttribute(_vbo, _material->getProgram())
-            .setAttribute("texCoords")
-            .setType(GL_FLOAT)
-            .setSize(2)
-            .setStride(7*sizeof(GLfloat))
-            .setOffset(5*sizeof(GLfloat))
-            .bind();
+        
+        VertexDefinition vdef;
+        vdef.defineAttribute("position")
+            .withType(GL_FLOAT)
+            .withSize(2)
+            .withStride(7*sizeof(GLfloat));
+        vdef.defineAttribute("color")
+            .withType(GL_FLOAT)
+            .withSize(3)
+            .withStride(7*sizeof(GLfloat))
+            .withOffset(2*sizeof(GLfloat));
+        vdef.defineAttribute("texCoords")
+            .withType(GL_FLOAT)
+            .withSize(2)
+            .withStride(7*sizeof(GLfloat))
+            .withOffset(5*sizeof(GLfloat));
+
+        _vao.load(vdef, _vbo, _material->getProgram());
 	}
 
 	void Application::unload()
@@ -86,7 +84,7 @@ namespace gorn
 	{
         time += dt;
         _material->getProgram().setUniform(_timeUniform, sinf(time));
-        _material->use();
+        // _material->use();
 		_render.drawArrays(_vao, 4);
 	}
 
