@@ -1,3 +1,0 @@
-set solib-search-path ./obj/local/armeabi-v7a
-source /opt/local/android/ndk/prebuilt/common/gdb/common.setup
-directory /opt/local/android/ndk/platforms/android-19/arch-arm/usr/include jni/../../../src jni/../../../src/base jni/../../../src/game jni/../../../src/platform jni/../../../src/platform/android jni/../../../lib /opt/local/android/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include /opt/local/android/ndk/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/include /opt/local/android/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/backward

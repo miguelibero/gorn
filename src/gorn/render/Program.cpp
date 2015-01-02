@@ -4,6 +4,8 @@
 
 namespace gorn
 {
+    GLuint Program::s_currentId = 0;
+
 	Program::Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader):
 	_id(0), _fragmentShader(fragmentShader), _vertexShader(vertexShader)
 	{
@@ -35,7 +37,11 @@ namespace gorn
 
     void Program::use() const
     {
-        glUseProgram(getId());
+        if(s_currentId != _id)
+        {
+            glUseProgram(_id);
+            s_currentId = _id;
+        }
     }
 
     GLint Program::getAttribute(const std::string& name) const

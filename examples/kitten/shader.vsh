@@ -6,7 +6,7 @@ attribute vec2 position;
 attribute vec3 color;
 attribute vec2 texCoords;
 
-uniform float timeSin;
+uniform mat4 transform;
 
 varying vec3 Color;
 varying vec2 TexCoords;
@@ -15,5 +15,5 @@ void main()
 {
     Color = color;
     TexCoords = texCoords;
-    gl_Position = vec4(position, 0.0, 0.2*timeSin+1.0);
+    gl_Position = transform * vec4(position, 0.0, 1.0);
 }

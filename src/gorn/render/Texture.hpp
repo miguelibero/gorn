@@ -2,6 +2,7 @@
 #define __gorn__Texture__
 
 #include <gorn/render/Gl.hpp>
+#include <map>
 
 namespace gorn
 {
@@ -10,6 +11,8 @@ namespace gorn
 	class Texture
 	{
 	private:
+        static std::map<GLenum, GLuint> s_currentIds;
+        static std::map<size_t, GLuint> s_activeIds;
 		GLuint _id;
         GLenum _target;
 	public:

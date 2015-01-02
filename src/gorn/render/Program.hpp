@@ -11,6 +11,8 @@ namespace gorn
 {
 	class Program
 	{
+    private:
+		static GLuint s_currentId;
 		GLuint _id;
 		std::shared_ptr<Shader> _fragmentShader;
 		std::shared_ptr<Shader> _vertexShader;

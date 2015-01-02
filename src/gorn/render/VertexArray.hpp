@@ -16,7 +16,7 @@ namespace gorn
     class VertexArray
     {
     private:
-        static GLuint _currentId;
+        static GLuint s_currentId;
         mutable GLuint _id;
         std::vector<std::shared_ptr<VertexBuffer>> _vbos;
         std::shared_ptr<Program> _program;

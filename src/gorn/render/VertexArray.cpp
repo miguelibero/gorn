@@ -9,7 +9,7 @@
 
 namespace gorn
 {
-    GLuint VertexArray::_currentId;
+    GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
     _id(0)
@@ -85,9 +85,10 @@ namespace gorn
 
     void VertexArray::bind() const
     {
-        if(_currentId != getId())
+        if(s_currentId != getId())
         {
 		    glBindVertexArray(getId());
+            s_currentId = getId();
         }
     }
 

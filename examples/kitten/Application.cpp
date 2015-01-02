@@ -5,7 +5,7 @@
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <cmath>
+#include <glm/gtx/transform.hpp>
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>
@@ -46,11 +46,11 @@ namespace gorn
         _vao.bindMaterial(_render.loadMaterial("kitten"));
 
         auto vbo = std::make_shared<VertexBuffer>(Data{
-         //  Position     Color             Texcoords
-            -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
-             0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
-            -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
+         //  Position     Color             texCoords
+            -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // Top-left
+             0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // Top-right
+             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // Bottom-right
+            -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Bottom-left
         }, VertexBuffer::Usage::StaticDraw);
 
         VertexDefinition vdef;
@@ -87,7 +87,8 @@ namespace gorn
 	void Application::update(double dt)
 	{
         time += dt;
-        _vao.getProgram()->setUniform("timeSin", sinf(time));
+        auto transform = glm::rotate(glm::mat4(), time, glm::vec3(0,0,1));
+        _vao.getProgram()->setUniform("transform", transform);
 		_render.drawElements(_vao, 6, GL_UNSIGNED_INT);
 	}
 

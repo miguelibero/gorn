@@ -2,6 +2,7 @@
 #define __gorn__VertexBuffer__
 
 #include <gorn/render/Gl.hpp>
+#include <map>
 
 namespace gorn
 {
@@ -32,6 +33,7 @@ namespace gorn
         typedef VertexBufferUsage Usage;
         typedef VertexBufferTarget Target;
 	private:
+        static std::map<GLenum, GLuint> s_currentIds;
 		mutable GLuint _id;
         Target _target;
 	public:

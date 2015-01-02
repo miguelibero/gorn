@@ -4,6 +4,8 @@
 
 namespace gorn
 {
+    std::map<GLenum, GLuint> VertexBuffer::s_currentIds;
+
     VertexBuffer::VertexBuffer(const Data& data, Usage usage, Target target):
     _id(0), _target(target)
     {
@@ -71,30 +73,34 @@ namespace gorn
     void VertexBuffer::bind() const
     {
         GLenum target = getGlTarget(_target);
-		glBindBuffer(target, getId());
+        GLuint id = getId();
+        if(s_currentIds[target] != id)
+        {
+		    glBindBuffer(target, id);
+            s_currentIds[target] = id;
+        }
     }
 
     void VertexBuffer::setData(const Data& data, Usage usage)
     {
-        GLenum target = getGlTarget(_target);
-		glBindBuffer(target, getId());
-		glBufferData(target, data.size(), data.ptr(),
-            getGlUsage(usage));
+        bind();
+		glBufferData(getGlTarget(_target), data.size(),
+            data.ptr(), getGlUsage(usage));
     }
 
     void VertexBuffer::setSubData(const Data& data, size_t offset)
     {
-        GLenum target = getGlTarget(_target);
-        glBindBuffer(target, getId());
-		glBufferSubData(target, offset, data.size(), data.ptr());
+        bind();
+		glBufferSubData(getGlTarget(_target), offset,
+            data.size(), data.ptr());
     }
 
     Data VertexBuffer::getSubData(size_t offset, size_t size) const
     {
-        GLenum target = getGlTarget(_target);
+        bind();
         Data data(size);
-        glBindBuffer(target, getId());
-		glGetBufferSubData(target, offset, data.size(), data.ptr());
+		glGetBufferSubData(getGlTarget(_target),
+            offset, data.size(), data.ptr());
         return data;
     }
 
