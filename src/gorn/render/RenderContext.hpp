@@ -7,6 +7,7 @@
 #include <gorn/render/Gl.hpp>
 #include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/MaterialDefinition.hpp>
+#include <gorn/render/TextureDefinition.hpp>
 #include <gorn/render/Texture.hpp>
 #include <gorn/render/Shader.hpp>
 #include <gorn/render/Program.hpp>
@@ -20,19 +21,13 @@ namespace gorn
     class RenderContext
     {
     private:
-        typedef std::map<std::string, std::shared_ptr<Texture>> Textures;
-        typedef std::map<ShaderType, std::map<std::string, std::shared_ptr<Shader>>> Shaders;
-        typedef std::map<std::string, std::shared_ptr<Program>> Programs;
-        typedef std::map<std::string, std::shared_ptr<Material>> Materials;
-        typedef std::map<std::string, ProgramDefinition> ProgramDefinitions;
-        typedef std::map<std::string, MaterialDefinition> MaterialDefinitions;
-
-        Textures _textures;
-        Shaders _shaders;
-        Programs _programs;
-        Materials _materials;
-        ProgramDefinitions _programDefinitions;
-        MaterialDefinitions _materialDefinitions;
+        std::map<std::string, std::shared_ptr<Texture>> _textures;
+        std::map<ShaderType, std::map<std::string, std::shared_ptr<Shader>>> _shaders;
+        std::map<std::string, std::shared_ptr<Program>> _programs;
+        std::map<std::string, std::shared_ptr<Material>> _materials;
+        std::map<std::string, ProgramDefinition> _programDefinitions;
+        std::map<std::string, MaterialDefinition> _materialDefinitions;
+        std::map<std::string, TextureDefinition> _textureDefinitions;
         
         PlatformBridge* _bridge;
 
@@ -46,6 +41,7 @@ namespace gorn
 
         ProgramDefinition& defineProgram(const std::string& name);
         MaterialDefinition& defineMaterial(const std::string& name);
+        TextureDefinition& defineTexture(const std::string& name);
 
         std::shared_ptr<Texture> loadTexture(const std::string& name);    
         std::shared_ptr<Shader> loadShader(const std::string& name, ShaderType type);

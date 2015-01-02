@@ -3,6 +3,7 @@
 
 #include <gorn/render/Gl.hpp>
 #include <map>
+#include <vector>
 
 namespace gorn
 {
@@ -16,10 +17,14 @@ namespace gorn
 		GLuint _id;
         GLenum _target;
 	public:
-		Texture(const Image& img, GLenum target=GL_TEXTURE_2D, GLint lodLevel=0);
+		Texture(GLenum target=GL_TEXTURE_2D);
 		~Texture();
 		GLuint getId() const;
         void setImage(const Image& img, GLint lodLevel=0);
+        void setParameter(GLenum name, GLint value);
+        void setParameter(GLenum name, GLfloat value);
+        void setParameter(GLenum name, const std::vector<GLint>& value);
+        void setParameter(GLenum name, const std::vector<GLfloat>& value);
         void bind();
         void activate(size_t pos);
 	};

@@ -6,11 +6,10 @@ namespace gorn
     std::map<GLenum, GLuint> Texture::s_currentIds;
     std::map<size_t, GLuint> Texture::s_activeIds;
 
-	Texture::Texture(const Image& img, GLenum target, GLint lodLevel):
+	Texture::Texture(GLenum target):
 	_id(0), _target(target)
 	{
 		glGenTextures(1, &_id);
-        setImage(img);
 	}
 
 	Texture::~Texture()
@@ -21,17 +20,36 @@ namespace gorn
 		}
 	}
 
+    void Texture::setParameter(GLenum name, GLint value)
+    {
+        bind();
+        glTexParameteri(_target, name, value);
+    }
+
+    void Texture::setParameter(GLenum name, GLfloat value)
+    {
+        bind();
+        glTexParameterf(_target, name, value);
+    }
+
+    void Texture::setParameter(GLenum name, const std::vector<GLint>& value)
+    {
+        bind();
+        glTexParameteriv(_target, name, value.data());
+    }
+
+    void Texture::setParameter(GLenum name, const std::vector<GLfloat>& value)
+    {
+        bind();
+        glTexParameterfv(_target, name, value.data());
+    }
+
     void Texture::setImage(const Image& img, GLint lodLevel)
     {
         bind();
         glTexImage2D(_target, lodLevel, img.getInternalFormat(),
             img.getWidth(), img.getHeight(), img.getBorder(),
             img.getFormat(), img.getType(), img.getData().ptr());
-
-        glTexParameteri(_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
 	GLuint Texture::getId() const

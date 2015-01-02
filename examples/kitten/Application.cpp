@@ -10,6 +10,9 @@
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>
 #include <gorn/platform/linux/PngImageLoader.hpp>
+#elif GORN_PLATFORM_ANDROID
+#include <gorn/platform/android/BundleFileLoader.hpp>
+#include <gorn/platform/android/GraphicsImageLoader.hpp>
 #endif
 
 namespace gorn
@@ -34,6 +37,15 @@ namespace gorn
             new LocalFileLoader("../%s.png")));
 		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(
             new PngImageLoader()));
+#elif GORN_PLATFORM_ANDROID
+		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
+            new BundleFileLoader("%s.fsh")));
+		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
+            new BundleFileLoader("%s.vsh")));
+		_bridge.addFileLoader("tex", std::unique_ptr<FileLoader>(
+            new BundleFileLoader("%s.png")));
+		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(
+            new GraphicsImageLoader()));
 #endif
 
 		_render.setPlatformBridge(_bridge);

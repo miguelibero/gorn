@@ -27,12 +27,34 @@ namespace gorn
         {
             return itr->second;
         }
+        auto& def = defineTexture(name);
         if(_bridge == nullptr)
         {
             throw Exception("Platform bridge not set.");
         }
-        auto img = _bridge->readImage(kDefaultTextureTag, name).get();
-        auto tex = std::make_shared<Texture>(img);
+        auto img = _bridge->readImage(def.getImageTag(), def.getImageName()).get();
+        auto tex = std::make_shared<Texture>(def.getTarget());
+        for(auto itr = def.getIntParameters().begin();
+            itr != def.getIntParameters().end(); ++itr)
+        {
+            tex->setParameter(itr->first, itr->second);
+        }
+        for(auto itr = def.getFloatParameters().begin();
+            itr != def.getFloatParameters().end(); ++itr)
+        {
+            tex->setParameter(itr->first, itr->second);
+        }
+        for(auto itr = def.getIntPointerParameters().begin();
+            itr != def.getIntPointerParameters().end(); ++itr)
+        {
+            tex->setParameter(itr->first, itr->second);
+        }
+        for(auto itr = def.getFloatPointerParameters().begin();
+            itr != def.getFloatPointerParameters().end(); ++itr)
+        {
+            tex->setParameter(itr->first, itr->second);
+        }
+        tex->setImage(img, def.getLevelOfDetail());
         _textures.insert(itr, {name, tex});
         return tex;
     }
@@ -129,6 +151,18 @@ namespace gorn
         if(itr == _materialDefinitions.end())
         {
             itr = _materialDefinitions.insert(itr, {name, MaterialDefinition()});
+        }
+        return itr->second;
+    }
+
+
+    TextureDefinition& RenderContext::defineTexture(const std::string& name)
+    {
+        auto itr = _textureDefinitions.find(name);
+        if(itr == _textureDefinitions.end())
+        {
+            itr = _textureDefinitions.insert(itr, {name, TextureDefinition()});
+            itr->second.withImage(name).withImageTag(kDefaultTextureTag);
         }
         return itr->second;
     }

@@ -9,6 +9,8 @@
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>
+#elif GORN_PLATFORM_ANDROID
+#include <gorn/platform/android/BundleFileLoader.hpp>
 #endif
 
 namespace gorn
@@ -29,7 +31,11 @@ namespace gorn
             new LocalFileLoader("../%s.fsh")));
 		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
             new LocalFileLoader("../%s.vsh")));
-
+#elif GORN_PLATFORM_ANDROID
+		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
+            new BundleFileLoader("%s.fsh")));
+		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
+            new BundleFileLoader("%s.vsh")));
 #endif
 
 		_render.setPlatformBridge(_bridge);
