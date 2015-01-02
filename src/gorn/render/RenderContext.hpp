@@ -53,7 +53,7 @@ namespace gorn
         std::shared_ptr<Material> loadMaterial(const std::string& name);
 
         void drawArrays(const VertexArray& vao, GLsizei size, GLint offset=0);
-
+        void drawElements(const VertexArray& vao, GLsizei size, GLenum type, GLint offset=0);
     };
 }
 

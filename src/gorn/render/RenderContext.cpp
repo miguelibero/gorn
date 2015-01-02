@@ -135,8 +135,15 @@ namespace gorn
 
     void RenderContext::drawArrays(const VertexArray& vao, GLsizei size, GLint offset)
 	{
-		glBindVertexArray(vao.getId());
+		vao.bind();
 		glDrawArrays(GL_TRIANGLES, offset, size);
 	}
+
+    void RenderContext::drawElements(const VertexArray& vao, GLsizei size, GLenum type, GLint offset)
+    {
+		vao.bind();
+		glDrawElements(GL_TRIANGLES, size, type,
+            reinterpret_cast<const GLvoid*>(offset));
+    }
 
 }

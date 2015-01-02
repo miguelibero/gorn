@@ -50,12 +50,17 @@ namespace gorn
 
 	GLint Program::getUniform(const std::string& name) const
 	{
-		GLint id = glGetUniformLocation(getId(), name.c_str());
-        if(id == -1)
+        auto itr = _uniforms.find(name);
+        if(itr == _uniforms.end())
         {
-            throw Exception(std::string("Could not find uniform '")+name+"'.");
+		    GLint id = glGetUniformLocation(getId(), name.c_str());
+            if(id == -1)
+            {
+                throw Exception(std::string("Could not find uniform '")+name+"'.");
+            }
+            itr = _uniforms.insert(itr, {name, id});
         }
-        return id;
+        return itr->second;
 	}
 
 	void Program::setUniform(const GLint& uniform, int value)

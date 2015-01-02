@@ -5,6 +5,7 @@
 #include <gorn/render/Shader.hpp>
 #include <glm/glm.hpp>
 #include <memory>
+#include <map>
 
 namespace gorn
 {
@@ -13,6 +14,7 @@ namespace gorn
 		GLuint _id;
 		std::shared_ptr<Shader> _fragmentShader;
 		std::shared_ptr<Shader> _vertexShader;
+        mutable std::map<std::string, GLint> _uniforms;
 	public:
 		Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader);
 		~Program();
@@ -24,6 +26,13 @@ namespace gorn
 
         GLint getAttribute(const std::string& name) const;
 	    GLint getUniform(const std::string& name) const;
+
+        template<typename V>
+        void setUniform(const std::string& uniform, const V& value)
+        {
+            setUniform(getUniform(uniform), value);
+        }
+
 	    void setUniform(const GLint& uniform, int value);
 	    void setUniform(const GLint& uniform, float value);
 	    void setUniform(const GLint& uniform, const glm::vec2& value);

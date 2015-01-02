@@ -36,6 +36,8 @@ namespace gorn
     {
         switch(target)
         {
+            case VertexBufferTarget::ElementArrayBuffer:
+                return GL_ELEMENT_ARRAY_BUFFER;
             default:
                 return GL_ARRAY_BUFFER;
         }

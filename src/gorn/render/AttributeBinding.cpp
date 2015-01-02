@@ -101,10 +101,6 @@ namespace gorn
         }
         _vao.bind();
         _vbo.bind();
-        if(_program != nullptr)
-        {
-            _program->use();
-        }
 		glEnableVertexAttribArray(_attribute);
 		glVertexAttribPointer(_attribute, _size, _type, _normalized,
             _stride, reinterpret_cast<const GLvoid*>(_offset));

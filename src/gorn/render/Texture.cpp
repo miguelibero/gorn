@@ -38,7 +38,7 @@ namespace gorn
 
     void Texture::activate(size_t pos)
     {
-        bind();
         glActiveTexture(GL_TEXTURE0 + pos);
+        bind();
     }
 }

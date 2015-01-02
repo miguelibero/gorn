@@ -13,18 +13,14 @@ namespace gorn
         }
 	}
 
-	const Program& Material::getProgram() const
+	const std::shared_ptr<Program>& Material::getProgram() const
 	{
-		return *_program;
+		return _program;
 	}
 
-    Program& Material::getProgram()
+    void Material::activate()
     {
-		return *_program;
-    }
-
-    void Material::use()
-    {
+        _program->use();
         size_t i = 0;
         for(auto itr = _textures.begin();
             itr != _textures.end(); ++itr)

@@ -17,9 +17,8 @@ namespace gorn
 		Material(const std::shared_ptr<Program>& program,
             const std::map<std::string, std::shared_ptr<Texture>>& textures);
 
-		const Program& getProgram() const;
-		Program& getProgram();
-        void use();
+		const std::shared_ptr<Program>& getProgram() const;
+        void activate();
 	};
 
 }

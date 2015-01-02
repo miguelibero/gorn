@@ -20,6 +20,7 @@ namespace gorn
 
     enum class VertexBufferTarget
     {
+        ElementArrayBuffer,
         ArrayBuffer
     };
 

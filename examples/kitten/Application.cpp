@@ -17,9 +17,6 @@ namespace gorn
 	PlatformBridge _bridge;
 	RenderContext _render;
     VertexArray _vao;
-    VertexBuffer _vbo;
-    std::shared_ptr<Material> _material;
-    GLuint _timeUniform;
     float time;
 
 	Application::Application()
@@ -40,15 +37,15 @@ namespace gorn
 #endif
 
 		_render.setPlatformBridge(_bridge);
-	    _render.defineProgram("shader");
+	    _render.defineProgram("shader")
+            .withUniforms({"timeSin"});
         _render.defineMaterial("kitten")
             .withProgram("shader")
             .withTexture("texture", "kitten");
 
-        _material = _render.loadMaterial("kitten");
-        _timeUniform = _material->getProgram().getUniform("timeSin");
+        _vao.bindMaterial(_render.loadMaterial("kitten"));
 
-        _vbo.setData({
+        auto vbo = std::make_shared<VertexBuffer>(Data{
          //  Position     Color             Texcoords
             -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
              0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
@@ -56,7 +53,6 @@ namespace gorn
             -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
         }, VertexBuffer::Usage::StaticDraw);
 
-        
         VertexDefinition vdef;
         vdef.defineAttribute("position")
             .withType(GL_FLOAT)
@@ -73,7 +69,15 @@ namespace gorn
             .withStride(7*sizeof(GLfloat))
             .withOffset(5*sizeof(GLfloat));
 
-        _vao.load(vdef, _vbo, _material->getProgram());
+        _vao.bindData(vdef, vbo);
+
+        vbo =  std::make_shared<VertexBuffer>(Data{
+            0, 1, 2,
+            2, 3, 0
+        }, VertexBuffer::Usage::StaticDraw,
+        VertexBuffer::Target::ElementArrayBuffer);
+
+        _vao.bindData(vbo);
 	}
 
 	void Application::unload()
@@ -83,9 +87,8 @@ namespace gorn
 	void Application::update(double dt)
 	{
         time += dt;
-        _material->getProgram().setUniform(_timeUniform, sinf(time));
-        // _material->use();
-		_render.drawArrays(_vao, 4);
+        _vao.getProgram()->setUniform("timeSin", sinf(time));
+		_render.drawElements(_vao, 6, GL_UNSIGNED_INT);
 	}
 
 }
