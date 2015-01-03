@@ -15,7 +15,7 @@ namespace gorn
 
 	MaterialDefinition& MaterialDefinition::withTexture(const std::string& uniform, const std::string& name)
     {
-        _textures[uniform] = name;        
+        _textures[uniform] = name;
 		return *this;
     }
 

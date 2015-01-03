@@ -2,7 +2,7 @@
 #ifndef __gorn__LocalFileLoader__
 #define __gorn__LocalFileLoader__
 
-#include <gorn/platform/FileLoader.hpp>
+#include <gorn/asset/FileLoader.hpp>
 
 namespace gorn {
 
@@ -14,7 +14,7 @@ namespace gorn {
     public:
         LocalFileLoader(const std::string& pathTemplate);
         bool validate(const std::string& name) const;
-        std::future<Data> load(const std::string& name) const;
+        Data load(const std::string& name) const;
     };
 }
 

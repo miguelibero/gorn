@@ -1,4 +1,4 @@
-#include <gorn/render/Image.hpp>
+#include <gorn/asset/Image.hpp>
 
 namespace gorn
 {

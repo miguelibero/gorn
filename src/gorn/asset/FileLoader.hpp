@@ -1,8 +1,7 @@
 #ifndef __gorn__FileLoader__
 #define __gorn__FileLoader__
 
-#include <memory>
-#include <future>
+#include <string>
 
 namespace gorn
 {
@@ -11,21 +10,19 @@ namespace gorn
 	class FileLoader
 	{
     public:
-		virtual ~FileLoader(){};
+		virtual ~FileLoader();
 
         /**
          * @return true if the file can be loaded
          */
-        virtual bool validate(const std::string& name) const
-        {
-            return true;
-        }
+        virtual bool validate(const std::string& name) const;
 
         /**
          * @return the new file data
          */
-        virtual std::future<Data> load(const std::string& name) const = 0;
+        virtual Data load(const std::string& name) const = 0;
 	};
+
 }
 
 #endif

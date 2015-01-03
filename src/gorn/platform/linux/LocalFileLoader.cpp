@@ -25,13 +25,9 @@ namespace gorn {
         return (stat (path.c_str(), &buffer) == 0); 
     }
 
-    Data loadLocalFile(const std::string& path)
+    Data LocalFileLoader::load(const std::string& name) const
     {
+        auto path = getPath(name);
         return Data::readFile(path);
-    }
-
-    std::future<Data> LocalFileLoader::load(const std::string& name) const
-    {
-        return std::async(std::launch::async, &loadLocalFile, getPath(name));
     }
 }

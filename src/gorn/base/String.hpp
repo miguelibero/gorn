@@ -19,6 +19,8 @@ namespace gorn
 
         static std::vector<std::string> split(const std::string& str,
             const std::string& sep, size_t max=npos);
+
+        static void trim(std::string& str, const std::string& chars=" \t\r\n");
 	};
 
 }

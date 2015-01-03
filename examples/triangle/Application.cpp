@@ -1,21 +1,8 @@
-#include <gorn/base/Application.hpp>
-#include <gorn/platform/PlatformBridge.hpp>
-#include <gorn/render/RenderContext.hpp>
-#include <gorn/render/ProgramDefinition.hpp>
-#include <gorn/render/VertexBuffer.hpp>
-#include <gorn/render/VertexArray.hpp>
-#include <gorn/render/AttributeBinding.hpp>
+#include <gorn/gorn.hpp>
 #include <cmath>
-
-#ifdef GORN_PLATFORM_LINUX
-#include <gorn/platform/linux/LocalFileLoader.hpp>
-#elif GORN_PLATFORM_ANDROID
-#include <gorn/platform/android/BundleFileLoader.hpp>
-#endif
 
 namespace gorn
 {
-	PlatformBridge _bridge;
 	RenderContext _render;
     VertexArray _vao;
     float time;
@@ -27,19 +14,16 @@ namespace gorn
 	void Application::load()
 	{
 #ifdef GORN_PLATFORM_LINUX
-		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
-            new LocalFileLoader("../%s.fsh")));
-		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
-            new LocalFileLoader("../%s.vsh")));
+		_render.getFileManager()
+            ->addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+		_render.getFileManager()
+            ->addLoader<LocalFileLoader>("vsh", "../%s.vsh");
 #elif GORN_PLATFORM_ANDROID
-		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
-            new BundleFileLoader("%s.fsh")));
-		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
-            new BundleFileLoader("%s.vsh")));
+		_render.getFileManager()
+            ->addLoader<BundleFileLoader>("fsh", "%s.fsh");
+		_render.getFileManager()
+            ->addLoader<BundleFileLoader>("vsh", "%s.vsh");
 #endif
-
-		_render.setPlatformBridge(_bridge);
-	    _render.defineProgram("shader");
 
         _vao.bindProgram(_render.loadProgram("shader"));
 

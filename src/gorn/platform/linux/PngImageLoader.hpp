@@ -2,15 +2,17 @@
 #ifndef __gorn__PngImageLoader__
 #define __gorn__PngImageLoader__
 
-#include <gorn/platform/ImageLoader.hpp>
+#include <gorn/asset/AssetLoader.hpp>
 
 namespace gorn {
 
-    class PngImageLoader : public ImageLoader
+    class Image;
+
+    class PngImageLoader : public AssetLoader<Image>
     {
     public:
         bool validate(const Data& input) const;
-        std::future<Image> load(Data&& input) const;
+        Image load(Data&& input) const;
     };
 }
 

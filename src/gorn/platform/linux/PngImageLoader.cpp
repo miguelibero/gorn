@@ -1,7 +1,7 @@
 
 
 #include <gorn/platform/linux/PngImageLoader.hpp>
-#include <gorn/render/Image.hpp>
+#include <gorn/asset/Image.hpp>
 #include <gorn/base/Exception.hpp>
 #include <cstring>
 #include <png.h>
@@ -49,7 +49,7 @@ namespace gorn {
             ->read(data, length);
     }
 
-    Image loadPngImage(Data&& inputData)
+    Image PngImageLoader::load(Data&& inputData) const
     {
         DataInputStream input(inputData);
         png_structp pngPtr = png_create_read_struct(
@@ -161,11 +161,5 @@ namespace gorn {
         GLenum format = hasAlpha ? GL_RGBA : GL_RGB;
         return Image(std::move(data),
             imgWidth, imgHeight, format, GL_UNSIGNED_BYTE);
-    }
-
-    std::future<Image> PngImageLoader::load(Data&& inputData) const
-    {
-        return std::async(std::launch::async,
-            &loadPngImage, std::move(inputData));
     }
 }

@@ -12,10 +12,11 @@
 #include <gorn/render/Shader.hpp>
 #include <gorn/render/Program.hpp>
 #include <gorn/render/Material.hpp>
+#include <gorn/asset/FileManager.hpp>
+#include <gorn/asset/AssetManager.hpp>
 
 namespace gorn
 {
-    class PlatformBridge;
     class VertexArray;
 
     class RenderContext
@@ -29,7 +30,8 @@ namespace gorn
         std::map<std::string, MaterialDefinition> _materialDefinitions;
         std::map<std::string, TextureDefinition> _textureDefinitions;
         
-        PlatformBridge* _bridge;
+        std::shared_ptr<FileManager> _files;
+        std::shared_ptr<AssetManager<Image>> _images;
 
     public:
         static const char* kDefaultTextureTag;
@@ -37,7 +39,11 @@ namespace gorn
         static const char* kDefaultFragmentShaderTag;
 
         RenderContext();
-        void setPlatformBridge(PlatformBridge& bridge);
+
+        void setFileManager(const std::shared_ptr<FileManager>& mng);
+        void setImageManager(const std::shared_ptr<AssetManager<Image>>& mng);
+        const std::shared_ptr<FileManager>& getFileManager() const;
+        const std::shared_ptr<AssetManager<Image>>& getImageManager() const;
 
         ProgramDefinition& defineProgram(const std::string& name);
         MaterialDefinition& defineMaterial(const std::string& name);

@@ -115,6 +115,22 @@ namespace gorn
         return n;
     }
 
+    size_t DataInputStream::readLine(std::string& line)
+    {
+        size_t n = 0;
+        while(_read_data._mem.at(_read+n) != '\0')
+        {
+            line += _read_data._mem.at(_read+n);
+        }
+		_read += n;
+        return n;
+    }
+
+    bool DataInputStream::reachedEnd() const
+    {
+        return _read >= _read_data.size();
+    }
+
     DataOutputStream::DataOutputStream(Data& data) :
     _write_data(data), _write(0)
     {
@@ -145,4 +161,15 @@ namespace gorn
 		s.read(*this, n);
 		return n;
 	}
+
+    size_t DataOutputStream::write(const std::string& s)
+	{
+        return write(reinterpret_cast<const uint8_t*>(s.c_str()),
+            s.length()*sizeof(std::string::value_type)/sizeof(uint8_t));
+	}
+
+    bool DataOutputStream::reachedEnd() const
+    {
+        return _write >= _write_data.size();
+    }
 }

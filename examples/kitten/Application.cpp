@@ -1,23 +1,9 @@
-#include <gorn/base/Application.hpp>
-#include <gorn/platform/PlatformBridge.hpp>
-#include <gorn/render/RenderContext.hpp>
-#include <gorn/render/MaterialDefinition.hpp>
-#include <gorn/render/VertexBuffer.hpp>
-#include <gorn/render/VertexArray.hpp>
-#include <gorn/render/VertexDefinition.hpp>
-#include <glm/gtx/transform.hpp>
 
-#ifdef GORN_PLATFORM_LINUX
-#include <gorn/platform/linux/LocalFileLoader.hpp>
-#include <gorn/platform/linux/PngImageLoader.hpp>
-#elif GORN_PLATFORM_ANDROID
-#include <gorn/platform/android/BundleFileLoader.hpp>
-#include <gorn/platform/android/GraphicsImageLoader.hpp>
-#endif
+#include <gorn/gorn.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace gorn
 {
-	PlatformBridge _bridge;
 	RenderContext _render;
     VertexArray _vao;
     float time;
@@ -28,29 +14,29 @@ namespace gorn
 
 	void Application::load()
 	{
+
 #ifdef GORN_PLATFORM_LINUX
-		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
-            new LocalFileLoader("../%s.fsh")));
-		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
-            new LocalFileLoader("../%s.vsh")));
-		_bridge.addFileLoader("tex", std::unique_ptr<FileLoader>(
-            new LocalFileLoader("../%s.png")));
-		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(
-            new PngImageLoader()));
+		_render.getFileManager()
+            ->addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+		_render.getFileManager()
+            ->addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+		_render.getFileManager()
+            ->addLoader<LocalFileLoader>("tex", "../%s.png");
+		_render.getImageManager()
+            ->addLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
-		_bridge.addFileLoader("fsh", std::unique_ptr<FileLoader>(
-            new BundleFileLoader("%s.fsh")));
-		_bridge.addFileLoader("vsh", std::unique_ptr<FileLoader>(
-            new BundleFileLoader("%s.vsh")));
-		_bridge.addFileLoader("tex", std::unique_ptr<FileLoader>(
-            new BundleFileLoader("%s.png")));
-		_bridge.addImageLoader(std::unique_ptr<ImageLoader>(
-            new GraphicsImageLoader()));
+		_render.getFileManager()
+            ->addLoader<BundleFileLoader>("fsh", "%s.fsh");
+		_render.getFileManager()
+            ->addLoader<BundleFileLoader>("vsh", "%s.vsh");
+		_render.getFileManager()
+            ->addLoader<BundleFileLoader>("tex", "%s.png");
+		_render.getImageManager()
+            ->addLoader<GraphicsImageLoader>();
 #endif
 
-		_render.setPlatformBridge(_bridge);
 	    _render.defineProgram("shader")
-            .withUniforms({"timeSin"});
+            .withUniforms({"transform"});
         _render.defineMaterial("kitten")
             .withProgram("shader")
             .withTexture("texture", "kitten");
@@ -93,7 +79,7 @@ namespace gorn
 	}
 
 	void Application::unload()
-	{   
+	{
 	}
 
 	void Application::update(double dt)

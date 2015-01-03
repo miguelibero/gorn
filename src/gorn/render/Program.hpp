@@ -17,6 +17,7 @@ namespace gorn
 		std::shared_ptr<Shader> _fragmentShader;
 		std::shared_ptr<Shader> _vertexShader;
         mutable std::map<std::string, GLint> _uniforms;
+        mutable std::map<std::string, GLint> _attributes;
 	public:
 		Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader);
 		~Program();
@@ -32,20 +33,11 @@ namespace gorn
         template<typename V>
         void setUniform(const std::string& uniform, const V& value)
         {
-            setUniform(getUniform(uniform), value);
+            setUniform<V>(getUniform(uniform), value);
         }
 
-	    void setUniform(const GLint& uniform, int value);
-	    void setUniform(const GLint& uniform, float value);
-	    void setUniform(const GLint& uniform, const glm::vec2& value);
-	    void setUniform(const GLint& uniform, const glm::vec3& value);
-	    void setUniform(const GLint& uniform, const glm::vec4& value);
-	    void setUniform(const GLint& uniform, const std::vector<float>& values);
-	    void setUniform(const GLint& uniform, const std::vector<glm::vec2>& values);
-	    void setUniform(const GLint& uniform, const std::vector<glm::vec3>& values);
-	    void setUniform(const GLint& uniform, const std::vector<glm::vec4>& values);
-	    void setUniform(const GLint& uniform, const glm::mat3& value);
-	    void setUniform(const GLint& uniform, const glm::mat4& value);
+        template<typename V>
+	    void setUniform(const GLint& uniform, const V& value);
     };
 }
 

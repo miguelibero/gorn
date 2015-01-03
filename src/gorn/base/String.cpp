@@ -42,6 +42,10 @@ namespace gorn
         return parts;
     }
 
+    void String::trim(std::string& str, const std::string& chars)
+    {
+    }
+
 
 }
 

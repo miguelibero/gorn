@@ -4,5 +4,3 @@ project(glm)
 
 include_directories(.)
 add_definitions(-DGLM_FORCE_RADIANS)
-
-

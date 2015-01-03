@@ -1,7 +1,6 @@
 #include <gorn/render/RenderContext.hpp>
-#include <gorn/render/Image.hpp>
 #include <gorn/render/VertexArray.hpp>
-#include <gorn/platform/PlatformBridge.hpp>
+#include <gorn/asset/Image.hpp>
 #include <gorn/base/Exception.hpp>
 
 namespace gorn
@@ -11,13 +10,29 @@ namespace gorn
     const char* RenderContext::kDefaultFragmentShaderTag = "fsh";
 
     RenderContext::RenderContext():
-    _bridge(nullptr)
+    _files(std::make_shared<FileManager>()),
+    _images(std::make_shared<AssetManager<Image>>(_files))
     {
     }
 
-    void RenderContext::setPlatformBridge(PlatformBridge& bridge)
+    void RenderContext::setFileManager(const std::shared_ptr<FileManager>& mng)
     {
-        _bridge = &bridge;
+        _files = mng;
+    }
+
+    void RenderContext::setImageManager(const std::shared_ptr<AssetManager<Image>>& mng)
+    {
+        _images = mng;
+    }
+
+    const std::shared_ptr<FileManager>& RenderContext::getFileManager() const
+    {
+        return _files;
+    }
+
+    const std::shared_ptr<AssetManager<Image>>& RenderContext::getImageManager() const
+    {
+        return _images;
     }
 
     std::shared_ptr<Texture> RenderContext::loadTexture(const std::string& name)
@@ -28,11 +43,11 @@ namespace gorn
             return itr->second;
         }
         auto& def = defineTexture(name);
-        if(_bridge == nullptr)
+        if(_images == nullptr)
         {
-            throw Exception("Platform bridge not set.");
+            throw Exception("Image asset manager not set.");
         }
-        auto img = _bridge->readImage(def.getImageTag(), def.getImageName()).get();
+        auto img = _images->load(def.getImageTag(), def.getImageName()).get();
         auto tex = std::make_shared<Texture>(def.getTarget());
         for(auto itr = def.getIntParameters().begin();
             itr != def.getIntParameters().end(); ++itr)
@@ -67,9 +82,9 @@ namespace gorn
         {
             return itr->second;
         }
-        if(_bridge == nullptr)
+        if(_files == nullptr)
         {
-            throw Exception("Platform bridge not set.");
+            throw Exception("File manager not set.");
         }
         std::string tag;
         if(type == ShaderType::Vertex)
@@ -80,7 +95,7 @@ namespace gorn
         {
             tag = kDefaultFragmentShaderTag;
         }
-        auto data = _bridge->readFile(tag, name).get();
+        auto data = _files->load(tag, name).get();
         auto shader = std::make_shared<Shader>(data, type);
         shaders.insert(itr, {name, shader});
         return shader;
@@ -93,16 +108,19 @@ namespace gorn
         {
             return itr->second;
         }
-        auto ditr = _programDefinitions.find(name);
-        if(ditr == _programDefinitions.end())
-        {
-            throw Exception(std::string("Could not find program definition '")+name+"'.");
-        }
-        ProgramDefinition& def = ditr->second;
+        auto& def = defineProgram(name);
         auto vertex = loadShader(def.getVertexShader(), ShaderType::Vertex);
         auto fragment = loadShader(def.getFragmentShader(), ShaderType::Fragment);
 
         auto program = std::make_shared<Program>(fragment, vertex);
+        for(auto& name : def.getAttributes())
+        {
+            program->getAttribute(name);
+        }
+        for(auto& name : def.getUniforms())
+        {
+            program->getUniform(name);
+        }
         _programs.insert(itr, {name, program});
         return program;
     }
@@ -114,12 +132,7 @@ namespace gorn
         {
             return itr->second;
         }
-        auto ditr = _materialDefinitions.find(name);
-        if(ditr == _materialDefinitions.end())
-        {
-            throw Exception(std::string("Could not find material definition '")+name+"'.");
-        }
-        MaterialDefinition& def = ditr->second;
+        auto& def = defineMaterial(name);
         auto program = loadProgram(def.getProgram());
 
         std::map<std::string, std::shared_ptr<Texture>> textures;
@@ -151,6 +164,7 @@ namespace gorn
         if(itr == _materialDefinitions.end())
         {
             itr = _materialDefinitions.insert(itr, {name, MaterialDefinition()});
+            itr->second.withProgram(name);
         }
         return itr->second;
     }

@@ -67,6 +67,8 @@ namespace gorn
 		size_t read(uint8_t* s, size_t n);
 		size_t read(DataOutputStream& s, size_t n);
 		size_t read(Data& s, size_t n);
+        size_t readLine(std::string& s);
+        bool reachedEnd() const;
 
         friend class DataStream;
     };
@@ -82,6 +84,8 @@ namespace gorn
 		size_t write(const uint8_t* s, size_t n);
 		size_t write(const Data& s, size_t n);
 		size_t write(DataInputStream& s, size_t n);
+        size_t write(const std::string& s);
+        bool reachedEnd() const;
 
         friend class DataInputStream;
     };
