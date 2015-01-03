@@ -1,7 +1,7 @@
 #ifndef __gorn__VertexDefinition__
 #define __gorn__VertexDefinition__
 
-#include <gorn/render/AttributeBindingDefinition.hpp>
+#include <gorn/render/AttributeDefinition.hpp>
 #include <map>
 
 namespace gorn
@@ -13,15 +13,15 @@ namespace gorn
 	class VertexDefinition
 	{
     private:
-        std::map<std::string, AttributeBindingDefinition> _attributeBindings;
+        std::map<std::string, AttributeDefinition> _attributes;
 
 	public:
 
         VertexDefinition();
 
-        AttributeBindingDefinition& defineAttribute(const std::string& name);
+        AttributeDefinition& setAttribute(const std::string& name);
 
-        const std::map<std::string, AttributeBindingDefinition>& getAttributeBindings() const;
+        const std::map<std::string, AttributeDefinition>& getAttributes() const;
 	};
 }
 

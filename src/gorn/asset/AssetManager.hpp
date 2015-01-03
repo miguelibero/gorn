@@ -17,14 +17,15 @@ namespace gorn
     public:
         typedef AssetLoader<T> Loader;
 	private:
-        std::shared_ptr<FileManager> _fileManager;
+        FileManager& _files;
 		std::vector<std::shared_ptr<Loader>> _loaders;
         std::future<T> load(const std::shared_ptr<Loader>& loader, Data&& data);
 
 	public:
-        AssetManager(const std::shared_ptr<FileManager>& fileMng);
+        AssetManager(FileManager& files);
 	    std::future<T> load(const std::string& tag, const std::string& name);
 	    std::future<T> load(const std::string& name);
+        std::future<T> load(Data&& data);
 
 	    void addLoader(std::unique_ptr<Loader>&& loader);
 
@@ -33,8 +34,8 @@ namespace gorn
 	};
 
     template<typename T>
-	AssetManager<T>::AssetManager(const std::shared_ptr<FileManager>& mng):
-    _fileManager(mng)
+	AssetManager<T>::AssetManager(FileManager& files):
+    _files(files)
     {
     }
 
@@ -59,7 +60,21 @@ namespace gorn
     template<typename T>
 	std::future<T> AssetManager<T>::load(const std::string& tag, const std::string& name)
 	{
-        auto data = _fileManager->load(tag, name).get();
+        auto data = _files.load(tag, name).get();
+        return load(std::move(data));
+	}
+
+
+    template<typename T>
+	std::future<T> AssetManager<T>::load(const std::string& name)
+	{
+        auto data = _files.load(name).get();
+        return load(std::move(data));
+	}
+
+    template<typename T>
+    std::future<T> AssetManager<T>::load(Data&& data)
+    {
         for(auto& loader : _loaders)
 		{
 			if(loader->validate(data))
@@ -68,7 +83,7 @@ namespace gorn
 			}
 		}
 		throw Exception("Could not load asset.");
-	}
+    }
 
     template<typename T>
     std::future<T> AssetManager<T>::load(const std::shared_ptr<Loader>& loader, Data&& data)

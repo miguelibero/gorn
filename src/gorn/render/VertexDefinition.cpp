@@ -6,20 +6,19 @@ namespace gorn
     {
     }
 
-    AttributeBindingDefinition& VertexDefinition::defineAttribute(const std::string& name)
+    AttributeDefinition& VertexDefinition::setAttribute(const std::string& name)
     {
-        auto itr = _attributeBindings.find(name);
-        if(itr == _attributeBindings.end())
+        auto itr = _attributes.find(name);
+        if(itr == _attributes.end())
         {
-            itr = _attributeBindings.insert(itr, {name, AttributeBindingDefinition()});
-            itr->second.withName(name);
+            itr = _attributes.insert(itr, {name, AttributeDefinition(name)});
         }
         return itr->second;
     }
 
-    const std::map<std::string, AttributeBindingDefinition>& VertexDefinition::getAttributeBindings() const
+    const std::map<std::string, AttributeDefinition>& VertexDefinition::getAttributes() const
     {
-        return _attributeBindings;
+        return _attributes;
     }    
 }
 

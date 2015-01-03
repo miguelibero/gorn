@@ -9,7 +9,7 @@ namespace gorn
 {
     class VertexBuffer;
     class VertexDefinition;
-    class AttributeBinding;
+    class AttributeDefinition;
     class Material;
     class Program;
 
@@ -18,7 +18,10 @@ namespace gorn
     private:
         static GLuint s_currentId;
         mutable GLuint _id;
-        std::vector<std::shared_ptr<VertexBuffer>> _vbos;
+        std::shared_ptr<VertexBuffer> _elementVbo;
+        GLenum _elementType;
+        GLenum _drawMode;
+        std::vector<std::shared_ptr<VertexBuffer>> _vertexVbos;
         std::shared_ptr<Program> _program;
         std::shared_ptr<Material> _material;
     public:
@@ -28,17 +31,19 @@ namespace gorn
 
         void bind() const;
         void activate() const;
-        void bindAttribute(GLuint attribute, const std::shared_ptr<VertexBuffer>& buffer,
+        void setDrawMode(GLenum mode);
+        void setAttribute(GLuint attribute, const std::shared_ptr<VertexBuffer>& buffer,
             GLenum type, GLboolean normalized, GLint size,
             GLsizei stride=0, GLsizei offset=0);
-        AttributeBinding bindAttribute(const std::shared_ptr<VertexBuffer>& vbo);
-        void bindData(const VertexDefinition& vdef, const std::shared_ptr<VertexBuffer>& vbo);
-        void bindData(const std::shared_ptr<VertexBuffer>& vbo);
-        void addData(const std::shared_ptr<VertexBuffer>& vbo);
-        void bindProgram(const std::shared_ptr<Program>& program);
-        void bindMaterial(const std::shared_ptr<Material>& material);
+        void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const AttributeDefinition& def);
+        void addVertexData(const std::shared_ptr<VertexBuffer>& vbo, const VertexDefinition& def);
+        void setElementData(const std::shared_ptr<VertexBuffer>& vbo, GLenum type=GL_UNSIGNED_INT);
+        void setProgram(const std::shared_ptr<Program>& program);
+        void setMaterial(const std::shared_ptr<Material>& material);
         const std::shared_ptr<Program>& getProgram() const;
         const std::shared_ptr<Material>& getMaterial() const;
+
+        void draw(GLsizei count, GLint offset=0);
     };
 }
 

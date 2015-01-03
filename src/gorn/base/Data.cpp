@@ -57,6 +57,18 @@ namespace gorn
 	{
 	}
 
+    Data& Data::operator=(Data&& other)
+    {
+        _mem = std::move(other._mem);
+        return *this;
+    }
+
+    Data& Data::operator=(const Data& other)
+    {
+        _mem = other._mem;
+        return *this;
+    }
+
 	uint8_t* Data::ptr()
 	{
 		return _mem.data();

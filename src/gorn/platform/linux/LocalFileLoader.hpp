@@ -9,10 +9,12 @@ namespace gorn {
     class LocalFileLoader : public FileLoader
     {
     private:
+        static const char* kPlaceholder;
+
         std::string _pathTemplate;
         std::string getPath(const std::string& name) const;
     public:
-        LocalFileLoader(const std::string& pathTemplate);
+        LocalFileLoader(const std::string& pathTemplate=kPlaceholder);
         bool validate(const std::string& name) const;
         Data load(const std::string& name) const;
     };

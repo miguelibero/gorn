@@ -29,6 +29,8 @@ namespace gorn
         template<typename T>
 		Data(std::vector<T>&& data);
 
+        Data& operator=(Data&& other);
+        Data& operator=(const Data& other);
 
 		uint8_t* ptr();
 		const uint8_t* ptr() const;

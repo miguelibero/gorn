@@ -32,12 +32,20 @@ namespace gorn
 
         template<typename L, typename... Args>
         void addLoader(const std::string& tag, Args&&... args);
+        template<typename L, typename... Args>
+        void addDefaultLoader(Args&&... args);
 	};
 
     template<typename L, typename... Args>
     void FileManager::addLoader(const std::string& tag, Args&&... args)
     {
         addLoader(tag, std::unique_ptr<Loader>(new L(std::forward<Args>(args)...)));
+    }
+
+    template<typename L, typename... Args>
+    void FileManager::addDefaultLoader(Args&&... args)
+    {
+        addLoader(std::unique_ptr<Loader>(new L(std::forward<Args>(args)...)));
     }
 }
 

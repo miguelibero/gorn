@@ -36,6 +36,7 @@ namespace gorn
         static std::map<GLenum, GLuint> s_currentIds;
 		mutable GLuint _id;
         Target _target;
+        size_t _size;
 	public:
 
 		VertexBuffer(const Data& data,
@@ -49,6 +50,7 @@ namespace gorn
         void setData(const Data& data, Usage usage);
         void setSubData(const Data& data, size_t offset);
         Data getSubData(size_t offset, size_t size) const;
+        size_t getSize() const;
 	};
 }
 

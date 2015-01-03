@@ -7,13 +7,13 @@ namespace gorn
     std::map<GLenum, GLuint> VertexBuffer::s_currentIds;
 
     VertexBuffer::VertexBuffer(const Data& data, Usage usage, Target target):
-    _id(0), _target(target)
+    _id(0), _target(target), _size(0)
     {
         setData(data, usage);
     }
 
     VertexBuffer::VertexBuffer(Target target):
-    _id(0), _target(target)
+    _id(0), _target(target), _size(0)
     {
     }
 	
@@ -84,6 +84,7 @@ namespace gorn
     void VertexBuffer::setData(const Data& data, Usage usage)
     {
         bind();
+        _size = data.size();
 		glBufferData(getGlTarget(_target), data.size(),
             data.ptr(), getGlUsage(usage));
     }
@@ -102,6 +103,11 @@ namespace gorn
 		glGetBufferSubData(getGlTarget(_target),
             offset, data.size(), data.ptr());
         return data;
+    }
+
+    size_t VertexBuffer::getSize() const
+    {
+        return _size;
     }
 
 }

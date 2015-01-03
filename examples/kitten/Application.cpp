@@ -25,33 +25,33 @@ namespace gorn
 
 #ifdef GORN_PLATFORM_LINUX
 		_render.getFileManager()
-            ->addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+            .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
 		_render.getFileManager()
-            ->addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+            .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
 		_render.getFileManager()
-            ->addLoader<LocalFileLoader>("tex", "../%s.png");
+            .addLoader<LocalFileLoader>("tex", "../%s.png");
 		_render.getImageManager()
-            ->addLoader<PngImageLoader>();
+            .addLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 		_render.getFileManager()
-            ->addLoader<BundleFileLoader>("fsh", "%s.fsh");
+            .addLoader<BundleFileLoader>("fsh", "%s.fsh");
 		_render.getFileManager()
-            ->addLoader<BundleFileLoader>("vsh", "%s.vsh");
+            .addLoader<BundleFileLoader>("vsh", "%s.vsh");
 		_render.getFileManager()
-            ->addLoader<BundleFileLoader>("tex", "%s.png");
+            .addLoader<BundleFileLoader>("tex", "%s.png");
 		_render.getImageManager()
-            ->addLoader<GraphicsImageLoader>();
+            .addLoader<GraphicsImageLoader>();
 #endif
 
-	    _render.defineProgram("shader")
+	    _render.getPrograms().define("shader")
             .withUniforms({"transform"});
 
-        _render.defineMaterial("kitten")
+        _render.getMaterials().define("kitten")
             .withProgram("shader")
             .withTexture("texture", "kitten")
             .withUniformValue("transform", getTransform(0.25f));
 
-        _vao.bindMaterial(_render.loadMaterial("kitten"));
+        _vao.setMaterial(_render.getMaterials().load("kitten"));
 
         auto vbo = std::make_shared<VertexBuffer>(Data{
          //  Position     Color             texCoords
@@ -62,22 +62,22 @@ namespace gorn
         }, VertexBuffer::Usage::StaticDraw);
 
         VertexDefinition vdef;
-        vdef.defineAttribute("position")
+        vdef.setAttribute("position")
             .withType(GL_FLOAT)
             .withSize(2)
             .withStride(7*sizeof(GLfloat));
-        vdef.defineAttribute("color")
+        vdef.setAttribute("color")
             .withType(GL_FLOAT)
             .withSize(3)
             .withStride(7*sizeof(GLfloat))
             .withOffset(2*sizeof(GLfloat));
-        vdef.defineAttribute("texCoords")
+        vdef.setAttribute("texCoords")
             .withType(GL_FLOAT)
             .withSize(2)
             .withStride(7*sizeof(GLfloat))
             .withOffset(5*sizeof(GLfloat));
 
-        _vao.bindData(vdef, vbo);
+        _vao.addVertexData(vbo, vdef);
 
         vbo =  std::make_shared<VertexBuffer>(Data{
             0, 1, 2,
@@ -85,7 +85,7 @@ namespace gorn
         }, VertexBuffer::Usage::StaticDraw,
         VertexBuffer::Target::ElementArrayBuffer);
 
-        _vao.bindData(vbo);
+        _vao.setElementData(vbo);
 	}
 
 	void Application::unload()
@@ -96,7 +96,7 @@ namespace gorn
 	{
         time += dt;
         _vao.getMaterial()->setUniformValue("transform", getTransform(time));
-		_render.drawElements(_vao, 6, GL_UNSIGNED_INT);
+		_vao.draw(6);
 	}
 
 }

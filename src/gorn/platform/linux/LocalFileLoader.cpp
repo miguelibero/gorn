@@ -6,6 +6,8 @@
 
 namespace gorn {
 
+    const char* LocalFileLoader::kPlaceholder = "%s";
+
     LocalFileLoader::LocalFileLoader(const std::string& pathTemplate):
     _pathTemplate(pathTemplate)
     {
@@ -14,7 +16,7 @@ namespace gorn {
     std::string LocalFileLoader::getPath(const std::string& name) const
     {
         std::string path(_pathTemplate);
-        String::replaceAll(path, "%s", name);
+        String::replaceAll(path, kPlaceholder, name);
         return path;
     }
 

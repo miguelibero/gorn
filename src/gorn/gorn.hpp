@@ -7,10 +7,12 @@
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <gorn/render/AttributeBinding.hpp>
+#include <gorn/render/AttributeDefinition.hpp>
 #include <gorn/render/UniformValue.hpp>
 #include <gorn/asset/Image.hpp>
 #include <gorn/asset/TextureAtlas.hpp>
+#include <gorn/asset/GdxTextureAtlasLoader.hpp>
+#include <gorn/asset/CocosTextureAtlasLoader.hpp>
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>

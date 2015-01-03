@@ -2,9 +2,10 @@
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <gorn/render/AttributeBinding.hpp>
+#include <gorn/render/AttributeDefinition.hpp>
 #include <gorn/render/Program.hpp>
 #include <gorn/render/Material.hpp>
+#include <gorn/base/Exception.hpp>
 #include <algorithm>
 
 namespace gorn
@@ -12,7 +13,7 @@ namespace gorn
     GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
-    _id(0)
+    _id(0), _elementType(0), _drawMode(GL_TRIANGLES)
     {   
     }
 	
@@ -33,7 +34,12 @@ namespace gorn
         return _id;
 	};
 
-    void VertexArray::bindProgram(const std::shared_ptr<Program>& program)
+    void VertexArray::setDrawMode(GLenum mode)
+    {
+        _drawMode = mode;
+    }
+
+    void VertexArray::setProgram(const std::shared_ptr<Program>& program)
     {
         _program = program;
         if(_program != nullptr)
@@ -52,7 +58,7 @@ namespace gorn
         return _program;
     }
 
-    void VertexArray::bindMaterial(const std::shared_ptr<Material>& material)
+    void VertexArray::setMaterial(const std::shared_ptr<Material>& material)
     {
         _material = material;
     }
@@ -62,20 +68,12 @@ namespace gorn
         return _material;
     }
 
-    void VertexArray::bindData(const std::shared_ptr<VertexBuffer>& vbo)
+    void VertexArray::setElementData(const std::shared_ptr<VertexBuffer>& vbo, GLenum type)
     {
-        addData(vbo);
+        _elementVbo = vbo;
+        _elementType = type;
         bind();
         vbo->bind();
-    }
-
-    void VertexArray::addData(const std::shared_ptr<VertexBuffer>& vbo)
-    {
-        auto itr = std::find(_vbos.begin(), _vbos.end(), vbo);
-        if(itr == _vbos.end())
-        {
-            _vbos.insert(itr, vbo);
-        }
     }
 
     void VertexArray::bind() const
@@ -96,27 +94,53 @@ namespace gorn
         }
     }
 
-    AttributeBinding VertexArray::bindAttribute(const std::shared_ptr<VertexBuffer>& vbo)
+    void VertexArray::setAttribute(const std::shared_ptr<VertexBuffer>& vbo,
+        const AttributeDefinition& def)
     {
-        addData(vbo);
-        auto program = getProgram();
-        if(program != nullptr)
+        if(!def.getType())
         {
-            return AttributeBinding(*this, *vbo, *program);
+            throw Exception("no type defined");
         }
-        else
+
+        auto itr = std::find(_vertexVbos.begin(), _vertexVbos.end(), vbo);
+        if(itr == _vertexVbos.end())
         {
-            return AttributeBinding(*this, *vbo);
+            itr = _vertexVbos.insert(itr, vbo);
+        }
+        auto program = getProgram();
+        GLint id = program->getAttribute(def.getName());        
+
+        bind();
+        vbo->bind();
+		glEnableVertexAttribArray(id);
+		glVertexAttribPointer(id, def.getSize(), def.getType(),
+            def.getNormalized(), def.getStride(),
+            reinterpret_cast<const GLvoid*>(def.getOffset()));
+    }
+
+    void VertexArray::addVertexData(const std::shared_ptr<VertexBuffer>& vbo,
+        const VertexDefinition& def)
+    {
+        for(auto itr = def.getAttributes().begin();
+            itr != def.getAttributes().end(); ++itr)
+        {
+            setAttribute(vbo, itr->second);
         }
     }
 
-    void VertexArray::bindData(const VertexDefinition& vdef, const std::shared_ptr<VertexBuffer>& vbo)
+    void VertexArray::draw(GLsizei count, GLint offset)
     {
-        for(auto itr = vdef.getAttributeBindings().begin();
-            itr != vdef.getAttributeBindings().end(); ++itr)
+        activate();
+        if(_elementVbo && _elementType)
         {
-            bindAttribute(vbo).withDefinition(itr->second).finish();
+    		glDrawElements(_drawMode, count, _elementType,
+                reinterpret_cast<const GLvoid*>(offset));
         }
+        else
+        {
+		    glDrawArrays(_drawMode, offset, count);
+        }
+
     }
 }
 
