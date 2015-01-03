@@ -27,6 +27,7 @@ namespace gorn
         GLuint getId() const;
 
         void bind() const;
+        void activate() const;
         void bindAttribute(GLuint attribute, const std::shared_ptr<VertexBuffer>& buffer,
             GLenum type, GLboolean normalized, GLint size,
             GLsizei stride=0, GLsizei offset=0);

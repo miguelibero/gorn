@@ -1,6 +1,7 @@
 
 #include <gorn/gorn.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/constants.hpp>
 
 namespace gorn
 {
@@ -11,6 +12,13 @@ namespace gorn
 	Application::Application()
 	{
 	}
+
+    glm::mat4 getTransform(float angle)
+    {
+        return glm::rotate(glm::mat4(),
+            glm::pi<float>()*angle,
+            glm::vec3(0,0,1));
+    }
 
 	void Application::load()
 	{
@@ -37,9 +45,11 @@ namespace gorn
 
 	    _render.defineProgram("shader")
             .withUniforms({"transform"});
+
         _render.defineMaterial("kitten")
             .withProgram("shader")
-            .withTexture("texture", "kitten");
+            .withTexture("texture", "kitten")
+            .withUniformValue("transform", getTransform(0.25f));
 
         _vao.bindMaterial(_render.loadMaterial("kitten"));
 
@@ -85,8 +95,7 @@ namespace gorn
 	void Application::update(double dt)
 	{
         time += dt;
-        auto transform = glm::rotate(glm::mat4(), time, glm::vec3(0,0,1));
-        _vao.getProgram()->setUniform("transform", transform);
+        _vao.getMaterial()->setUniformValue("transform", getTransform(time));
 		_render.drawElements(_vao, 6, GL_UNSIGNED_INT);
 	}
 

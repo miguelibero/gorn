@@ -1,17 +1,22 @@
 #include <gorn/render/Material.hpp>
+#include <gorn/render/UniformValue.hpp>
 
 namespace gorn
 {
-	Material::Material(const std::shared_ptr<Program>& program,
-        const std::map<std::string, std::shared_ptr<Texture>>& textures):
+	Material::Material(const std::shared_ptr<Program>& program):
 	_program(program)
 	{
-        for(auto itr = textures.begin();
-            itr != textures.end(); ++itr)
-        {
-            _textures[_program->getUniform(itr->first)] = itr->second;
-        }
 	}
+
+	void Material::setTexture(const std::string& name, const std::shared_ptr<Texture>& texture)
+    {
+        _textures[_program->getUniform(name)] = texture;
+    }
+
+	void Material::setUniformValue(const std::string& name, const UniformValue& value)
+    {
+        _uniformValues[_program->getUniform(name)] = value;
+    }
 
 	const std::shared_ptr<Program>& Material::getProgram() const
 	{
@@ -25,9 +30,14 @@ namespace gorn
         for(auto itr = _textures.begin();
             itr != _textures.end(); ++itr)
         {
-            _program->setUniform(itr->first, (int)i);
+            _program->setUniformValue(itr->first, (GLint)i);
             itr->second->activate(i);
             ++i;
+        }
+        for(auto itr = _uniformValues.begin();
+            itr != _uniformValues.end(); ++itr)
+        {
+            itr->second.set(itr->first);
         }
     }
 

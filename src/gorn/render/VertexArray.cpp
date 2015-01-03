@@ -55,11 +55,6 @@ namespace gorn
     void VertexArray::bindMaterial(const std::shared_ptr<Material>& material)
     {
         _material = material;
-        if(_material != nullptr)
-        {
-            bind();
-            _material->activate();
-        }
     }
 
     const std::shared_ptr<Material>& VertexArray::getMaterial() const
@@ -89,6 +84,15 @@ namespace gorn
         {
 		    glBindVertexArray(getId());
             s_currentId = getId();
+        }
+    }
+
+    void VertexArray::activate() const
+    {
+        bind();
+        if(_material != nullptr)
+        {
+            _material->activate();
         }
     }
 

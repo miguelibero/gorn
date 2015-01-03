@@ -3,6 +3,7 @@
 
 #include <gorn/render/Program.hpp>
 #include <gorn/render/Texture.hpp>
+#include <gorn/render/UniformValue.hpp>
 #include <map>
 
 namespace gorn
@@ -12,10 +13,13 @@ namespace gorn
 	private:
 		std::shared_ptr<Program> _program;
 		std::map<GLint, std::shared_ptr<Texture>> _textures;
+        std::map<GLint, UniformValue> _uniformValues;
 
 	public:
-		Material(const std::shared_ptr<Program>& program,
-            const std::map<std::string, std::shared_ptr<Texture>>& textures);
+		Material(const std::shared_ptr<Program>& program);
+
+		void setTexture(const std::string& name, const std::shared_ptr<Texture>& texture);
+		void setUniformValue(const std::string& name, const UniformValue& value);
 
 		const std::shared_ptr<Program>& getProgram() const;
         void activate();

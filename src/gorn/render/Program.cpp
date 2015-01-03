@@ -1,4 +1,5 @@
 #include <gorn/render/Program.hpp>
+#include <gorn/render/UniformValue.hpp>
 #include <gorn/base/Exception.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -74,73 +75,14 @@ namespace gorn
         return itr->second;
 	}
 
-    template<>
-	void Program::setUniform(const GLint& uniform, const int& value)
+    void Program::setUniformValue(const std::string& name, const UniformValue& value)
+    {
+        setUniformValue(getUniform(name), value);
+    }
+
+	void Program::setUniformValue(const GLint& location, const UniformValue& value)
 	{
-		glUniform1i(uniform, value);
+        value.set(location);
 	}
 
-    template<>
-	void Program::setUniform(const GLint& uniform, const float& value)
-	{
-		glUniform1f(uniform, value);
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const glm::vec2& value)
-	{
-		glUniform2f(uniform, value.x, value.y);
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const glm::vec3& value)
-	{
-		glUniform3f(uniform, value.x, value.y, value.z);
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const glm::vec4& value)
-	{
-		glUniform4f(uniform, value.x, value.y, value.z, value.w);
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const std::vector<float>& values)
-	{
-		glUniform1fv(uniform, values.size(), 
-            reinterpret_cast<const GLfloat*>(values.data()));
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const std::vector<glm::vec2>& values)
-	{
-		glUniform2fv(uniform, values.size(),
-            reinterpret_cast<const GLfloat*>(values.data()));
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const std::vector<glm::vec3>& values)
-	{
-		glUniform3fv(uniform, values.size(), 
-            reinterpret_cast<const GLfloat*>(values.data()));
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const std::vector<glm::vec4>& values)
-	{
-		glUniform4fv(uniform, values.size(), 
-            reinterpret_cast<const GLfloat*>(values.data()));
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const glm::mat3& value)
-	{
-		glUniformMatrix3fv(uniform, 1, GL_FALSE, glm::value_ptr(value));
-	}
-
-    template<>
-	void Program::setUniform(const GLint& uniform, const glm::mat4& value)
-	{
-		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(value));
-	}
 }

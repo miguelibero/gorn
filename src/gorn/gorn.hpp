@@ -8,6 +8,7 @@
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/render/AttributeBinding.hpp>
+#include <gorn/render/UniformValue.hpp>
 #include <gorn/asset/Image.hpp>
 #include <gorn/asset/TextureAtlas.hpp>
 

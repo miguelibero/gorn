@@ -13,15 +13,21 @@ namespace gorn
         return *this;
     }
 
-	MaterialDefinition& MaterialDefinition::withTexture(const std::string& uniform, const std::string& name)
+	MaterialDefinition& MaterialDefinition::withTexture(const std::string& name, const std::string& value)
     {
-        _textures[uniform] = name;
+        _textures[name] = value;
 		return *this;
     }
 
 	MaterialDefinition& MaterialDefinition::withTexture(const std::string& name)
     {
         return withTexture(name, name);
+    }
+
+    MaterialDefinition& MaterialDefinition::withUniformValue(const std::string& name, const UniformValue& value)
+    {
+        _uniformValues[name] = value;
+		return *this;
     }
 
 	const std::string& MaterialDefinition::getProgram() const
@@ -33,5 +39,10 @@ namespace gorn
 	{
 		return _textures;
 	}
+
+	const std::map<std::string, UniformValue>& MaterialDefinition::getUniformValues() const
+    {
+        return _uniformValues;
+    }
 
 }

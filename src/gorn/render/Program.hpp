@@ -9,6 +9,8 @@
 
 namespace gorn
 {
+    class UniformValue;
+
 	class Program
 	{
     private:
@@ -30,14 +32,9 @@ namespace gorn
         GLint getAttribute(const std::string& name) const;
 	    GLint getUniform(const std::string& name) const;
 
-        template<typename V>
-        void setUniform(const std::string& uniform, const V& value)
-        {
-            setUniform<V>(getUniform(uniform), value);
-        }
+        void setUniformValue(const std::string& name, const UniformValue& value);
+	    void setUniformValue(const GLint& location, const UniformValue& value);
 
-        template<typename V>
-	    void setUniform(const GLint& uniform, const V& value);
     };
 }
 

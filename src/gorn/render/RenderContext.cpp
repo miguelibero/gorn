@@ -135,14 +135,18 @@ namespace gorn
         auto& def = defineMaterial(name);
         auto program = loadProgram(def.getProgram());
 
-        std::map<std::string, std::shared_ptr<Texture>> textures;
+        auto material = std::make_shared<Material>(program);
         for(auto itr = def.getTextures().begin();
             itr != def.getTextures().end(); ++itr)
         {
-            textures[itr->first] = loadTexture(itr->second);
+            material->setTexture(itr->first, loadTexture(itr->second));
+        }
+        for(auto itr = def.getUniformValues().begin();
+            itr != def.getUniformValues().end(); ++itr)
+        {
+            material->setUniformValue(itr->first, itr->second);
         }
 
-        auto material = std::make_shared<Material>(program, textures);
         _materials.insert(itr, {name, material});
         return material;
     }
@@ -189,7 +193,7 @@ namespace gorn
 
     void RenderContext::drawElements(const VertexArray& vao, GLsizei size, GLenum type, GLint offset)
     {
-		vao.bind();
+        vao.activate();
 		glDrawElements(GL_TRIANGLES, size, type,
             reinterpret_cast<const GLvoid*>(offset));
     }
