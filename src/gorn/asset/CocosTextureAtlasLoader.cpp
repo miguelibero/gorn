@@ -31,7 +31,7 @@ namespace gorn {
         for(std::string& strpart : strparts)
         {
             String::trim(strpart, "{}");
-            parts.push_back(std::stoi(strpart));
+            parts.push_back(String::convertTo<int>(strpart));
         }
         return parts;
     }

@@ -21,6 +21,9 @@ namespace gorn
             const std::string& sep, size_t max=npos);
 
         static void trim(std::string& str, const std::string& chars=" \t\r\n");
+
+        template<typename V>
+        static V convertTo(const std::string& value);
 	};
 
 }

@@ -15,6 +15,7 @@ public enum NativeBridge
 	instance;
 
 	private Activity mActivity;
+    private int[] mImageInfo;
 
 	public void setActivity(Activity activity)
 	{
@@ -35,24 +36,47 @@ public enum NativeBridge
         return os.toByteArray();
 	}
 
-	public byte[] readImage(String name) throws IOException
+	public byte[] loadImage(byte[] data) throws IOException
 	{
-		Log.v(TAG, "reading image '" + name + "'...");
-		AssetManager am = mActivity.getAssets();
-		InputStream is = am.open(name);
+		Log.v(TAG, "loading image...");
 		BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
 		int bytes = bitmap.getByteCount();
+        mImageInfo = new int[]{
+            bitmap.getWidth(),
+            bitmap.getHeight(),
+            bitmap.hasAlpha(),
+        };
 		ByteBuffer buffer = ByteBuffer.allocate(bytes);
 		bitmap.copyPixelsToBuffer(buffer);
 		return buffer.array();
 	}
 
-	public byte[] readFile(String name) throws IOException
+    public int[] getImageInfo()
+    {
+        return mImageInfo;
+    }
+
+	public bool validateFile(String name)
 	{
-		Log.v(TAG, "reading file '" + name + "'...");
+		Log.v(TAG, "validating file '" + name + "'...");
+		AssetManager am = mActivity.getAssets();
+        try
+        {
+            am.open(name);
+            return true;
+        }
+        catch (IOException ex)
+        {
+            return false;
+        }
+	}
+
+	public byte[] loadFile(String name) throws IOException
+	{
+		Log.v(TAG, "loading file '" + name + "'...");
 		AssetManager am = mActivity.getAssets();
 		InputStream is = am.open(name);
 		return readInputStream(is);

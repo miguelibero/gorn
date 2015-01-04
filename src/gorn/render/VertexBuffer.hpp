@@ -9,14 +9,8 @@ namespace gorn
     enum class VertexBufferUsage
     {
 		StreamDraw,
-		StreamRead,
-		StreamCopy,
 		StaticDraw,
-		StaticRead,
-		StaticCopy,
 		DynamicDraw,
-		DynamicRead,
-		DynamicCopy
     };
 
     enum class VertexBufferTarget
@@ -49,7 +43,6 @@ namespace gorn
         void bind() const;
         void setData(const Data& data, Usage usage);
         void setSubData(const Data& data, size_t offset);
-        Data getSubData(size_t offset, size_t size) const;
         size_t getSize() const;
 	};
 }

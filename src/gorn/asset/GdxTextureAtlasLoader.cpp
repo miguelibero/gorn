@@ -67,30 +67,30 @@ namespace gorn {
                     else if(n == "xy")
                     {
                         sep = v.find(',');                       
-                        region.origin.x = std::stoi(v.substr(0, sep));
-                        region.origin.y = std::stoi(v.substr(sep+1));
+                        region.origin.x = String::convertTo<int>(v.substr(0, sep));
+                        region.origin.y = String::convertTo<int>(v.substr(sep+1));
                     }
                     else if(n == "size")
                     {
                         sep = v.find(',');
-                        region.size.x = std::stoi(v.substr(0, sep));
-                        region.size.y = std::stoi(v.substr(sep+1));
+                        region.size.x = String::convertTo<int>(v.substr(0, sep));
+                        region.size.y = String::convertTo<int>(v.substr(sep+1));
                     }
                     else if(n == "orig")
                     {
                         sep = v.find(',');
-                        region.original.x = std::stoi(v.substr(0, sep));
-                        region.original.y = std::stoi(v.substr(sep+1));
+                        region.original.x = String::convertTo<int>(v.substr(0, sep));
+                        region.original.y = String::convertTo<int>(v.substr(sep+1));
                     }
                     else if(n == "offset")
                     {
                         sep = v.find(',');
-                        region.offset.x = std::stoi(v.substr(0, sep));
-                        region.offset.y = std::stoi(v.substr(sep+1));
+                        region.offset.x = String::convertTo<int>(v.substr(0, sep));
+                        region.offset.y = String::convertTo<int>(v.substr(sep+1));
                     }
                     else if(n == "index")
                     {
-                        regionIndex = std::stoi(v);
+                        regionIndex = String::convertTo<int>(v);
                     }
                 }
                 else

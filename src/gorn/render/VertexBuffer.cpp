@@ -51,20 +51,8 @@ namespace gorn
         {
             case VertexBufferUsage::StreamDraw:
                 return GL_STREAM_DRAW;
-			case VertexBufferUsage::StreamRead:
-                return GL_STREAM_READ;
-			case VertexBufferUsage::StreamCopy:
-                return GL_STREAM_COPY;
 			case VertexBufferUsage::StaticDraw:
                 return GL_STATIC_DRAW;
-			case VertexBufferUsage::StaticRead:
-                return GL_STATIC_READ;
-			case VertexBufferUsage::StaticCopy:
-                return GL_STATIC_COPY;
-			case VertexBufferUsage::DynamicRead:
-                return GL_DYNAMIC_READ;
-			case VertexBufferUsage::DynamicCopy:
-                return GL_DYNAMIC_COPY;
             default:
                 return GL_DYNAMIC_DRAW;
         }
@@ -94,15 +82,6 @@ namespace gorn
         bind();
 		glBufferSubData(getGlTarget(_target), offset,
             data.size(), data.ptr());
-    }
-
-    Data VertexBuffer::getSubData(size_t offset, size_t size) const
-    {
-        bind();
-        Data data(size);
-		glGetBufferSubData(getGlTarget(_target),
-            offset, data.size(), data.ptr());
-        return data;
     }
 
     size_t VertexBuffer::getSize() const

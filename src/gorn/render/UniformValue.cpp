@@ -167,7 +167,10 @@ namespace gorn
             glUniform1iv(location, _int.size(), _int.data());
             break;
         case Type::UnsignedInt:
+#ifdef GORN_PLATFORM_ANDROID
+#else
             glUniform1uiv(location, _uint.size(), _uint.data());
+#endif
             break;
         case Type::Matrix2:
             glUniformMatrix2fv(location, _mat2.size(), false,

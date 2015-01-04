@@ -1,5 +1,7 @@
 
 #include <gorn/base/String.hpp>
+#include <cstdlib>
+#include <sstream>
 
 namespace gorn
 {
@@ -46,6 +48,62 @@ namespace gorn
     {
     }
 
+template<>
+    int String::convertTo(const std::string& value)
+    {
+        return atoi(value.c_str());
+    }
+
+    template<>
+    unsigned int String::convertTo(const std::string& value)
+    {
+        std::istringstream reader(value);
+        unsigned int val;
+        reader >> val;
+        return val;
+    }
+
+    template<>
+    short String::convertTo(const std::string& value)
+    {
+        return atoi(value.c_str());
+    }
+
+    template<>
+    float String::convertTo(const std::string& value)
+    {
+        return atof(value.c_str());
+    }
+
+    template<>
+    double String::convertTo(const std::string& value)
+    {
+        return strtod(value.c_str(), 0);
+    }
+
+    template<>
+    long String::convertTo(const std::string& value)
+    {
+        return strtol(value.c_str(), 0, 10);
+    }
+
+    template<>
+    long long String::convertTo(const std::string& value)
+    {
+        return strtoll(value.c_str(), 0, 10);
+    }
+
+    template<>
+    unsigned long String::convertTo(const std::string& value)
+    {
+        return strtoul(value.c_str(), 0, 10);
+    }
+
+    template<>
+    unsigned long long String::convertTo(const std::string& value)
+    {
+        return strtoull(value.c_str(), 0, 10);
+    }
 
 }
 

@@ -11,7 +11,6 @@
 #include <set>
 #include <cassert>
 #include <exception>
-#include "base/Log.hpp"
 
 class JniException: public std::exception
 {
@@ -127,13 +126,14 @@ private:
     }
  
     template<typename Arg, typename... Args>
-    static jvalue* buildArguments(jvalue* jargs, unsigned pos, const Arg& arg, const Args&... args)
+    static void buildArguments(jvalue* jargs, unsigned pos, const Arg& arg, const Args&... args)
     {
         jargs[pos] = convertToJavaValue(arg);
         buildArguments(jargs, pos+1, args...);
+        
     }
  
-    static jvalue* buildArguments(jvalue* jargs, unsigned pos)
+    static void buildArguments(jvalue* jargs, unsigned pos)
     {
     }
     
