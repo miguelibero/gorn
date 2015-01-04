@@ -6,6 +6,12 @@ namespace gorn
     {
     }
 
+    VertexDefinition& VertexDefinition::withAttribute(const AttributeDefinition& attr)
+    {
+        _attributes[attr.getName()] = attr;
+        return *this;
+    }
+
     AttributeDefinition& VertexDefinition::setAttribute(const std::string& name)
     {
         auto itr = _attributes.find(name);

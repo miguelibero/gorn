@@ -19,6 +19,7 @@ namespace gorn
 
         VertexDefinition();
 
+        VertexDefinition& withAttribute(const AttributeDefinition& attr);
         AttributeDefinition& setAttribute(const std::string& name);
 
         const std::map<std::string, AttributeDefinition>& getAttributes() const;

@@ -6,4 +6,5 @@ cmake_install.cmake
 install_manifest.txt
 bin
 .fuse*
-proj.linux/gorn/
+proj.linux/bin/
+*.trace

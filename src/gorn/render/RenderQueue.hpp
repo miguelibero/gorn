@@ -18,12 +18,14 @@ namespace gorn
         typedef RenderQueueOrder Order;
     private:
         std::vector<Command> _commands;
+
     public:
         RenderQueue();
         void setDefaultOrder(Order order);
         void pushOrder(Order order);
         void popOrder();
         void addCommand(RenderCommand&& cmd);
+        RenderCommand& addCommand();
         void draw();
     };
 }

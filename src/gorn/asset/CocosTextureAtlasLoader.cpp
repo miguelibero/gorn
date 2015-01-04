@@ -100,7 +100,7 @@ namespace gorn {
         {
             TextureRegion region;
             loadFrame(key->next_sibling("dict"), region);
-            atlas.setRegion(key->value(), region);
+            atlas.addRegion(key->value(), region);
             key = key->next_sibling("key");
         }
     }

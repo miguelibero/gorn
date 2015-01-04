@@ -32,6 +32,7 @@ namespace gorn {
         bool inRegion = false;
         TextureRegion region;
         std::string regionName;
+        size_t regionIndex = 0;
 
         while(!input.reachedEnd())
         {
@@ -89,12 +90,12 @@ namespace gorn {
                     }
                     else if(n == "index")
                     {
-                        regionName += v;
+                        regionIndex = std::stoi(v);
                     }
                 }
                 else
                 {
-                    atlas.setRegion(regionName, region);
+                    atlas.setRegion(regionName, region, regionIndex);
                     region = TextureRegion();
                     regionName = line;
                 }             
