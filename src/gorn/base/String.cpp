@@ -44,11 +44,22 @@ namespace gorn
         return parts;
     }
 
+    bool String::prefix(std::string& str, const std::string& prefix, const std::string& sep)
+    {
+        auto parts = String::split(str, sep, 2);
+        if(parts.size() == 1)
+        {
+            str = prefix+sep+str;
+            return true;
+        }
+        return false;
+    }
+
     void String::trim(std::string& str, const std::string& chars)
     {
     }
 
-template<>
+    template<>
     int String::convertTo(const std::string& value)
     {
         return atoi(value.c_str());

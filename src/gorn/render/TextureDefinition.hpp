@@ -14,7 +14,6 @@ namespace gorn
 	{
 	private:
         std::string _imageName;
-        std::string _imageTag;
         GLenum _target;
         GLint _lod;
         std::map<GLenum, GLint> _intParams;
@@ -24,7 +23,6 @@ namespace gorn
 	public:
 		TextureDefinition();
         TextureDefinition& withImage(const std::string& image);
-        TextureDefinition& withImageTag(const std::string& tag);
         TextureDefinition& withTarget(GLenum target);
         TextureDefinition& withLevelOfDetail(GLint lod);
         TextureDefinition& withParameter(GLenum name, GLint value);
@@ -33,7 +31,6 @@ namespace gorn
         TextureDefinition& withParameter(GLenum name, const std::vector<GLfloat>& value);
 
         const std::string& getImageName() const;
-        const std::string& getImageTag() const;
         GLenum getTarget() const;
         GLint getLevelOfDetail() const;
         const std::map<GLenum, GLint>& getIntParameters() const;

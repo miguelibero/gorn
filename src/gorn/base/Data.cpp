@@ -79,6 +79,16 @@ namespace gorn
 		return _mem.data();
 	}
 
+    std::vector<uint8_t>& Data::mem()
+    {
+        return _mem;
+    }
+
+    const std::vector<uint8_t>& Data::mem() const
+    {
+        return _mem;
+    }
+
 	size_t Data::size() const
 	{
 		return _mem.size();

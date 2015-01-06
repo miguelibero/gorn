@@ -10,7 +10,7 @@ PLATFORM_DIR_FILTER := ! \( -path \*/platform/\* ! -regex .\*/platform/android/\
 #Recursive include all .cpp files in the SRC directory
 FILE_LIST := $(shell find $(BASE_PATH)/src -type f -iname \*.cpp $(PLATFORM_DIR_FILTER) )
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
-FILE_LIST := $(shell find $(BASE_PATH)/lib/platform/android/jniobject -type f -iname \*.ccp)
+FILE_LIST := $(shell find $(BASE_PATH)/lib/platform/android/jniobject -type f -iname \*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 LOCAL_C_INCLUDES += $(BASE_PATH)/src
@@ -31,6 +31,6 @@ endif
 
 LOCAL_WHOLE_STATIC_LIBRARIES := gorn
 
-LOCAL_LDLIBS := -llog -lGLESv2 -landroid -lz
+LOCAL_LDLIBS := -llog -lGLESv2 -lEGL -landroid -lz
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)

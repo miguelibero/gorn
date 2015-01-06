@@ -24,6 +24,8 @@ namespace gorn
 
         template<typename V>
         static V convertTo(const std::string& value);
+
+        static bool prefix(std::string& str, const std::string& prefix, const std::string& sep=":");
 	};
 
 }

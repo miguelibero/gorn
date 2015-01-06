@@ -34,6 +34,8 @@ namespace gorn
 
 		uint8_t* ptr();
 		const uint8_t* ptr() const;
+        std::vector<uint8_t>& mem();
+        const std::vector<uint8_t>& mem() const;
 		size_t size() const;
 
         static Data readFile(const std::string& path);
@@ -51,6 +53,13 @@ namespace gorn
 
     template<typename T>
 	Data::Data(const std::vector<T>& data):
+	_mem(reinterpret_cast<const uint8_t*>(&data.front()),
+        reinterpret_cast<const uint8_t*>(&data.back()))
+	{
+	}
+
+    template<typename T>
+	Data::Data(std::vector<T>&& data):
 	_mem(reinterpret_cast<const uint8_t*>(&data.front()),
         reinterpret_cast<const uint8_t*>(&data.back()))
 	{

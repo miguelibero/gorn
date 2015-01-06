@@ -4,8 +4,10 @@
 
 #include <gorn/asset/FileLoader.hpp>
 
-namespace gorn {
+class JniObject;
 
+namespace gorn
+{
     class BundleFileLoader : public FileLoader
     {
     private:
@@ -13,6 +15,7 @@ namespace gorn {
 
         std::string _pathTemplate;
         std::string getPath(const std::string& name) const;
+        static JniObject& getJniObject();
     public:
         BundleFileLoader(const std::string& pathTemplate=kPlaceholder);
         bool validate(const std::string& name) const;

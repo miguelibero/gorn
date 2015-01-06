@@ -7,12 +7,13 @@
 
 namespace gorn
 {
-
-	JniObject getJniObject()
+	JniObject& BundleFileLoader::getJniObject()
 	{
 		static JniObject obj = JniObject::findSingleton("net.gorn.PlatformBridge");
 		return obj;
 	}
+
+    const char* BundleFileLoader::kPlaceholder = "%s";
 
     BundleFileLoader::BundleFileLoader(const std::string& pathTemplate):
     _pathTemplate(pathTemplate)
@@ -44,7 +45,7 @@ namespace gorn
 		try
 		{
             auto path = getPath(name);
-			return Data(getJniObject().call("loadFile", Data(), path));
+			return Data(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
 		}
 		catch(JniException e)
 		{

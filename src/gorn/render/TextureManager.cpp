@@ -18,7 +18,7 @@ namespace gorn
             return itr->second;
         }
         auto& def = define(name);
-        auto img = _images.load(def.getImageTag(), def.getImageName()).get();
+        auto img = _images.load(def.getImageName(), false).get();
         auto tex = std::make_shared<Texture>(def.getTarget());
         for(auto itr = def.getIntParameters().begin();
             itr != def.getIntParameters().end(); ++itr)
@@ -40,7 +40,7 @@ namespace gorn
         {
             tex->setParameter(itr->first, itr->second);
         }
-        tex->setImage(img, def.getLevelOfDetail());
+        tex->setImage(*img, def.getLevelOfDetail());
         _textures.insert(itr, {name, tex});
         return tex;
     }
@@ -51,7 +51,9 @@ namespace gorn
         if(itr == _definitions.end())
         {
             itr = _definitions.insert(itr, {name, TextureDefinition()});
-            itr->second.withImage(name).withImageTag(kDefaultTag);
+            std::string tname(name);
+            FileManager::prefix(tname, kDefaultTag);
+            itr->second.withImage(tname);
         }
         return itr->second;
     }

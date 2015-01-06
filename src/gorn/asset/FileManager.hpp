@@ -24,8 +24,7 @@ namespace gorn
         std::future<Data> load(const std::shared_ptr<Loader>& loader, const std::string& name);
 
 	public:
-	    std::future<Data> load(const std::string& tag, const std::string& name);
-	    std::future<Data> load(const std::string& name);
+	    std::future<Data> load(const std::string& name, bool cache=false);
 
 	    void addLoader(const std::string& tag, std::unique_ptr<Loader>&& loader);
         void addLoader(std::unique_ptr<Loader>&& loader);
@@ -34,6 +33,8 @@ namespace gorn
         void addLoader(const std::string& tag, Args&&... args);
         template<typename L, typename... Args>
         void addDefaultLoader(Args&&... args);
+
+        static bool prefix(std::string& name, const std::string& prefix=kDefaultTag);
 	};
 
     template<typename L, typename... Args>

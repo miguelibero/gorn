@@ -7,7 +7,7 @@
 namespace gorn
 {
 
-	JniObject getJniObject()
+	JniObject& GraphicsImageLoader::getJniObject()
 	{
 		static JniObject obj = JniObject::findSingleton("net.gorn.PlatformBridge");
 		return obj;
@@ -22,7 +22,8 @@ namespace gorn
     {
 		try
 		{
-			auto data = Data(getJniObject().call("loadImage", Data(), input));
+			auto data = Data(getJniObject().call("loadImage",
+                std::vector<uint8_t>(), input.mem()));
             auto info = getJniObject().call("getImageInfo", std::vector<int>());
             GLenum format = info[2] ? GL_RGBA : GL_RGB;
 			return Image(std::move(data), info[0], info[1], format, GL_UNSIGNED_BYTE);

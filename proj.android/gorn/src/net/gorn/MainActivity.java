@@ -1,4 +1,4 @@
-package net.openglgame;
+package net.gorn;
 
 import android.content.Intent;
 import android.content.Context;
@@ -111,8 +111,8 @@ public class MainActivity extends Activity
 	}
 
     static {
-    	System.loadLibrary("gnustl_shared");
-		System.loadLibrary("app");
+    	System.loadLibrary("c++_shared");
+		System.loadLibrary("gorn");
     }
 
     public static native void onSurfaceCreated();

@@ -18,12 +18,6 @@ namespace gorn
         return *this;
     }
 
-    TextureDefinition& TextureDefinition::withImageTag(const std::string& tag)
-    {
-        _imageTag = tag;
-        return *this;
-    }
-
     TextureDefinition& TextureDefinition::withTarget(GLenum target)
     {
         _target = target;
@@ -63,11 +57,6 @@ namespace gorn
     const std::string& TextureDefinition::getImageName() const
     {
         return _imageName;
-    }
-
-    const std::string& TextureDefinition::getImageTag() const
-    {
-        return _imageTag;
     }
 
     GLenum TextureDefinition::getTarget() const

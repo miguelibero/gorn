@@ -1,2 +1,4 @@
 obj/
 bin/
+libs/
+local.properties

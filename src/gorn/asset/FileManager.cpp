@@ -25,11 +25,11 @@ namespace gorn
         addLoader(kDefaultTag, std::move(loader));
     }
 
-	std::future<Data> FileManager::load(const std::string& atag, const std::string& aname)
+	std::future<Data> FileManager::load(const std::string& aname, bool cache)
 	{
         auto parts = String::split(aname, kTagSeparator);
-        std::string tag(atag);
         std::string name(aname);
+        std::string tag(kDefaultTag);        
         if(parts.size() > 1)
         {
             tag = parts.front();
@@ -74,9 +74,8 @@ namespace gorn
         }, name);
     }
 
-    std::future<Data> FileManager::load(const std::string& name)
+    bool FileManager::prefix(std::string& name, const std::string& prefix)
     {
-        return load(kDefaultTag, name);
+        return String::prefix(name, prefix, kTagSeparator);
     }
-
 }

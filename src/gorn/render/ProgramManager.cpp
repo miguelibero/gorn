@@ -18,16 +18,16 @@ namespace gorn
         {
             return itr->second;
         }
-        std::string tag;
+        std::string tname(name);
         if(type == ShaderType::Vertex)
         {
-            tag = kDefaultVertexShaderTag;
+            FileManager::prefix(tname, kDefaultVertexShaderTag);
         }
         else if(type == ShaderType::Fragment)
         {
-            tag = kDefaultFragmentShaderTag;
+            FileManager::prefix(tname, kDefaultFragmentShaderTag);
         }
-        auto data = _files.load(tag, name).get();
+        auto data = _files.load(tname, false).get();
         auto shader = std::make_shared<Shader>(data, type);
         shaders.insert(itr, {name, shader});
         return shader;
