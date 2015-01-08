@@ -19,12 +19,13 @@ namespace gorn
 	private:
         static const char* kDefaultTag;
         static const char* kTagSeparator;
-
+		std::map<std::string, Data> _preloads;
 		std::map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
         std::future<Data> load(const std::shared_ptr<Loader>& loader, const std::string& name);
 
 	public:
 	    std::future<Data> load(const std::string& name, bool cache=false);
+        void preload(const std::string& name, Data&& data);
 
 	    void addLoader(const std::string& tag, std::unique_ptr<Loader>&& loader);
         void addLoader(std::unique_ptr<Loader>&& loader);

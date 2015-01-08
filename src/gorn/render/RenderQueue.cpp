@@ -2,10 +2,13 @@
 #include <gorn/render/RenderQueue.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexBuffer.hpp>
+#include <gorn/render/MaterialManager.hpp>
+#include <gorn/asset/AssetManager.hpp>
 
 namespace gorn
 {
-    RenderQueue::RenderQueue()
+    RenderQueue::RenderQueue(AssetManager<VertexDefinition>& vdefs, MaterialManager& materials):
+    _vdefs(vdefs), _materials(materials)
     {
     }
 
@@ -26,10 +29,21 @@ namespace gorn
         _commands.push_back(std::move(cmd));
     }
 
-    RenderCommand& RenderQueue::addCommand()
+    RenderCommand& RenderQueue::addCommand(
+        const std::string& vdefname)
     {
-        _commands.push_back(RenderCommand());
+        auto& vdef = *_vdefs.load(vdefname).get();
+        _commands.push_back(RenderCommand(vdef));
         return _commands.back();
+    }
+
+    RenderCommand& RenderQueue::addCommand(
+        const std::string& vdef,
+        const std::string& material)
+    {
+        auto& cmd = addCommand(vdef);
+        cmd.withMaterial(_materials.load(material));
+        return cmd;
     }
 
     void RenderQueue::draw()

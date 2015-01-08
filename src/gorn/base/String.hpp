@@ -12,6 +12,7 @@ namespace gorn
 		String();
 
 	public:
+        static const char* kWhitespaceChars;
         static const size_t npos;
 
         static size_t replaceAll(std::string& str,
@@ -20,7 +21,9 @@ namespace gorn
         static std::vector<std::string> split(const std::string& str,
             const std::string& sep, size_t max=npos);
 
-        static void trim(std::string& str, const std::string& chars=" \t\r\n");
+        static void trim(std::string& str, const std::string& chrs=kWhitespaceChars);
+        static void ltrim(std::string& str, const std::string& chrs=kWhitespaceChars);
+        static void rtrim(std::string& str, const std::string& chrs=kWhitespaceChars);
 
         template<typename V>
         static V convertTo(const std::string& value);

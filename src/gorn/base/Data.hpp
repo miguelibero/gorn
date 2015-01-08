@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include <initializer_list>
 
 
@@ -17,6 +18,7 @@ namespace gorn
 		Data();
 		Data(size_t size);
 		Data(const void* data, size_t size);
+        Data(const std::string& data);
 		Data(const Data& other);
 		Data(Data&& other);
         
@@ -37,6 +39,7 @@ namespace gorn
         std::vector<uint8_t>& mem();
         const std::vector<uint8_t>& mem() const;
 		size_t size() const;
+        bool empty() const;
 
         static Data readFile(const std::string& path);
 

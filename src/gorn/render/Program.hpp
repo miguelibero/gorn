@@ -29,6 +29,9 @@ namespace gorn
 		const Shader& getFragmentShader() const;
 		const Shader& getVertexShader() const;
 
+        GLint loadAttribute(const std::string& name, const std::string& alias);
+        GLint loadUniform(const std::string& name, const std::string& alias);
+
         GLint getAttribute(const std::string& name) const;
 	    GLint getUniform(const std::string& name) const;
 

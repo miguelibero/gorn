@@ -47,6 +47,11 @@ namespace gorn
 	{
 	}
 
+    Data::Data(const std::string& data):
+	_mem(data.begin(), data.end())
+    {
+    }
+
 	Data::Data(const Data& other):
 	_mem(other._mem)
 	{
@@ -93,6 +98,11 @@ namespace gorn
 	{
 		return _mem.size();
 	}
+
+    bool Data::empty() const
+    {
+        return _mem.empty();
+    }
 
     DataInputStream::DataInputStream(const Data& data):
     _read_data(data), _read(0)

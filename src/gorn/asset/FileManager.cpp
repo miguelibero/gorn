@@ -27,6 +27,16 @@ namespace gorn
 
 	std::future<Data> FileManager::load(const std::string& aname, bool cache)
 	{
+        {
+            auto itr = _preloads.find(aname);
+            if(itr != _preloads.end())
+            {
+                std::promise<Data> p;
+                p.set_value(itr->second);
+                return p.get_future();
+            }
+        }
+
         auto parts = String::split(aname, kTagSeparator);
         std::string name(aname);
         std::string tag(kDefaultTag);        
@@ -48,12 +58,14 @@ namespace gorn
                 }
             }
         }
-        auto itr = _loaders.find(kDefaultTag);
-        if(itr != _loaders.end())
         {
-            for(auto& loader : itr->second)
+            auto itr = _loaders.find(kDefaultTag);
+            if(itr != _loaders.end())
             {
-                loaders.push_back(loader);
+                for(auto& loader : itr->second)
+                {
+                    loaders.push_back(loader);
+                }
             }
         }
         for(auto& loader : loaders)
@@ -72,6 +84,11 @@ namespace gorn
         return std::async(std::launch::async, [loader](const std::string& name){
             return loader->load(name);
         }, name);
+    }
+
+    void FileManager::preload(const std::string& name, Data&& data)
+    {
+        _preloads[name] = std::move(data);
     }
 
     bool FileManager::prefix(std::string& name, const std::string& prefix)

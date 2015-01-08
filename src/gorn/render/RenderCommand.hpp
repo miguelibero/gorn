@@ -18,11 +18,12 @@ namespace gorn
         GLenum _elementType;
         GLenum _drawMode;
     public:
-        RenderCommand();
-        RenderCommand& withVertexData(Data&& data, const VertexDefinition& def);
+        RenderCommand(const VertexDefinition& def);
+        RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
+        RenderCommand& withVertexData(Data&& data);
+        RenderCommand& withAttributeData(const std::string& name, Data&& data);
         RenderCommand& withElementData(Data&& data, GLenum type);
         RenderCommand& withElementCount(GLsizei count);
-        RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withDrawMode(GLenum mode);
 
         Data& getVertexData();

@@ -2,10 +2,12 @@
 #include <gorn/base/String.hpp>
 #include <cstdlib>
 #include <sstream>
+#include <algorithm>
 
 namespace gorn
 {
     const size_t String::npos = -1;
+    const char* String::kWhitespaceChars = " \t\r\n";
 
     size_t String::replaceAll(std::string& str,
         const std::string& from, const std::string& to)
@@ -55,8 +57,24 @@ namespace gorn
         return false;
     }
 
-    void String::trim(std::string& str, const std::string& chars)
+    void String::ltrim(std::string& str, const std::string& chrs)
     {
+        str.erase(str.begin(), std::find_if(str.begin(), str.end(), [&chrs](const char chr){
+            return chrs.find(chr) == std::string::npos;
+        }));
+    }
+    
+    void String::rtrim(std::string& str, const std::string& chrs)
+    {
+        str.erase(std::find_if(str.rbegin(), str.rend(), [&chrs](const char chr){
+            return chrs.find(chr) == std::string::npos;
+        }).base(), str.end());
+    }
+    
+    void String::trim(std::string& str, const std::string& chrs)
+    {
+        ltrim(str, chrs);
+        rtrim(str, chrs);
     }
 
     template<>

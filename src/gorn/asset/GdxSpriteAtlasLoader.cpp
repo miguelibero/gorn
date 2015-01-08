@@ -1,23 +1,25 @@
 
-#include <gorn/asset/GdxTextureAtlasLoader.hpp>
-#include <gorn/asset/TextureAtlas.hpp>
+#include <gorn/asset/GdxSpriteAtlasLoader.hpp>
+#include <gorn/asset/SpriteAtlas.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Data.hpp>
+#include <gorn/render/MaterialManager.hpp>
 
 namespace gorn {
 
-    GdxTextureAtlasLoader::GdxTextureAtlasLoader()
+    GdxSpriteAtlasLoader::GdxSpriteAtlasLoader(MaterialManager& materials):
+    _materials(materials)
     {
     }
     
-    bool GdxTextureAtlasLoader::validate(const Data& data) const
+    bool GdxSpriteAtlasLoader::validate(const Data& data) const
     {
         return true;
     }
 
-    TextureAtlas GdxTextureAtlasLoader::load(Data&& data) const
+    SpriteAtlas GdxSpriteAtlasLoader::load(Data&& data) const
     {
-        TextureAtlas atlas;
+        SpriteAtlas atlas;
         std::string line;
         DataInputStream input(data);
 
@@ -27,10 +29,10 @@ namespace gorn {
             input.readLine(line);
             String::trim(line);
         }
-        atlas.setTexture(line);
+        atlas.setMaterial(_materials.load(line));
 
         bool inRegion = false;
-        TextureRegion region;
+        SpriteRegion region;
         std::string regionName;
         size_t regionIndex = 0;
 
@@ -46,7 +48,7 @@ namespace gorn {
                 if(sep == std::string::npos)
                 {
                     inRegion = true;
-                    region = TextureRegion();
+                    region = SpriteRegion();
                     regionName = line;
                 }
                 else
@@ -60,33 +62,37 @@ namespace gorn {
                 {
                     String::trim(n);
                     String::trim(v);
-                    if(n == "rotate" && v == "true")
+                    if(n == "rotate")
                     {
-                        region.rotate();
+                        region.setRotate(v == "true");
                     }
                     else if(n == "xy")
                     {
                         sep = v.find(',');                       
-                        region.origin.x = String::convertTo<int>(v.substr(0, sep));
-                        region.origin.y = String::convertTo<int>(v.substr(sep+1));
+                        region.setOrigin(
+                            String::convertTo<int>(v.substr(0, sep)),
+                            String::convertTo<int>(v.substr(sep+1)));
                     }
                     else if(n == "size")
                     {
                         sep = v.find(',');
-                        region.size.x = String::convertTo<int>(v.substr(0, sep));
-                        region.size.y = String::convertTo<int>(v.substr(sep+1));
+                        region.setSize(
+                            String::convertTo<int>(v.substr(0, sep)),
+                            String::convertTo<int>(v.substr(sep+1)));
                     }
                     else if(n == "orig")
                     {
                         sep = v.find(',');
-                        region.original.x = String::convertTo<int>(v.substr(0, sep));
-                        region.original.y = String::convertTo<int>(v.substr(sep+1));
+                        region.setOriginalSize(
+                            String::convertTo<int>(v.substr(0, sep)),
+                            String::convertTo<int>(v.substr(sep+1)));
                     }
                     else if(n == "offset")
                     {
                         sep = v.find(',');
-                        region.offset.x = String::convertTo<int>(v.substr(0, sep));
-                        region.offset.y = String::convertTo<int>(v.substr(sep+1));
+                        region.setOffset(
+                            String::convertTo<int>(v.substr(0, sep)),
+                            String::convertTo<int>(v.substr(sep+1)));
                     }
                     else if(n == "index")
                     {
@@ -96,7 +102,7 @@ namespace gorn {
                 else
                 {
                     atlas.setRegion(regionName, region, regionIndex);
-                    region = TextureRegion();
+                    region = SpriteRegion();
                     regionName = line;
                 }             
             }

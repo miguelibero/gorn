@@ -2,58 +2,95 @@
 
 namespace gorn
 {
+
+    const char* AttributeKind::Position = "position";
+    const char* AttributeKind::Color = "color";
+    const char* AttributeKind::TexCoords = "texCoords";
+
+    const char* UniformKind::Texture0 = "texture0";
+    const char* UniformKind::Texture1 = "texture1";
+    const char* UniformKind::Texture2 = "texture2";
+    const char* UniformKind::Texture3 = "texture3";
+    const char* UniformKind::Texture4 = "texture4";
+    const char* UniformKind::Texture5 = "texture5";
+    const char* UniformKind::Texture6 = "texture6";
+    const char* UniformKind::Color = "color";
 	
 	ProgramDefinition::ProgramDefinition()
     {
     }
 
-    ProgramDefinition& ProgramDefinition::withShader(const std::string& shader)
+    ProgramDefinition& ProgramDefinition::withShaderFile(ShaderType type, const std::string& name)
     {
-        _vertexShader = shader;
-        _fragmentShader = shader;
-		return *this;
+        _shaderFiles[type] = name;
+        return *this;
     }
 
-    ProgramDefinition& ProgramDefinition::withVertexShader(const std::string& shader)
+    ProgramDefinition& ProgramDefinition::withShaderData(ShaderType type, Data&& data)
     {
-        _vertexShader = shader;
-		return *this;
+        _shaderData[type] = std::move(data);
+        return *this;
     }
 
-    ProgramDefinition& ProgramDefinition::withFragmentShader(const std::string& shader)
+    ProgramDefinition& ProgramDefinition::withShaderData(ShaderType type, const std::string& data)
     {
-        _fragmentShader = shader;
-		return *this;
+        return withShaderData(type, Data(data));
     }
 
-	ProgramDefinition& ProgramDefinition::withUniforms(std::initializer_list<std::string> list)
-	{
-		_uniforms.insert(_uniforms.end(), list.begin(), list.end());
-		return *this;
-	}
+    ProgramDefinition& ProgramDefinition::withUniform(
+        const std::string& name)
+    {
+        return withUniform(name, name);
+    }
 
-	ProgramDefinition& ProgramDefinition::withAttributes(std::initializer_list<std::string> list)
-	{
-		_attributes.insert(_attributes.end(), list.begin(), list.end());
-		return *this;
-	}
+    ProgramDefinition& ProgramDefinition::withUniform(
+        const std::string& name, const std::string& alias)
+    {
+        _uniforms[alias] = name;
+        return *this;
+    }
 
-	const std::string& ProgramDefinition::getVertexShader() const
-	{
-		return _vertexShader;
-	}
+    ProgramDefinition& ProgramDefinition::withAttribute(
+        const std::string& name)
+    {
+        return withAttribute(name, name);
+    }
 
-	const std::string& ProgramDefinition::getFragmentShader() const
-	{
-		return _fragmentShader;
-	}
+    ProgramDefinition& ProgramDefinition::withAttribute(
+        const std::string& name, const std::string& alias)
+    {
+        _attributes[alias] = name;
+        return *this;
+    }
 
-	const std::vector<std::string> ProgramDefinition::getUniforms() const
+    bool ProgramDefinition::hasShaderData(ShaderType type) const
+    {
+        auto itr = _shaderData.find(type);
+        return itr != _shaderData.end();
+    }
+
+    const Data& ProgramDefinition::getShaderData(ShaderType type) const
+    {
+        return _shaderData.at(type);
+    }
+
+    bool ProgramDefinition::hasShaderFile(ShaderType type) const
+    {
+        auto itr = _shaderFiles.find(type);
+        return itr != _shaderFiles.end();
+    }
+
+	const std::string& ProgramDefinition::getShaderFile(ShaderType type) const
+    {
+        return _shaderFiles.at(type);
+    }
+
+	const std::map<std::string, std::string>& ProgramDefinition::getUniforms() const
 	{
 		return _uniforms;
 	}
 
-	const std::vector<std::string> ProgramDefinition::getAttributes() const
+	const std::map<std::string, std::string>& ProgramDefinition::getAttributes() const
 	{
 		return _attributes;
 	}

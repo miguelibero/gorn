@@ -45,6 +45,20 @@ namespace gorn
         }
     }
 
+    GLint Program::loadAttribute(const std::string& name, const std::string& alias)
+    {
+        auto id = getAttribute(name);
+        _attributes[alias] = id;
+        return id;
+    }
+
+    GLint Program::loadUniform(const std::string& name, const std::string& alias)
+    {
+        auto id = getUniform(name);
+        _uniforms[alias] = id;
+        return id;
+    }
+
     GLint Program::getAttribute(const std::string& name) const
     {
         auto itr = _attributes.find(name);

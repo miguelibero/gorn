@@ -1,8 +1,9 @@
 
-#include <gorn/asset/CocosTextureAtlasLoader.hpp>
-#include <gorn/asset/TextureAtlas.hpp>
+#include <gorn/asset/CocosSpriteAtlasLoader.hpp>
+#include <gorn/asset/SpriteAtlas.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Data.hpp>
+#include <gorn/render/MaterialManager.hpp>
 #include <rapidxml/rapidxml.hpp>
 
 using namespace rapidxml;
@@ -36,7 +37,7 @@ namespace gorn {
         return parts;
     }
 
-    void loadFrame(xml_node<>* dict, TextureRegion& region)
+    void loadFrame(xml_node<>* dict, SpriteRegion& region)
     {
         auto key = dict->first_node("key");
         while(key != nullptr)
@@ -50,10 +51,8 @@ namespace gorn {
                 {
                     throw std::runtime_error("Invalid frame value.");
                 }
-                region.origin.x = parts[0];
-                region.origin.y = parts[1];
-                region.size.x = parts[2];
-                region.size.y = parts[3];
+                region.setOrigin(parts[0], parts[1]);
+                region.setSize(parts[2], parts[3]);
 
             }
             else if(name == "offset")
@@ -64,16 +63,12 @@ namespace gorn {
                 {
                     throw std::runtime_error("Invalid offset value.");
                 }
-                region.offset.x = parts[0];
-                region.offset.y = parts[1];                    
+                region.setOffset(parts[0], parts[1]);
             }
             else if(name == "rotated")
             {                
                 std::string value = key->next_sibling()->name();
-                if(value == "true")
-                {
-                    region.rotate();
-                }
+                region.setRotate(value == "true");
             }
             else if(name == "sourceSize")                
             {
@@ -83,29 +78,27 @@ namespace gorn {
                 {
                     throw std::runtime_error("Invalid sourceSize value.");
                 }
-                region.original.x = parts[0];
-                region.original.y = parts[1];  
+                region.setOriginalSize(parts[0], parts[1]);
             }
             key = key->next_sibling("key");
         }
         // in cocos2d offset origin is the center
-        region.offset.x += (region.original.x-region.size.x)/2.0f;
-        region.offset.y += (region.original.y-region.size.y)/2.0f;
+        region.getOffset() += (region.getOriginalSize()-region.getSize())/2.0f;
     }
 
-    void loadFrames(xml_node<>* dict, TextureAtlas& atlas)
+    void loadFrames(xml_node<>* dict, SpriteAtlas& atlas)
     {
         auto key = dict->first_node("key");
         while(key != nullptr)
         {
-            TextureRegion region;
+            SpriteRegion region;
             loadFrame(key->next_sibling("dict"), region);
             atlas.addRegion(key->value(), region);
             key = key->next_sibling("key");
         }
     }
 
-    void loadMetadata(xml_node<>* dict, TextureAtlas& atlas)
+    void loadMetadata(xml_node<>* dict, SpriteAtlas& atlas, MaterialManager& materials)
     {
         auto key = dict->first_node("key");
         while(key != nullptr)
@@ -114,29 +107,30 @@ namespace gorn {
             if(name == "textureFileName")
             {
                 auto value = key->next_sibling();
-                atlas.setTexture(value->value());
+                atlas.setMaterial(materials.load(value->value()));
             }
             key = key->next_sibling("key");
         }
     }
 
-    CocosTextureAtlasLoader::CocosTextureAtlasLoader()
+    CocosSpriteAtlasLoader::CocosSpriteAtlasLoader(MaterialManager& materials):
+    _materials(materials)
     {
     }
     
-    bool CocosTextureAtlasLoader::validate(const Data& data) const
+    bool CocosSpriteAtlasLoader::validate(const Data& data) const
     {
         xml_document<> doc;
         loadXmlDocument(doc, data);
         return std::string(doc.first_node()->name()) == "plist";
     }
 
-    TextureAtlas CocosTextureAtlasLoader::load(Data&& data) const
+    SpriteAtlas CocosSpriteAtlasLoader::load(Data&& data) const
     {
         xml_document<> doc;
         loadXmlDocument(doc, data);
         
-        TextureAtlas atlas;
+        SpriteAtlas atlas;
         auto root = doc.first_node("plist");
         auto dict = root->first_node("dict");
         while (dict != nullptr)
@@ -151,7 +145,7 @@ namespace gorn {
                 }
                 if(name == "metadata")
                 {
-                    loadMetadata(key->next_sibling("dict"), atlas);
+                    loadMetadata(key->next_sibling("dict"), atlas, _materials);
                 }
                 key = key->next_sibling("key");
             }

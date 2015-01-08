@@ -6,10 +6,6 @@
 
 namespace gorn
 {
-    class VertexArray;
-    class VertexBuffer;
-    class Program;
-
 	class VertexDefinition
 	{
     private:

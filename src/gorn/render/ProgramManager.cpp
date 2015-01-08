@@ -10,7 +10,25 @@ namespace gorn
     {
     }
 
-    std::shared_ptr<Shader> ProgramManager::loadShader(const std::string& name, ShaderType type)
+    std::shared_ptr<Shader> ProgramManager::loadShader(
+        const ProgramDefinition& def, ShaderType type)
+    {
+        if(def.hasShaderData(type))
+        {
+            return std::make_shared<Shader>(def.getShaderData(type), type);
+        }
+        else if(def.hasShaderFile(type))
+        {
+            return loadShader(def.getShaderFile(type), type);
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+
+    std::shared_ptr<Shader> ProgramManager::loadShader(
+        const std::string& name, ShaderType type)
     {
         auto& shaders = _shaders[type];
         auto itr = shaders.find(name);
@@ -41,17 +59,19 @@ namespace gorn
             return itr->second;
         }
         auto& def = define(name);
-        auto vertex = loadShader(def.getVertexShader(), ShaderType::Vertex);
-        auto fragment = loadShader(def.getFragmentShader(), ShaderType::Fragment);
+        auto vertex = loadShader(def, ShaderType::Vertex);
+        auto fragment = loadShader(def, ShaderType::Fragment);
 
         auto program = std::make_shared<Program>(fragment, vertex);
-        for(auto& name : def.getAttributes())
+        for(auto itr = def.getAttributes().begin();
+            itr != def.getAttributes().end(); ++itr)
         {
-            program->getAttribute(name);
+            program->loadAttribute(itr->second, itr->first);
         }
-        for(auto& name : def.getUniforms())
+        for(auto itr = def.getUniforms().begin();
+            itr != def.getUniforms().end(); ++itr)
         {
-            program->getUniform(name);
+            program->loadUniform(itr->second, itr->first);
         }
         _programs.insert(itr, {name, program});
         return program;
@@ -63,8 +83,10 @@ namespace gorn
         if(itr == _definitions.end())
         {
             itr = _definitions.insert(itr, {name, ProgramDefinition()});
-            itr->second.withShader(name);
+            itr->second.withShaderFile(ShaderType::Vertex, name);
+            itr->second.withShaderFile(ShaderType::Fragment, name);
         }
         return itr->second;
     }
+
 }

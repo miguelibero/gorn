@@ -4,16 +4,27 @@
 namespace gorn
 {
 
-    RenderCommand::RenderCommand():
+    RenderCommand::RenderCommand(const VertexDefinition& def):
+    _vertexDefinition(def),  
     _elementCount(0), _elementType(0),
     _drawMode(GL_TRIANGLES)
     {
     }
 
-    RenderCommand& RenderCommand::withVertexData(Data&& data, const VertexDefinition& def)
+    RenderCommand& RenderCommand::withMaterial(const std::shared_ptr<Material>& material)
+    {
+        _material = material;
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withVertexData(Data&& data)
     {
         _vertexData = std::move(data);
-        _vertexDefinition = def;
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withAttributeData(const std::string& name, Data&& data)
+    {
         return *this;
     }
 
@@ -21,12 +32,6 @@ namespace gorn
     {
         _elementData = std::move(data);
         _elementType = type;
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withMaterial(const std::shared_ptr<Material>& material)
-    {
-        _material = material;
         return *this;
     }
 

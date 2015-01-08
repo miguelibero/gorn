@@ -1,37 +1,28 @@
 
 
-#ifndef __gorn__TextureAtlas__
-#define __gorn__TextureAtlas__
+#ifndef __gorn__SpriteAtlas__
+#define __gorn__SpriteAtlas__
 
-#include <glm/glm.hpp>
 #include <map>
 #include <vector>
 #include <string>
+#include <gorn/asset/SpriteRegion.hpp>
+#include <gorn/render/Material.hpp>
 
 namespace gorn
 {
-    struct TextureRegion
-    {
-        glm::vec2 origin;
-        glm::vec2 size;
-        glm::vec2 original;
-        glm::vec2 offset;
-
-        void rotate();
-    };
-
-    class TextureAtlas
+    class SpriteAtlas
     {
     public:
-        typedef TextureRegion Region;
+        typedef SpriteRegion Region;
     private:
+        std::shared_ptr<Material> _material;
         std::map<std::string, std::vector<Region>> _regions;
-        std::string _texture;
     public:
-        TextureAtlas();
+        SpriteAtlas(const std::shared_ptr<Material>& = nullptr);
 
-        void setTexture(const std::string& name);
-        const std::string& getTexture() const;
+        const std::shared_ptr<Material>& getMaterial() const;
+        void setMaterial(const std::shared_ptr<Material>& value);
 
         void addRegion(const std::string& name, const Region& region);
         void setRegion(const std::string& name, const Region& region);

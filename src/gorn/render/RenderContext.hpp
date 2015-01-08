@@ -10,13 +10,15 @@
 
 namespace gorn
 {
-    class VertexArray;
+    class Image;
+    class VertexDefinition;
 
     class RenderContext
     {
     private:
         FileManager _files;
         AssetManager<Image> _images;
+        AssetManager<VertexDefinition> _vdefs;
         ProgramManager _programs;
         TextureManager _textures;
         MaterialManager _materials;
@@ -25,11 +27,14 @@ namespace gorn
 
         RenderContext();
 
-        FileManager& getFileManager();
-        const FileManager& getFileManager() const;
+        FileManager& getFiles();
+        const FileManager& getFiles() const;
 
-        AssetManager<Image>& getImageManager();
-        const AssetManager<Image>& getImageManager() const;
+        AssetManager<Image>& getImages();
+        const AssetManager<Image>& getImages() const;
+
+        AssetManager<VertexDefinition>& getVertexDefinitions();
+        const AssetManager<VertexDefinition>& getVertexDefinitions() const;
 
         RenderQueue& getQueue();
         const RenderQueue& getQueue() const;
@@ -44,14 +49,18 @@ namespace gorn
         const MaterialManager& getMaterials() const;
 
         template<typename T>
-        AssetManager<T> createAssetManager() const;
+        AssetManager<T> createAssetManager();
+
+        void basicSetup();
+
     };
 
     template<typename T>
-    AssetManager<T> RenderContext::createAssetManager() const
+    AssetManager<T> RenderContext::createAssetManager()
     {
-        return AssetManager<T>(getFileManager());
+        return AssetManager<T>(getFiles());
     }
+
 }
 
 #endif

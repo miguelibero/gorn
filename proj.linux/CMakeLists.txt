@@ -21,7 +21,7 @@ file(GLOB GORN_SOURCES
 	"${GORN_SOURCE_DIR}/asset/*.cpp"
 	"${GORN_SOURCE_DIR}/base/*.cpp"
 	"${GORN_SOURCE_DIR}/render/*.cpp"
-	#"${GORN_SOURCE_DIR}/scene/*.cpp"
+	"${GORN_SOURCE_DIR}/view/*.cpp"
 	"${GORN_SOURCE_DIR}/platform/*.cpp"
 	"${GORN_SOURCE_DIR}/platform/linux/*.cpp"
 )

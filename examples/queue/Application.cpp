@@ -6,7 +6,6 @@
 namespace gorn
 {
 	RenderContext _render;
-    VertexDefinition _vdef;
 
 	Application::Application()
 	{
@@ -14,22 +13,11 @@ namespace gorn
 
 	void Application::load()
 	{
-
-#ifdef GORN_PLATFORM_LINUX
-		_render.getFileManager()
-            .addDefaultLoader<LocalFileLoader>("../%s");
-		_render.getImageManager()
-            .addLoader<PngImageLoader>();
-#elif GORN_PLATFORM_ANDROID
-		_render.getFileManager()
-            .addDefaultLoader<BundleFileLoader>("%s");
-		_render.getImageManager()
-            .addLoader<GraphicsImageLoader>();
-#endif
+        _render.basicSetup();
 
 	    _render.getPrograms().define("shader")
-            .withVertexShader("shader.vsh")
-            .withFragmentShader("shader.fsh");
+            .withShaderFile(ShaderType::Vertex, "shader.vsh")
+            .withShaderFile(ShaderType::Fragment, "shader.fsh");
         _render.getMaterials().define("kitten")
             .withProgram("shader")
             .withTexture("texture", "kitten.png");
@@ -37,12 +25,14 @@ namespace gorn
             .withProgram("shader")
             .withTexture("texture", "puppy.png");
 
-        _vdef = VertexDefinition()
-            .withAttribute(AttributeDefinition("position")
+        _render.getVertexDefinitions().preload("vdef")
+            .withAttribute(AttributeDefinition()
+                .withName("position")
                 .withType(GL_FLOAT)
                 .withSize(2)
                 .withStride(4*sizeof(GLfloat)))
-            .withAttribute(AttributeDefinition("texCoords")
+            .withAttribute(AttributeDefinition()
+                .withName("texCoords")
                 .withType(GL_FLOAT)
                 .withSize(2)
                 .withStride(4*sizeof(GLfloat))
@@ -56,35 +46,33 @@ namespace gorn
 	void Application::update(double dt)
 	{
 
-        _render.getQueue().addCommand()
+        _render.getQueue().addCommand("vdef", "kitten")
             .withVertexData({
                 //  Position  texCoords
                 -0.75f,  0.75f, 0.0f, 1.0f, // Top-left
                  0.25f,  0.75f, 1.0f, 1.0f, // Top-right
                  0.25f, -0.25f, 1.0f, 0.0f, // Bottom-right
                 -0.75f, -0.25f, 0.0f, 0.0f  // Bottom-left
-            }, _vdef)
+            })
             .withElementData({
                 0, 1, 2,
                 2, 3, 0
             }, GL_UNSIGNED_INT)
-            .withElementCount(6)
-            .withMaterial(_render.getMaterials().load("kitten"));
+            .withElementCount(6);
 
-        _render.getQueue().addCommand()
+        _render.getQueue().addCommand("vdef", "puppy")
             .withVertexData({
                 //  Position  texCoords
                 -0.25f,  0.25f, 0.0f, 1.0f, // Top-left
                  0.75f,  0.25f, 1.0f, 1.0f, // Top-right
                  0.75f, -0.75f, 1.0f, 0.0f, // Bottom-right
                 -0.25f, -0.75f, 0.0f, 0.0f  // Bottom-left
-            }, _vdef)
+            })
             .withElementData({
                 0, 1, 2,
                 2, 3, 0
             }, GL_UNSIGNED_INT)
-            .withElementCount(6)
-            .withMaterial(_render.getMaterials().load("puppy"));
+            .withElementCount(6);
 
 		_render.getQueue().draw();
 	}

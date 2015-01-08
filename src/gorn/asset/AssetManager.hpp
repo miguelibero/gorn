@@ -30,6 +30,9 @@ namespace gorn
         AssetManager(FileManager& files);
 	    std::future<std::shared_ptr<T>> load(const std::string& name, bool cache=false);
 
+        template<typename... Args>
+        T& preload(const std::string& name, Args&&... args);
+
 	    void addLoader(std::unique_ptr<Loader>&& loader);
 
         template<typename L, typename... Args>
@@ -128,6 +131,15 @@ namespace gorn
 			}
 		}
 		throw Exception("Could not load asset.");
+    }
+
+    template<typename T>
+    template<typename... Args>
+    T& AssetManager<T>::preload(const std::string& name, Args&&... args)
+    {
+        auto asset = std::make_shared<T>(std::forward<Args>(args)...);
+        (*_assets)[name] = asset;
+        return *asset;
     }
 
     template<typename T>

@@ -23,6 +23,9 @@ namespace gorn
        
         FileManager& _files;
 
+        std::shared_ptr<Shader> loadShader(
+            const ProgramDefinition& def, ShaderType type);
+
     public:
 
         static const char* kDefaultVertexShaderTag;
@@ -31,7 +34,8 @@ namespace gorn
         ProgramManager(FileManager& files);
 
         ProgramDefinition& define(const std::string& name);
-        std::shared_ptr<Shader> loadShader(const std::string& name, ShaderType type);
+        std::shared_ptr<Shader> loadShader(
+            const std::string& name, ShaderType type);
         std::shared_ptr<Program> load(const std::string& name);
 
     };
