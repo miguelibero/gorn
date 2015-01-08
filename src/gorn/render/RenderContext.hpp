@@ -11,14 +11,12 @@
 namespace gorn
 {
     class Image;
-    class VertexDefinition;
 
     class RenderContext
     {
     private:
         FileManager _files;
         AssetManager<Image> _images;
-        AssetManager<VertexDefinition> _vdefs;
         ProgramManager _programs;
         TextureManager _textures;
         MaterialManager _materials;
@@ -32,9 +30,6 @@ namespace gorn
 
         AssetManager<Image>& getImages();
         const AssetManager<Image>& getImages() const;
-
-        AssetManager<VertexDefinition>& getVertexDefinitions();
-        const AssetManager<VertexDefinition>& getVertexDefinitions() const;
 
         RenderQueue& getQueue();
         const RenderQueue& getQueue() const;
@@ -50,8 +45,6 @@ namespace gorn
 
         template<typename T>
         AssetManager<T> createAssetManager();
-
-        void basicSetup();
 
     };
 

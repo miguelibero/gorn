@@ -26,6 +26,10 @@ namespace gorn
         {
             char buffer[512];
             glGetShaderInfoLog(_id, sizeof(buffer), NULL, buffer);
+            if(buffer[0] == 0)
+            {
+                throw Exception("Could not compile shader.");
+            }
             throw Exception(buffer);
         }
 	}

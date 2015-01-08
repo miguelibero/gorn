@@ -7,39 +7,50 @@
 
 namespace gorn
 {
+    class VertexDefinition;
+
+    struct RenderCommandBlock
+    {
+        Data data;
+        GLenum type;
+        GLsizei count;
+
+        RenderCommandBlock();
+        RenderCommandBlock(Data&& data, GLenum type, GLsizei count);
+    };
+
     class RenderCommand
     {
+    public:
+        typedef RenderCommandBlock Block;
     private:
-        Data _vertexData;
-        Data _elementData;
-        VertexDefinition _vertexDefinition;
+        std::map<std::string, Block> _attributes;
+        Block _elements;
         std::shared_ptr<Material> _material;
-        GLsizei _elementCount;
-        GLenum _elementType;
         GLenum _drawMode;
     public:
-        RenderCommand(const VertexDefinition& def);
+        RenderCommand();
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
-        RenderCommand& withVertexData(Data&& data);
-        RenderCommand& withAttributeData(const std::string& name, Data&& data);
-        RenderCommand& withElementData(Data&& data, GLenum type);
+        RenderCommand& withAttribute(const std::string& name,
+            Data&& data, GLenum type, GLsizei count);
+        RenderCommand& withElements(Data&& data, GLenum type, GLsizei count);
         RenderCommand& withElementCount(GLsizei count);
         RenderCommand& withDrawMode(GLenum mode);
 
-        Data& getVertexData();
-        const Data& getVertexData() const;
+        Block& getElements();
+        const Block& getElements() const;
 
-        VertexDefinition& getVertexDefinition();
-        const VertexDefinition& getVertexDefinition() const;
-
-        Data& getElementData();
-        const Data& getElementData() const;
+        Block& getAttribute(const std::string& name);
+        const Block& getAttribute(const std::string& name) const;
+        bool hasAttribute(const std::string& name) const;
+        std::map<std::string, Block>& getAttributes();
+        const std::map<std::string, Block>& getAttributes() const;
 
         const std::shared_ptr<Material>& getMaterial() const;
-
-        GLsizei getElementCount() const;
-        GLenum getElementType() const;
         GLenum getDrawMode() const;
+
+        VertexDefinition generateVertexDefinition() const;
+        Data generateVertexData(const VertexDefinition& vdef) const;
 
     };
 }

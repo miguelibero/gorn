@@ -19,6 +19,9 @@ namespace gorn
         AttributeDefinition& setAttribute(const std::string& name);
 
         const std::map<std::string, AttributeDefinition>& getAttributes() const;
+        std::map<std::string, AttributeDefinition>& getAttributes();
+
+        GLsizei getElementSize() const;
 	};
 }
 

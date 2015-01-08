@@ -25,6 +25,21 @@ namespace gorn
     const std::map<std::string, AttributeDefinition>& VertexDefinition::getAttributes() const
     {
         return _attributes;
-    }    
+    }
+
+    std::map<std::string, AttributeDefinition>& VertexDefinition::getAttributes()
+    {
+        return _attributes;
+    }
+
+    GLsizei VertexDefinition::getElementSize() const
+    {
+        GLsizei size = 0;
+        for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
+        {
+            size += itr->second.getMemSize();
+        }
+        return size;
+    }
 }
 

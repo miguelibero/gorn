@@ -6,7 +6,6 @@
 namespace gorn
 {
 	RenderContext _render;
-
     Sprite _sprite;
 
 	Application::Application()
@@ -15,10 +14,21 @@ namespace gorn
 
 	void Application::load()
 	{
-        _render.basicSetup();
+#ifdef GORN_PLATFORM_LINUX
+		_render.getFiles()
+            .addDefaultLoader<LocalFileLoader>("../%s");
+		_render.getImages()
+            .addLoader<PngImageLoader>();
+#elif GORN_PLATFORM_ANDROID
+		_render.getFiles()
+            .addDefaultLoader<BundleFileLoader>("%s");
+		_render.getImages()
+            .addLoader<GraphicsImageLoader>();
+#endif
+
         RenderSystem2D render2d(_render);
 
-        _render.getMaterials().define("guybrush")
+        _render.getMaterials().define("guybrush.png")
             .withProgram(RenderSystem2D::Sprite)
             .withTexture(UniformKind::Texture0, "guybrush.png");
 
@@ -33,8 +43,7 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
-        auto& cmd = _render.getQueue().addCommand(RenderSystem2D::Sprite);
-        _sprite.render(cmd);
+        _sprite.render(_render.getQueue());
 		_render.getQueue().draw();
 	}
 

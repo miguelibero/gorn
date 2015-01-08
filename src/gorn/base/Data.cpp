@@ -105,54 +105,59 @@ namespace gorn
     }
 
     DataInputStream::DataInputStream(const Data& data):
-    _read_data(data), _read(0)
+    _data(data), _read(0)
     {
     }
 
 	size_t DataInputStream::read(uint8_t* s, size_t n)
 	{
-		if(_read+n > _read_data.size())
+		if(_read+n > _data.size())
 		{
-			n = _read_data.size()-_read;
+			n = _data.size()-_read;
 		}
-		memcpy(s, _read_data.ptr()+_read, n);
+		memcpy(s, _data.ptr()+_read, n);
 		_read += n;
 		return n;
 	}
 
 	size_t DataInputStream::read(DataOutputStream& s, size_t n)
 	{
-		if(_read+n > _read_data.size())
+		if(_read+n > _data.size())
 		{
-			n = _read_data.size()-_read;
+			n = _data.size()-_read;
 		}
-		s._write_data._mem.insert(s._write_data._mem.begin()+s._write,
-			_read_data._mem.begin()+_read,
-            _read_data._mem.begin()+_read+n);
+        s.write(_data.ptr()+_read, n);
 		_read += n;
-		s._write += n;
 		return n;
 	}
 
 	size_t DataInputStream::read(Data& s, size_t n)
 	{
-    	if(_read+n > _read_data.size())
+    	if(_read+n > _data.size())
 		{
-			n = _read_data.size()-_read;
+			n = _data.size()-_read;
 		}
-        s._mem.insert(s._mem.end(),
-            _read_data._mem.begin()+_read,
-            _read_data._mem.begin()+_read+n);
+        for(size_t i=0; i<n; ++i)
+        {
+            s._mem[i] = _data._mem[_read+i];
+        }
 		_read += n;
         return n;
     }
 
-    size_t DataInputStream::readLine(std::string& line)
+    size_t DataInputStream::read(std::string& line, char end)
     {
         size_t n = 0;
-        while(_read_data._mem.at(_read+n) != '\0')
+        char chr;
+        while(_read+n < _data.size())
         {
-            line += _read_data._mem.at(_read+n);
+            chr = _data._mem.at(_read+n);
+            if(chr == end)
+            {
+                break;
+            }
+            line += chr;
+            n++;
         }
 		_read += n;
         return n;
@@ -160,36 +165,68 @@ namespace gorn
 
     bool DataInputStream::reachedEnd() const
     {
-        return _read >= _read_data.size();
+        return _read >= _data.size();
     }
 
     DataOutputStream::DataOutputStream(Data& data) :
-    _write_data(data), _write(0)
+    _data(data), _write(0)
     {
+    }
+
+    bool DataOutputStream::fit(size_t n)
+    {
+        if(_data.size() >= _write+n)
+        {
+            return false;
+        }
+        _data._mem.resize(_write+n);
+        return true;
+    }
+
+    size_t DataOutputStream::write(size_t n)
+    {
+        fit(n);
+        for(size_t i=0; i<n; ++i)
+        {
+            _data._mem[_write+i] = 0;
+        }
+        _write += n;
+        return n;
     }
 
 	size_t DataOutputStream::write(const uint8_t* s, size_t n)
 	{
-		_write_data._mem.insert(
-            _write_data._mem.begin()+_write, s, s+n);
+        fit(n);
+        for(size_t i=0; i<n; ++i)
+        {
+            _data._mem[_write+i] = s[i];
+        }
 		_write += n;
 		return n;
 	}
 
-	size_t DataOutputStream::write(const Data& s, size_t n)
+	size_t DataOutputStream::write(const Data& s, size_t n, size_t start)
 	{
-        if(n>s.size())
+        if(start>=s.size())
         {
-            n = s.size();
+            n = 0;
         }
-   		_write_data._mem.insert(_write_data._mem.begin()+_write,
-            s._mem.begin(), s._mem.begin()+n);
+        else if(start+n>s.size())
+        {
+            n = s.size()-start;
+        }
+        fit(n);
+        for(size_t i=0; i<n; ++i)
+        {
+            _data._mem[_write+i] = s._mem[start+i];
+        }
 		_write += n;
 		return n;
 	}
 
 	size_t DataOutputStream::write(DataInputStream& s, size_t n)
 	{
+        fit(n);
 		s.read(*this, n);
 		return n;
 	}
@@ -199,9 +236,4 @@ namespace gorn
         return write(reinterpret_cast<const uint8_t*>(s.c_str()),
             s.length()*sizeof(std::string::value_type)/sizeof(uint8_t));
 	}
-
-    bool DataOutputStream::reachedEnd() const
-    {
-        return _write >= _write_data.size();
-    }
 }

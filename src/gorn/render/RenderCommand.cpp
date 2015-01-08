@@ -3,10 +3,17 @@
 
 namespace gorn
 {
+    RenderCommandBlock::RenderCommandBlock():
+    type(0), count(0)
+    {
+    }
 
-    RenderCommand::RenderCommand(const VertexDefinition& def):
-    _vertexDefinition(def),  
-    _elementCount(0), _elementType(0),
+    RenderCommandBlock::RenderCommandBlock(Data&& data, GLenum type, GLsizei count):
+    data(std::move(data)), type(type), count(count)
+    {
+    }
+
+    RenderCommand::RenderCommand():
     _drawMode(GL_TRIANGLES)
     {
     }
@@ -17,27 +24,22 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withVertexData(Data&& data)
+    RenderCommand& RenderCommand::withAttribute(const std::string& name,
+        Data&& data, GLenum type, GLint count)
     {
-        _vertexData = std::move(data);
+        _attributes[name] = Block(std::move(data), type, count);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withAttributeData(const std::string& name, Data&& data)
+    RenderCommand& RenderCommand::withElements(Data&& data, GLenum type, GLsizei count)
     {
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withElementData(Data&& data, GLenum type)
-    {
-        _elementData = std::move(data);
-        _elementType = type;
+        _elements = Block(std::move(data), type, count);
         return *this;
     }
 
     RenderCommand& RenderCommand::withElementCount(GLsizei count)
     {
-        _elementCount = count;
+        _elements.count = count;
         return *this;
     }
 
@@ -47,34 +49,40 @@ namespace gorn
         return *this;
     }
 
-    Data& RenderCommand::getVertexData()
+
+    RenderCommand::Block& RenderCommand::getElements()
     {
-        return _vertexData;
+        return _elements;
     }
 
-    const Data& RenderCommand::getVertexData() const
+    const RenderCommand::Block& RenderCommand::getElements() const
     {
-        return _vertexData;
+        return _elements;
     }
 
-    VertexDefinition& RenderCommand::getVertexDefinition()
+    RenderCommand::Block& RenderCommand::getAttribute(const std::string& name)
     {
-        return _vertexDefinition;
+        return _attributes.at(name);
     }
 
-    const VertexDefinition& RenderCommand::getVertexDefinition() const
+    const RenderCommand::Block& RenderCommand::getAttribute(const std::string& name) const
     {
-        return _vertexDefinition;
+        return _attributes.at(name);
     }
 
-    Data& RenderCommand::getElementData()
+    bool RenderCommand::hasAttribute(const std::string& name) const
     {
-        return _elementData;
+        return _attributes.find(name) != _attributes.end();
     }
 
-    const Data& RenderCommand::getElementData() const
+    std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes()
     {
-        return _elementData;
+        return _attributes;
+    }
+
+    const std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes() const
+    {
+        return _attributes;
     }
 
     const std::shared_ptr<Material>& RenderCommand::getMaterial() const
@@ -82,20 +90,59 @@ namespace gorn
         return _material;
     }
 
-    GLsizei RenderCommand::getElementCount() const
-    {
-        return _elementCount;
-    }
-
-    GLenum RenderCommand::getElementType() const
-    {
-        return _elementType;
-    }
-
     GLenum RenderCommand::getDrawMode() const
     {
         return _drawMode;
     }
+
+    VertexDefinition RenderCommand::generateVertexDefinition() const
+    {
+        VertexDefinition vdef;
+        for(auto itr = _attributes.begin();
+          itr != _attributes.end(); ++itr)
+        {
+            auto offset = vdef.getElementSize();
+            vdef.setAttribute(itr->first)
+                .withType(itr->second.type)
+                .withCount(itr->second.count)
+                .withOffset(offset);
+        }
+        GLsizei stride = vdef.getElementSize();
+        for(auto itr = vdef.getAttributes().begin();
+          itr != vdef.getAttributes().end(); ++itr)
+        {
+            itr->second.withStride(stride);
+        }
+        return vdef;
+    }
+
+    Data RenderCommand::generateVertexData(const VertexDefinition& vdef) const
+    {
+        Data data;
+        DataOutputStream out(data);
+
+        size_t n = 0;
+        bool finished = false;
+        while(!finished)
+        {
+            finished = true;
+            for(auto itr = vdef.getAttributes().begin();
+              itr != vdef.getAttributes().end(); ++itr)
+            {
+                size_t elmSize = itr->second.getMemSize();
+                auto& block = getAttribute(itr->first);
+                size_t writeSize = out.write(block.data, elmSize, n*elmSize);
+                out.write(elmSize-writeSize);
+                if(writeSize != 0)
+                {
+                    finished = false;
+                }
+            }
+            n++;
+        }
+        return data;
+    }
+
 
 }
 

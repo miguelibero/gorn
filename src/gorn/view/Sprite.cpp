@@ -1,6 +1,7 @@
 
 #include <gorn/view/Sprite.hpp>
-#include <gorn/render/RenderCommand.hpp>
+#include <gorn/render/RenderQueue.hpp>
+#include <gorn/render/Kinds.hpp>
 
 namespace gorn {
 
@@ -42,8 +43,26 @@ namespace gorn {
         _region = region;
     }
 
-    void Sprite::render(RenderCommand& cmd)
+    void Sprite::render(RenderQueue& queue)
     {
+        queue.addCommand()
+            .withMaterial(_material)
+            .withAttribute(AttributeKind::Position, {
+                 0.0f, 1.0f,
+                 1.0f, 1.0f,
+                 1.0f, 0.0f,
+                 0.0f, 0.0f,
+            }, GL_FLOAT, 2)
+            .withAttribute(AttributeKind::TexCoords, {
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 0.0f
+            }, GL_FLOAT, 2)
+            .withElements({
+                0, 1, 2,
+                2, 3, 0
+            }, GL_UNSIGNED_INT, 6);
     }
 
 }

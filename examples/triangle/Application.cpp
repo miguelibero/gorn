@@ -14,14 +14,14 @@ namespace gorn
 	void Application::load()
 	{
 #ifdef GORN_PLATFORM_LINUX
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
 #elif GORN_PLATFORM_ANDROID
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<BundleFileLoader>("fsh", "%s.fsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<BundleFileLoader>("vsh", "%s.vsh");
 #endif
 
@@ -36,12 +36,12 @@ namespace gorn
 
         _vao.setAttribute(vbo, AttributeDefinition("position")
             .withType(GL_FLOAT)
-            .withSize(2)
+            .withCount(2)
             .withStride(5*sizeof(GLfloat)));
             
         _vao.setAttribute(vbo, AttributeDefinition("color")
             .withType(GL_FLOAT)
-            .withSize(3)
+            .withCount(3)
             .withStride(5*sizeof(GLfloat))
             .withOffset(2*sizeof(GLfloat)));
 	}

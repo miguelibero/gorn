@@ -5,7 +5,6 @@ project(gorn)
 add_definitions(-Wall -std=c++11 -Wno-unknown-pragmas)
 add_definitions(-DGLM_FORCE_RADIANS)
 add_definitions(-DGORN_PLATFORM_LINUX)
-add_definitions(-DGORN_DEBUG_PNG_IMAGE_LOADER)
 
 # glm
 add_subdirectory(../lib/glm "${CMAKE_CURRENT_BINARY_DIR}/glm")

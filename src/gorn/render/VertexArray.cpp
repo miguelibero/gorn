@@ -13,7 +13,7 @@ namespace gorn
     GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
-    _id(0), _elementType(0), _drawMode(GL_TRIANGLES)
+    _id(0), _elementType(0)
     {   
     }
 	
@@ -33,11 +33,6 @@ namespace gorn
         }
         return _id;
 	};
-
-    void VertexArray::setDrawMode(GLenum mode)
-    {
-        _drawMode = mode;
-    }
 
     void VertexArray::setProgram(const std::shared_ptr<Program>& program)
     {
@@ -113,7 +108,7 @@ namespace gorn
         bind();
         vbo->bind();
 		glEnableVertexAttribArray(id);
-		glVertexAttribPointer(id, def.getSize(), def.getType(),
+		glVertexAttribPointer(id, def.getCount(), def.getType(),
             def.getNormalized(), def.getStride(),
             reinterpret_cast<const GLvoid*>(def.getOffset()));
     }
@@ -128,17 +123,17 @@ namespace gorn
         }
     }
 
-    void VertexArray::draw(GLsizei count, GLint offset)
+    void VertexArray::draw(GLsizei count, GLenum mode, GLint offset)
     {
         activate();
         if(_elementVbo && _elementType)
         {
-    		glDrawElements(_drawMode, count, _elementType,
+    		glDrawElements(mode, count, _elementType,
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else
         {
-		    glDrawArrays(_drawMode, offset, count);
+		    glDrawArrays(mode, offset, count);
         }
 
     }

@@ -24,32 +24,32 @@ namespace gorn
 	{
 
 #ifdef GORN_PLATFORM_LINUX
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<LocalFileLoader>("tex", "../%s.png");
-		_render.getImageManager()
+		_render.getImages()
             .addLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<BundleFileLoader>("fsh", "%s.fsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<BundleFileLoader>("vsh", "%s.vsh");
-		_render.getFileManager()
+		_render.getFiles()
             .addLoader<BundleFileLoader>("tex", "%s.png");
-		_render.getImageManager()
+		_render.getImages()
             .addLoader<GraphicsImageLoader>();
 #endif
 
 	    _render.getPrograms().define("shader")
-            .withUniforms({"transform"});
+            .withUniform("transform", UniformKind::Transform);
 
         _render.getMaterials().define("kitten")
             .withProgram("shader")
             .withTexture("texture", "kitten")
-            .withUniformValue("transform", getTransform(0.25f));
+            .withUniformValue(UniformKind::Transform, getTransform(0.25f));
 
         _vao.setMaterial(_render.getMaterials().load("kitten"));
 
@@ -64,16 +64,16 @@ namespace gorn
         VertexDefinition vdef;
         vdef.setAttribute("position")
             .withType(GL_FLOAT)
-            .withSize(2)
+            .withCount(2)
             .withStride(7*sizeof(GLfloat));
         vdef.setAttribute("color")
             .withType(GL_FLOAT)
-            .withSize(3)
+            .withCount(3)
             .withStride(7*sizeof(GLfloat))
             .withOffset(2*sizeof(GLfloat));
         vdef.setAttribute("texCoords")
             .withType(GL_FLOAT)
-            .withSize(2)
+            .withCount(2)
             .withStride(7*sizeof(GLfloat))
             .withOffset(5*sizeof(GLfloat));
 
@@ -95,7 +95,8 @@ namespace gorn
 	void Application::update(double dt)
 	{
         time += dt;
-        _vao.getMaterial()->setUniformValue("transform", getTransform(time));
+        _vao.getMaterial()->setUniformValue(
+            UniformKind::Transform, getTransform(time));
 		_vao.draw(6);
 	}
 

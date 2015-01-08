@@ -7,8 +7,8 @@
 
 namespace gorn
 {
-    RenderQueue::RenderQueue(AssetManager<VertexDefinition>& vdefs, MaterialManager& materials):
-    _vdefs(vdefs), _materials(materials)
+    RenderQueue::RenderQueue(MaterialManager& materials):
+    _materials(materials)
     {
     }
 
@@ -29,44 +29,41 @@ namespace gorn
         _commands.push_back(std::move(cmd));
     }
 
-    RenderCommand& RenderQueue::addCommand(
-        const std::string& vdefname)
+    RenderCommand& RenderQueue::addCommand()
     {
-        auto& vdef = *_vdefs.load(vdefname).get();
-        _commands.push_back(RenderCommand(vdef));
+        _commands.push_back(RenderCommand());
         return _commands.back();
     }
 
-    RenderCommand& RenderQueue::addCommand(
-        const std::string& vdef,
-        const std::string& material)
+    RenderCommand& RenderQueue::addCommand(const std::string& material)
     {
-        auto& cmd = addCommand(vdef);
+        auto& cmd = addCommand();
         cmd.withMaterial(_materials.load(material));
         return cmd;
     }
 
     void RenderQueue::draw()
     {
-        // TODO: join commands to reduce draw calls
         for(auto& cmd : _commands)
         {
             VertexArray vao;
             vao.setMaterial(cmd.getMaterial());
+            auto vdef = cmd.generateVertexDefinition();
+            Data vdata = cmd.generateVertexData(vdef);
             vao.addVertexData(std::make_shared<VertexBuffer>(
-                cmd.getVertexData(),
+                std::move(vdata),
                 VertexBuffer::Usage::DynamicDraw,
                 VertexBuffer::Target::ArrayBuffer),
-                cmd.getVertexDefinition());
-            if(cmd.getElementType())
+                vdef);
+            if(cmd.getElements().type)
             {
                 vao.setElementData(std::make_shared<VertexBuffer>(
-                    cmd.getElementData(),
+                    std::move(cmd.getElements().data),
                     VertexBuffer::Usage::DynamicDraw,
                     VertexBuffer::Target::ElementArrayBuffer),
-                    cmd.getElementType());
+                    cmd.getElements().type);
             }
-            vao.draw(cmd.getElementCount());
+            vao.draw(cmd.getElements().count, cmd.getDrawMode());
         }
         _commands.clear();
     }

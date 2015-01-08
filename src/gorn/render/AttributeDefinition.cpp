@@ -5,7 +5,7 @@ namespace gorn
     AttributeDefinition::AttributeDefinition(const std::string& name):
     _name(name),
     _normalized(false),
-    _size(1),
+    _count(1),
     _stride(0),
     _offset(0)
     {
@@ -29,9 +29,9 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withSize(GLint size)
+    AttributeDefinition& AttributeDefinition::withCount(GLint count)
     {
-        _size = size;
+        _count = count;
         return *this;
     }
 
@@ -62,9 +62,9 @@ namespace gorn
         return _normalized;
     }
 
-    GLint AttributeDefinition::getSize() const
+    GLint AttributeDefinition::getCount() const
     {
-        return _size;
+        return _count;
     }
 
     GLsizei AttributeDefinition::getStride() const
@@ -76,4 +76,35 @@ namespace gorn
     {
         return _offset;
     }
+
+    GLsizei AttributeDefinition::getTypeSize() const
+    {
+        switch(_type)
+        {
+            case GL_BYTE:
+                return sizeof(GLbyte);
+            case GL_UNSIGNED_BYTE:
+                return sizeof(GLubyte);
+            case GL_SHORT:
+                return sizeof(GLshort);
+            case GL_UNSIGNED_SHORT:
+                return sizeof(GLushort);
+            case GL_INT:
+                return sizeof(GLint);
+            case GL_UNSIGNED_INT:
+                return sizeof(GLuint);
+            case GL_FLOAT:
+                return sizeof(GLfloat);
+            case GL_DOUBLE:
+                return sizeof(GLdouble);
+            default:
+                return 0;               
+        }
+    }
+
+    GLsizei AttributeDefinition::getMemSize() const
+    {
+        return getTypeSize()*getCount();
+    }
+
 }

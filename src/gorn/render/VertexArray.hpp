@@ -20,7 +20,6 @@ namespace gorn
         mutable GLuint _id;
         std::shared_ptr<VertexBuffer> _elementVbo;
         GLenum _elementType;
-        GLenum _drawMode;
         std::vector<std::shared_ptr<VertexBuffer>> _vertexVbos;
         std::shared_ptr<Program> _program;
         std::shared_ptr<Material> _material;
@@ -31,7 +30,6 @@ namespace gorn
 
         void bind() const;
         void activate() const;
-        void setDrawMode(GLenum mode);
         void setAttribute(GLuint attribute, const std::shared_ptr<VertexBuffer>& buffer,
             GLenum type, GLboolean normalized, GLint size,
             GLsizei stride=0, GLsizei offset=0);
@@ -43,7 +41,7 @@ namespace gorn
         const std::shared_ptr<Program>& getProgram() const;
         const std::shared_ptr<Material>& getMaterial() const;
 
-        void draw(GLsizei count, GLint offset=0);
+        void draw(GLsizei count, GLenum mode=GL_TRIANGLES, GLint offset=0);
     };
 }
 

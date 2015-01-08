@@ -16,7 +16,7 @@ namespace gorn
         GLenum _type;
         std::string _name;
         GLboolean _normalized;
-        GLint _size;
+        GLint _count;
         GLsizei _stride;
         GLsizei _offset;
 
@@ -27,16 +27,18 @@ namespace gorn
         AttributeDefinition& withName(const std::string& name);
         AttributeDefinition& withType(GLenum type);
         AttributeDefinition& withNormalized(GLboolean enabled);
-        AttributeDefinition& withSize(GLint size);
+        AttributeDefinition& withCount(GLint count);
         AttributeDefinition& withStride(GLsizei stride);
         AttributeDefinition& withOffset(GLsizei offset);
 
         const std::string& getName() const;
         GLenum getType() const;
         bool getNormalized() const;
-        GLint getSize() const;
+        GLint getCount() const;
         GLsizei getStride() const;
         GLsizei getOffset() const;
+        GLsizei getTypeSize() const;
+        GLsizei getMemSize() const;
 	};
 }
 

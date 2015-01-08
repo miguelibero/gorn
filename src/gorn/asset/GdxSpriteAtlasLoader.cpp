@@ -26,7 +26,7 @@ namespace gorn {
         // texture name
         while(line.empty() && !input.reachedEnd())
         {
-            input.readLine(line);
+            input.read(line);
             String::trim(line);
         }
         atlas.setMaterial(_materials.load(line));
@@ -38,7 +38,7 @@ namespace gorn {
 
         while(!input.reachedEnd())
         {
-            input.readLine(line);
+            input.read(line);
             std::size_t sep = line.find(':');
             std::string n = line.substr(0, sep);
             std::string v = line.substr(sep+1);

@@ -9,7 +9,7 @@
 
 namespace gorn {
 
-    class RenderCommand;
+    class RenderQueue;
     class TextureRegion;
 
     class Sprite
@@ -35,7 +35,7 @@ namespace gorn {
         const Region& getRegion() const;
         void setRegion(const Region& region);
 
-        void render(RenderCommand& cmd);
+        void render(RenderQueue& queue);
     };
 
 }
