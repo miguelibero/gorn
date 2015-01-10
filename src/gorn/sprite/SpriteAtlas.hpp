@@ -6,23 +6,22 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <gorn/asset/SpriteRegion.hpp>
-#include <gorn/render/Material.hpp>
+#include <gorn/sprite/SpriteAtlasRegion.hpp>
 
 namespace gorn
 {
     class SpriteAtlas
     {
     public:
-        typedef SpriteRegion Region;
+        typedef SpriteAtlasRegion Region;
     private:
-        std::shared_ptr<Material> _material;
+        std::string _material;
         std::map<std::string, std::vector<Region>> _regions;
     public:
-        SpriteAtlas(const std::shared_ptr<Material>& = nullptr);
+        SpriteAtlas();
 
-        const std::shared_ptr<Material>& getMaterial() const;
-        void setMaterial(const std::shared_ptr<Material>& value);
+        const std::string& getMaterial() const;
+        void setMaterial(const std::string& value);
 
         void addRegion(const std::string& name, const Region& region);
         void setRegion(const std::string& name, const Region& region);

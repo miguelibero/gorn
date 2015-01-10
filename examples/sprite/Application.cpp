@@ -28,13 +28,15 @@ namespace gorn
 
         RenderSystem2D render2d(_render);
 
-        _render.getMaterials().define("guybrush.png")
-            .withProgram(RenderSystem2D::Sprite)
-            .withTexture(UniformKind::Texture0, "guybrush.png");
+        render2d.getSprites().setDefaultProgram(RenderSystem2D::Sprite);
+        render2d.getSprites().define("guybrush")
+            .withAtlas("guybrush.atlas")
+            .withAnimation("walk", SpriteAnimationDefinition()
+                .withFrames("gb_walk")
+                .withFrameDuration(1.0f/5.0f));
 
-        auto atlas = render2d.getSpriteAtlases().load("guybrush.atlas").get();
-        _sprite.setMaterial(atlas->getMaterial());
-        _sprite.setRegion(atlas->getRegion("gb_walk", 0));
+        _sprite = render2d.getSprites().load("guybrush");
+        _sprite.play("walk");
 	}
 
 	void Application::unload()
@@ -43,6 +45,7 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
+        _sprite.update(dt);
         _sprite.render(_render.getQueue());
 		_render.getQueue().draw();
 	}

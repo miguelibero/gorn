@@ -4,7 +4,6 @@
 #include <gorn/render/ProgramManager.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/FileManager.hpp>
-#include <gorn/asset/GdxSpriteAtlasLoader.hpp>
 
 namespace gorn
 {
@@ -12,10 +11,8 @@ namespace gorn
 
     RenderSystem2D::RenderSystem2D(RenderContext& context):
     _context(context),
-    _spriteAtlases(context.getFiles())
+    _sprites(context.getMaterials(), context.getFiles())
     {
-        _spriteAtlases.addLoader<GdxSpriteAtlasLoader>(_context.getMaterials());
-
 	    context.getPrograms().define(Sprite)
             .withShaderData(ShaderType::Vertex, R"(#version 100
 
@@ -52,14 +49,14 @@ void main()
             .withAttribute("texCoords", AttributeKind::TexCoords);
     }
 
-    const AssetManager<SpriteAtlas>& RenderSystem2D::getSpriteAtlases() const
+    const SpriteManager& RenderSystem2D::getSprites() const
     {
-        return _spriteAtlases;
+        return _sprites;
     }
 
-    AssetManager<SpriteAtlas>& RenderSystem2D::getSpriteAtlases()
+    SpriteManager& RenderSystem2D::getSprites()
     {
-        return _spriteAtlases;
+        return _sprites;
     }
 }
 

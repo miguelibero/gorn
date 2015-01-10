@@ -17,6 +17,7 @@ namespace gorn
 
         RenderCommandBlock();
         RenderCommandBlock(Data&& data, GLenum type, GLsizei count);
+        RenderCommandBlock(const Data& data, GLenum type, GLsizei count);
     };
 
     class RenderCommand
@@ -33,7 +34,10 @@ namespace gorn
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
             Data&& data, GLenum type, GLsizei count);
+        RenderCommand& withAttribute(const std::string& name,
+            const Data& data, GLenum type, GLsizei count);
         RenderCommand& withElements(Data&& data, GLenum type, GLsizei count);
+        RenderCommand& withElements(const Data& data, GLenum type, GLsizei count);
         RenderCommand& withElementCount(GLsizei count);
         RenderCommand& withDrawMode(GLenum mode);
 

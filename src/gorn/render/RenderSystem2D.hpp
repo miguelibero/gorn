@@ -2,6 +2,7 @@
 #define __gorn__RenderSystem2D__
 
 #include <gorn/asset/AssetManager.hpp>
+#include <gorn/sprite/SpriteManager.hpp>
 
 namespace gorn
 {
@@ -12,14 +13,14 @@ namespace gorn
     {
     private:
         RenderContext& _context;
-        AssetManager<SpriteAtlas> _spriteAtlases;
+        SpriteManager _sprites;
     public:
         static const char* Sprite;
 
         RenderSystem2D(RenderContext& context);
-        
-        const AssetManager<SpriteAtlas>& getSpriteAtlases() const;
-        AssetManager<SpriteAtlas>& getSpriteAtlases();
+
+        const SpriteManager& getSprites() const;
+        SpriteManager& getSprites();
     };
 }
 

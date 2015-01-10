@@ -18,12 +18,14 @@ namespace gorn
     private:
         std::map<std::string, std::shared_ptr<Material>> _materials;
         std::map<std::string, MaterialDefinition> _definitions;
-
+        std::string _defaultProgram;
         ProgramManager& _programs;
         TextureManager& _textures;
 
     public:
         MaterialManager(ProgramManager& programs, TextureManager& textures);
+
+        void setDefaultProgram(const std::string& program);
 
         MaterialDefinition& define(const std::string& name);
         std::shared_ptr<Material> load(const std::string& name);

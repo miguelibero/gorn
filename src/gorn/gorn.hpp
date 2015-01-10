@@ -12,10 +12,10 @@
 #include <gorn/render/UniformValue.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/Image.hpp>
-#include <gorn/asset/SpriteAtlas.hpp>
-#include <gorn/asset/GdxSpriteAtlasLoader.hpp>
-#include <gorn/asset/CocosSpriteAtlasLoader.hpp>
-#include <gorn/view/Sprite.hpp>
+#include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
+#include <gorn/sprite/CocosSpriteAtlasLoader.hpp>
+#include <gorn/sprite/SpriteAtlas.hpp>
+#include <gorn/sprite/Sprite.hpp>
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>

@@ -18,6 +18,19 @@ namespace gorn
         _uniformValues[_program->getUniform(name)] = value;
     }
 
+    const glm::vec2& Material::getSize() const
+    {
+        if(_textures.empty())
+        {
+            static glm::vec2 size;
+            return size;
+        }
+        else
+        {
+            return _textures.begin()->second->getSize();
+        }
+    }
+
 	const std::shared_ptr<Program>& Material::getProgram() const
 	{
 		return _program;

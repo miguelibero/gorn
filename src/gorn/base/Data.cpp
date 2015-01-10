@@ -149,15 +149,16 @@ namespace gorn
     {
         size_t n = 0;
         char chr;
+        line = "";
         while(_read+n < _data.size())
         {
             chr = _data._mem.at(_read+n);
+            n++;
             if(chr == end)
             {
                 break;
             }
             line += chr;
-            n++;
         }
 		_read += n;
         return n;

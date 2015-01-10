@@ -1,14 +1,12 @@
 
-#include <gorn/asset/GdxSpriteAtlasLoader.hpp>
-#include <gorn/asset/SpriteAtlas.hpp>
+#include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
+#include <gorn/sprite/SpriteAtlas.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Data.hpp>
-#include <gorn/render/MaterialManager.hpp>
 
 namespace gorn {
 
-    GdxSpriteAtlasLoader::GdxSpriteAtlasLoader(MaterialManager& materials):
-    _materials(materials)
+    GdxSpriteAtlasLoader::GdxSpriteAtlasLoader()
     {
     }
     
@@ -29,10 +27,10 @@ namespace gorn {
             input.read(line);
             String::trim(line);
         }
-        atlas.setMaterial(_materials.load(line));
+        atlas.setMaterial(line);
 
         bool inRegion = false;
-        SpriteRegion region;
+        SpriteAtlasRegion region;
         std::string regionName;
         size_t regionIndex = 0;
 
@@ -48,7 +46,8 @@ namespace gorn {
                 if(sep == std::string::npos)
                 {
                     inRegion = true;
-                    region = SpriteRegion();
+                    region = SpriteAtlasRegion();
+                    region.setOrigin(SpriteAtlasRegionOrigin::TopLeft);
                     regionName = line;
                 }
                 else
@@ -69,7 +68,7 @@ namespace gorn {
                     else if(n == "xy")
                     {
                         sep = v.find(',');                       
-                        region.setOrigin(
+                        region.setPosition(
                             String::convertTo<int>(v.substr(0, sep)),
                             String::convertTo<int>(v.substr(sep+1)));
                     }
@@ -102,7 +101,8 @@ namespace gorn {
                 else
                 {
                     atlas.setRegion(regionName, region, regionIndex);
-                    region = SpriteRegion();
+                    region = SpriteAtlasRegion();
+                    region.setOrigin(SpriteAtlasRegionOrigin::TopLeft);
                     regionName = line;
                 }             
             }

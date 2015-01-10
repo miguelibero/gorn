@@ -13,6 +13,11 @@ namespace gorn
     {
     }
 
+    RenderCommandBlock::RenderCommandBlock(const Data& data, GLenum type, GLsizei count):
+    data(data), type(type), count(count)
+    {
+    }
+
     RenderCommand::RenderCommand():
     _drawMode(GL_TRIANGLES)
     {
@@ -31,9 +36,22 @@ namespace gorn
         return *this;
     }
 
+    RenderCommand& RenderCommand::withAttribute(const std::string& name,
+        const Data& data, GLenum type, GLint count)
+    {
+        _attributes[name] = Block(data, type, count);
+        return *this;
+    }
+
     RenderCommand& RenderCommand::withElements(Data&& data, GLenum type, GLsizei count)
     {
         _elements = Block(std::move(data), type, count);
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withElements(const Data& data, GLenum type, GLsizei count)
+    {
+        _elements = Block(data, type, count);
         return *this;
     }
 

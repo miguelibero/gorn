@@ -7,14 +7,11 @@
 namespace gorn {
 
     class SpriteAtlas;
-    class MaterialManager;
 
     class GdxSpriteAtlasLoader : public AssetLoader<SpriteAtlas>
     {      
-    private:
-        MaterialManager& _materials;
     public:
-        GdxSpriteAtlasLoader(MaterialManager& materials);
+        GdxSpriteAtlasLoader();
 
         bool validate(const Data& data) const;
         SpriteAtlas load(Data&& data) const;

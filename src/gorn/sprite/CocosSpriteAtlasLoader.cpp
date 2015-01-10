@@ -1,6 +1,6 @@
 
-#include <gorn/asset/CocosSpriteAtlasLoader.hpp>
-#include <gorn/asset/SpriteAtlas.hpp>
+#include <gorn/sprite/CocosSpriteAtlasLoader.hpp>
+#include <gorn/sprite/SpriteAtlas.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Data.hpp>
 #include <gorn/render/MaterialManager.hpp>
@@ -37,7 +37,7 @@ namespace gorn {
         return parts;
     }
 
-    void loadFrame(xml_node<>* dict, SpriteRegion& region)
+    void loadFrame(xml_node<>* dict, SpriteAtlasRegion& region)
     {
         auto key = dict->first_node("key");
         while(key != nullptr)
@@ -51,7 +51,7 @@ namespace gorn {
                 {
                     throw std::runtime_error("Invalid frame value.");
                 }
-                region.setOrigin(parts[0], parts[1]);
+                region.setPosition(parts[0], parts[1]);
                 region.setSize(parts[2], parts[3]);
 
             }
@@ -91,14 +91,14 @@ namespace gorn {
         auto key = dict->first_node("key");
         while(key != nullptr)
         {
-            SpriteRegion region;
+            SpriteAtlasRegion region;
             loadFrame(key->next_sibling("dict"), region);
             atlas.addRegion(key->value(), region);
             key = key->next_sibling("key");
         }
     }
 
-    void loadMetadata(xml_node<>* dict, SpriteAtlas& atlas, MaterialManager& materials)
+    void loadMetadata(xml_node<>* dict, SpriteAtlas& atlas)
     {
         auto key = dict->first_node("key");
         while(key != nullptr)
@@ -107,14 +107,13 @@ namespace gorn {
             if(name == "textureFileName")
             {
                 auto value = key->next_sibling();
-                atlas.setMaterial(materials.load(value->value()));
+                atlas.setMaterial(value->value());
             }
             key = key->next_sibling("key");
         }
     }
 
-    CocosSpriteAtlasLoader::CocosSpriteAtlasLoader(MaterialManager& materials):
-    _materials(materials)
+    CocosSpriteAtlasLoader::CocosSpriteAtlasLoader()
     {
     }
     
@@ -145,7 +144,7 @@ namespace gorn {
                 }
                 if(name == "metadata")
                 {
-                    loadMetadata(key->next_sibling("dict"), atlas, _materials);
+                    loadMetadata(key->next_sibling("dict"), atlas);
                 }
                 key = key->next_sibling("key");
             }

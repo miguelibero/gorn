@@ -1,6 +1,7 @@
 #include <gorn/render/MaterialManager.hpp>
 #include <gorn/render/ProgramManager.hpp>
 #include <gorn/render/TextureManager.hpp>
+#include <gorn/render/Kinds.hpp>
 
 namespace gorn
 {
@@ -8,6 +9,11 @@ namespace gorn
     _programs(programs),
     _textures(textures)
     {
+    }
+
+    void MaterialManager::setDefaultProgram(const std::string& program)
+    {
+        _defaultProgram = program;
     }
 
     std::shared_ptr<Material> MaterialManager::load(const std::string& name)
@@ -18,7 +24,12 @@ namespace gorn
             return itr->second;
         }
         auto& def = define(name);
-        auto program = _programs.load(def.getProgram());
+        auto progname = def.getProgram();
+        if(progname.empty())
+        {
+            progname = _defaultProgram;
+        }
+        auto program = _programs.load(progname);
         auto material = std::make_shared<Material>(program);
         for(auto itr = def.getTextures().begin();
             itr != def.getTextures().end(); ++itr)
@@ -41,7 +52,7 @@ namespace gorn
         if(itr == _definitions.end())
         {
             itr = _definitions.insert(itr, {name, MaterialDefinition()});
-            itr->second.withProgram(name);
+            itr->second.withTexture(UniformKind::Texture0, name);
         }
         return itr->second;
     }

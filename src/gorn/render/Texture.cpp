@@ -50,12 +50,18 @@ namespace gorn
         glTexImage2D(_target, lodLevel, img.getInternalFormat(),
             img.getWidth(), img.getHeight(), img.getBorder(),
             img.getFormat(), img.getType(), img.getData().ptr());
+        _size = glm::vec2(img.getWidth(), img.getHeight());
     }
 
 	GLuint Texture::getId() const
 	{
 		return _id;
 	}
+
+    const glm::vec2& Texture::getSize() const
+    {
+        return _size;
+    }
 
     void Texture::bind()
     {

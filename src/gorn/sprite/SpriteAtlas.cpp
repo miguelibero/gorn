@@ -1,20 +1,19 @@
 
-#include <gorn/asset/SpriteAtlas.hpp>
+#include <gorn/sprite/SpriteAtlas.hpp>
 #include <gorn/base/Exception.hpp>
 
 namespace gorn {
 
-    SpriteAtlas::SpriteAtlas(const std::shared_ptr<Material>& material):
-    _material(material)
+    SpriteAtlas::SpriteAtlas()
     {
     }
 
-    const std::shared_ptr<Material>& SpriteAtlas::getMaterial() const
+    const std::string& SpriteAtlas::getMaterial() const
     {
         return _material;
     }
 
-    void SpriteAtlas::setMaterial(const std::shared_ptr<Material>& value)
+    void SpriteAtlas::setMaterial(const std::string& value)
     {
         _material = value;
     }
@@ -32,16 +31,21 @@ namespace gorn {
     void SpriteAtlas::setRegion(const std::string& name,
         const Region& region, size_t index)
     {
-        _regions[name][index] = region;
+        auto& regions = _regions[name];
+        if(regions.size() <= index)
+        {
+            regions.resize(index+1);
+        }
+        regions[index] = region;
     }
 
-    const std::map<std::string, std::vector<SpriteRegion>>& SpriteAtlas::getRegions() const
+    const std::map<std::string, std::vector<SpriteAtlasRegion>>& SpriteAtlas::getRegions() const
     {
         return _regions;
     }
 
 
-    const std::vector<SpriteRegion>& SpriteAtlas::getRegions(const std::string& name) const
+    const std::vector<SpriteAtlasRegion>& SpriteAtlas::getRegions(const std::string& name) const
     {
         auto itr = _regions.find(name);
         if(itr != _regions.end())
@@ -51,7 +55,7 @@ namespace gorn {
         throw Exception("Could not find regions.");
     }
 
-    const SpriteRegion& SpriteAtlas::getRegion(const std::string& name, size_t index) const
+    const SpriteAtlasRegion& SpriteAtlas::getRegion(const std::string& name, size_t index) const
     {
         auto itr = _regions.find(name);
         if(itr != _regions.end() && itr->second.size() > index)

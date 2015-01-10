@@ -7,14 +7,11 @@
 namespace gorn {
 
     class SpriteAtlas;
-    class MaterialManager;
 
     class CocosSpriteAtlasLoader : public AssetLoader<SpriteAtlas>
     {
-    private:
-        MaterialManager& _materials;
     public:
-        CocosSpriteAtlasLoader(MaterialManager& materials);
+        CocosSpriteAtlasLoader();
 
         bool validate(const Data& data) const;
         SpriteAtlas load(Data&& data) const;

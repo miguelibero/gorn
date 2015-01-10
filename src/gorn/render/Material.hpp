@@ -21,6 +21,7 @@ namespace gorn
 		void setTexture(const std::string& name, const std::shared_ptr<Texture>& texture);
 		void setUniformValue(const std::string& name, const UniformValue& value);
 
+        const glm::vec2& getSize() const;
 		const std::shared_ptr<Program>& getProgram() const;
         void activate();
 	};
