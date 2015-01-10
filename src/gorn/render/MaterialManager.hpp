@@ -27,7 +27,9 @@ namespace gorn
 
         void setDefaultProgram(const std::string& program);
 
+        bool hasDefined(const std::string& name) const;
         MaterialDefinition& define(const std::string& name);
+        MaterialDefinition& define(const std::string& name, const MaterialDefinition& def);
         std::shared_ptr<Material> load(const std::string& name);
     };
 

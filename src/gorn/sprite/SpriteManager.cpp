@@ -11,14 +11,15 @@
 namespace gorn {
 
     SpriteManager::SpriteManager(MaterialManager& materials, FileManager& files):
-    _materials(materials), _atlases(files), _defaultProgram(RenderSystem2D::Sprite)
+    _materials(materials), _atlases(files)
     {
+        _materialdef.withProgram(RenderSystem2D::Sprite);
         _atlases.addLoader<GdxSpriteAtlasLoader>();
     }
     
-    void SpriteManager::setDefaultProgram(const std::string& name)
+    MaterialDefinition& SpriteManager::getDefaultMaterialDefinition()
     {
-        _defaultProgram = name;
+        return _materialdef;
     }
 
     const AssetManager<SpriteAtlas>& SpriteManager::getAtlases() const
@@ -64,10 +65,9 @@ namespace gorn {
             {
                 materialName = atlas->getMaterial();
             }
-            auto& mdef = _materials.define(materialName);
-            if(mdef.getProgram().empty())
+            if(!_materials.hasDefined(materialName))
             {
-                mdef.withProgram(_defaultProgram);
+                _materials.define(materialName, _materialdef);
             }
             auto material = _materials.load(materialName);
             auto& anim = sprite.setAnimation(itr->first);

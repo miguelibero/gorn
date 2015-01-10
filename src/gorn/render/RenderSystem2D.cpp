@@ -4,6 +4,8 @@
 #include <gorn/render/ProgramManager.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/FileManager.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace gorn
 {
@@ -23,10 +25,12 @@ attribute vec2 texCoords;
 
 varying vec2 TexCoords;
 
+uniform mat4 transform;
+
 void main()
 {
     TexCoords = texCoords;
-    gl_Position = vec4(position, 0.0, 1.0);
+    gl_Position = transform*vec4(position, 0.0, 1.0);
 }
 
 )")
@@ -44,7 +48,10 @@ void main()
 }
 
 )")
+            .withUniform("transform", UniformKind::Transform)
             .withUniform("texture", UniformKind::Texture0)
+            .withUniformValue(UniformKind::Transform,
+                glm::translate(glm::mat4(), glm::vec3(-0.5f, -0.5f, 0.0f)))
             .withAttribute("position", AttributeKind::Position)
             .withAttribute("texCoords", AttributeKind::TexCoords);
     }

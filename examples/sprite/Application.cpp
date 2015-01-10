@@ -28,7 +28,6 @@ namespace gorn
 
         RenderSystem2D render2d(_render);
 
-        render2d.getSprites().setDefaultProgram(RenderSystem2D::Sprite);
         render2d.getSprites().define("guybrush")
             .withAtlas("guybrush.atlas")
             .withAnimation("walk", SpriteAnimationDefinition()

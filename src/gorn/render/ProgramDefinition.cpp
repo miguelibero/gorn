@@ -50,6 +50,13 @@ namespace gorn
         return *this;
     }
 
+    ProgramDefinition& ProgramDefinition::withUniformValue(
+        const std::string& name, const UniformValue& value)
+    {
+        _uniformValues[name] = value;
+		return *this;
+    }
+
     bool ProgramDefinition::hasShaderData(ShaderType type) const
     {
         auto itr = _shaderData.find(type);
@@ -81,5 +88,10 @@ namespace gorn
 	{
 		return _attributes;
 	}
+
+	const std::map<std::string, UniformValue>& ProgramDefinition::getUniformValues() const
+    {
+        return _uniformValues;
+    }
 
 }

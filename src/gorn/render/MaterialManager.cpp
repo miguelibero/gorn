@@ -36,6 +36,12 @@ namespace gorn
         {
             material->setTexture(itr->first, _textures.load(itr->second));
         }
+        auto& pdef = _programs.define(progname);
+        for(auto itr = pdef.getUniformValues().begin();
+            itr != pdef.getUniformValues().end(); ++itr)
+        {
+            material->setUniformValue(itr->first, itr->second);
+        }
         for(auto itr = def.getUniformValues().begin();
             itr != def.getUniformValues().end(); ++itr)
         {
@@ -44,6 +50,11 @@ namespace gorn
 
         _materials.insert(itr, {name, material});
         return material;
+    }
+
+    bool MaterialManager::hasDefined(const std::string& name) const
+    {
+        return _definitions.find(name) != _definitions.end();
     }
 
     MaterialDefinition& MaterialManager::define(const std::string& name)
@@ -55,5 +66,16 @@ namespace gorn
             itr->second.withTexture(UniformKind::Texture0, name);
         }
         return itr->second;
+    }
+
+    MaterialDefinition& MaterialManager::define(const std::string& name, const MaterialDefinition& def)
+    {
+        _definitions[name] = def;
+        auto& ndef = _definitions[name];
+        if(ndef.getTextures().empty())
+        {
+            ndef.withTexture(UniformKind::Texture0, name);
+        }
+        return ndef;
     }
 }

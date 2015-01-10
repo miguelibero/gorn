@@ -5,6 +5,7 @@
 
 #include <gorn/asset/AssetManager.hpp>
 #include <gorn/sprite/SpriteDefinition.hpp>
+#include <gorn/render/MaterialDefinition.hpp>
 
 namespace gorn {
 
@@ -21,14 +22,14 @@ namespace gorn {
         MaterialManager& _materials;
         AssetManager<SpriteAtlas> _atlases;
         std::map<std::string, Definition> _definitions;
-        std::string _defaultProgram;
+        MaterialDefinition _materialdef;
     public:
         SpriteManager(MaterialManager& materials, FileManager& files);
 
         const AssetManager<SpriteAtlas>& getAtlases() const;
         AssetManager<SpriteAtlas>& getAtlases();
 
-        void setDefaultProgram(const std::string& name);
+        MaterialDefinition& getDefaultMaterialDefinition();
 
         SpriteDefinition& define(const std::string& name);
 
