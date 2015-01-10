@@ -107,6 +107,7 @@ namespace gorn {
                 }             
             }
         }
+        atlas.setRegion(regionName, region, regionIndex);
 
         return atlas;
     }

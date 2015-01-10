@@ -175,11 +175,12 @@ namespace gorn {
 
     const Data& SpriteAtlasRegion::getPositionVertices() const
     {
-        auto bl = (_originalSize-_size)*0.5f+_offset;
-        bl /= _totalSize;
-        auto tr = bl + _size/_originalSize;
         if(_posVertsDirty)
         {
+            auto bl = (_originalSize-_size)*0.5f+_offset;
+            bl /= _totalSize;
+            auto tr = bl + _size/_originalSize;
+
             _posVerts = {
                 bl.x, tr.y,
                 tr.x, tr.y,
@@ -196,18 +197,18 @@ namespace gorn {
         if(_texVertsDirty)
         {
             glm::vec2 bl = _position;
-            if(_origin == Origin::TopLeft || _origin == Origin::TopRight)
-            {
-                bl.y = _totalSize.y - bl.y;
-            }
-            if(_origin == Origin::BottomRight || _origin == Origin::TopRight)
-            {
-                bl.x = _totalSize.x - bl.x;
-            }
             auto rsize = _size;
             if(_rotate)
             {
                 std::swap(rsize.x, rsize.y);
+            }
+            if(_origin == Origin::TopLeft || _origin == Origin::TopRight)
+            {
+                bl.y = _totalSize.y - rsize.y - bl.y;
+            }
+            if(_origin == Origin::BottomRight || _origin == Origin::TopRight)
+            {
+                bl.x = _totalSize.x - rsize.x - bl.x;
             }
             auto tr = bl+rsize;
             tr /= _totalSize;

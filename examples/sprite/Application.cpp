@@ -28,6 +28,10 @@ namespace gorn
 
         RenderSystem2D render2d(_render);
 
+        _render.getTextures().define("guybrush.png")
+            .withParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+            .withParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
         render2d.getSprites().define("guybrush")
             .withAtlas("guybrush.atlas")
             .withAnimation("walk", SpriteAnimationDefinition()
