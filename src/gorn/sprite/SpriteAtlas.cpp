@@ -8,14 +8,43 @@ namespace gorn {
     {
     }
 
-    const std::string& SpriteAtlas::getMaterial() const
+    const std::string& SpriteAtlas::getMaterial(size_t page) const
     {
-        return _material;
+        return _materials.at(page);
     }
 
-    void SpriteAtlas::setMaterial(const std::string& value)
+    void SpriteAtlas::setMaterial(const std::string& value, size_t page)
     {
-        _material = value;
+        if(_materials.size() <= page)
+        {
+            _materials.resize(page+1);
+        }
+        _materials[page] = value;
+    }
+
+    size_t SpriteAtlas::getMaterialCount() const
+    {
+        return _materials.size();
+    }
+
+    void SpriteAtlas::setProperty(const std::string& name, const std::string& value)
+    {
+        _properties[name] = value;
+    }
+
+    const std::string& SpriteAtlas::getProperty(const std::string& name) const
+    {
+        return _properties.at(name);
+    }
+
+    bool SpriteAtlas::hasProperty(const std::string& name) const
+    {
+        return _properties.find(name) != _properties.end();
+    }
+
+    const std::map<std::string, std::string>& SpriteAtlas::getProperties() const
+    {
+        return _properties;
     }
 
     void SpriteAtlas::addRegion(const std::string& name, const Region& region)
@@ -43,7 +72,6 @@ namespace gorn {
     {
         return _regions;
     }
-
 
     const std::vector<SpriteAtlasRegion>& SpriteAtlas::getRegions(const std::string& name) const
     {

@@ -47,7 +47,6 @@ namespace gorn {
         if(_currentAnim != name)
         {
             _currentAnim = name;
-            _animTime = 0.0;
         }
     }
 
@@ -56,37 +55,18 @@ namespace gorn {
         auto itr = _anims.find(_currentAnim);
         if(itr != _anims.end())
         {
-            auto& anim = itr->second;
-            _animTime += dt;
-            auto duration = anim.getTotalDuration();
-            while(_animTime > duration)
-            {
-                _animTime -= duration;
-            }
+            itr->second.update(dt);
         }
     }
 
-    void Sprite::render(RenderQueue& queue)
+    void Sprite::render(RenderQueue& queue) const
     {
         auto itr = _anims.find(_currentAnim);
-        if(itr == _anims.end())
+        if(itr != _anims.end())
         {
-            return;
+            itr->second.render(queue);
         }
     
-        auto& anim = itr->second;
-        auto& frame = anim.getFrame(_animTime);
-
-        queue.addCommand()
-            .withMaterial(anim.getMaterial())
-            .withAttribute(AttributeKind::Position, 
-                frame.getPositionVertices(), GL_FLOAT, 2)
-            .withAttribute(AttributeKind::TexCoords, 
-                frame.getTextureVertices(), GL_FLOAT, 2)
-            .withElements({
-                0, 1, 2,
-                2, 3, 0
-            }, GL_UNSIGNED_INT, 6);
     }
 
 }

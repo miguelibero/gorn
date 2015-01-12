@@ -8,12 +8,6 @@ namespace gorn {
     {
     }
 
-    SpriteAnimationDefinition& SpriteAnimationDefinition::withMaterial(const std::string& material)
-    {
-        _material = material;
-        return *this;
-    }
-
     SpriteAnimationDefinition& SpriteAnimationDefinition::withAtlas(const std::string& atlas)
     {
         _atlas = atlas;
@@ -43,12 +37,6 @@ namespace gorn {
     double SpriteAnimationDefinition::getFrameDuration() const
     {
         return _frameDuration;
-    }
-
-
-    const std::string& SpriteAnimationDefinition::getMaterial() const
-    {
-        return _material;
     }
 
     const std::string& SpriteAnimationDefinition::getAtlas() const

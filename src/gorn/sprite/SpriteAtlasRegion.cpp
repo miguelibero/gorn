@@ -4,13 +4,19 @@
 namespace gorn {
 
     SpriteAtlasRegion::SpriteAtlasRegion() :
-    _origin(Origin::BottomLeft), _flipX(false),
-    _flipY(false), _rotate(false),
-    _texVerts(8*sizeof(float)),
-    _posVerts(8*sizeof(float)),
-    _texVertsDirty(true),
-    _posVertsDirty(true)
+    _page(0), _origin(Origin::BottomLeft),
+    _flipX(false), _flipY(false), _rotate(false)
     {
+    }
+
+    size_t SpriteAtlasRegion::getPage() const
+    {
+        return _page;
+    }
+
+    void SpriteAtlasRegion::setPage(size_t value)
+    {
+        _page = value;
     }
 
     SpriteAtlasRegion::Origin SpriteAtlasRegion::getOrigin() const
@@ -20,11 +26,7 @@ namespace gorn {
 
     void SpriteAtlasRegion::setOrigin(Origin value)
     {
-        if(_origin != value)
-        {
-            _origin = value;
-            _texVertsDirty = true;
-        }
+        _origin = value;
     }
 
     const glm::vec2& SpriteAtlasRegion::getPosition() const
@@ -59,11 +61,7 @@ namespace gorn {
 
     void SpriteAtlasRegion::setSize(const glm::vec2& value)
     {
-        if(_size != value)
-        {
-            _size = value;
-            _texVertsDirty = true;
-        }
+        _size = value;
     }
 
     void SpriteAtlasRegion::setSize(value_type x, value_type y)
@@ -83,11 +81,7 @@ namespace gorn {
 
     void SpriteAtlasRegion::setOriginalSize(const glm::vec2& value)
     {
-        if(_originalSize != value)
-        {
-            _originalSize = value;
-            _posVertsDirty = true;
-        }
+        _originalSize = value;
     }
 
     void SpriteAtlasRegion::setOriginalSize(value_type x, value_type y)
@@ -107,40 +101,12 @@ namespace gorn {
 
     void SpriteAtlasRegion::setOffset(const glm::vec2& value)
     {
-        if(_offset != value)
-        {
-            _offset = value;
-            _posVertsDirty = true;
-        }
+        _offset = value;
     }
 
     void SpriteAtlasRegion::setOffset(value_type x, value_type y)
     {
         setOffset(glm::vec2(x, y));
-    }
-
-    const glm::vec2& SpriteAtlasRegion::getTotalSize() const
-    {
-        return _totalSize;
-    }
-
-    glm::vec2& SpriteAtlasRegion::getTotalSize()
-    {
-        return _totalSize;
-    }
-
-    void SpriteAtlasRegion::setTotalSize(const glm::vec2& value)
-    {
-        if(_totalSize != value)
-        {
-            _totalSize = value;
-            _texVertsDirty = true;
-        }
-    }
-
-    void SpriteAtlasRegion::setTotalSize(value_type x, value_type y)
-    {
-        setTotalSize(glm::vec2(x, y));
     }
 
     bool SpriteAtlasRegion::getFlipX() const
@@ -173,67 +139,4 @@ namespace gorn {
         _rotate = enabled;
     }
 
-    const Data& SpriteAtlasRegion::getPositionVertices() const
-    {
-        if(_posVertsDirty)
-        {
-            auto bl = (_originalSize-_size)*0.5f+_offset;
-            bl /= _totalSize;
-            auto tr = bl + _size/_originalSize;
-
-            _posVerts = {
-                bl.x, tr.y,
-                tr.x, tr.y,
-                tr.x, bl.y,
-                bl.x, bl.y
-            };
-            _posVertsDirty = false;
-        }
-        return _posVerts;
-    }
-
-    const Data& SpriteAtlasRegion::getTextureVertices() const
-    {
-        if(_texVertsDirty)
-        {
-            glm::vec2 bl = _position;
-            auto rsize = _size;
-            if(_rotate)
-            {
-                std::swap(rsize.x, rsize.y);
-            }
-            if(_origin == Origin::TopLeft || _origin == Origin::TopRight)
-            {
-                bl.y = _totalSize.y - rsize.y - bl.y;
-            }
-            if(_origin == Origin::BottomRight || _origin == Origin::TopRight)
-            {
-                bl.x = _totalSize.x - rsize.x - bl.x;
-            }
-            auto tr = bl+rsize;
-            tr /= _totalSize;
-            bl /= _totalSize;
-
-            if(_rotate)
-            {
-                _texVerts = {
-                    bl.x, bl.y,
-                    bl.x, tr.y,
-                    tr.x, tr.y,
-                    tr.x, bl.y
-                };
-            }
-            else
-            {
-                _texVerts = {
-                    bl.x, tr.y,
-                    tr.x, tr.y,
-                    tr.x, bl.y,
-                    bl.x, bl.y
-                };
-            }
-            _texVertsDirty = false;
-        }
-        return _texVerts;
-    }
 }

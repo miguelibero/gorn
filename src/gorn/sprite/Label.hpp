@@ -1,7 +1,7 @@
 
 
-#ifndef __gorn__Sprite__
-#define __gorn__Sprite__
+#ifndef __gorn__Label__
+#define __gorn__Label__
 
 #include <gorn/sprite/SpriteAnimation.hpp>
 
@@ -9,7 +9,7 @@ namespace gorn {
 
     class RenderQueue;
 
-    class Sprite
+    class Label
     {
     public:
         typedef SpriteAnimation Animation;
@@ -17,6 +17,7 @@ namespace gorn {
     private:
         std::map<std::string, Animation> _anims;
         std::string _currentAnim;
+        double _animTime;
     public:
         Sprite();
         Sprite(const Animation& anim);
@@ -29,7 +30,7 @@ namespace gorn {
         void play(const std::string& name);
 
         void update(double dt);
-        void render(RenderQueue& queue) const;
+        void render(RenderQueue& queue);
     };
 
 }

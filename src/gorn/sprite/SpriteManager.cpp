@@ -3,6 +3,7 @@
 #include <gorn/sprite/SpriteManager.hpp>
 #include <gorn/sprite/SpriteAtlas.hpp>
 #include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
+#include <gorn/sprite/FntSpriteAtlasLoader.hpp>
 #include <gorn/sprite/Sprite.hpp>
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/render/MaterialManager.hpp>
@@ -50,32 +51,26 @@ namespace gorn {
         for(auto itr = def.getAnimations().begin();
             itr != def.getAnimations().end(); ++itr)
         {
-            std::string atlasName = itr->second.getAtlas();
-            if(atlasName.empty())
-            {
-                atlasName = def.getAtlas();
-            }
-            auto atlas = _atlases.load(atlasName).get();
-            std::string materialName = itr->second.getMaterial();
-            if(materialName.empty())
-            {
-                materialName = def.getMaterial();
-            }
-            if(materialName.empty())
-            {
-                materialName = atlas->getMaterial();
-            }
-            if(!_materials.hasDefined(materialName))
-            {
-                _materials.define(materialName, _materialdef);
-            }
-            auto material = _materials.load(materialName);
             auto& anim = sprite.setAnimation(itr->first);
-            anim.withMaterial(material);
             anim.withFrameDuration(itr->second.getFrameDuration());
+            std::string aname = itr->second.getAtlas();
+            if(aname.empty())
+            {
+                aname = def.getAtlas();
+            }
+            auto atlas = _atlases.load(aname).get();
             for(auto& name : itr->second.getFrames())
             {
-                anim.addFrames(atlas->getRegions(name));
+                for(auto& region : atlas->getRegions(name))
+                {
+                    std::string mname = atlas->getMaterial(region.getPage());
+                    if(!_materials.hasDefined(mname))
+                    {
+                        _materials.define(mname, _materialdef);
+                    }
+                    auto material = _materials.load(mname);
+                    anim.addFrame(material, region);                    
+                }
             }
         }
         return sprite;

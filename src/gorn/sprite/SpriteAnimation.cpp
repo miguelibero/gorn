@@ -4,33 +4,35 @@
 
 namespace gorn {
 
-    SpriteAnimation::SpriteAnimation():
-    _frameDuration(1.0f/30.0f)
+    SpriteAnimation::SpriteAnimation()
     {
+        init();
     }
 
     SpriteAnimation::SpriteAnimation(const std::shared_ptr<Material>& material):
-    _material(material)
+    _frames{Frame(material)}
     {
+        init();
     }
 
-    SpriteAnimation::SpriteAnimation(const std::shared_ptr<Material>& material,
-        const Frame& frame):
-    _material(material), _frames{frame}
+    SpriteAnimation::SpriteAnimation(
+        const std::shared_ptr<Material>& material,
+        const SpriteAtlasRegion& region):
+    _frames{Frame(material, region)}
     {
+        init();
+    }
+
+    SpriteAnimation::SpriteAnimation(const Frame& frame):
+    _frames{frame}
+    {
+        init();
     }
     
-    SpriteAnimation& SpriteAnimation::withMaterial(const std::shared_ptr<Material>& material)
+    void SpriteAnimation::init()
     {
-        _material = material;
-        if(_material != nullptr)
-        {
-            for(auto& frame : _frames)
-            {
-                frame.setTotalSize(_material->getSize());
-            }
-        }
-        return *this;
+        _time = 0.0;
+        _frameDuration = 1.0/30.0;
     }
 
     SpriteAnimation& SpriteAnimation::withFrameDuration(double duration)
@@ -42,36 +44,63 @@ namespace gorn {
     SpriteAnimation& SpriteAnimation::addFrame(const Frame& frame)
     {
         _frames.push_back(frame);
-        if(_material != nullptr)
-        {
-            _frames.back().setTotalSize(_material->getSize());            
-        }
         return *this;
     }
 
-    SpriteAnimation& SpriteAnimation::addFrames(const std::vector<Frame>& frames)
+    SpriteAnimation& SpriteAnimation::addFrame(
+        const std::shared_ptr<Material>& material)
     {
-        for(auto& frame : frames)
-        {
-            addFrame(frame);
-        }
+        _frames.push_back(Frame(material));
         return *this;
     }
 
-    const std::shared_ptr<Material>& SpriteAnimation::getMaterial() const
+    SpriteAnimation& SpriteAnimation::addFrame(
+        const std::shared_ptr<Material>& material,
+        const SpriteAtlasRegion& region)
     {
-        return _material;
+        _frames.push_back(Frame(material, region));
+        return *this;
     }
 
-    const SpriteAnimation::Frame& SpriteAnimation::getFrame(double time) const
+    size_t SpriteAnimation::getCurrentFrameNumber() const
     {
-        size_t num = time / _frameDuration;
-        return _frames.at(num % _frames.size());
+        return ((size_t)(_time/_frameDuration)) % _frames.size();
     }
 
-    double SpriteAnimation::getTotalDuration() const
+    const SpriteAnimation::Frame& SpriteAnimation::getCurrentFrame() const
+    {
+        return _frames.at(getCurrentFrameNumber());
+    }
+
+    SpriteAnimation::Frame& SpriteAnimation::getCurrentFrame()
+    {
+        return _frames.at(getCurrentFrameNumber());
+    }
+
+    double SpriteAnimation::getCurrentTime() const
+    {
+        return _time;
+    }
+
+    double SpriteAnimation::getDuration() const
     {
         return _frames.size()*_frameDuration;
+    }
+
+    void SpriteAnimation::update(double dt)
+    {
+        _time += dt;
+        auto duration = getDuration();
+        while(_time > duration)
+        {
+            _time -= duration;
+        }
+        getCurrentFrame().update();
+    }
+
+    void SpriteAnimation::render(RenderQueue& queue) const
+    {
+        getCurrentFrame().render(queue);
     }
 
 }

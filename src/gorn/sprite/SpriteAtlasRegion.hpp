@@ -4,9 +4,6 @@
 #define __gorn__SpriteAtlasRegion__
 
 #include <glm/glm.hpp>
-#include <string>
-#include <memory>
-#include <gorn/base/Data.hpp>
 
 namespace gorn {
 
@@ -24,21 +21,21 @@ namespace gorn {
         typedef glm::vec2::value_type value_type;
         typedef SpriteAtlasRegionOrigin Origin;
     private:
+        size_t _page;
         Origin _origin;
         glm::vec2 _position;
         glm::vec2 _size;
         glm::vec2 _originalSize;
-        glm::vec2 _totalSize;
         glm::vec2 _offset;
         bool _flipX;
         bool _flipY;
         bool _rotate;
-        mutable Data _texVerts;
-        mutable Data _posVerts;
-        mutable bool _texVertsDirty;
-        mutable bool _posVertsDirty;
+
     public:
         SpriteAtlasRegion();
+
+        size_t getPage() const;
+        void setPage(size_t value);
 
         Origin getOrigin() const;
         void setOrigin(Origin value);
@@ -63,21 +60,12 @@ namespace gorn {
         void setOffset(const glm::vec2& value);
         void setOffset(value_type x, value_type y);
 
-        const glm::vec2& getTotalSize() const;
-        glm::vec2& getTotalSize();
-        void setTotalSize(const glm::vec2& value);
-        void setTotalSize(value_type x, value_type y);
-
-        const Data& getPositionVertices() const;
-        const Data& getTextureVertices() const;
-
         bool getFlipX() const;
         void setFlipX(bool enabled);
         bool getFlipY() const;
         void setFlipY(bool enabled);
         bool getRotate() const;
         void setRotate(bool enabled);
-
     };
 
 }
