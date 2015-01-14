@@ -50,8 +50,6 @@ void main()
 )")
             .withUniform("transform", UniformKind::Transform)
             .withUniform("texture", UniformKind::Texture0)
-            .withUniformValue(UniformKind::Transform,
-                glm::translate(glm::mat4(), glm::vec3(-0.5f, -0.5f, 0.0f)))
             .withAttribute("position", AttributeKind::Position)
             .withAttribute("texCoords", AttributeKind::TexCoords);
     }

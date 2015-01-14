@@ -12,6 +12,7 @@ namespace gorn
     class AttributeDefinition;
     class Material;
     class Program;
+    class UniformValue;
 
     class VertexArray
     {
@@ -40,6 +41,8 @@ namespace gorn
         void setMaterial(const std::shared_ptr<Material>& material);
         const std::shared_ptr<Program>& getProgram() const;
         const std::shared_ptr<Material>& getMaterial() const;
+        void setUniformValue(const std::string& name, const UniformValue& value);
+	    void setUniformValue(const GLint& location, const UniformValue& value);
 
         void draw(GLsizei count, GLenum mode=GL_TRIANGLES, GLint offset=0);
     };

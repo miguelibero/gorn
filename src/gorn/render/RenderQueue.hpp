@@ -24,12 +24,10 @@ namespace gorn
     private:
         MaterialManager& _materials;
         std::vector<Command> _commands;
-
     public:
         RenderQueue(MaterialManager& materials);
         void setDefaultOrder(Order order);
-        void pushOrder(Order order);
-        void popOrder();
+        void clearTransform();
         void addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();
         RenderCommand& addCommand(const std::string& material);

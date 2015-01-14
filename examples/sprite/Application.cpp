@@ -6,7 +6,8 @@
 namespace gorn
 {
 	RenderContext _render;
-    Sprite _sprite;
+    Sprite _sprite1;
+    Sprite _sprite2;
 
 	Application::Application()
 	{
@@ -38,8 +39,11 @@ namespace gorn
                 .withFrames("gb_walk")
                 .withFrameDuration(1.0f/5.0f));
 
-        _sprite = render2d.getSprites().load("guybrush");
-        _sprite.play("walk");
+        _sprite1 = render2d.getSprites().load("guybrush");
+        _sprite1.play("walk");
+
+        _sprite2 = render2d.getSprites().load("guybrush");
+        _sprite2.play("walk");
 	}
 
 	void Application::unload()
@@ -48,8 +52,16 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
-        _sprite.update(dt);
-        _sprite.render(_render.getQueue());
+        _sprite1.update(dt);
+        _sprite1.render(_render.getQueue());
+
+        _render.getQueue().addCommand()
+            .withTransform(
+                glm::translate(glm::mat4(),
+                glm::vec3(-0.5f, -0.5f, 0.0f)));
+
+        _sprite2.update(dt);
+        _sprite2.render(_render.getQueue());
 		_render.getQueue().draw();
 	}
 

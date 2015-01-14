@@ -123,6 +123,24 @@ namespace gorn
         }
     }
 
+    void VertexArray::setUniformValue(const std::string& name, const UniformValue& value)
+    {
+        auto program = getProgram();
+        if(program != nullptr)
+        {
+            program->setUniformValue(name, value);
+        }
+    }
+
+    void VertexArray::setUniformValue(const GLint& location, const UniformValue& value)
+    {
+        auto program = getProgram();
+        if(program != nullptr)
+        {
+            program->setUniformValue(location, value);
+        }
+    }
+
     void VertexArray::draw(GLsizei count, GLenum mode, GLint offset)
     {
         activate();

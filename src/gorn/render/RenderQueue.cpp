@@ -3,7 +3,10 @@
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/VertexBuffer.hpp>
 #include <gorn/render/MaterialManager.hpp>
+#include <gorn/render/Kinds.hpp>
 #include <gorn/asset/AssetManager.hpp>
+#include <glm/glm.hpp>
+#include <stack>
 
 namespace gorn
 {
@@ -13,14 +16,6 @@ namespace gorn
     }
 
     void RenderQueue::setDefaultOrder(Order order)
-    {
-    }
-
-    void RenderQueue::pushOrder(Order order)
-    {
-    }
-
-    void RenderQueue::popOrder()
     {
     }
 
@@ -44,6 +39,8 @@ namespace gorn
 
     void RenderQueue::draw()
     {
+        std::stack<glm::mat4> transforms;
+        transforms.emplace();
         for(auto& cmd : _commands)
         {
             VertexArray vao;
@@ -63,6 +60,24 @@ namespace gorn
                     VertexBuffer::Target::ElementArrayBuffer),
                     cmd.getElements().type);
             }
+            switch(cmd.getTransformMode())
+            {
+                case RenderCommand::TransformMode::PushLocal:
+                    transforms.push(transforms.top()*cmd.getTransform());
+                    break;
+                case RenderCommand::TransformMode::PopLocal:
+                    transforms.pop();
+                    break;
+                case RenderCommand::TransformMode::SetGlobal:
+                    transforms.push(cmd.getTransform());
+                    break;
+                case RenderCommand::TransformMode::SetNone:
+                    transforms.emplace();
+                    break;
+                default:
+                    break;
+            }
+            vao.setUniformValue(UniformKind::Transform, transforms.top());
             vao.draw(cmd.getElements().count, cmd.getDrawMode());
         }
         _commands.clear();

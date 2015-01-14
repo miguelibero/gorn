@@ -4,6 +4,7 @@
 #include <gorn/base/Data.hpp>
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/render/Material.hpp>
+#include <glm/glm.hpp>
 
 namespace gorn
 {
@@ -20,15 +21,27 @@ namespace gorn
         RenderCommandBlock(const Data& data, GLenum type, GLsizei count);
     };
 
+    enum class RenderCommandTransformMode
+    {
+        NoChange,
+        PushLocal,
+        PopLocal,
+        SetGlobal,
+        SetNone
+    };
+
     class RenderCommand
     {
     public:
+        typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandBlock Block;
     private:
         std::map<std::string, Block> _attributes;
         Block _elements;
         std::shared_ptr<Material> _material;
         GLenum _drawMode;
+        glm::mat4 _transform;
+        TransformMode _transformMode;
     public:
         RenderCommand();
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
@@ -40,6 +53,9 @@ namespace gorn
         RenderCommand& withElements(const Data& data, GLenum type, GLsizei count);
         RenderCommand& withElementCount(GLsizei count);
         RenderCommand& withDrawMode(GLenum mode);
+        RenderCommand& withTransform(const glm::mat4& trans,
+            TransformMode mode=TransformMode::PushLocal);
+        RenderCommand& withTransformMode(TransformMode mode);
 
         Block& getElements();
         const Block& getElements() const;
@@ -55,6 +71,9 @@ namespace gorn
 
         VertexDefinition generateVertexDefinition() const;
         Data generateVertexData(const VertexDefinition& vdef) const;
+
+        const glm::mat4& getTransform() const;
+        TransformMode getTransformMode() const;
 
     };
 }

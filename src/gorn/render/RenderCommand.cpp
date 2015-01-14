@@ -19,7 +19,7 @@ namespace gorn
     }
 
     RenderCommand::RenderCommand():
-    _drawMode(GL_TRIANGLES)
+    _drawMode(GL_TRIANGLES), _transformMode(TransformMode::NoChange)
     {
     }
 
@@ -67,6 +67,19 @@ namespace gorn
         return *this;
     }
 
+    RenderCommand& RenderCommand::withTransform(const glm::mat4& trans,
+        TransformMode mode)
+    {
+        _transform = trans;
+        _transformMode = mode;
+        return *this;
+    }
+    
+    RenderCommand& RenderCommand::withTransformMode(TransformMode mode)
+    {
+        _transformMode = mode;
+        return *this;
+    }
 
     RenderCommand::Block& RenderCommand::getElements()
     {
@@ -111,6 +124,16 @@ namespace gorn
     GLenum RenderCommand::getDrawMode() const
     {
         return _drawMode;
+    }
+
+    const glm::mat4& RenderCommand::getTransform() const
+    {
+        return _transform;
+    }
+
+    RenderCommand::TransformMode RenderCommand::getTransformMode() const
+    {
+        return _transformMode;
     }
 
     VertexDefinition RenderCommand::generateVertexDefinition() const
