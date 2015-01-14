@@ -4,7 +4,7 @@
 #define __gorn__SpriteAnimation__
 
 #include <gorn/render/Material.hpp>
-#include <gorn/sprite/SpriteAnimationFrame.hpp>
+#include <gorn/sprite/SpriteFrame.hpp>
 #include <memory>
 
 namespace gorn {
@@ -14,9 +14,9 @@ namespace gorn {
     class SpriteAnimation
     {
     public:
-        typedef SpriteAnimationFrame Frame;
+        typedef SpriteFrame Frame;
     private:
-        std::vector<Frame> _frames;
+        std::vector<std::shared_ptr<Frame>> _frames;
         double _frameDuration;
         double _time;
 
@@ -24,14 +24,15 @@ namespace gorn {
     public:
         SpriteAnimation();
         SpriteAnimation(const std::shared_ptr<Material>& material);
-        SpriteAnimation(const std::shared_ptr<Material>& material, const SpriteAtlasRegion& region);
-        SpriteAnimation(const Frame& frame);
+        SpriteAnimation(const std::shared_ptr<Material>& material,
+            const SpriteAtlasRegion& region);
+        SpriteAnimation(const std::shared_ptr<Frame>&);
         
         SpriteAnimation& withFrameDuration(double duration);
-        SpriteAnimation& addFrame(const Frame& frame);
+        SpriteAnimation& withFrames(const std::vector<std::shared_ptr<Frame>>& frames);
+        SpriteAnimation& addFrame(const std::shared_ptr<Frame>& frame);
         SpriteAnimation& addFrame(const std::shared_ptr<Material>& material);
-        SpriteAnimation& addFrame(
-            const std::shared_ptr<Material>& material,
+        SpriteAnimation& addFrame(const std::shared_ptr<Material>& material,
             const SpriteAtlasRegion& region);
 
         size_t getCurrentFrameNumber() const;

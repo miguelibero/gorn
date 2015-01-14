@@ -22,7 +22,8 @@ namespace gorn {
     {
     }
 
-    Sprite::Sprite(const std::shared_ptr<Material>& material, SpriteAtlasRegion region):
+    Sprite::Sprite(const std::shared_ptr<Material>& material,
+        const SpriteAtlasRegion& region):
     _anims({{kDefaultAnimation, Animation(material, region)}})
     {
     }
@@ -44,10 +45,7 @@ namespace gorn {
         {
             throw Exception(std::string("Could not find animation '")+name+"'.");
         }
-        if(_currentAnim != name)
-        {
-            _currentAnim = name;
-        }
+        _currentAnim = name;
     }
 
     void Sprite::update(double dt)

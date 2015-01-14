@@ -3,7 +3,7 @@
 #ifndef __gorn__Label__
 #define __gorn__Label__
 
-#include <gorn/sprite/SpriteAnimation.hpp>
+#include <gorn/sprite/SpriteFont.hpp>
 
 namespace gorn {
 
@@ -11,24 +11,15 @@ namespace gorn {
 
     class Label
     {
-    public:
-        typedef SpriteAnimation Animation;
-        static const char* kDefaultAnimation;
     private:
-        std::map<std::string, Animation> _anims;
-        std::string _currentAnim;
-        double _animTime;
+        SpriteFont _font;
+        std::string _text;
     public:
-        Sprite();
-        Sprite(const Animation& anim);
-        Sprite(const std::shared_ptr<Material>& material);
-        Sprite(const std::shared_ptr<Material>& material, SpriteAtlasRegion region);
+        Label(const SpriteFont& font);
+        Label(const SpriteFont& font, const std::string& text);
 
-        void setAnimation(const std::string& name, const Animation& anim);
-        Animation& setAnimation(const std::string& name);
-
-        void play(const std::string& name);
-
+        void setText(const std::string& text);
+        
         void update(double dt);
         void render(RenderQueue& queue);
     };

@@ -9,6 +9,25 @@ namespace gorn {
     {
     }
 
+    bool SpriteAtlasRegion::operator==(const SpriteAtlasRegion& other) const
+    {
+        return _page == other._page
+            && _origin == other._origin
+            && _position == other._position
+            && _size == other._size
+            && _originalSize == other._originalSize
+            && _offset == other._offset
+            && _flipX == other._flipX
+            && _flipY == other._flipY
+            && _rotate == other._rotate;
+    }
+
+    bool SpriteAtlasRegion::operator!=(const SpriteAtlasRegion& other) const
+    {
+        return !operator==(other);
+    }
+
+
     size_t SpriteAtlasRegion::getPage() const
     {
         return _page;

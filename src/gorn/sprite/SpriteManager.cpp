@@ -44,9 +44,35 @@ namespace gorn {
         return itr->second;
     }
 
-    Sprite SpriteManager::load(const std::string& name)
+    const SpriteManager::FrameList& SpriteManager::loadFrames(
+        const std::string& aname, const std::string& fname)
     {
-        auto& def = define(name);
+        auto atlas = _atlases.load(aname).get();
+        auto& frames = _frames[aname];
+        auto fitr = frames.find(fname);
+        if(fitr == frames.end())
+        {
+            fitr = frames.insert(fitr, std::make_pair(fname, FrameList()));
+            auto& regions = atlas->getRegions(fname);
+            fitr->second.reserve(regions.size());
+            for(auto& region : regions)
+            {
+                std::string mname = atlas->getMaterial(region.getPage());
+                if(!_materials.hasDefined(mname))
+                {
+                    _materials.define(mname, _materialdef);
+                }
+                auto material = _materials.load(mname);
+                fitr->second.push_back(std::make_shared<SpriteFrame>(
+                    material, region));                
+            }
+        }
+        return fitr->second;
+    }
+
+    Sprite SpriteManager::load(const std::string& dname)
+    {
+        auto& def = define(dname);
         Sprite sprite;
         for(auto itr = def.getAnimations().begin();
             itr != def.getAnimations().end(); ++itr)
@@ -58,19 +84,9 @@ namespace gorn {
             {
                 aname = def.getAtlas();
             }
-            auto atlas = _atlases.load(aname).get();
-            for(auto& name : itr->second.getFrames())
+            for(auto& fname : itr->second.getFrames())
             {
-                for(auto& region : atlas->getRegions(name))
-                {
-                    std::string mname = atlas->getMaterial(region.getPage());
-                    if(!_materials.hasDefined(mname))
-                    {
-                        _materials.define(mname, _materialdef);
-                    }
-                    auto material = _materials.load(mname);
-                    anim.addFrame(material, region);                    
-                }
+                anim.withFrames(loadFrames(aname, fname));
             }
         }
         return sprite;

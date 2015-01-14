@@ -21,7 +21,7 @@ namespace gorn {
         Sprite();
         Sprite(const Animation& anim);
         Sprite(const std::shared_ptr<Material>& material);
-        Sprite(const std::shared_ptr<Material>& material, SpriteAtlasRegion region);
+        Sprite(const std::shared_ptr<Material>& material, const SpriteAtlasRegion& region);
 
         void setAnimation(const std::string& name, const Animation& anim);
         Animation& setAnimation(const std::string& name);

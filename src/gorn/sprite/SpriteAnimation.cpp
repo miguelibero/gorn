@@ -10,7 +10,7 @@ namespace gorn {
     }
 
     SpriteAnimation::SpriteAnimation(const std::shared_ptr<Material>& material):
-    _frames{Frame(material)}
+    _frames{std::make_shared<Frame>(material)}
     {
         init();
     }
@@ -18,12 +18,12 @@ namespace gorn {
     SpriteAnimation::SpriteAnimation(
         const std::shared_ptr<Material>& material,
         const SpriteAtlasRegion& region):
-    _frames{Frame(material, region)}
+    _frames{std::make_shared<Frame>(material, region)}
     {
         init();
     }
 
-    SpriteAnimation::SpriteAnimation(const Frame& frame):
+    SpriteAnimation::SpriteAnimation(const std::shared_ptr<Frame>& frame):
     _frames{frame}
     {
         init();
@@ -41,7 +41,15 @@ namespace gorn {
         return *this;
     }
 
-    SpriteAnimation& SpriteAnimation::addFrame(const Frame& frame)
+    SpriteAnimation& SpriteAnimation::withFrames(
+        const std::vector<std::shared_ptr<Frame>>& frames)
+    {
+        _frames = frames;
+        return *this;
+    }
+
+    SpriteAnimation& SpriteAnimation::addFrame(
+        const std::shared_ptr<Frame>& frame)
     {
         _frames.push_back(frame);
         return *this;
@@ -50,7 +58,7 @@ namespace gorn {
     SpriteAnimation& SpriteAnimation::addFrame(
         const std::shared_ptr<Material>& material)
     {
-        _frames.push_back(Frame(material));
+        _frames.push_back(std::make_shared<Frame>(material));
         return *this;
     }
 
@@ -58,7 +66,7 @@ namespace gorn {
         const std::shared_ptr<Material>& material,
         const SpriteAtlasRegion& region)
     {
-        _frames.push_back(Frame(material, region));
+        _frames.push_back(std::make_shared<Frame>(material, region));
         return *this;
     }
 
@@ -69,12 +77,12 @@ namespace gorn {
 
     const SpriteAnimation::Frame& SpriteAnimation::getCurrentFrame() const
     {
-        return _frames.at(getCurrentFrameNumber());
+        return *_frames.at(getCurrentFrameNumber());
     }
 
     SpriteAnimation::Frame& SpriteAnimation::getCurrentFrame()
     {
-        return _frames.at(getCurrentFrameNumber());
+        return *_frames.at(getCurrentFrameNumber());
     }
 
     double SpriteAnimation::getCurrentTime() const

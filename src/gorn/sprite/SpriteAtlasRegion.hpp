@@ -34,6 +34,9 @@ namespace gorn {
     public:
         SpriteAtlasRegion();
 
+        bool operator==(const SpriteAtlasRegion& other) const;
+        bool operator!=(const SpriteAtlasRegion& other) const;
+
         size_t getPage() const;
         void setPage(size_t value);
 
