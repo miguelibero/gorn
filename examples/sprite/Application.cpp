@@ -39,6 +39,10 @@ namespace gorn
                 .withFrames("gb_walk")
                 .withFrameDuration(1.0f/5.0f));
 
+        _render.getQueue().setBaseTransform(
+                glm::translate(glm::mat4(),
+                glm::vec3(-0.25f, -0.25f, 0.0f)));
+
         _sprite1 = render2d.getSprites().load("guybrush");
         _sprite1.play("walk");
 
@@ -53,14 +57,13 @@ namespace gorn
 	void Application::update(double dt)
 	{
         _sprite1.update(dt);
-        _sprite1.render(_render.getQueue());
+        _sprite2.update(dt);
 
+        _sprite1.render(_render.getQueue());
         _render.getQueue().addCommand()
             .withTransform(
                 glm::translate(glm::mat4(),
                 glm::vec3(-0.5f, -0.5f, 0.0f)));
-
-        _sprite2.update(dt);
         _sprite2.render(_render.getQueue());
 		_render.getQueue().draw();
 	}

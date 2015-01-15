@@ -2,6 +2,7 @@
 #define __gorn__RenderQueue__
 
 #include <gorn/render/RenderCommand.hpp>
+#include <glm/glm.hpp>
 
 namespace gorn
 {
@@ -24,10 +25,11 @@ namespace gorn
     private:
         MaterialManager& _materials;
         std::vector<Command> _commands;
+        glm::mat4 _baseTransform;
     public:
         RenderQueue(MaterialManager& materials);
         void setDefaultOrder(Order order);
-        void clearTransform();
+        void setBaseTransform(const glm::mat4& trans);
         void addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();
         RenderCommand& addCommand(const std::string& material);

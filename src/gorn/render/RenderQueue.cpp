@@ -5,7 +5,6 @@
 #include <gorn/render/MaterialManager.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/AssetManager.hpp>
-#include <glm/glm.hpp>
 #include <stack>
 
 namespace gorn
@@ -17,6 +16,11 @@ namespace gorn
 
     void RenderQueue::setDefaultOrder(Order order)
     {
+    }
+
+    void RenderQueue::setBaseTransform(const glm::mat4& trans)
+    {
+        _baseTransform = trans;
     }
 
     void RenderQueue::addCommand(RenderCommand&& cmd)
@@ -40,7 +44,7 @@ namespace gorn
     void RenderQueue::draw()
     {
         std::stack<glm::mat4> transforms;
-        transforms.emplace();
+        transforms.push(_baseTransform);
         for(auto& cmd : _commands)
         {
             VertexArray vao;
