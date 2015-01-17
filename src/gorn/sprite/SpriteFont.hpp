@@ -20,6 +20,7 @@ namespace gorn {
         void setLetter(const std::string& name, const std::shared_ptr<Letter>& letter);
         bool hasLetter(const std::string& name) const;
         const Letter& getLetter(const std::string& name) const;
+        Letter& getLetter(const std::string& name);
     };
 
 }

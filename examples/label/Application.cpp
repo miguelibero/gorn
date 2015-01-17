@@ -6,7 +6,7 @@
 namespace gorn
 {
 	RenderContext _render;
-
+    Label _label;
 
 	Application::Application()
 	{
@@ -28,11 +28,18 @@ namespace gorn
 
         RenderSystem2D render2d(_render);
 
-        _render.getTextures().define("font.png")
-            .withParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-            .withParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        _render.getQueue().setBaseTransform(
+                glm::translate(glm::mat4(),
+                glm::vec3(-0.5f, -0.5f, 0.0f)));
 
+        _render.getMaterials().define("font.png")
+            .withProgram(RenderSystem2D::Sprite);
 
+        _label = render2d.getLabels().load("font.fnt");
+        _label.setText("This is a label!");
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	void Application::unload()
@@ -41,7 +48,9 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
-
+        _label.update(dt);
+        _label.render(_render.getQueue());
+		_render.getQueue().draw();
 	}
 
 }

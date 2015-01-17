@@ -1,17 +1,10 @@
 
 #include <gorn/sprite/SpriteDefinition.hpp>
-#include <string>
 
 namespace gorn {
 
     SpriteDefinition::SpriteDefinition()    
     {
-    }
-
-    SpriteDefinition& SpriteDefinition::withMaterial(const std::string& material)
-    {
-        _material = material;
-        return *this;
     }
 
     SpriteDefinition& SpriteDefinition::withAtlas(const std::string& atlas)
@@ -35,11 +28,6 @@ namespace gorn {
             itr = _anims.insert(itr, {name, Animation()});
         }
         return itr->second;
-    }
-
-    const std::string& SpriteDefinition::getMaterial() const
-    {
-        return _material;
     }
 
     const std::string& SpriteDefinition::getAtlas() const

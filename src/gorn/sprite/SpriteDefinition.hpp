@@ -16,19 +16,16 @@ namespace gorn {
         typedef SpriteAnimationDefinition Animation;
 
     private:
-        std::string _material;
         std::string _atlas;
         std::map<std::string, Animation> _anims;
     public:
         SpriteDefinition();
 
-        SpriteDefinition& withMaterial(const std::string& material);
         SpriteDefinition& withAtlas(const std::string& atlas);
         SpriteDefinition& withAnimation(const std::string& name, const Animation& anim);
 
         Animation& setAnimation(const std::string& name);
 
-        const std::string& getMaterial() const;
         const std::string& getAtlas() const;
 
         const Animation& getAnimation(const std::string& name) const;

@@ -24,5 +24,12 @@ namespace gorn {
     {
         return *_letters.at(name);
     }
+
+
+    SpriteFont::Letter& SpriteFont::getLetter(
+        const std::string& name)
+    {
+        return *_letters.at(name);
+    }
 }
 

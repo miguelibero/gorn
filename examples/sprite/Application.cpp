@@ -33,6 +33,9 @@ namespace gorn
             .withParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST)
             .withParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+        _render.getMaterials().define("guybrush.png")
+            .withProgram(RenderSystem2D::Sprite);
+
         render2d.getSprites().define("guybrush")
             .withAtlas("guybrush.atlas")
             .withAnimation("walk", SpriteAnimationDefinition()

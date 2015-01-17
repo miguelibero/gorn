@@ -1,4 +1,4 @@
-package net.gorn;
+package me.ibero.gorn;
 
 import android.content.Intent;
 import android.content.Context;

@@ -8,3 +8,5 @@ bin
 .fuse*
 proj.linux/bin/
 *.trace
+.gradle
+build/

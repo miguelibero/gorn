@@ -4,6 +4,9 @@
 #include <gorn/render/ProgramManager.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/FileManager.hpp>
+#include <gorn/sprite/CocosSpriteAtlasLoader.hpp>
+#include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
+#include <gorn/sprite/FntSpriteAtlasLoader.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -13,8 +16,13 @@ namespace gorn
 
     RenderSystem2D::RenderSystem2D(RenderContext& context):
     _context(context),
-    _sprites(context.getMaterials(), context.getFiles())
+    _sprites(context.getMaterials(), context.getFiles()),
+    _labels(context.getMaterials(), context.getFiles())
     {
+        _sprites.getAtlases().addLoader<GdxSpriteAtlasLoader>();
+        _sprites.getAtlases().addLoader<CocosSpriteAtlasLoader>();
+        _labels.getAtlases().addLoader<FntSpriteAtlasLoader>();
+
 	    context.getPrograms().define(Sprite)
             .withShaderData(ShaderType::Vertex, R"(#version 100
 
@@ -62,6 +70,16 @@ void main()
     SpriteManager& RenderSystem2D::getSprites()
     {
         return _sprites;
+    }
+
+    const LabelManager& RenderSystem2D::getLabels() const
+    {
+        return _labels;
+    }
+
+    LabelManager& RenderSystem2D::getLabels()
+    {
+        return _labels;
     }
 }
 

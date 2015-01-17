@@ -31,6 +31,8 @@ namespace gorn {
         bool _flipY;
         bool _rotate;
 
+        void fixOriginalSize();
+
     public:
         SpriteAtlasRegion();
 

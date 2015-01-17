@@ -1,4 +1,4 @@
-package net.gorn;
+package me.ibero.gorn;
 
 import android.content.res.AssetManager;
 import android.app.Activity;
@@ -47,7 +47,7 @@ public enum NativeBridge
         mImageInfo = new int[]{
             bitmap.getWidth(),
             bitmap.getHeight(),
-            bitmap.hasAlpha(),
+            bitmap.hasAlpha()?1:0,
         };
 		ByteBuffer buffer = ByteBuffer.allocate(bytes);
 		bitmap.copyPixelsToBuffer(buffer);
@@ -59,7 +59,7 @@ public enum NativeBridge
         return mImageInfo;
     }
 
-	public bool validateFile(String name)
+	public boolean validateFile(String name)
 	{
 		Log.v(TAG, "validating file '" + name + "'...");
 		AssetManager am = mActivity.getAssets();

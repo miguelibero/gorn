@@ -3,6 +3,7 @@
 
 #include <gorn/asset/AssetManager.hpp>
 #include <gorn/sprite/SpriteManager.hpp>
+#include <gorn/sprite/LabelManager.hpp>
 
 namespace gorn
 {
@@ -14,6 +15,7 @@ namespace gorn
     private:
         RenderContext& _context;
         SpriteManager _sprites;
+        LabelManager _labels;
     public:
         static const char* Sprite;
 
@@ -21,6 +23,9 @@ namespace gorn
 
         const SpriteManager& getSprites() const;
         SpriteManager& getSprites();
+
+        const LabelManager& getLabels() const;
+        LabelManager& getLabels();
     };
 }
 

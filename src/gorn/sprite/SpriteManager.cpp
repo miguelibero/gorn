@@ -2,25 +2,15 @@
 
 #include <gorn/sprite/SpriteManager.hpp>
 #include <gorn/sprite/SpriteAtlas.hpp>
-#include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
-#include <gorn/sprite/FntSpriteAtlasLoader.hpp>
 #include <gorn/sprite/Sprite.hpp>
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/render/MaterialManager.hpp>
-#include <gorn/render/RenderSystem2D.hpp>
 
 namespace gorn {
 
     SpriteManager::SpriteManager(MaterialManager& materials, FileManager& files):
     _materials(materials), _atlases(files)
     {
-        _materialdef.withProgram(RenderSystem2D::Sprite);
-        _atlases.addLoader<GdxSpriteAtlasLoader>();
-    }
-    
-    MaterialDefinition& SpriteManager::getDefaultMaterialDefinition()
-    {
-        return _materialdef;
     }
 
     const AssetManager<SpriteAtlas>& SpriteManager::getAtlases() const
@@ -38,7 +28,7 @@ namespace gorn {
         auto itr = _definitions.find(name);
         if(itr == _definitions.end())
         {
-            itr = _definitions.insert(itr, {name, SpriteDefinition()});
+            itr = _definitions.insert(itr, {name, Definition()});
             itr->second.withAtlas(name);
         }
         return itr->second;
@@ -47,27 +37,40 @@ namespace gorn {
     const SpriteManager::FrameList& SpriteManager::loadFrames(
         const std::string& aname, const std::string& fname)
     {
-        auto atlas = _atlases.load(aname).get();
-        auto& frames = _frames[aname];
-        auto fitr = frames.find(fname);
-        if(fitr == frames.end())
+        return loadFrames(aname).at(fname);
+    }
+
+    const SpriteManager::FrameMap& SpriteManager::loadFrames(
+            const std::string& aname)
+    {
+        auto itr = _frames.find(aname);
+        if(itr == _frames.end())
         {
-            fitr = frames.insert(fitr, std::make_pair(fname, FrameList()));
-            auto& regions = atlas->getRegions(fname);
-            fitr->second.reserve(regions.size());
-            for(auto& region : regions)
+            itr = _frames.insert(itr, std::make_pair(aname, FrameMap()));
+            auto& frames = itr->second;
+            auto atlas = _atlases.load(aname).get();
+            auto& regions = atlas->getRegions();
+            for(auto ritr = regions.begin(); ritr != regions.end(); ++ritr)
             {
-                std::string mname = atlas->getMaterial(region.getPage());
-                if(!_materials.hasDefined(mname))
+                auto& fname = ritr->first;
+                auto fitr = frames.find(fname);
+                if(fitr == frames.end())
                 {
-                    _materials.define(mname, _materialdef);
+                    fitr = frames.insert(fitr, std::make_pair(fname, FrameList()));
+                    fitr->second.reserve(ritr->second.size());
+                    for(auto& region : ritr->second)
+                    {
+                        std::string mname = atlas->getMaterial(region.getPage());
+                        auto material = _materials.load(mname);
+                        fitr->second.push_back(std::make_shared<SpriteFrame>(
+                            material, region));
+                    }
+
                 }
-                auto material = _materials.load(mname);
-                fitr->second.push_back(std::make_shared<SpriteFrame>(
-                    material, region));                
             }
         }
-        return fitr->second;
+
+        return itr->second;
     }
 
     Sprite SpriteManager::load(const std::string& dname)

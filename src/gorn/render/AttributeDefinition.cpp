@@ -95,8 +95,6 @@ namespace gorn
                 return sizeof(GLuint);
             case GL_FLOAT:
                 return sizeof(GLfloat);
-            case GL_DOUBLE:
-                return sizeof(GLdouble);
             default:
                 return 0;               
         }

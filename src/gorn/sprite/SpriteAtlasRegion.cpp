@@ -27,7 +27,6 @@ namespace gorn {
         return !operator==(other);
     }
 
-
     size_t SpriteAtlasRegion::getPage() const
     {
         return _page;
@@ -81,6 +80,7 @@ namespace gorn {
     void SpriteAtlasRegion::setSize(const glm::vec2& value)
     {
         _size = value;
+        fixOriginalSize();
     }
 
     void SpriteAtlasRegion::setSize(value_type x, value_type y)
@@ -101,6 +101,7 @@ namespace gorn {
     void SpriteAtlasRegion::setOriginalSize(const glm::vec2& value)
     {
         _originalSize = value;
+        fixOriginalSize();
     }
 
     void SpriteAtlasRegion::setOriginalSize(value_type x, value_type y)
@@ -156,6 +157,18 @@ namespace gorn {
     void SpriteAtlasRegion::setRotate(bool enabled)
     {
         _rotate = enabled;
+    }
+
+    void SpriteAtlasRegion::fixOriginalSize()
+    {
+        if(_originalSize.x < _size.x)
+        {
+            _originalSize.x = _size.x;
+        }
+        if(_originalSize.y < _size.y)
+        {
+            _originalSize.y = _size.y;
+        }
     }
 
 }

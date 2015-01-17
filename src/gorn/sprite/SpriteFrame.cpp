@@ -71,6 +71,24 @@ namespace gorn {
         updateTextureData();
     }
 
+    float SpriteFrame::getMaterialScale() const
+    {
+        auto& msize = _material->getSize();
+        if(msize.x > msize.y)
+        {
+            return 1.0f/msize.x;
+        }
+        else
+        {
+            return 1.0f/msize.y;
+        }
+    }
+
+    glm::vec2 SpriteFrame::getUnitarySize()
+    {
+        return _region.getOriginalSize()*getMaterialScale();
+    }
+
     void SpriteFrame::updateElementData()
     {
         if(_dirtyElmVerts)
@@ -89,10 +107,12 @@ namespace gorn {
         {
             return;
         }
-        auto bl = _region.getOriginalSize()-_region.getSize();
-        bl = bl*0.5f+_region.getOffset();
-        bl /= _material->getSize();
-        auto tr = bl + _region.getSize()/_region.getOriginalSize();
+        auto osize = _region.getOriginalSize();
+        auto rsize = _region.getSize();
+        auto bl = (osize-rsize)*0.5f+_region.getOffset();
+        auto tr = bl + rsize;
+        bl *= getMaterialScale();
+        tr *= getMaterialScale();
 
         _posVerts = {
             bl.x, tr.y,

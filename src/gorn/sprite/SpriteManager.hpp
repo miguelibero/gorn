@@ -5,7 +5,6 @@
 
 #include <gorn/asset/AssetManager.hpp>
 #include <gorn/sprite/SpriteDefinition.hpp>
-#include <gorn/render/MaterialDefinition.hpp>
 
 namespace gorn {
 
@@ -20,25 +19,28 @@ namespace gorn {
     public:
         typedef SpriteDefinition Definition;
         typedef std::vector<std::shared_ptr<SpriteFrame>> FrameList;
+        typedef std::map<std::string, FrameList> FrameMap;
     private:
         MaterialManager& _materials;
         AssetManager<SpriteAtlas> _atlases;
         std::map<std::string, Definition> _definitions;
-        MaterialDefinition _materialdef;
-        std::map<std::string, std::map<std::string, FrameList>> _frames;
+        std::map<std::string, FrameMap> _frames;
     public:
         SpriteManager(MaterialManager& materials, FileManager& files);
 
         const AssetManager<SpriteAtlas>& getAtlases() const;
         AssetManager<SpriteAtlas>& getAtlases();
 
-        MaterialDefinition& getDefaultMaterialDefinition();
-
         SpriteDefinition& define(const std::string& name);
 
         Sprite load(const std::string& name);
+
         const FrameList& loadFrames(
-            const std::string& atlas, const std::string& name);
+            const std::string& aname, const std::string& fname);
+
+        const FrameMap& loadFrames(
+            const std::string& aname);
+
     };
 
 }

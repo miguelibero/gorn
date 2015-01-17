@@ -16,6 +16,7 @@
 #include <gorn/sprite/CocosSpriteAtlasLoader.hpp>
 #include <gorn/sprite/SpriteAtlas.hpp>
 #include <gorn/sprite/Sprite.hpp>
+#include <gorn/sprite/Label.hpp>
 
 #ifdef GORN_PLATFORM_LINUX
 #include <gorn/platform/linux/LocalFileLoader.hpp>

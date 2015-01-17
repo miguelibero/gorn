@@ -35,6 +35,8 @@ namespace gorn {
 
         void init();
 
+        float getMaterialScale() const;
+
     public:
         SpriteFrame();
         explicit SpriteFrame(const std::shared_ptr<Material>& material);
@@ -45,6 +47,8 @@ namespace gorn {
 
         void setRegion(const Region& region);
         const Region& getRegion() const;
+
+        glm::vec2 getUnitarySize();
 
         void update();
         void render(RenderQueue& queue) const;

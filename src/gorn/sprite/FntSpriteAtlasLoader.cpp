@@ -29,7 +29,6 @@ namespace gorn {
         std::size_t p = str.find(FntAttrSepToken);
         std::map<std::string, std::string> map;
         map[""] = str.substr(0, p);
-
         while(true)
         {
 			if(p>=str.size())
@@ -79,7 +78,7 @@ namespace gorn {
             std::string line;
             in.read(line);
             auto map = parseData(line);
-            auto& name = map[""];
+            auto name = map[""];
             map.erase("");
             if(name == "info" || name == "common")
             {
@@ -105,10 +104,12 @@ namespace gorn {
                     String::convertTo<SpriteAtlasRegion::value_type>(map["width"]),
                     String::convertTo<SpriteAtlasRegion::value_type>(map["height"])
                 );
+                /*
                 region.setOffset(
                     String::convertTo<SpriteAtlasRegion::value_type>(map["xoffset"]),
                     String::convertTo<SpriteAtlasRegion::value_type>(map["yoffset"])
                 );
+                */
                 // TODO: what is xadvance?
                 std::string name = map["letter"];
                 if(name == "space")
