@@ -1,20 +1,33 @@
 #include <gorn/render/MaterialManager.hpp>
 #include <gorn/render/ProgramManager.hpp>
 #include <gorn/render/TextureManager.hpp>
+#include <gorn/render/MaterialDefinition.hpp>
+#include <gorn/render/Material.hpp>
 #include <gorn/render/Kinds.hpp>
 
 namespace gorn
 {
-    MaterialManager::MaterialManager(ProgramManager& programs, TextureManager& textures):
+    MaterialManager::MaterialManager(
+        ProgramManager& programs, TextureManager& textures):
     _programs(programs),
     _textures(textures)
     {
+        getDefinitions().set([](const std::string& name){
+            return Definition()
+                .withTexture(UniformKind::Texture0, name);
+        });
     }
 
-    void MaterialManager::setDefaultProgram(const std::string& program)
+    const MaterialManager::Definitions& MaterialManager::getDefinitions() const
     {
-        _defaultProgram = program;
+        return _definitions;
     }
+
+    MaterialManager::Definitions& MaterialManager::getDefinitions()
+    {
+        return _definitions;
+    }
+
 
     std::shared_ptr<Material> MaterialManager::load(const std::string& name)
     {
@@ -23,20 +36,16 @@ namespace gorn
         {
             return itr->second;
         }
-        auto& def = define(name);
-        auto progname = def.getProgram();
-        if(progname.empty())
-        {
-            progname = _defaultProgram;
-        }
-        auto program = _programs.load(progname);
+        auto& def = getDefinitions().get(name);
+        auto& pname = def.getProgram();
+        auto program = _programs.load(pname);
         auto material = std::make_shared<Material>(program);
         for(auto itr = def.getTextures().begin();
             itr != def.getTextures().end(); ++itr)
         {
             material->setTexture(itr->first, _textures.load(itr->second));
         }
-        auto& pdef = _programs.define(progname);
+        auto& pdef = _programs.getDefinitions().get(pname);
         for(auto itr = pdef.getUniformValues().begin();
             itr != pdef.getUniformValues().end(); ++itr)
         {
@@ -52,30 +61,4 @@ namespace gorn
         return material;
     }
 
-    bool MaterialManager::hasDefined(const std::string& name) const
-    {
-        return _definitions.find(name) != _definitions.end();
-    }
-
-    MaterialDefinition& MaterialManager::define(const std::string& name)
-    {
-        auto itr = _definitions.find(name);
-        if(itr == _definitions.end())
-        {
-            itr = _definitions.insert(itr, {name, MaterialDefinition()});
-            itr->second.withTexture(UniformKind::Texture0, name);
-        }
-        return itr->second;
-    }
-
-    MaterialDefinition& MaterialManager::define(const std::string& name, const MaterialDefinition& def)
-    {
-        _definitions[name] = def;
-        auto& ndef = _definitions[name];
-        if(ndef.getTextures().empty())
-        {
-            ndef.withTexture(UniformKind::Texture0, name);
-        }
-        return ndef;
-    }
 }

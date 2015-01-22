@@ -1,14 +1,35 @@
 #include <gorn/render/ProgramManager.hpp>
+#include <gorn/render/Shader.hpp>
+#include <gorn/render/Program.hpp>
+#include <gorn/asset/FileManager.hpp>
 
 namespace gorn
 {
-    const char* ProgramManager::kDefaultVertexShaderTag = "vsh";
-    const char* ProgramManager::kDefaultFragmentShaderTag = "fsh";
+    const char* ProgramManager::kDefaultVertexShaderExtension = ".vsh";
+    const char* ProgramManager::kDefaultFragmentShaderExtension = ".fsh";
 
     ProgramManager::ProgramManager(FileManager& files):
     _files(files)
     {
+        getDefinitions().set([](const std::string& name){
+            return Definition()
+                .withShaderFile(ShaderType::Vertex,
+                    name+kDefaultVertexShaderExtension)
+                .withShaderFile(ShaderType::Fragment,
+                    name+kDefaultFragmentShaderExtension);
+        });
     }
+
+    const ProgramManager::Definitions& ProgramManager::getDefinitions() const
+    {
+        return _definitions;
+    }
+
+    ProgramManager::Definitions& ProgramManager::getDefinitions()
+    {
+        return _definitions;
+    }
+
 
     std::shared_ptr<Shader> ProgramManager::loadShader(
         const ProgramDefinition& def, ShaderType type)
@@ -36,16 +57,7 @@ namespace gorn
         {
             return itr->second;
         }
-        std::string tname(name);
-        if(type == ShaderType::Vertex)
-        {
-            FileManager::prefix(tname, kDefaultVertexShaderTag);
-        }
-        else if(type == ShaderType::Fragment)
-        {
-            FileManager::prefix(tname, kDefaultFragmentShaderTag);
-        }
-        auto data = _files.load(tname, false).get();
+        auto data = _files.load(name, false).get();
         auto shader = std::make_shared<Shader>(data, type);
         shaders.insert(itr, {name, shader});
         return shader;
@@ -58,11 +70,11 @@ namespace gorn
         {
             return itr->second;
         }
-        auto& def = define(name);
+        auto& def = getDefinitions().get(name);
         auto vertex = loadShader(def, ShaderType::Vertex);
         auto fragment = loadShader(def, ShaderType::Fragment);
 
-        auto program = std::make_shared<Program>(fragment, vertex);
+        auto program = std::make_shared<Program>(vertex, fragment);
         for(auto itr = def.getAttributes().begin();
             itr != def.getAttributes().end(); ++itr)
         {
@@ -77,16 +89,5 @@ namespace gorn
         return program;
     }
 
-    ProgramDefinition& ProgramManager::define(const std::string& name)
-    {
-        auto itr = _definitions.find(name);
-        if(itr == _definitions.end())
-        {
-            itr = _definitions.insert(itr, {name, ProgramDefinition()});
-            itr->second.withShaderFile(ShaderType::Vertex, name);
-            itr->second.withShaderFile(ShaderType::Fragment, name);
-        }
-        return itr->second;
-    }
 
 }

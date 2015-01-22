@@ -8,6 +8,8 @@ namespace gorn
 {
     const size_t String::npos = -1;
     const char* String::kWhitespaceChars = " \t\r\n";
+    const char* String::kTagSeparator = ":";
+    const char* String::kDefaultTag = "default";
 
     size_t String::replaceAll(std::string& str,
         const std::string& from, const std::string& to)
@@ -46,8 +48,22 @@ namespace gorn
         return parts;
     }
 
-    bool String::prefix(std::string& str, const std::string& prefix, const std::string& sep)
+    std::pair<std::string,std::string> String::splitTag(const std::string& str)
     {
+        auto parts = split(str, kTagSeparator, 2);
+        std::string name(str);
+        std::string tag(String::kDefaultTag);
+        if(parts.size() > 1)
+        {
+            tag = parts.front();
+            name = parts.back();
+        }
+        return std::make_pair(tag, name);
+    }
+
+    bool String::addTag(std::string& str, const std::string& prefix)
+    {
+        std::string sep(kTagSeparator);
         auto parts = String::split(str, sep, 2);
         if(parts.size() == 1)
         {

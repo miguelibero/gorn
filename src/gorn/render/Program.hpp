@@ -21,7 +21,8 @@ namespace gorn
         mutable std::map<std::string, GLint> _uniforms;
         mutable std::map<std::string, GLint> _attributes;
 	public:
-		Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader);
+		Program(const std::shared_ptr<Shader>& vertexShader,
+            const std::shared_ptr<Shader>& fragmentShader);
 		~Program();
 
         void use() const;
@@ -35,7 +36,8 @@ namespace gorn
         GLint getAttribute(const std::string& name) const;
 	    GLint getUniform(const std::string& name) const;
 
-        void setUniformValue(const std::string& name, const UniformValue& value);
+        void setUniformValue(const std::string& name,
+            const UniformValue& value);
 	    void setUniformValue(const GLint& location, const UniformValue& value);
 
     };

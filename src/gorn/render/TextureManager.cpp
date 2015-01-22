@@ -1,14 +1,30 @@
 #include <gorn/render/TextureManager.hpp>
+#include <gorn/render/Texture.hpp>
 #include <gorn/asset/Image.hpp>
+#include <gorn/asset/AssetManager.hpp>
 
 namespace gorn
 {
-    const char* TextureManager::kDefaultTag = "tex";
-
     TextureManager::TextureManager(AssetManager<Image>& images):
     _images(images)
     {
+        getDefinitions().set([](const std::string& name){
+            return Definition()
+                .withImage(name);
+        });
     }
+
+
+    const TextureManager::Definitions& TextureManager::getDefinitions() const
+    {
+        return _definitions;
+    }
+
+    TextureManager::Definitions& TextureManager::getDefinitions()
+    {
+        return _definitions;
+    }
+
 
     std::shared_ptr<Texture> TextureManager::load(const std::string& name)
     {
@@ -17,7 +33,7 @@ namespace gorn
         {
             return itr->second;
         }
-        auto& def = define(name);
+        auto& def = getDefinitions().get(name);
         auto img = _images.load(def.getImageName(), false).get();
         auto tex = std::make_shared<Texture>(def.getTarget());
         for(auto itr = def.getIntParameters().begin();
@@ -45,16 +61,4 @@ namespace gorn
         return tex;
     }
 
-    TextureDefinition& TextureManager::define(const std::string& name)
-    {
-        auto itr = _definitions.find(name);
-        if(itr == _definitions.end())
-        {
-            itr = _definitions.insert(itr, {name, TextureDefinition()});
-            std::string tname(name);
-            FileManager::prefix(tname, kDefaultTag);
-            itr->second.withImage(tname);
-        }
-        return itr->second;
-    }
 }

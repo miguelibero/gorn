@@ -31,7 +31,7 @@ namespace gorn
 		_render.getFiles()
             .addLoader<LocalFileLoader>("tex", "../%s.png");
 		_render.getImages()
-            .addLoader<PngImageLoader>();
+            .addDefaultLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 		_render.getFiles()
             .addLoader<BundleFileLoader>("fsh", "%s.fsh");
@@ -40,17 +40,19 @@ namespace gorn
 		_render.getFiles()
             .addLoader<BundleFileLoader>("tex", "%s.png");
 		_render.getImages()
-            .addLoader<GraphicsImageLoader>();
+            .addDefaultLoader<GraphicsImageLoader>();
 #endif
 
-	    _render.getPrograms().define("shader")
+	    _render.getPrograms().getDefinitions().get("shader")
+            .withShaderFile(ShaderType::Vertex, "vsh:shader")
+            .withShaderFile(ShaderType::Fragment, "fsh:shader")
             .withUniform("transform", UniformKind::Transform)
-            .withUniform("texture", UniformKind::Texture0);
-
-        _render.getMaterials().define("kitten")
-            .withProgram("shader")
-            .withTexture("texture", "kitten")
+            .withUniform("texture", UniformKind::Texture0)
             .withUniformValue(UniformKind::Transform, getTransform(0.25f));
+
+        _render.getMaterials().getDefinitions().get("kitten")
+            .withProgram("shader")
+            .withTexture(UniformKind::Texture0, "tex:kitten");            
 
         _vao.setMaterial(_render.getMaterials().load("kitten"));
 

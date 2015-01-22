@@ -9,9 +9,12 @@ PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT = 0;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
 
 void initExtensions() {
-     glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
-     glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
-     glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+     glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)
+        eglGetProcAddress("glGenVertexArraysOES");
+     glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)
+        eglGetProcAddress("glBindVertexArrayOES");
+     glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)
+        eglGetProcAddress("glDeleteVertexArraysOES");
 }
 
 #endif

@@ -10,6 +10,8 @@ namespace gorn
 	{
 	public:
         static const char* kWhitespaceChars;
+        static const char* kTagSeparator;
+        static const char* kDefaultTag;
         static const size_t npos;
 
    		String() = delete;
@@ -27,7 +29,8 @@ namespace gorn
         template<typename V>
         static V convertTo(const std::string& value);
 
-        static bool prefix(std::string& str, const std::string& prefix, const std::string& sep=":");
+        static std::pair<std::string,std::string> splitTag(const std::string& str);
+        static bool addTag(std::string& str, const std::string& tag);
 	};
 
 }

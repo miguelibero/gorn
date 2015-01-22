@@ -7,19 +7,22 @@ namespace gorn
     {
     }
 
-    ProgramDefinition& ProgramDefinition::withShaderFile(ShaderType type, const std::string& name)
+    ProgramDefinition& ProgramDefinition::withShaderFile(
+        ShaderType type, const std::string& name)
     {
         _shaderFiles[type] = name;
         return *this;
     }
 
-    ProgramDefinition& ProgramDefinition::withShaderData(ShaderType type, Data&& data)
+    ProgramDefinition& ProgramDefinition::withShaderData(
+        ShaderType type, Data&& data)
     {
         _shaderData[type] = std::move(data);
         return *this;
     }
 
-    ProgramDefinition& ProgramDefinition::withShaderData(ShaderType type, const std::string& data)
+    ProgramDefinition& ProgramDefinition::withShaderData(
+        ShaderType type, const std::string& data)
     {
         return withShaderData(type, Data(data));
     }
@@ -79,17 +82,19 @@ namespace gorn
         return _shaderFiles.at(type);
     }
 
-	const std::map<std::string, std::string>& ProgramDefinition::getUniforms() const
+	const ProgramDefinition::Uniforms& ProgramDefinition::getUniforms() const
 	{
 		return _uniforms;
 	}
 
-	const std::map<std::string, std::string>& ProgramDefinition::getAttributes() const
+	const ProgramDefinition::Attributes& ProgramDefinition::
+        getAttributes() const
 	{
 		return _attributes;
 	}
 
-	const std::map<std::string, UniformValue>& ProgramDefinition::getUniformValues() const
+	const ProgramDefinition::UniformValues& ProgramDefinition::
+        getUniformValues() const
     {
         return _uniformValues;
     }

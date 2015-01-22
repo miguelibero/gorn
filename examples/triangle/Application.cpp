@@ -15,14 +15,11 @@ namespace gorn
 	{
 #ifdef GORN_PLATFORM_LINUX
 		_render.getFiles()
-            .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
-		_render.getFiles()
-            .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+            .addDefaultLoader<LocalFileLoader>("../%s");
 #elif GORN_PLATFORM_ANDROID
 		_render.getFiles()
-            .addLoader<BundleFileLoader>("fsh", "%s.fsh");
-		_render.getFiles()
-            .addLoader<BundleFileLoader>("vsh", "%s.vsh");
+            .addDefaultLoader<BundleFileLoader>("%s");
+
 #endif
 
         _vao.setProgram(_render.getPrograms().load("shader"));

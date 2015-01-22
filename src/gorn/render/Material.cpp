@@ -8,12 +8,14 @@ namespace gorn
 	{
 	}
 
-	void Material::setTexture(const std::string& name, const std::shared_ptr<Texture>& texture)
+	void Material::setTexture(const std::string& name,
+        const std::shared_ptr<Texture>& texture)
     {
         _textures[_program->getUniform(name)] = texture;
     }
 
-	void Material::setUniformValue(const std::string& name, const UniformValue& value)
+	void Material::setUniformValue(const std::string& name,
+        const UniformValue& value)
     {
         _uniformValues[_program->getUniform(name)] = value;
     }

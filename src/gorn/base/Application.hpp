@@ -4,7 +4,6 @@
 
 namespace gorn
 {
-
 	class Application
 	{
 	public:

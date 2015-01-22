@@ -8,8 +8,6 @@
 
 namespace gorn
 {
-    const char* FileManager::kDefaultTag = "default";
-    const char* FileManager::kTagSeparator = ":";
 
 	void FileManager::addLoader(const std::string& tag, std::unique_ptr<Loader>&& loader)
 	{
@@ -22,7 +20,7 @@ namespace gorn
 
     void FileManager::addLoader(std::unique_ptr<Loader>&& loader)
     {
-        addLoader(kDefaultTag, std::move(loader));
+        addLoader(String::kDefaultTag, std::move(loader));
     }
 
 	std::future<Data> FileManager::load(const std::string& aname, bool cache)
@@ -37,19 +35,12 @@ namespace gorn
             }
         }
 
-        auto parts = String::split(aname, kTagSeparator);
-        std::string name(aname);
-        std::string tag(kDefaultTag);        
-        if(parts.size() > 1)
-        {
-            tag = parts.front();
-            name = parts.back();
-        }
+        auto parts = String::splitTag(aname);
 
         std::vector<std::shared_ptr<Loader>> loaders;
-        if(tag != kDefaultTag)
+        if(parts.first != String::kDefaultTag)
         {
-            auto itr = _loaders.find(tag);
+            auto itr = _loaders.find(parts.first);
             if(itr != _loaders.end())
             {
                 for(auto& loader : itr->second)
@@ -59,7 +50,7 @@ namespace gorn
             }
         }
         {
-            auto itr = _loaders.find(kDefaultTag);
+            auto itr = _loaders.find(String::kDefaultTag);
             if(itr != _loaders.end())
             {
                 for(auto& loader : itr->second)
@@ -70,16 +61,18 @@ namespace gorn
         }
         for(auto& loader : loaders)
         {
-            if(loader->validate(name))
+            if(loader->validate(parts.second))
             {
-                return load(loader, name);
+                return load(loader, parts.second);
             }
         }
        
-		throw Exception(std::string("Could not load file '")+name+"' with tag '"+tag+"'.");
+		throw Exception(std::string("Could not load file '")
+            +parts.second+"' with tag '"+parts.first+"'.");
 	}
 
-    std::future<Data> FileManager::load(const std::shared_ptr<Loader>& loader, const std::string& name)
+    std::future<Data> FileManager::load(
+      const std::shared_ptr<Loader>& loader, const std::string& name)
     {
         return std::async(std::launch::async, [loader](const std::string& name){
             return loader->load(name);
@@ -91,8 +84,4 @@ namespace gorn
         _preloads[name] = std::move(data);
     }
 
-    bool FileManager::prefix(std::string& name, const std::string& prefix)
-    {
-        return String::prefix(name, prefix, kTagSeparator);
-    }
 }

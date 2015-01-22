@@ -17,8 +17,6 @@ namespace gorn
     public:
         typedef FileLoader Loader;
 	private:
-        static const char* kDefaultTag;
-        static const char* kTagSeparator;
 		std::map<std::string, Data> _preloads;
 		std::map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
         std::future<Data> load(const std::shared_ptr<Loader>& loader, const std::string& name);
@@ -35,7 +33,6 @@ namespace gorn
         template<typename L, typename... Args>
         void addDefaultLoader(Args&&... args);
 
-        static bool prefix(std::string& name, const std::string& prefix=kDefaultTag);
 	};
 
     template<typename L, typename... Args>

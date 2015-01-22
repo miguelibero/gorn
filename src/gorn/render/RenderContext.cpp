@@ -1,6 +1,5 @@
 #include <gorn/render/RenderContext.hpp>
 
-
 namespace gorn
 {
 

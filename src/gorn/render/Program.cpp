@@ -7,8 +7,9 @@ namespace gorn
 {
     GLuint Program::s_currentId = 0;
 
-	Program::Program(const std::shared_ptr<Shader>& fragmentShader, const std::shared_ptr<Shader>& vertexShader):
-	_id(0), _fragmentShader(fragmentShader), _vertexShader(vertexShader)
+	Program::Program(const std::shared_ptr<Shader>& vertexShader,
+        const std::shared_ptr<Shader>& fragmentShader):
+	_id(0), _vertexShader(vertexShader), _fragmentShader(fragmentShader)
 	{
 		_id = glCreateProgram();
         glAttachShader(_id, _fragmentShader->getId());
@@ -45,14 +46,16 @@ namespace gorn
         }
     }
 
-    GLint Program::loadAttribute(const std::string& name, const std::string& alias)
+    GLint Program::loadAttribute(const std::string& name,
+        const std::string& alias)
     {
         auto id = getAttribute(name);
         _attributes[alias] = id;
         return id;
     }
 
-    GLint Program::loadUniform(const std::string& name, const std::string& alias)
+    GLint Program::loadUniform(const std::string& name,
+        const std::string& alias)
     {
         auto id = getUniform(name);
         _uniforms[alias] = id;
@@ -81,12 +84,14 @@ namespace gorn
         return itr->second;
 	}
 
-    void Program::setUniformValue(const std::string& name, const UniformValue& value)
+    void Program::setUniformValue(const std::string& name,
+        const UniformValue& value)
     {
         setUniformValue(getUniform(name), value);
     }
 
-	void Program::setUniformValue(const GLint& location, const UniformValue& value)
+	void Program::setUniformValue(const GLint& location,
+        const UniformValue& value)
 	{
         if(location >= 0)
         {
