@@ -44,7 +44,8 @@ namespace gorn
 #endif
 
 	    _render.getPrograms().define("shader")
-            .withUniform("transform", UniformKind::Transform);
+            .withUniform("transform", UniformKind::Transform)
+            .withUniform("texture", UniformKind::Texture0);
 
         _render.getMaterials().define("kitten")
             .withProgram("shader")

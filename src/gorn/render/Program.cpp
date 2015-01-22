@@ -65,10 +65,6 @@ namespace gorn
         if(itr == _attributes.end())
         {
             GLint id = glGetAttribLocation(getId(), name.c_str());
-            if(id == -1)
-            {
-                throw Exception(std::string("Could not find attribure '")+name+"'.");
-            }
             itr = _attributes.insert(itr, {name, id});
         }
         return itr->second;
@@ -80,10 +76,6 @@ namespace gorn
         if(itr == _uniforms.end())
         {
 		    GLint id = glGetUniformLocation(getId(), name.c_str());
-            if(id == -1)
-            {
-                throw Exception(std::string("Could not find uniform '")+name+"'.");
-            }
             itr = _uniforms.insert(itr, {name, id});
         }
         return itr->second;
@@ -96,7 +88,10 @@ namespace gorn
 
 	void Program::setUniformValue(const GLint& location, const UniformValue& value)
 	{
-        value.set(location);
+        if(location >= 0)
+        {
+            value.set(location);
+        }
 	}
 
 }

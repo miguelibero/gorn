@@ -26,14 +26,15 @@ namespace gorn
 #endif
 
 	    _render.getPrograms().define("shader")
+            .withUniform("texture", UniformKind::Texture0)
             .withShaderFile(ShaderType::Vertex, "shader.vsh")
             .withShaderFile(ShaderType::Fragment, "shader.fsh");
         _render.getMaterials().define("kitten")
             .withProgram("shader")
-            .withTexture("texture", "kitten.png");
+            .withTexture(UniformKind::Texture0, "kitten.png");
         _render.getMaterials().define("puppy")
             .withProgram("shader")
-            .withTexture("texture", "puppy.png");
+            .withTexture(UniformKind::Texture0, "puppy.png");
 
 	}
 
