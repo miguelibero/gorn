@@ -3,7 +3,7 @@
 
 #include <gorn/asset/AssetManager.hpp>
 #include <gorn/sprite/SpriteManager.hpp>
-#include <gorn/sprite/LabelManager.hpp>
+#include <gorn/label/LabelManager.hpp>
 
 namespace gorn
 {

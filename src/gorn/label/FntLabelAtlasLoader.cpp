@@ -1,7 +1,6 @@
 
-#include <gorn/sprite/FntSpriteAtlasLoader.hpp>
-#include <gorn/sprite/SpriteAtlas.hpp>
-#include <gorn/sprite/SpriteAtlasRegion.hpp>
+#include <gorn/label/FntLabelAtlasLoader.hpp>
+#include <gorn/label/LabelAtlas.hpp>
 #include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
 
@@ -12,11 +11,11 @@ namespace gorn {
     const char FntAttrValSepToken = '=';
     const char FntAttrGroupToken = '"';
 
-    FntSpriteAtlasLoader::FntSpriteAtlasLoader()
+    FntLabelAtlasLoader::FntLabelAtlasLoader()
     {
     }
 
-    bool FntSpriteAtlasLoader::validate(const Data& data) const
+    bool FntLabelAtlasLoader::validate(const Data& data) const
     {
         DataInputStream in(data);
         std::string line;
@@ -68,9 +67,9 @@ namespace gorn {
         return map;
     }
 
-    SpriteAtlas FntSpriteAtlasLoader::load(Data&& data) const
+    LabelAtlas FntLabelAtlasLoader::load(Data&& data) const
     {
-        SpriteAtlas atlas;
+        LabelAtlas atlas;
         DataInputStream in(data);
         std::vector<std::string> pages;
         while(!in.reachedEnd())
@@ -82,10 +81,7 @@ namespace gorn {
             map.erase("");
             if(name == "info" || name == "common")
             {
-                for(auto itr = map.begin(); itr != map.end(); ++itr)
-                {
-                    atlas.setProperty(itr->first, itr->second);
-                }
+                // TODO: take font properties
             }            
             else if(name == "page")
             {
@@ -94,7 +90,7 @@ namespace gorn {
             }
             else if(name == "char")
             {
-                SpriteAtlasRegion region;
+                LabelAtlasRegion region;
                 region.setOrigin(SpriteAtlasRegion::Origin::TopLeft);
                 region.setPosition(
                     String::convertTo<SpriteAtlasRegion::value_type>(map["x"]),
@@ -104,13 +100,18 @@ namespace gorn {
                     String::convertTo<SpriteAtlasRegion::value_type>(map["width"]),
                     String::convertTo<SpriteAtlasRegion::value_type>(map["height"])
                 );
-                /*
-                region.setOffset(
+                region.setAdvance(
+                    String::convertTo<SpriteAtlasRegion::value_type>(map["xadvance"])
+                );
+
+                glm::vec2 offset(
                     String::convertTo<SpriteAtlasRegion::value_type>(map["xoffset"]),
                     String::convertTo<SpriteAtlasRegion::value_type>(map["yoffset"])
                 );
-                */
-                // TODO: what is xadvance?
+
+                region.setOriginalSize(region.getSize()+offset);
+                region.setOffset(offset*glm::vec2(0.5f, -0.5f));
+
                 std::string name = map["letter"];
                 if(name == "space")
                 {

@@ -30,6 +30,7 @@ namespace gorn
         void bind();
         void activate(size_t pos);
         const glm::vec2& getSize() const;
+        float getScale() const;
 	};
 }
 

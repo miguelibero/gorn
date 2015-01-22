@@ -13,12 +13,12 @@ namespace gorn {
     {
     }
 
-    const AssetManager<SpriteAtlas>& SpriteManager::getAtlases() const
+    const SpriteManager::AtlasManager& SpriteManager::getAtlases() const
     {
         return _atlases;
     }
 
-    AssetManager<SpriteAtlas>& SpriteManager::getAtlases()
+    SpriteManager::AtlasManager& SpriteManager::getAtlases()
     {
         return _atlases;
     }
@@ -46,7 +46,7 @@ namespace gorn {
         auto itr = _frames.find(aname);
         if(itr == _frames.end())
         {
-            itr = _frames.insert(itr, std::make_pair(aname, FrameMap()));
+            itr = _frames.insert(itr, {aname, FrameMap()});
             auto& frames = itr->second;
             auto atlas = _atlases.load(aname).get();
             auto& regions = atlas->getRegions();
@@ -56,7 +56,7 @@ namespace gorn {
                 auto fitr = frames.find(fname);
                 if(fitr == frames.end())
                 {
-                    fitr = frames.insert(fitr, std::make_pair(fname, FrameList()));
+                    fitr = frames.insert(fitr, {fname, FrameList()});
                     fitr->second.reserve(ritr->second.size());
                     for(auto& region : ritr->second)
                     {

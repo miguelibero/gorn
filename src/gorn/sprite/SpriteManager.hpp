@@ -18,18 +18,20 @@ namespace gorn {
     {
     public:
         typedef SpriteDefinition Definition;
+        typedef SpriteAtlas Atlas;
         typedef std::vector<std::shared_ptr<SpriteFrame>> FrameList;
         typedef std::map<std::string, FrameList> FrameMap;
+        typedef AssetManager<Atlas> AtlasManager;
     private:
         MaterialManager& _materials;
-        AssetManager<SpriteAtlas> _atlases;
+        AtlasManager _atlases;
         std::map<std::string, Definition> _definitions;
         std::map<std::string, FrameMap> _frames;
     public:
         SpriteManager(MaterialManager& materials, FileManager& files);
 
-        const AssetManager<SpriteAtlas>& getAtlases() const;
-        AssetManager<SpriteAtlas>& getAtlases();
+        const AtlasManager& getAtlases() const;
+        AtlasManager& getAtlases();
 
         SpriteDefinition& define(const std::string& name);
 

@@ -6,7 +6,7 @@
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/sprite/CocosSpriteAtlasLoader.hpp>
 #include <gorn/sprite/GdxSpriteAtlasLoader.hpp>
-#include <gorn/sprite/FntSpriteAtlasLoader.hpp>
+#include <gorn/label/FntLabelAtlasLoader.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -21,7 +21,7 @@ namespace gorn
     {
         _sprites.getAtlases().addLoader<GdxSpriteAtlasLoader>();
         _sprites.getAtlases().addLoader<CocosSpriteAtlasLoader>();
-        _labels.getAtlases().addLoader<FntSpriteAtlasLoader>();
+        _labels.getAtlases().addLoader<FntLabelAtlasLoader>();
 
 	    context.getPrograms().define(Sprite)
             .withShaderData(ShaderType::Vertex, R"(#version 100

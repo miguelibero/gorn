@@ -1,5 +1,5 @@
 
-#include <gorn/sprite/LabelDefinition.hpp>
+#include <gorn/label/LabelDefinition.hpp>
 
 namespace gorn {
 

@@ -3,7 +3,7 @@
 #ifndef __gorn__Label__
 #define __gorn__Label__
 
-#include <gorn/sprite/SpriteFont.hpp>
+#include <gorn/label/LabelFont.hpp>
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
@@ -14,23 +14,25 @@ namespace gorn {
 
     class Label
     {
+    public:
+        typedef LabelFont Font;
     private:
 
-        SpriteFont _font;
+        std::shared_ptr<Font> _font;
         std::string _text;
         glm::vec2 _size;
-        bool _dirtyLetters;
-        std::vector<std::string> _textLetters;
+        bool _dirty;
+        std::vector<std::string> _characters;
 
         void init();
 
     public:
         Label();
-        Label(const SpriteFont& font);
-        Label(const SpriteFont& font, const std::string& text);
+        Label(const std::shared_ptr<Font>& font);
+        Label(const std::shared_ptr<Font>& font, const std::string& text);
 
-        const SpriteFont& getFont() const;
-        void setFont(const SpriteFont& font);
+        const std::shared_ptr<Font>& getFont() const;
+        void setFont(const std::shared_ptr<Font>& font);
 
         const std::string& getText() const;
         void setText(const std::string& text);

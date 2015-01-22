@@ -31,6 +31,21 @@ namespace gorn
         }
     }
 
+    float Material::getScale() const
+    {
+        float scale = FLT_MAX;
+        for(auto itr = _textures.begin();
+            itr != _textures.end(); ++itr)
+        {
+            float tscale = itr->second->getScale();
+            if(tscale < scale)
+            {
+                scale = tscale;
+            }
+        }
+        return scale;
+    }
+
 	const std::shared_ptr<Program>& Material::getProgram() const
 	{
 		return _program;
