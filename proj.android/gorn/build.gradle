@@ -16,6 +16,10 @@ android {
 
     defaultConfig {
         minSdkVersion 12
+        ndk {
+            moduleName "gorn"
+            stl "c++_shared"
+        }
     }
 
     sourceSets {

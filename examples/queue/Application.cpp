@@ -15,20 +15,20 @@ namespace gorn
 	{
 #ifdef GORN_PLATFORM_LINUX
 		_render.getFiles()
-            .addLoader<LocalFileLoader>("sprite", "../%s.png");
+            .addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
 		_render.getFiles()
-            .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+            .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 		_render.getFiles()
-            .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+            .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 		_render.getImages()
             .addLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
 		_render.getFiles()
-            .addLoader<BundleFileLoader>("sprite", "%s.png");
+            .addLoader<AssetFileLoader>("sprite", "%s.png");
 		_render.getFiles()
-            .addLoader<BundleFileLoader>("vsh", "%s.vsh");
+            .addLoader<AssetFileLoader>("vsh", "%s.vsh");
 		_render.getFiles()
-            .addLoader<BundleFileLoader>("fsh", "%s.fsh");
+            .addLoader<AssetFileLoader>("fsh", "%s.fsh");
 		_render.getImages()
             .addLoader<GraphicsImageLoader>("sprite");
 #endif

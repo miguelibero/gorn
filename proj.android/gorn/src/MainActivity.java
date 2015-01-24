@@ -112,7 +112,6 @@ public class MainActivity extends Activity
 
     static {
     	System.loadLibrary("c++_shared");
-		System.loadLibrary("gorn");
     }
 
     public static native void onSurfaceCreated();

@@ -38,20 +38,27 @@ public enum NativeBridge
 
 	public byte[] loadImage(byte[] data) throws IOException
 	{
-		Log.v(TAG, "loading image...");
+		Log.v(TAG, "loading image of "+data.length+" bytes...");
 		BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-		int bytes = bitmap.getByteCount();
-        mImageInfo = new int[]{
-            bitmap.getWidth(),
-            bitmap.getHeight(),
-            bitmap.hasAlpha()?1:0,
-        };
-		ByteBuffer buffer = ByteBuffer.allocate(bytes);
-		bitmap.copyPixelsToBuffer(buffer);
-		return buffer.array();
+        if(bitmap != null)
+        {
+		    int bytes = bitmap.getByteCount();
+            mImageInfo = new int[]{
+                bitmap.getWidth(),
+                bitmap.getHeight(),
+                bitmap.hasAlpha()?1:0,
+            };
+		    ByteBuffer buffer = ByteBuffer.allocate(bytes);
+		    bitmap.copyPixelsToBuffer(buffer);
+		    return buffer.array();
+        }
+        else
+        {
+            mImageInfo = new int[]{0,0,0};
+            return new byte[0];
+        }
 	}
 
     public int[] getImageInfo()

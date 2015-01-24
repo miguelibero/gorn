@@ -32,12 +32,15 @@ class Jni
 {
 private:
     typedef std::map<std::string, jclass> ClassMap;
-    JavaVM* _java;
-    JNIEnv* _env;
+    static JavaVM* _java;
+    static JNIEnv* _env;
+    static int _thread;
     ClassMap _classes;
  
     Jni();
     Jni(const Jni& other);
+
+    static void detachCurrentThread(void*);
 public:
     ~Jni();
  
@@ -47,9 +50,9 @@ public:
     static Jni& get();
  
     /**
-     * Set the java virtual machine pointer
+     * Call in the JNI_OnLoad function
      */
-    void setJava(JavaVM* java);
+    jint onLoad(JavaVM* java);
  
     /**
      * Get the java virtual machine pointer

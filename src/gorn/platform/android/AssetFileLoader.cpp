@@ -1,5 +1,5 @@
 
-#include <gorn/platform/android/BundleFileLoader.hpp>
+#include <gorn/platform/android/AssetFileLoader.hpp>
 #include <jniobject/JniObject.hpp>
 #include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
@@ -7,27 +7,27 @@
 
 namespace gorn
 {
-	JniObject& BundleFileLoader::getJniObject()
+	JniObject& AssetFileLoader::getJniObject()
 	{
-		static JniObject obj = JniObject::findSingleton("net.gorn.PlatformBridge");
+		static JniObject obj = JniObject::findSingleton("me.ibero.gorn.NativeBridge");
 		return obj;
 	}
 
-    const char* BundleFileLoader::kPlaceholder = "%s";
+    const char* AssetFileLoader::kPlaceholder = "%s";
 
-    BundleFileLoader::BundleFileLoader(const std::string& pathTemplate):
+    AssetFileLoader::AssetFileLoader(const std::string& pathTemplate):
     _pathTemplate(pathTemplate)
     {
     }
 
-    std::string BundleFileLoader::getPath(const std::string& name) const
+    std::string AssetFileLoader::getPath(const std::string& name) const
     {
         std::string path(_pathTemplate);
         String::replaceAll(path, kPlaceholder, name);
         return path;
     }
 
-    bool BundleFileLoader::validate(const std::string& name) const
+    bool AssetFileLoader::validate(const std::string& name) const
     {
 		try
 		{
@@ -40,7 +40,7 @@ namespace gorn
 		}
     }
 
-    Data BundleFileLoader::load(const std::string& name) const
+    Data AssetFileLoader::load(const std::string& name) const
     {
 		try
 		{

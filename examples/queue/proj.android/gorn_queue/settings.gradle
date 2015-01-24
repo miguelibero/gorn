@@ -1,5 +1,3 @@
-rootProject.name = 'gorn_queue'
-
 include ':gorn'
-project(':gorn').projectDir = new File(settingsDir, "aaa/../../../../proj.android/gorn")
+project(':gorn').projectDir = new File("../../../../proj.android/gorn")
 

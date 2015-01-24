@@ -1,9 +1,13 @@
 
 #include "JniObject.hpp"
 #include <algorithm>
+#include <pthread.h>
+
+JavaVM* Jni::_java = nullptr;
+JNIEnv* Jni::_env = nullptr;
+int Jni::_thread = 0;
  
-Jni::Jni():
-_java(nullptr), _env(nullptr)
+Jni::Jni()
 {
 }
  
@@ -37,25 +41,38 @@ JavaVM* Jni::getJava()
 {
     return _java;
 }
- 
-void Jni::setJava(JavaVM* java)
+
+void Jni::detachCurrentThread(void*)
 {
-    _java = java;
+  _java->DetachCurrentThread();
 }
  
+jint Jni::onLoad(JavaVM* java)
+{
+    JNIEnv *env = NULL;
+    if (java->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK)
+    {
+        return 0;
+    } 
+    _java = java;
+    pthread_key_create(&_thread, Jni::detachCurrentThread);
+    return JNI_VERSION_1_4;
+}
  
 JNIEnv* Jni::getEnvironment()
 {
-    if(!_env)
+    if(_java == nullptr)
     {
-        assert(_java);
- 
-        int r = _java->GetEnv((void**)&_env, JNI_VERSION_1_4);
-        assert(r == JNI_OK); (void)r;
+        throw JniException("Jni::onLoad not called.");
     }
-    int r = _java->AttachCurrentThread(&_env, nullptr);
-    assert(r == JNI_OK); (void)r;
-    return _env;
+    JNIEnv* env = static_cast<JNIEnv*>(pthread_getspecific(_thread));
+    if((env ) == NULL)
+    {
+        _java->GetEnv((void**)&_env, JNI_VERSION_1_4);
+        _java->AttachCurrentThread(&env, nullptr);
+        pthread_setspecific(_thread, env);
+    }
+    return env;
 }
  
 jclass Jni::getClass(const std::string& classPath, bool cache)
@@ -283,6 +300,7 @@ JniObject& JniObject::operator=(const JniObject& other)
     clear();
     _classPath = other._classPath;
     init(other._instance, other._class);
+    return *this;
 }
  
 bool JniObject::operator==(const JniObject& other) const
