@@ -16,12 +16,11 @@
 #define GL_WRITE_ONLY				GL_WRITE_ONLY_OES
 
 
-#include <GLES2/gl2platform.h>
 #ifndef GL_GLEXT_PROTOTYPES
 #define GL_GLEXT_PROTOTYPES 1
 #endif
 
-
+#include <GLES2/gl2platform.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
@@ -31,7 +30,6 @@ typedef char GLchar;
 #define GL_BGRA  0x80E1
 #endif
 
-
 extern PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT;
 extern PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT;
 extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
@@ -39,6 +37,8 @@ extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
 #define glGenVertexArraysOES glGenVertexArraysOESEXT
 #define glBindVertexArrayOES glBindVertexArrayOESEXT
 #define glDeleteVertexArraysOES glDeleteVertexArraysOESEXT
+
+void gornInitGlExtensions();
 
 #else
 

@@ -17,7 +17,7 @@ android {
     defaultConfig {
         minSdkVersion 12
         ndk {
-            moduleName "gorn_queue"
+            moduleName "gorn_triangle"
             stl "c++_shared"
         }
     }

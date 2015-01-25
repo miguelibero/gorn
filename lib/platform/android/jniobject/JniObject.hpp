@@ -11,6 +11,7 @@
 #include <set>
 #include <cassert>
 #include <exception>
+#include <android/log.h>
 
 class JniException: public std::exception
 {
@@ -69,6 +70,7 @@ public:
      * get a class, will be stored in64 the class cache
      */
     jclass getClass(const std::string& classPath, bool cache=true);
+
 };
  
 /**
@@ -547,6 +549,12 @@ public:
     */
     template<typename Type>
     static void setJavaArrayElement(JNIEnv* env, jarray arr, size_t position, const Type& elm);
+
+    /**
+    * Set all elements of a java array
+    */
+    template<typename Type>
+    static void setJavaArrayElements(JNIEnv* env, jarray arr, const Type& obj);
  
     template<typename Type>
     static bool convertFromJavaCollection(JNIEnv* env, jobject obj, Type& out)
@@ -735,12 +743,7 @@ public:
         {
             arr = createJavaArray(env, *obj.begin(), obj.size());
         }
-        size_t i = 0;
-        for(typename Type::const_iterator itr = obj.begin(); itr != obj.end(); ++itr)
-        {
-            setJavaArrayElement(env, arr, i, *itr);
-            i++;
-        }
+        setJavaArrayElements(env, arr, obj);
         return arr;
     }
  

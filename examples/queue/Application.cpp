@@ -5,7 +5,7 @@
 
 namespace gorn
 {
-	RenderContext _render;
+	Context _ctx;
 
 	Application::Application()
 	{
@@ -14,33 +14,33 @@ namespace gorn
 	void Application::load()
 	{
 #ifdef GORN_PLATFORM_LINUX
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-		_render.getImages()
+		_ctx.getImages()
             .addLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<AssetFileLoader>("sprite", "%s.png");
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<AssetFileLoader>("vsh", "%s.vsh");
-		_render.getFiles()
+		_ctx.getFiles()
             .addLoader<AssetFileLoader>("fsh", "%s.fsh");
-		_render.getImages()
+		_ctx.getImages()
             .addLoader<GraphicsImageLoader>("sprite");
 #endif
 
-        _render.getMaterials().getDefinitions()
+        _ctx.getMaterials().getDefinitions()
             .set("sprite", [](const std::string& name){
                 return MaterialDefinition()
                     .withProgram("sprite")
                     .withTexture(UniformKind::Texture0, name);
             });
 
-	    _render.getPrograms().getDefinitions().get("sprite")
+	    _ctx.getPrograms().getDefinitions().get("sprite")
             .withUniform("texture", UniformKind::Texture0)
             .withShaderFile(ShaderType::Vertex, "vsh:shader")
             .withShaderFile(ShaderType::Fragment, "fsh:shader");
@@ -52,8 +52,10 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        _render.getQueue().addCommand("sprite:kitten")
+        _ctx.getQueue().addCommand("sprite:kitten")
             .withAttribute(AttributeKind::Position, {
                 -0.75f,  0.75f,
                  0.25f,  0.75f,
@@ -72,7 +74,7 @@ namespace gorn
                 2, 3, 0
             }, GL_UNSIGNED_INT, 6);
 
-        _render.getQueue().addCommand("sprite:puppy")
+        _ctx.getQueue().addCommand("sprite:puppy")
             .withAttribute(AttributeKind::Position, {
                 -0.25f,  0.25f,
                  0.75f,  0.25f,
@@ -90,7 +92,7 @@ namespace gorn
                 2, 3, 0
             }, GL_UNSIGNED_INT, 6);
 
-		_render.getQueue().draw();
+		_ctx.getQueue().draw();
 	}
 
 }

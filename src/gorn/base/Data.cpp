@@ -62,6 +62,11 @@ namespace gorn
 	{
 	}
 
+	Data::Data(std::vector<uint8_t>&& vec):
+    _mem(std::move(vec))
+	{
+	}
+
     Data& Data::operator=(Data&& other)
     {
         _mem = std::move(other._mem);

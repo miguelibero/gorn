@@ -6,7 +6,6 @@
 #include <string>
 #include <initializer_list>
 
-
 namespace gorn
 {
 	class Data
@@ -26,10 +25,9 @@ namespace gorn
         Data(std::initializer_list<T> list);
 
         template<typename T>
-		Data(const std::vector<T>& data);
+		Data(const std::vector<T>& vec);
 
-        template<typename T>
-		Data(std::vector<T>&& data);
+		Data(std::vector<uint8_t>&& vec);
 
         Data& operator=(Data&& other);
         Data& operator=(const Data& other);
@@ -49,24 +47,27 @@ namespace gorn
 	};
 
     template<typename T>
-    Data::Data(std::initializer_list<T> list):
-    _mem(reinterpret_cast<const uint8_t*>(list.begin()),
-        reinterpret_cast<const uint8_t*>(list.end()))
+    Data::Data(std::initializer_list<T> list)
     {
+        if(list.size() > 0)
+        {
+            _mem = std::vector<uint8_t>(
+                reinterpret_cast<const uint8_t*>(list.begin()),
+                reinterpret_cast<const uint8_t*>(list.end())
+            );
+        }
     }
 
     template<typename T>
-	Data::Data(const std::vector<T>& data):
-	_mem(reinterpret_cast<const uint8_t*>(&data.front()),
-        reinterpret_cast<const uint8_t*>(&data.back()))
+	Data::Data(const std::vector<T>& vec)
 	{
-	}
-
-    template<typename T>
-	Data::Data(std::vector<T>&& data):
-	_mem(reinterpret_cast<const uint8_t*>(&data.front()),
-        reinterpret_cast<const uint8_t*>(&data.back()))
-	{
+        if(!vec.empty())
+        {
+            _mem = std::vector<uint8_t>(
+                reinterpret_cast<const uint8_t*>(vec.data()),
+                reinterpret_cast<const uint8_t*>(vec.data()+vec.size())
+            );
+        }
 	}
 
     class DataOutputStream;

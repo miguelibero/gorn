@@ -12,7 +12,7 @@ Its main goals are:
 * reusability
 * draw call batching (TODO)
 * drawing in separate thread (TODO)
-* support for Linux, Windows, Android and iOS (TODO)
+* support for Linux, Windows, Android and iOS (WIP)
 
 ## Examples
 
@@ -79,34 +79,34 @@ Very extendable file sources can be defined using
 tags.
 
 ```c++
-RenderContext render;
-render.getFiles()
+Context ctx;
+ctx.getFiles()
     .addLoader<LocalFileLoader>("sprite", "../%s.png");
 
-auto img = render.getImages().load("sprite:kitten");
+auto img = ctx.getImages().load("sprite:kitten");
 ```
 
 Loading assets can be done with definitions.
 
 ```c++
-RenderContext render;
-render.getFiles()
+Context ctx;
+ctx.getFiles()
     .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
-render.getFiles()
+ctx.getFiles()
     .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
-render.getPrograms().getDefinitions().get("sprite")
+ctx.getPrograms().getDefinitions().get("sprite")
     .withUniform("texture", UniformKind::Texture0)
     .withShaderFile(ShaderType::Vertex, "vsh:shader")
     .withShaderFile(ShaderType::Fragment, "fsh:shader");
 
-auto prog = render.getPrograms().load("sprite");
+auto prog = ctx.getPrograms().load("sprite");
 ```
 
 Support for materials, that combine a program with a list of textures
 and uniform values.
 
 ```c++
-RenderContext render;
+Context render;
 render.getMaterials().getDefinitions().get("puppy")
     .withProgram("shader")
     .withTexture(UniformKind::Texture0, "puppy.png");
@@ -115,8 +115,8 @@ render.getMaterials().getDefinitions().get("puppy")
 Support for render commands that are executed afterwards.
 
 ```c++
-RenderContext render;
-render.getQueue().addCommand("sprite:kitten")
+Context ctx;
+ctx.getQueue().addCommand("sprite:kitten")
     .withAttribute(AttributeKind::Position, {
         -0.75f,  0.75f,
          0.25f,  0.75f,
@@ -135,7 +135,7 @@ render.getQueue().addCommand("sprite:kitten")
         2, 3, 0
     }, GL_UNSIGNED_INT, 6);
 
-render.getQueue().addCommand("sprite:puppy")
+ctx.getQueue().addCommand("sprite:puppy")
     .withAttribute(AttributeKind::Position, {
         -0.25f,  0.25f,
          0.75f,  0.25f,
@@ -153,6 +153,6 @@ render.getQueue().addCommand("sprite:puppy")
         2, 3, 0
     }, GL_UNSIGNED_INT, 6);
 
-render.getQueue().draw();
+ctx.getQueue().draw();
 ```
 

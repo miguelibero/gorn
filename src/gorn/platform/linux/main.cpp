@@ -91,9 +91,6 @@ int main(void)
         double dt = ((double)currTime.tv_sec - lastTime.tv_sec)
             + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000*1000);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         app.update(dt);
 
         while(XPending(display))

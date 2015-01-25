@@ -8,7 +8,7 @@ PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT = 0;
 PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT = 0;
 PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
 
-void initExtensions() {
+void gornInitGlExtensions() {
      glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)
         eglGetProcAddress("glGenVertexArraysOES");
      glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)

@@ -3,6 +3,7 @@
 #include <jniobject/JniObject.hpp>
 #include <gorn/base/Exception.hpp>
 #include <gorn/asset/Image.hpp>
+#include <android/log.h>
 
 namespace gorn
 {
@@ -22,7 +23,7 @@ namespace gorn
     {
 		try
 		{
-			auto data = Data(getJniObject().call("loadImage",
+            auto data = Data(getJniObject().call("loadImage",
                 std::vector<uint8_t>(), input.mem()));
             if(data.empty())
             {
@@ -32,9 +33,9 @@ namespace gorn
             GLenum format = info[2] ? GL_RGBA : GL_RGB;
 			return Image(std::move(data), info[0], info[1], format, GL_UNSIGNED_BYTE);
 		}
-		catch(JniException e)
+		catch(const JniException& e)
 		{
-			throw Exception(std::string("Error loading image: ")+e.what());
+			throw Exception(std::string("JNI Error loading image: ")+e.what());
 		}
 	}
 

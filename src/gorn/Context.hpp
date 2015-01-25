@@ -1,5 +1,5 @@
-#ifndef __gorn__RenderContext__
-#define __gorn__RenderContext__
+#ifndef __gorn__Context__
+#define __gorn__Context__
 
 #include <gorn/render/MaterialManager.hpp>
 #include <gorn/render/TextureManager.hpp>
@@ -12,7 +12,7 @@ namespace gorn
 {
     class Image;
 
-    class RenderContext
+    class Context
     {
     private:
         FileManager _files;
@@ -23,7 +23,7 @@ namespace gorn
         RenderQueue _queue;
     public:
 
-        RenderContext();
+        Context();
 
         FileManager& getFiles();
         const FileManager& getFiles() const;
@@ -49,7 +49,7 @@ namespace gorn
     };
 
     template<typename T>
-    AssetManager<T> RenderContext::createAssetManager()
+    AssetManager<T> Context::createAssetManager()
     {
         return AssetManager<T>(getFiles());
     }

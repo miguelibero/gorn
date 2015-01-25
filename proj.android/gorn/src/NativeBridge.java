@@ -36,19 +36,49 @@ public enum NativeBridge
         return os.toByteArray();
 	}
 
+    private void logByteArray(byte[] data)
+    {
+        logByteArray(data, 10);
+    }
+
+    private void logByteArray(byte[] data, int len)
+    {
+        String start = "";
+        for(int i=0; i<len && i<data.length; i++)
+        {
+            start += String.format("%02x", data[i] & 0xff);
+        }
+        int i=data.length-len;
+        if(i<0)
+        {
+            i=0;
+        }
+        String end = "";
+        for(; i<data.length; i++)
+        {
+            end += String.format("%02x", data[i] & 0xff);
+        }
+        Log.v(TAG, ""+data.length+" bytes "+start+"..."+end+".");
+    }
+
 	public byte[] loadImage(byte[] data) throws IOException
 	{
-		Log.v(TAG, "loading image of "+data.length+" bytes...");
+		Log.v(TAG, "loading image...");
+        logByteArray(data);
 		BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
+        options.inPremultiplied = false;
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
         if(bitmap != null)
         {
+            Log.v(TAG, "loaded bitmap "+bitmap.getConfig());
 		    int bytes = bitmap.getByteCount();
             mImageInfo = new int[]{
                 bitmap.getWidth(),
                 bitmap.getHeight(),
-                bitmap.hasAlpha()?1:0,
+                1,
             };
 		    ByteBuffer buffer = ByteBuffer.allocate(bytes);
 		    bitmap.copyPixelsToBuffer(buffer);
@@ -56,6 +86,7 @@ public enum NativeBridge
         }
         else
         {
+            Log.v(TAG, "failed to decode image");
             mImageInfo = new int[]{0,0,0};
             return new byte[0];
         }
@@ -86,7 +117,9 @@ public enum NativeBridge
 		Log.v(TAG, "loading file '" + name + "'...");
 		AssetManager am = mActivity.getAssets();
 		InputStream is = am.open(name);
-		return readInputStream(is);
+		byte[] data = readInputStream(is);
+        logByteArray(data);
+        return data;
 	}
 
 	private static final String TAG = "NativeBridge";

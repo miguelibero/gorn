@@ -3,7 +3,7 @@
 
 namespace gorn
 {
-	RenderContext _render;
+	Context _ctx;
     VertexArray _vao;
     float time;
 
@@ -14,15 +14,15 @@ namespace gorn
 	void Application::load()
 	{
 #ifdef GORN_PLATFORM_LINUX
-		_render.getFiles()
-            .addDefaultLoader<LocalFileLoader>("../%s");
+		_ctx.getFiles()
+            .addDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-		_render.getFiles()
-            .addDefaultLoader<BundleFileLoader>("%s");
+		_ctx.getFiles()
+            .addDefaultLoader<AssetFileLoader>("%s");
 
 #endif
 
-        _vao.setProgram(_render.getPrograms().load("shader"));
+        _vao.setProgram(_ctx.getPrograms().load("shader"));
 
         auto vbo = std::make_shared<VertexBuffer>(Data{
          //  Position     Color 
@@ -49,6 +49,9 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         time += dt;
         _vao.getProgram()->setUniformValue("timeSin", sinf(time));
 		_vao.draw(3);

@@ -106,7 +106,7 @@ jclass Jni::getClass(const std::string& classPath, bool cache)
     }
     return nullptr;
 }
- 
+
 #pragma mark - JniObject
  
 JniObject::JniObject(const std::string& classPath, jobject objId, jclass classId) :
@@ -880,15 +880,13 @@ void JniObject::setJavaArrayElement(JNIEnv* env, jarray arr, size_t position, co
 {
     env->SetIntArrayRegion((jintArray)arr, position, 1, &elm);
 }
-
  
 template<>
 void JniObject::setJavaArrayElement(JNIEnv* env, jarray arr, size_t position, const uint8_t& elm)
 {
-    jbyte byte = elm;
-    env->SetByteArrayRegion((jbyteArray)arr, position, 1, &byte);
+    env->SetByteArrayRegion((jbyteArray)arr, position, 1, (const jbyte*)&elm);
 }
- 
+
 template<>
 void JniObject::setJavaArrayElement(JNIEnv* env, jarray arr, size_t position, const std::string& elm)
 {
@@ -901,3 +899,67 @@ void JniObject::setJavaArrayElement(JNIEnv* env, jarray arr, size_t position, co
 {
     setJavaArrayElement(env, arr, position, elm.getInstance());
 }
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<double>& obj)
+{
+    env->SetDoubleArrayRegion((jdoubleArray)arr, 0, obj.size(), obj.data());
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<long>& obj)
+{
+    env->SetLongArrayRegion((jlongArray)arr, 0, obj.size(), (const jlong*)obj.data());
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<float>& obj)
+{
+    env->SetFloatArrayRegion((jfloatArray)arr, 0, obj.size(), obj.data());
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<int>& obj)
+{
+    env->SetIntArrayRegion((jintArray)arr, 0, obj.size(), obj.data());
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<uint8_t>& obj)
+{
+    env->SetByteArrayRegion((jbyteArray)arr, 0, obj.size(), (const jbyte*)obj.data());
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<JniObject>& obj)
+{
+    size_t i = 0;
+    for(auto itr = obj.begin(); itr != obj.end(); ++itr)
+    {
+        setJavaArrayElement(env, arr, i, *itr);
+        i++;
+    }
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<std::string>& obj)
+{
+    size_t i = 0;
+    for(auto itr = obj.begin(); itr != obj.end(); ++itr)
+    {
+        setJavaArrayElement(env, arr, i, *itr);
+        i++;
+    }
+}
+
+template<>
+void JniObject::setJavaArrayElements(JNIEnv* env, jarray arr, const std::vector<jobject>& obj)
+{
+    size_t i = 0;
+    for(auto itr = obj.begin(); itr != obj.end(); ++itr)
+    {
+        setJavaArrayElement(env, arr, i, *itr);
+        i++;
+    }
+}
+

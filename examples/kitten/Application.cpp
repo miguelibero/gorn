@@ -5,7 +5,7 @@
 
 namespace gorn
 {
-	RenderContext _render;
+	Context _ctx;
     VertexArray _vao;
     float time;
 
@@ -24,37 +24,37 @@ namespace gorn
 	{
 
 #ifdef GORN_PLATFORM_LINUX
-		_render.getFiles()
-            .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
-		_render.getFiles()
-            .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
-		_render.getFiles()
-            .addLoader<LocalFileLoader>("tex", "../%s.png");
-		_render.getImages()
+		_ctx.getFiles()
+            .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+		_ctx.getFiles()
+            .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+		_ctx.getFiles()
+            .addLoader<LocalFileLoader>("tex", "../assets/%s.png");
+		_ctx.getImages()
             .addDefaultLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
-		_render.getFiles()
-            .addLoader<BundleFileLoader>("fsh", "%s.fsh");
-		_render.getFiles()
-            .addLoader<BundleFileLoader>("vsh", "%s.vsh");
-		_render.getFiles()
-            .addLoader<BundleFileLoader>("tex", "%s.png");
-		_render.getImages()
+		_ctx.getFiles()
+            .addLoader<AssetFileLoader>("fsh", "%s.fsh");
+		_ctx.getFiles()
+            .addLoader<AssetFileLoader>("vsh", "%s.vsh");
+		_ctx.getFiles()
+            .addLoader<AssetFileLoader>("tex", "%s.png");
+		_ctx.getImages()
             .addDefaultLoader<GraphicsImageLoader>();
 #endif
 
-	    _render.getPrograms().getDefinitions().get("shader")
+	    _ctx.getPrograms().getDefinitions().get("shader")
             .withShaderFile(ShaderType::Vertex, "vsh:shader")
             .withShaderFile(ShaderType::Fragment, "fsh:shader")
             .withUniform("transform", UniformKind::Transform)
             .withUniform("texture", UniformKind::Texture0)
             .withUniformValue(UniformKind::Transform, getTransform(0.25f));
 
-        _render.getMaterials().getDefinitions().get("kitten")
+        _ctx.getMaterials().getDefinitions().get("kitten")
             .withProgram("shader")
             .withTexture(UniformKind::Texture0, "tex:kitten");            
 
-        _vao.setMaterial(_render.getMaterials().load("kitten"));
+        _vao.setMaterial(_ctx.getMaterials().load("kitten"));
 
         auto vbo = std::make_shared<VertexBuffer>(Data{
          //  Position     Color             texCoords
@@ -97,6 +97,9 @@ namespace gorn
 
 	void Application::update(double dt)
 	{
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         time += dt;
         _vao.getMaterial()->setUniformValue(
             UniformKind::Transform, getTransform(time));

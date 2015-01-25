@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <gorn/base/Application.hpp>
+#include <gorn/render/Gl.hpp>
 #include <jniobject/JniObject.hpp>
 
 gorn::Application app;
@@ -23,6 +24,7 @@ extern "C" {
 
 	jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	{
+        gornInitGlExtensions();
 		return Jni::get().onLoad(vm);
 	}
 

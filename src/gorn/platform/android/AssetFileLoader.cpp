@@ -34,9 +34,9 @@ namespace gorn
             auto path = getPath(name);
 			return getJniObject().call("validateFile", false, path);
 		}
-		catch(JniException e)
+		catch(const JniException& e)
 		{
-			throw Exception(std::string("Error validating asset '")+name+"': "+e.what());
+			throw Exception(std::string("JNI Error validating asset '")+name+"': "+e.what());
 		}
     }
 
@@ -47,9 +47,9 @@ namespace gorn
             auto path = getPath(name);
 			return Data(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
 		}
-		catch(JniException e)
+		catch(const JniException& e)
 		{
-			throw Exception(std::string("Error loading file '")+name+"': "+e.what());
+			throw Exception(std::string("JNI Error loading file '")+name+"': "+e.what());
 		}
     }
 
