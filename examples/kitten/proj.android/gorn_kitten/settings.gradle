@@ -1,3 +1,0 @@
-include ':gorn'
-project(':gorn').projectDir = new File("../../../../proj.android/gorn")
-

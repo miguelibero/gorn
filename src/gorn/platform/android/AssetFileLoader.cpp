@@ -1,6 +1,6 @@
 
 #include <gorn/platform/android/AssetFileLoader.hpp>
-#include <jniobject/JniObject.hpp>
+#include <JniObject.hpp>
 #include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Exception.hpp>

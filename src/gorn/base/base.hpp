@@ -5,5 +5,6 @@
 #include <gorn/base/Data.hpp>
 #include <gorn/base/Exception.hpp>
 #include <gorn/base/String.hpp>
+#include <gorn/base/Context.hpp>
 
 #endif

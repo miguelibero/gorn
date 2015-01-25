@@ -1,6 +1,6 @@
 
 #include <gorn/platform/android/GraphicsImageLoader.hpp>
-#include <jniobject/JniObject.hpp>
+#include <JniObject.hpp>
 #include <gorn/base/Exception.hpp>
 #include <gorn/asset/Image.hpp>
 #include <android/log.h>

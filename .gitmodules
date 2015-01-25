@@ -1,0 +1,3 @@
+[submodule "lib/platform/android/jniobject"]
+	path = lib/platform/android/jniobject
+	url = git@github.com:miguelibero/jniobject.git

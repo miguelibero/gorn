@@ -5,7 +5,6 @@
 #include <gorn/asset/asset.hpp>
 #include <gorn/render/render.hpp>
 #include <gorn/platform/platform.hpp>
-#include <gorn/Context.hpp>
 
 #endif
 
