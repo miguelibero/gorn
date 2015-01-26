@@ -19,7 +19,9 @@ namespace gorn
 #elif GORN_PLATFORM_ANDROID
 		_ctx.getFiles()
             .addDefaultLoader<AssetFileLoader>("%s");
-
+#elif GORN_PLATFORM_IOS
+        _ctx.getFiles()
+        .addDefaultLoader<BundleFileLoader>("%s");
 #endif
 
         _vao.setProgram(_ctx.getPrograms().load("shader"));

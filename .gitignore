@@ -9,4 +9,6 @@ bin
 proj.linux/bin/
 *.trace
 .gradle
+.DS_Store
 build/
+xcuserdata/

@@ -17,11 +17,6 @@ namespace gorn
     {
     }
 
-	UniformValue::UniformValue(GLuint u):
-    _uint{u}, _type(Type::UnsignedInt)
-    {
-    }
-
 	UniformValue::UniformValue(const glm::mat2& m):
     _mat2{m}, _type(Type::Matrix2)
     {
@@ -44,11 +39,6 @@ namespace gorn
 
 	UniformValue::UniformValue(std::initializer_list<GLint> is):
     _int(is), _type(Type::Int)
-    {
-    }
-
-	UniformValue::UniformValue(std::initializer_list<GLuint> us):
-    _uint(us), _type(Type::UnsignedInt)
     {
     }
 
@@ -78,13 +68,6 @@ namespace gorn
     {
         _int = {i};
         _type = Type::Int;
-        return *this;
-    }
-
-	UniformValue& UniformValue::operator=(GLuint u)
-    {
-        _uint = {u};
-        _type = Type::UnsignedInt;
         return *this;
     }
 
@@ -123,13 +106,6 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<GLuint> us)
-    {
-        _uint = us;
-        _type = Type::UnsignedInt;
-        return *this;
-    }
-
 	UniformValue& UniformValue::operator=(std::initializer_list<glm::mat2> ms)
     {
         _mat2 = ms;
@@ -161,27 +137,21 @@ namespace gorn
         switch(_type)
         {
         case Type::Float:
-            glUniform1fv(location, _float.size(), _float.data());
+            glUniform1fv(location, (GLsizei)_float.size(), _float.data());
             break;
         case Type::Int:
-            glUniform1iv(location, _int.size(), _int.data());
-            break;
-        case Type::UnsignedInt:
-#ifdef GORN_PLATFORM_ANDROID
-#else
-            glUniform1uiv(location, _uint.size(), _uint.data());
-#endif
+            glUniform1iv(location, (GLsizei)_int.size(), _int.data());
             break;
         case Type::Matrix2:
-            glUniformMatrix2fv(location, _mat2.size(), false,
+            glUniformMatrix2fv(location, (GLsizei)_mat2.size(), false,
                 reinterpret_cast<const GLfloat*>(_mat2.data()));
             break;
         case Type::Matrix3:
-            glUniformMatrix3fv(location, _mat3.size(), false,
+            glUniformMatrix3fv(location, (GLsizei)_mat3.size(), false,
                 reinterpret_cast<const GLfloat*>(_mat3.data()));
             break;
         case Type::Matrix4:
-            glUniformMatrix4fv(location, _mat4.size(), false,
+            glUniformMatrix4fv(location, (GLsizei)_mat4.size(), false,
                 reinterpret_cast<const GLfloat*>(_mat4.data()));
             break;
         default:

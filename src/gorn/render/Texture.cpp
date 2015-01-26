@@ -90,7 +90,7 @@ namespace gorn
         bind();
         if(s_activeIds[pos] != _id)
         {
-            glActiveTexture(GL_TEXTURE0 + pos);
+            glActiveTexture(GL_TEXTURE0 + (GLenum)pos);
             s_activeIds[pos] = _id;
         }
     }
