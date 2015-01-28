@@ -9,6 +9,7 @@
 #include <gorn/asset/AssetLoader.hpp>
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/base/Exception.hpp>
+#include <gorn/base/String.hpp>
 
 namespace gorn
 {

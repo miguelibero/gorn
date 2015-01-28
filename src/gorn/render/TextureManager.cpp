@@ -14,7 +14,6 @@ namespace gorn
         });
     }
 
-
     const TextureManager::Definitions& TextureManager::getDefinitions() const
     {
         return _definitions;
