@@ -10,3 +10,5 @@ proj.linux/bin/
 *.trace
 .gradle
 build/
+*.obj
+*.tlog/

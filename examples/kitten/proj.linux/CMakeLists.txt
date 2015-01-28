@@ -17,6 +17,6 @@ add_subdirectory(../../../proj.linux "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gorn")
 include_directories(../../../src)
 include_directories(../../../lib)
 
-file(GLOB SOURCES "../*.cpp")
+file(GLOB SOURCES "../src/*.cpp")
 add_executable(kitten ${SOURCES})
 target_link_libraries(kitten gorn)
