@@ -10,7 +10,7 @@
 #include <gorn/base/Application.hpp>
 
 @interface GameViewController () {
-    Application _app;
+    gorn::Application _app;
 }
 @property (strong, nonatomic) EAGLContext *context;
 
@@ -78,7 +78,6 @@
 
 - (void)update
 {
-    double dt = 0;
-    _app.update(dt);
+    _app.update(self.timeSinceLastUpdate);
 }
 @end

@@ -9,6 +9,9 @@ bin
 proj.linux/bin/
 *.trace
 .gradle
+.DS_Store
 build/
+<<<<<<< HEAD
 *.obj
 *.tlog/
+xcuserdata/

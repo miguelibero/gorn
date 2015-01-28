@@ -3,6 +3,14 @@
 
 #ifdef GORN_PLATFORM_IOS
 #import <OpenGLES/ES2/glext.h>
+
+#define	glClearDepth				glClearDepthf
+#define glDeleteVertexArrays		glDeleteVertexArraysOES
+#define glGenVertexArrays			glGenVertexArraysOES
+#define glBindVertexArray			glBindVertexArrayOES
+#define glMapBuffer					glMapBufferOES
+#define glUnmapBuffer				glUnmapBufferOES
+
 #elif GORN_PLATFORM_ANDROID
 
 #define	glClearDepth				glClearDepthf

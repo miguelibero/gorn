@@ -7,6 +7,8 @@
 #elif GORN_PLATFORM_ANDROID
 #include <gorn/platform/android/AssetFileLoader.hpp>
 #include <gorn/platform/android/GraphicsImageLoader.hpp>
+#elif GORN_PLATFORM_IOS
+#include <gorn/platform/ios/BundleFileLoader.hpp>
 #endif
 
 #endif
