@@ -21,7 +21,7 @@ namespace gorn
 		_ctx.getFiles()
             .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 		_ctx.getImages()
-            .addLoader<PngImageLoader>("sprite");
+            .addDataLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
 		_ctx.getFiles()
             .addLoader<AssetFileLoader>("sprite", "%s.png");
@@ -30,7 +30,7 @@ namespace gorn
 		_ctx.getFiles()
             .addLoader<AssetFileLoader>("fsh", "%s.fsh");
 		_ctx.getImages()
-            .addLoader<GraphicsImageLoader>("sprite");
+            .addDataLoader<GraphicsImageLoader>("sprite");
 #endif
 
         _ctx.getMaterials().getDefinitions()

@@ -2,7 +2,7 @@
 #ifndef __gorn__GraphicsImageLoader__
 #define __gorn__GraphicsImageLoader__
 
-#include <gorn/asset/AssetLoader.hpp>
+#include <gorn/asset/DataAssetLoader.hpp>
 
 class JniObject;
 
@@ -10,7 +10,7 @@ namespace gorn {
 
     class Image;
 
-    class GraphicsImageLoader : public AssetLoader<Image>
+    class GraphicsImageLoader : public DataAssetLoader<Image>
     {
     private:
         static JniObject& getJniObject();

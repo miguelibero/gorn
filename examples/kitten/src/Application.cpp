@@ -31,7 +31,7 @@ namespace gorn
 		_ctx.getFiles()
             .addLoader<LocalFileLoader>("tex", "../assets/%s.png");
 		_ctx.getImages()
-            .addDefaultLoader<PngImageLoader>();
+            .addDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 		_ctx.getFiles()
             .addLoader<AssetFileLoader>("fsh", "%s.fsh");
@@ -40,7 +40,7 @@ namespace gorn
 		_ctx.getFiles()
             .addLoader<AssetFileLoader>("tex", "%s.png");
 		_ctx.getImages()
-            .addDefaultLoader<GraphicsImageLoader>();
+            .addDefaultDataLoader<GraphicsImageLoader>();
 #endif
 
 	    _ctx.getPrograms().getDefinitions().get("shader")

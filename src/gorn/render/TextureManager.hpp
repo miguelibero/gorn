@@ -6,10 +6,10 @@
 #include <functional>
 #include <gorn/base/DefinitionManager.hpp>
 #include <gorn/render/TextureDefinition.hpp>
+#include <gorn/asset/Image.hpp>
 
 namespace gorn
 {
-    class Image;
     class Texture;
 
     template<typename T>

@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <gorn/asset/AssetLoader.hpp>
+#include <gorn/asset/FileAssetLoader.hpp>
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/base/Exception.hpp>
 #include <gorn/base/String.hpp>
@@ -18,17 +19,20 @@ namespace gorn
 	{
     public:
         typedef AssetLoader<T> Loader;
+        typedef DataAssetLoader<T> DataLoader;
+        typedef FileAssetLoader<T> FileLoader;
         typedef std::vector<std::shared_ptr<Loader>> Loaders;
         typedef std::map<std::string, std::shared_ptr<T>> Assets;
 	private:
-        FileManager& _files;
+        std::shared_ptr<FileLoader> _files;
 		std::map<std::string, Loaders> _loaders;
 		std::shared_ptr<Assets> _assets;
+
+        Loaders getLoaders(const std::string& name) const;
+
         std::future<std::shared_ptr<T>> load(
             const std::shared_ptr<Loader>& loader,
-            Data&& data, const std::string& name, bool cache);
-        std::future<std::shared_ptr<T>> load(
-            Data&& data, const std::string& name, bool cache);
+            const std::string& name, bool cache);
 
 	public:
         AssetManager(FileManager& files);
@@ -43,9 +47,18 @@ namespace gorn
             std::unique_ptr<Loader>&& loader);
 
         template<typename L, typename... Args>
-        void addDefaultLoader(Args&&... args);
+        L& addDefaultLoader(Args&&... args);
         template<typename L, typename... Args>
-        void addLoader(const std::string& tag, Args&&... args);
+        L& addLoader(const std::string& tag, Args&&... args);
+
+	    void addDefaultDataLoader(std::unique_ptr<DataLoader>&& loader);
+        void addDataLoader(const std::string& tag,
+            std::unique_ptr<DataLoader>&& loader);
+
+        template<typename L, typename... Args>
+        L& addDefaultDataLoader(Args&&... args);
+        template<typename L, typename... Args>
+        L& addDataLoader(const std::string& tag, Args&&... args);
 
         bool remove(const std::shared_ptr<T>& asset);
         bool remove(const std::string& name);
@@ -54,7 +67,8 @@ namespace gorn
 
     template<typename T>
 	AssetManager<T>::AssetManager(FileManager& files):
-    _files(files), _assets(std::make_shared<Assets>())
+    _files(std::make_shared<FileLoader>(files)),
+    _assets(std::make_shared<Assets>())
     {
     }
 
@@ -77,19 +91,57 @@ namespace gorn
 	}
 
     template<typename T>
-    template<typename L, typename... Args>
-    void AssetManager<T>::addDefaultLoader(Args&&... args)
+	void AssetManager<T>::addDefaultDataLoader(
+        std::unique_ptr<DataLoader>&& loader)
     {
-        addDefaultLoader(std::unique_ptr<Loader>(
-            new L(std::forward<Args>(args)...)));
+        addDataLoader(String::kDefaultTag, std::move(loader));
+    }
+
+    template<typename T>
+    void AssetManager<T>::addDataLoader(const std::string& tag,
+        std::unique_ptr<DataLoader>&& loader)
+	{
+        if(loader == nullptr)
+        {
+            throw Exception("Cannot add an empty loader");
+        }
+		_files->addLoader(tag, std::move(loader));
+	}
+
+    template<typename T>
+    template<typename L, typename... Args>
+    L& AssetManager<T>::addDefaultLoader(Args&&... args)
+    {
+        auto ptr = new L(std::forward<Args>(args)...);
+        addDefaultLoader(std::unique_ptr<Loader>(ptr));
+        return *ptr;
     }
 
     template<typename T>
     template<typename L, typename... Args>
-    void AssetManager<T>::addLoader(const std::string& tag, Args&&... args)
+    L& AssetManager<T>::addLoader(const std::string& tag, Args&&... args)
     {
-        addLoader(tag, std::unique_ptr<Loader>(
-            new L(std::forward<Args>(args)...)));
+        auto ptr = new L(std::forward<Args>(args)...);
+        addLoader(tag, std::unique_ptr<Loader>(ptr));
+        return *ptr;
+    }
+
+    template<typename T>
+    template<typename L, typename... Args>
+    L& AssetManager<T>::addDefaultDataLoader(Args&&... args)
+    {
+        auto ptr = new L(std::forward<Args>(args)...);
+        addDefaultDataLoader(std::unique_ptr<DataLoader>(ptr));
+        return *ptr;
+    }
+
+    template<typename T>
+    template<typename L, typename... Args>
+    L& AssetManager<T>::addDataLoader(const std::string& tag, Args&&... args)
+    {
+        auto ptr = new L(std::forward<Args>(args)...);
+        addDataLoader(tag, std::unique_ptr<DataLoader>(ptr));
+        return *ptr;
     }
 
     template<typename T>
@@ -130,23 +182,8 @@ namespace gorn
     }
 
     template<typename T>
-	std::future<std::shared_ptr<T>> AssetManager<T>::load(
-        const std::string& name, bool cache)
-	{
-        auto itr = _assets->find(name);
-        if(itr != _assets->end())
-        {
-            std::promise<std::shared_ptr<T>> p;
-            p.set_value(itr->second);
-            return p.get_future();
-        }
-        auto data = _files.load(name).get();
-        return load(std::move(data), name, cache);
-	}
-
-    template<typename T>
-    std::future<std::shared_ptr<T>> AssetManager<T>::load(
-        Data&& data, const std::string& name, bool cache)
+    typename AssetManager<T>::Loaders AssetManager<T>::getLoaders(
+        const std::string& name) const
     {
         auto parts = String::splitTag(name);
         auto itr = _loaders.find(parts.first);
@@ -169,14 +206,8 @@ namespace gorn
                 }
             }
         }
-        for(auto& loader : loaders)
-	    {
-		    if(loader->validate(data))
-		    {
-			    return load(loader, std::move(data), name, cache);
-		    }
-	    }
-		throw Exception("Could not load asset.");
+        loaders.push_back(_files);
+        return loaders;
     }
 
     template<typename T>
@@ -189,12 +220,35 @@ namespace gorn
     }
 
     template<typename T>
-    std::shared_ptr<T> assetLoadAsync(Data&& data,
+	std::future<std::shared_ptr<T>> AssetManager<T>::load(
+        const std::string& name, bool cache)
+	{
+        auto itr = _assets->find(name);
+        if(itr != _assets->end())
+        {
+            std::promise<std::shared_ptr<T>> p;
+            p.set_value(itr->second);
+            return p.get_future();
+        }
+
+        auto loaders = getLoaders(name);
+        for(auto& loader : loaders)
+	    {
+		    if(loader->validate(name))
+		    {
+			    return load(loader, name, cache);
+		    }
+	    }
+		throw Exception("Could not load asset.");
+    }
+
+    template<typename T>
+    std::shared_ptr<T> assetLoadAsync(
       const std::shared_ptr<AssetLoader<T>>& loader,
       const std::shared_ptr<typename AssetManager<T>::Assets>& assets,
       const std::string& name)
     {
-        auto asset = std::make_shared<T>(loader->load(std::move(data)));
+        auto asset = std::make_shared<T>(loader->load(name));
         if(assets)
         {
             (*assets)[name] = asset;
@@ -205,11 +259,11 @@ namespace gorn
     template<typename T>
     std::future<std::shared_ptr<T>> AssetManager<T>::load(
         const std::shared_ptr<Loader>& loader,
-        Data&& data, const std::string& name, bool cache)
+            const std::string& name, bool cache)
     {
         auto assets = cache?_assets:nullptr;
         return std::async(std::launch::async, &assetLoadAsync<T>,
-          std::move(data), loader, assets, name);
+          loader, assets, name);
     }
 
 }
