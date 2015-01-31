@@ -63,19 +63,6 @@ namespace gorn
         return _size;
     }
 
-
-    float Texture::getScale() const
-    {
-        if(_size.x > _size.y)
-        {
-            return 1.0f/_size.x;
-        }
-        else
-        {
-            return 1.0f/_size.y;
-        }
-    }
-
     void Texture::bind()
     {
         if(s_currentIds[_target] != _id)
