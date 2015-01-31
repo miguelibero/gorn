@@ -45,6 +45,7 @@ namespace gorn
     {
         std::stack<glm::mat4> transforms;
         transforms.push(_baseTransform);
+        std::stack<size_t> checkpoints;
         for(auto& cmd : _commands)
         {
             VertexArray vao;
@@ -76,8 +77,21 @@ namespace gorn
                     transforms.push(cmd.getTransform());
                     break;
                 case RenderCommand::TransformMode::SetNone:
-                    transforms.emplace();
+                    transforms.push(_baseTransform);
                     break;
+                case RenderCommand::TransformMode::PushCheckpoint:
+                    checkpoints.push(transforms.size());
+                    break;
+                case RenderCommand::TransformMode::PopCheckpoint:
+                {
+                    size_t size = checkpoints.top();
+                    checkpoints.pop();
+                    while(transforms.size() > size)
+                    {
+                        transforms.pop();
+                    }
+                    break;
+                }
                 default:
                     break;
             }

@@ -27,7 +27,9 @@ namespace gorn
         PushLocal,
         PopLocal,
         SetGlobal,
-        SetNone
+        SetNone,
+        PushCheckpoint,
+        PopCheckpoint
     };
 
     class RenderCommand
