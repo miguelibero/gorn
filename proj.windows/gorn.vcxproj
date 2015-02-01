@@ -16,7 +16,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -38,16 +38,23 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\lib;..\src;..\lib\platform\windows\glew\include;$(IncludePath)</IncludePath>
+    <LibraryPath>
+    </LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Projects\gorn\lib;E:\Projects\gorn\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GORN_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,7 +85,9 @@
     <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp" />
     <ClInclude Include="..\src\gorn\base\Exception.hpp" />
     <ClInclude Include="..\src\gorn\base\String.hpp" />
+    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp" />
     <ClInclude Include="..\src\gorn\platform\platform.hpp" />
+    <ClInclude Include="..\src\gorn\platform\windows\GDIImageLoader.hpp" />
     <ClInclude Include="..\src\gorn\render\AttributeDefinition.hpp" />
     <ClInclude Include="..\src\gorn\render\Gl.hpp" />
     <ClInclude Include="..\src\gorn\render\Kinds.hpp" />
@@ -107,7 +116,9 @@
     <ClCompile Include="..\src\gorn\base\Context.cpp" />
     <ClCompile Include="..\src\gorn\base\Data.cpp" />
     <ClCompile Include="..\src\gorn\base\String.cpp" />
-    <ClCompile Include="..\src\gorn\platform\windows\Gorn.cpp" />
+    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp" />
+    <ClCompile Include="..\src\gorn\platform\windows\GDIImageLoader.cpp" />
+    <ClCompile Include="..\src\gorn\platform\windows\Main.cpp" />
     <ClCompile Include="..\src\gorn\render\AttributeDefinition.cpp" />
     <ClCompile Include="..\src\gorn\render\Gl.cpp" />
     <ClCompile Include="..\src\gorn\render\Kinds.cpp" />

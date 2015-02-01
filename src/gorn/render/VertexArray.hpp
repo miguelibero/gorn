@@ -14,8 +14,18 @@ namespace gorn
     class Program;
     class UniformValue;
 
+    enum class VertexArrayDrawMode
+    {
+        Triangles,
+        Quads,
+        Lines,
+        Points
+    };
+
     class VertexArray
     {
+    public:
+        typedef VertexArrayDrawMode DrawMode;
     private:
         static GLuint s_currentId;
         mutable GLuint _id;
@@ -24,6 +34,8 @@ namespace gorn
         std::vector<std::shared_ptr<VertexBuffer>> _vertexVbos;
         std::shared_ptr<Program> _program;
         std::shared_ptr<Material> _material;
+
+        static GLenum getGlDrawMode(DrawMode mode);
     public:
         VertexArray();
         ~VertexArray();
@@ -44,7 +56,7 @@ namespace gorn
         void setUniformValue(const std::string& name, const UniformValue& value);
 	    void setUniformValue(const GLint& location, const UniformValue& value);
 
-        void draw(GLsizei count, GLenum mode=GL_TRIANGLES, GLint offset=0);
+        void draw(GLsizei count, DrawMode mode, GLint offset=0);
     };
 }
 

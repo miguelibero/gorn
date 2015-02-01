@@ -213,11 +213,11 @@ namespace gorn
 
 	size_t DataOutputStream::write(const Data& s, size_t n, size_t start)
 	{
-        if(start>=s.size())
+        if(n == 0)
         {
-            n = 0;
+            n = s.size();
         }
-        else if(start+n>s.size())
+        if(start+n>s.size())
         {
             n = s.size()-start;
         }

@@ -117,7 +117,7 @@ namespace gorn
     template<>
     float String::convertTo(const std::string& value)
     {
-        return atof(value.c_str());
+        return (float)atof(value.c_str());
     }
 
     template<>

@@ -111,6 +111,8 @@ namespace gorn
 		glVertexAttribPointer(id, def.getCount(), def.getType(),
             def.getNormalized(), def.getStride(),
             reinterpret_cast<const GLvoid*>(def.getOffset()));
+
+        checkGlError("setting a vertex array attribute");
     }
 
     void VertexArray::addVertexData(const std::shared_ptr<VertexBuffer>& vbo,
@@ -141,19 +143,38 @@ namespace gorn
         }
     }
 
-    void VertexArray::draw(GLsizei count, GLenum mode, GLint offset)
+    GLenum VertexArray::getGlDrawMode(DrawMode mode)
+    {
+        switch(mode)
+        {
+            case DrawMode::Quads:
+                return GL_QUADS;
+            case DrawMode::Lines:
+                return GL_LINES;
+            case DrawMode::Points:
+                return GL_POINTS;
+            case DrawMode::Triangles:
+                return GL_TRIANGLES;
+            default:
+                throw Exception("Unsupported draw mode.");
+        }
+    }
+
+    void VertexArray::draw(GLsizei count, DrawMode mode, GLint offset)
     {
         activate();
+        GLenum glMode = getGlDrawMode(mode);
         if(_elementVbo && _elementType)
         {
-    		glDrawElements(mode, count, _elementType,
+    		glDrawElements(glMode, count, _elementType,
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else
         {
-		    glDrawArrays(mode, offset, count);
+		    glDrawArrays(glMode, offset, count);
         }
 
+        checkGlError("drawing a vertex array");
     }
 }
 

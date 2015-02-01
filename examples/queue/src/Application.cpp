@@ -22,6 +22,15 @@ namespace gorn
             .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 		_ctx.getImages()
             .addDataLoader<PngImageLoader>("sprite");
+#elif GORN_PLATFORM_WINDOWS
+		_ctx.getFiles()
+			.addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
+		_ctx.getFiles()
+			.addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+		_ctx.getFiles()
+			.addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+		_ctx.getImages()
+			.addDataLoader<GDIImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
 		_ctx.getFiles()
             .addLoader<AssetFileLoader>("sprite", "%s.png");

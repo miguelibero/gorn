@@ -23,7 +23,7 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withNormalized(GLboolean enabled)
+    AttributeDefinition& AttributeDefinition::withNormalized(bool enabled)
     {
         _normalized = enabled;
         return *this;

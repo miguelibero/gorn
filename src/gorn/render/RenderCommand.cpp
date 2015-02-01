@@ -19,7 +19,7 @@ namespace gorn
     }
 
     RenderCommand::RenderCommand():
-    _drawMode(GL_TRIANGLES), _transformMode(TransformMode::NoChange)
+    _drawMode(DrawMode::Triangles), _transformMode(TransformMode::NoChange)
     {
     }
 
@@ -61,7 +61,7 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withDrawMode(GLenum mode)
+    RenderCommand& RenderCommand::withDrawMode(DrawMode mode)
     {
         _drawMode = mode;
         return *this;
@@ -121,7 +121,7 @@ namespace gorn
         return _material;
     }
 
-    GLenum RenderCommand::getDrawMode() const
+    RenderCommand::DrawMode RenderCommand::getDrawMode() const
     {
         return _drawMode;
     }

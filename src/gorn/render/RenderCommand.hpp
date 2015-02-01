@@ -3,6 +3,7 @@
 
 #include <gorn/base/Data.hpp>
 #include <gorn/render/VertexDefinition.hpp>
+#include <gorn/render/VertexArray.hpp>
 #include <gorn/render/Material.hpp>
 #include <glm/glm.hpp>
 
@@ -37,11 +38,12 @@ namespace gorn
     public:
         typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandBlock Block;
+        typedef VertexArrayDrawMode DrawMode;
     private:
         std::map<std::string, Block> _attributes;
         Block _elements;
         std::shared_ptr<Material> _material;
-        GLenum _drawMode;
+        DrawMode _drawMode;
         glm::mat4 _transform;
         TransformMode _transformMode;
     public:
@@ -54,7 +56,7 @@ namespace gorn
         RenderCommand& withElements(Data&& data, GLenum type, GLsizei count);
         RenderCommand& withElements(const Data& data, GLenum type, GLsizei count);
         RenderCommand& withElementCount(GLsizei count);
-        RenderCommand& withDrawMode(GLenum mode);
+        RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);
         RenderCommand& withTransformMode(TransformMode mode);
@@ -69,7 +71,7 @@ namespace gorn
         const std::map<std::string, Block>& getAttributes() const;
 
         const std::shared_ptr<Material>& getMaterial() const;
-        GLenum getDrawMode() const;
+        DrawMode getDrawMode() const;
 
         VertexDefinition generateVertexDefinition() const;
         Data generateVertexData(const VertexDefinition& vdef) const;

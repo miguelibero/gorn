@@ -141,6 +141,12 @@
     <ClInclude Include="..\src\gorn\platform\platform.hpp">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
+      <Filter>Source Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\windows\GDIImageLoader.hpp">
+      <Filter>Source Files\platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\gorn\asset\FileLoader.cpp">
@@ -218,7 +224,13 @@
     <ClCompile Include="..\src\gorn\render\VertexDefinition.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\windows\Gorn.cpp">
+    <ClCompile Include="..\src\gorn\platform\windows\Main.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp">
+      <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\platform\windows\GDIImageLoader.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,6 +15,8 @@ namespace gorn
         glAttachShader(_id, _fragmentShader->getId());
         glAttachShader(_id, _vertexShader->getId());
         glLinkProgram(_id);
+
+        checkGlError("linking a program");
 	}
 
 	Program::~Program()
@@ -95,6 +97,7 @@ namespace gorn
 	{
         if(location >= 0)
         {
+            use();
             value.set(location);
         }
 	}

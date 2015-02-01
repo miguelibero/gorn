@@ -75,6 +75,8 @@ namespace gorn
         _size = data.size();
 		glBufferData(getGlTarget(_target), data.size(),
             data.ptr(), getGlUsage(usage));
+
+        checkGlError("setting the data of a vertex buffer");
     }
 
     void VertexBuffer::setSubData(const Data& data, size_t offset)
@@ -82,6 +84,8 @@ namespace gorn
         bind();
 		glBufferSubData(getGlTarget(_target), offset,
             data.size(), data.ptr());
+
+        checkGlError("setting the a part of the data of a vertex buffer");
     }
 
     size_t VertexBuffer::getSize() const

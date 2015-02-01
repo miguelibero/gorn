@@ -99,7 +99,7 @@ namespace gorn
 
 		size_t write(size_t n);
 		size_t write(const uint8_t* s, size_t n);
-		size_t write(const Data& s, size_t n, size_t start=0);
+		size_t write(const Data& s, size_t n=0, size_t start=0);
 		size_t write(DataInputStream& s, size_t n);
         size_t write(const std::string& s);
     };

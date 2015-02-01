@@ -13,11 +13,13 @@ namespace gorn
         Empty,
         Float,
         Int,
+        Vector2,
+        Vector3,
+        Vector4,
         Matrix2,
         Matrix3,
         Matrix4
     };
-
 
 	class UniformValue
 	{
@@ -36,9 +38,12 @@ namespace gorn
         UniformValue();
 		UniformValue(GLfloat f);
 		UniformValue(GLint i);
-		UniformValue(const glm::mat2& ms);
-		UniformValue(const glm::mat3& ms);
-		UniformValue(const glm::mat4& ms);
+		UniformValue(const glm::vec2& v);
+		UniformValue(const glm::vec3& v);
+		UniformValue(const glm::vec4& v);
+		UniformValue(const glm::mat2& m);
+		UniformValue(const glm::mat3& m);
+		UniformValue(const glm::mat4& m);
 
 		UniformValue(std::initializer_list<GLfloat> fs);
 		UniformValue(std::initializer_list<GLint> is);
@@ -48,6 +53,9 @@ namespace gorn
 
 		UniformValue& operator=(GLfloat f);
 		UniformValue& operator=(GLint i);
+		UniformValue& operator=(const glm::vec2& v);
+		UniformValue& operator=(const glm::vec3& v);
+		UniformValue& operator=(const glm::vec4& v);
 		UniformValue& operator=(const glm::mat2& m);
 		UniformValue& operator=(const glm::mat3& m);
 		UniformValue& operator=(const glm::mat4& m);
