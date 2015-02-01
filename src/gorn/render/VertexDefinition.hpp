@@ -21,7 +21,7 @@ namespace gorn
         const std::map<std::string, AttributeDefinition>& getAttributes() const;
         std::map<std::string, AttributeDefinition>& getAttributes();
 
-        GLsizei getElementSize() const;
+        size_t getElementSize() const;
 	};
 }
 

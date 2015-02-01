@@ -34,15 +34,15 @@ namespace gorn
         }, VertexBuffer::Usage::StaticDraw);
 
         _vao.setAttribute(vbo, AttributeDefinition("position")
-            .withType(GL_FLOAT)
+            .withType(BasicType::Float)
             .withCount(2)
-            .withStride(5*sizeof(GLfloat)));
+            .withStride(5*getSize(BasicType::Float)));
             
         _vao.setAttribute(vbo, AttributeDefinition("color")
-            .withType(GL_FLOAT)
+            .withType(BasicType::Float)
             .withCount(3)
-            .withStride(5*sizeof(GLfloat))
-            .withOffset(2*sizeof(GLfloat)));
+            .withStride(5*getSize(BasicType::Float))
+            .withOffset(2*getSize(BasicType::Float)));
 	}
 
 	void Application::background()

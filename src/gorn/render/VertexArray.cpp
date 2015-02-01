@@ -10,10 +10,50 @@
 
 namespace gorn
 {
+    GLenum getGlDrawMode(DrawMode mode)
+    {
+        switch(mode)
+        {
+            case DrawMode::Quads:
+                return GL_QUADS;
+            case DrawMode::Lines:
+                return GL_LINES;
+            case DrawMode::Points:
+                return GL_POINTS;
+            case DrawMode::Triangles:
+                return GL_TRIANGLES;
+            default:
+                throw Exception("Unsupported draw mode.");
+        }
+    }
+
+    GLenum getGlBasicType(BasicType type)
+    {
+        switch(type)
+        {
+            case BasicType::Byte:
+                return GL_BYTE;
+            case BasicType::UnsignedByte:
+                return GL_UNSIGNED_BYTE;
+            case BasicType::Short:
+                return GL_SHORT;
+            case BasicType::UnsignedShort:
+                return GL_UNSIGNED_SHORT;
+            case BasicType::Integer:
+                return GL_INT;
+            case BasicType::UnsignedInteger:
+                return GL_UNSIGNED_INT;
+            case BasicType::Float:
+                return GL_FLOAT;
+            default:
+                return 0;               
+        }
+    }
+
     GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
-    _id(0), _elementType(0)
+    _id(0), _elementType(BasicType::None)
     {   
     }
 	
@@ -63,7 +103,7 @@ namespace gorn
         return _material;
     }
 
-    void VertexArray::setElementData(const std::shared_ptr<VertexBuffer>& vbo, GLenum type)
+    void VertexArray::setElementData(const std::shared_ptr<VertexBuffer>& vbo, BasicType type)
     {
         _elementVbo = vbo;
         _elementType = type;
@@ -92,7 +132,7 @@ namespace gorn
     void VertexArray::setAttribute(const std::shared_ptr<VertexBuffer>& vbo,
         const AttributeDefinition& def)
     {
-        if(!def.getType())
+        if(def.getType() == BasicType::None)
         {
             throw Exception("no type defined");
         }
@@ -108,7 +148,8 @@ namespace gorn
         bind();
         vbo->bind();
 		glEnableVertexAttribArray(id);
-		glVertexAttribPointer(id, def.getCount(), def.getType(),
+		glVertexAttribPointer(id, def.getCount(), 
+            getGlBasicType(def.getType()),
             def.getNormalized(), def.getStride(),
             reinterpret_cast<const GLvoid*>(def.getOffset()));
 
@@ -143,30 +184,13 @@ namespace gorn
         }
     }
 
-    GLenum VertexArray::getGlDrawMode(DrawMode mode)
-    {
-        switch(mode)
-        {
-            case DrawMode::Quads:
-                return GL_QUADS;
-            case DrawMode::Lines:
-                return GL_LINES;
-            case DrawMode::Points:
-                return GL_POINTS;
-            case DrawMode::Triangles:
-                return GL_TRIANGLES;
-            default:
-                throw Exception("Unsupported draw mode.");
-        }
-    }
-
-    void VertexArray::draw(GLsizei count, DrawMode mode, GLint offset)
+    void VertexArray::draw(size_t count, DrawMode mode, size_t offset)
     {
         activate();
         GLenum glMode = getGlDrawMode(mode);
-        if(_elementVbo && _elementType)
+        if(_elementVbo && _elementType != BasicType::None)
         {
-    		glDrawElements(glMode, count, _elementType,
+    		glDrawElements(glMode, count, getGlBasicType(_elementType),
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else

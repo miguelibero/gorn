@@ -4,17 +4,17 @@
 namespace gorn
 {
     RenderCommandBlock::RenderCommandBlock():
-    type(0), count(0)
+    count(0), type(BasicType::None)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(Data&& data, GLenum type, GLsizei count):
-    data(std::move(data)), type(type), count(count)
+    RenderCommandBlock::RenderCommandBlock(Data&& data, size_t count, BasicType type):
+    data(std::move(data)), count(count), type(type)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(const Data& data, GLenum type, GLsizei count):
-    data(data), type(type), count(count)
+    RenderCommandBlock::RenderCommandBlock(const Data& data, size_t count, BasicType type):
+    data(data), count(count), type(type)
     {
     }
 
@@ -30,32 +30,32 @@ namespace gorn
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        Data&& data, GLenum type, GLint count)
+        Data&& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(std::move(data), type, count);
+        _attributes[name] = Block(std::move(data), count, type);
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        const Data& data, GLenum type, GLint count)
+        const Data& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(data, type, count);
+        _attributes[name] = Block(data, count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(Data&& data, GLenum type, GLsizei count)
+    RenderCommand& RenderCommand::withElements(Data&& data, size_t count, BasicType type)
     {
-        _elements = Block(std::move(data), type, count);
+        _elements = Block(std::move(data), count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const Data& data, GLenum type, GLsizei count)
+    RenderCommand& RenderCommand::withElements(const Data& data, size_t count, BasicType type)
     {
-        _elements = Block(data, type, count);
+        _elements = Block(data, count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElementCount(GLsizei count)
+    RenderCommand& RenderCommand::withElementCount(size_t count)
     {
         _elements.count = count;
         return *this;
@@ -121,7 +121,7 @@ namespace gorn
         return _material;
     }
 
-    RenderCommand::DrawMode RenderCommand::getDrawMode() const
+    DrawMode RenderCommand::getDrawMode() const
     {
         return _drawMode;
     }
@@ -148,7 +148,7 @@ namespace gorn
                 .withCount(itr->second.count)
                 .withOffset(offset);
         }
-        GLsizei stride = vdef.getElementSize();
+        size_t stride = vdef.getElementSize();
         for(auto itr = vdef.getAttributes().begin();
           itr != vdef.getAttributes().end(); ++itr)
         {

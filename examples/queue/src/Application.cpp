@@ -79,17 +79,17 @@ namespace gorn
                  0.25f, -0.25f,
                 -0.75f, -0.25f,
                  0.66f
-            }, GL_FLOAT, 2)
+            }, 2, BasicType::Float)
             .withAttribute(AttributeKind::TexCoords, {
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f,
                 0.0f, 0.0f
-            }, GL_FLOAT, 2)
+            }, 2, BasicType::Float)
             .withElements({
                 0, 1, 2,
                 2, 3, 0
-            }, GL_UNSIGNED_INT, 6);
+            }, 6, BasicType::UnsignedInteger);
 
         _ctx.getQueue().addCommand("sprite:puppy")
             .withAttribute(AttributeKind::Position, {
@@ -97,17 +97,17 @@ namespace gorn
                  0.75f,  0.25f,
                  0.75f, -0.75f,
                 -0.25f, -0.75f
-            }, GL_FLOAT, 2)
+            }, 2, BasicType::Float)
             .withAttribute(AttributeKind::TexCoords, {
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f,
                 0.0f, 0.0f
-            }, GL_FLOAT, 2)
+            }, 2, BasicType::Float)
             .withElements({
                 0, 1, 2,
                 2, 3, 0
-            }, GL_UNSIGNED_INT, 6);
+            }, 6, BasicType::UnsignedInteger);
 
 		_ctx.getQueue().draw();
 	}

@@ -57,7 +57,7 @@ namespace gorn
                 VertexBuffer::Usage::DynamicDraw,
                 VertexBuffer::Target::ArrayBuffer),
                 vdef);
-            if(cmd.getElements().type)
+            if(cmd.getElements().type != BasicType::None)
             {
                 vao.setElementData(std::make_shared<VertexBuffer>(
                     std::move(cmd.getElements().data),

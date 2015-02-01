@@ -32,9 +32,9 @@ namespace gorn
         return _attributes;
     }
 
-    GLsizei VertexDefinition::getElementSize() const
+    size_t VertexDefinition::getElementSize() const
     {
-        GLsizei size = 0;
+        size_t size = 0;
         for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
         {
             size += itr->second.getMemSize();

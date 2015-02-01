@@ -5,6 +5,7 @@ namespace gorn
     AttributeDefinition::AttributeDefinition(const std::string& name):
     _name(name),
     _normalized(false),
+    _type(BasicType::None),
     _count(1),
     _stride(0),
     _offset(0)
@@ -17,7 +18,7 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withType(GLenum type)
+    AttributeDefinition& AttributeDefinition::withType(BasicType type)
     {
         _type = type;
         return *this;
@@ -29,19 +30,19 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withCount(GLint count)
+    AttributeDefinition& AttributeDefinition::withCount(size_t count)
     {
         _count = count;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withStride(GLsizei stride)
+    AttributeDefinition& AttributeDefinition::withStride(size_t stride)
     {
         _stride = stride;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withOffset(GLsizei offset)
+    AttributeDefinition& AttributeDefinition::withOffset(size_t offset)
     {
         _offset = offset;
         return *this;
@@ -52,7 +53,7 @@ namespace gorn
         return _name;
     }
 
-    GLenum AttributeDefinition::getType() const
+    BasicType AttributeDefinition::getType() const
     {
         return _type;
     }
@@ -62,45 +63,27 @@ namespace gorn
         return _normalized;
     }
 
-    GLint AttributeDefinition::getCount() const
+    size_t AttributeDefinition::getCount() const
     {
         return _count;
     }
 
-    GLsizei AttributeDefinition::getStride() const
+    size_t AttributeDefinition::getStride() const
     {
         return _stride;
     }
 
-    GLsizei AttributeDefinition::getOffset() const
+    size_t AttributeDefinition::getOffset() const
     {
         return _offset;
     }
 
-    GLsizei AttributeDefinition::getTypeSize() const
+    size_t AttributeDefinition::getTypeSize() const
     {
-        switch(_type)
-        {
-            case GL_BYTE:
-                return sizeof(GLbyte);
-            case GL_UNSIGNED_BYTE:
-                return sizeof(GLubyte);
-            case GL_SHORT:
-                return sizeof(GLshort);
-            case GL_UNSIGNED_SHORT:
-                return sizeof(GLushort);
-            case GL_INT:
-                return sizeof(GLint);
-            case GL_UNSIGNED_INT:
-                return sizeof(GLuint);
-            case GL_FLOAT:
-                return sizeof(GLfloat);
-            default:
-                return 0;               
-        }
+        return getSize(_type);
     }
 
-    GLsizei AttributeDefinition::getMemSize() const
+    size_t AttributeDefinition::getMemSize() const
     {
         return getTypeSize()*getCount();
     }

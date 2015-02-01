@@ -66,19 +66,19 @@ namespace gorn
 
         VertexDefinition vdef;
         vdef.setAttribute("position")
-            .withType(GL_FLOAT)
+            .withType(BasicType::Float)
             .withCount(2)
-            .withStride(7*sizeof(GLfloat));
+            .withStride(7*getSize(BasicType::Float));
         vdef.setAttribute("color")
-            .withType(GL_FLOAT)
+            .withType(BasicType::Float)
             .withCount(3)
-            .withStride(7*sizeof(GLfloat))
-            .withOffset(2*sizeof(GLfloat));
+            .withStride(7*getSize(BasicType::Float))
+            .withOffset(2*getSize(BasicType::Float));
         vdef.setAttribute("texCoords")
-            .withType(GL_FLOAT)
+            .withType(BasicType::Float)
             .withCount(2)
-            .withStride(7*sizeof(GLfloat))
-            .withOffset(5*sizeof(GLfloat));
+            .withStride(7*getSize(BasicType::Float))
+            .withOffset(5*getSize(BasicType::Float));
 
         _vao.addVertexData(vbo, vdef);
 

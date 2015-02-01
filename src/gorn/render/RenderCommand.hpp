@@ -14,12 +14,12 @@ namespace gorn
     struct RenderCommandBlock
     {
         Data data;
-        GLenum type;
-        GLsizei count;
+        size_t count;
+        BasicType type;
 
         RenderCommandBlock();
-        RenderCommandBlock(Data&& data, GLenum type, GLsizei count);
-        RenderCommandBlock(const Data& data, GLenum type, GLsizei count);
+        RenderCommandBlock(Data&& data, size_t count, BasicType type);
+        RenderCommandBlock(const Data& data, size_t count, BasicType type);
     };
 
     enum class RenderCommandTransformMode
@@ -38,7 +38,6 @@ namespace gorn
     public:
         typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandBlock Block;
-        typedef VertexArrayDrawMode DrawMode;
     private:
         std::map<std::string, Block> _attributes;
         Block _elements;
@@ -50,12 +49,14 @@ namespace gorn
         RenderCommand();
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
-            Data&& data, GLenum type, GLsizei count);
+            Data&& data, size_t count, BasicType type=BasicType::Float);
         RenderCommand& withAttribute(const std::string& name,
-            const Data& data, GLenum type, GLsizei count);
-        RenderCommand& withElements(Data&& data, GLenum type, GLsizei count);
-        RenderCommand& withElements(const Data& data, GLenum type, GLsizei count);
-        RenderCommand& withElementCount(GLsizei count);
+            const Data& data, size_t count, BasicType type=BasicType::Float);
+        RenderCommand& withElements(Data&& data, size_t count,
+            BasicType type=BasicType::UnsignedInteger);
+        RenderCommand& withElements(const Data& data, size_t count,
+            BasicType type=BasicType::UnsignedInteger);
+        RenderCommand& withElementCount(size_t count);
         RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);

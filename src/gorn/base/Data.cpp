@@ -217,6 +217,10 @@ namespace gorn
         {
             n = s.size();
         }
+        if(start>s.size())
+        {
+            start = s.size();
+        }
         if(start+n>s.size())
         {
             n = s.size()-start;

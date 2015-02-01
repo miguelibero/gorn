@@ -62,15 +62,15 @@ auto vbo = VertexBuffer(Data{
 }, VertexBuffer::Usage::StaticDraw);
 
 vao.setAttribute(vbo, AttributeDefinition("position")
-    .withType(GL_FLOAT)
+    .withType(BasicType::Float)
     .withCount(2)
-    .withStride(5*sizeof(GLfloat)));
+    .withStride(5*getSize(BasicType::Float)));
             
 vao.setAttribute(vbo, AttributeDefinition("color")
-    .withType(GL_FLOAT)
+    .withType(BasicType::Float)
     .withCount(3)
-    .withStride(5*sizeof(GLfloat))
-    .withOffset(2*sizeof(GLfloat)));
+    .withStride(5*getSize(BasicType::Float))
+    .withOffset(2*getSize(BasicType::Float)));
 
 vao.draw(3);
 ```
@@ -82,6 +82,8 @@ tags.
 Context ctx;
 ctx.getFiles()
     .addLoader<LocalFileLoader>("sprite", "../%s.png");
+ctx.getImages()
+    .addDefaultDataLoader<PngImageLoader>();
 
 auto img = ctx.getImages().load("sprite:kitten");
 ```
@@ -121,19 +123,18 @@ ctx.getQueue().addCommand("sprite:kitten")
         -0.75f,  0.75f,
          0.25f,  0.75f,
          0.25f, -0.25f,
-        -0.75f, -0.25f,
-         0.66f
-    }, GL_FLOAT, 2)
+        -0.75f, -0.25f
+    }, 2, BasicType::Float)
     .withAttribute(AttributeKind::TexCoords, {
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, GL_UNSIGNED_INT, 6);
+    }, 6, BasicType::UnsignedInteger);
 
 ctx.getQueue().addCommand("sprite:puppy")
     .withAttribute(AttributeKind::Position, {
@@ -141,17 +142,17 @@ ctx.getQueue().addCommand("sprite:puppy")
          0.75f,  0.25f,
          0.75f, -0.75f,
         -0.25f, -0.75f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withAttribute(AttributeKind::TexCoords, {
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, GL_UNSIGNED_INT, 6);
+    }, 6, BasicType::UnsignedInteger);
 
 ctx.getQueue().draw();
 ```
