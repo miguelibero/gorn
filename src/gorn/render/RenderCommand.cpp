@@ -1,5 +1,6 @@
 
 #include <gorn/render/RenderCommand.hpp>
+#include <gorn/render/Kinds.hpp>
 
 namespace gorn
 {
@@ -19,7 +20,9 @@ namespace gorn
     }
 
     RenderCommand::RenderCommand():
-    _drawMode(DrawMode::Triangles), _transformMode(TransformMode::NoChange)
+    _drawMode(DrawMode::Triangles),
+    _transformMode(TransformMode::NoChange),
+    _lifetime(Lifetime::Frame)
     {
     }
 
@@ -43,21 +46,17 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(Data&& data, size_t count, BasicType type)
+    RenderCommand& RenderCommand::withElements(const std::string& name,
+        Data&& data, BasicType type)
     {
-        _elements = Block(std::move(data), count, type);
+        _elements[name] = Block(std::move(data), data.size()/getSize(type), type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const Data& data, size_t count, BasicType type)
+    RenderCommand& RenderCommand::withElements(const std::string& name,
+        const Data& data, BasicType type)
     {
-        _elements = Block(data, count, type);
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withElementCount(size_t count)
-    {
-        _elements.count = count;
+        _elements[name] = Block(data, data.size()/getSize(type), type);
         return *this;
     }
 
@@ -81,12 +80,33 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand::Block& RenderCommand::getElements()
+    RenderCommand& RenderCommand::withLifetime(Lifetime lifetime)
+    {
+        _lifetime = lifetime;
+        return *this;
+    }
+
+    RenderCommand::Block& RenderCommand::getElements(const std::string& name)
+    {
+        return _elements.at(name);
+    }
+
+    const RenderCommand::Block& RenderCommand::getElements(const std::string& name) const
+    {
+        return _elements.at(name);
+    }
+
+    bool RenderCommand::hasElements(const std::string& name) const
+    {
+        return _elements.find(name) != _elements.end();
+    }
+
+    std::map<std::string, RenderCommand::Block>& RenderCommand::getElements()
     {
         return _elements;
     }
 
-    const RenderCommand::Block& RenderCommand::getElements() const
+    const std::map<std::string, RenderCommand::Block>& RenderCommand::getElements() const
     {
         return _elements;
     }
@@ -136,6 +156,11 @@ namespace gorn
         return _transformMode;
     }
 
+    RenderCommand::Lifetime RenderCommand::getLifetime() const
+    {
+        return _lifetime;
+    }
+
     VertexDefinition RenderCommand::generateVertexDefinition() const
     {
         VertexDefinition vdef;
@@ -157,10 +182,11 @@ namespace gorn
         return vdef;
     }
 
-    Data RenderCommand::generateVertexData(const VertexDefinition& vdef) const
+    size_t RenderCommand::getVertexData(const VertexDefinition& vdef,
+        Data& vertData, Data& elmData) const
     {
-        Data data;
-        DataOutputStream out(data);
+        DataOutputStream outVert(vertData);
+        DataOutputStream outElm(elmData);
 
         size_t n = 0;
         bool finished = false;
@@ -172,8 +198,8 @@ namespace gorn
             {
                 size_t elmSize = itr->second.getMemSize();
                 auto& block = getAttribute(itr->first);
-                size_t writeSize = out.write(block.data, elmSize, n*elmSize);
-                out.write(elmSize-writeSize);
+                size_t writeSize = outVert.write(block.data, elmSize, n*elmSize);
+                outVert.write(elmSize-writeSize);
                 if(writeSize != 0)
                 {
                     finished = false;
@@ -181,9 +207,15 @@ namespace gorn
             }
             n++;
         }
-        return data;
+        // TODO: different elements for each attribute
+        auto itr = _elements.find(AttributeKind::Position);
+        if(itr != _elements.end())
+        {
+            outElm.write(itr->second.data);
+            n = itr->second.count;
+        }
+        return n;
     }
-
 
 }
 

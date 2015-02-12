@@ -1,7 +1,5 @@
 
 #include <gorn/gorn.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/constants.hpp>
 
 namespace gorn
 {
@@ -89,7 +87,7 @@ namespace gorn
             .withElements({
                 0, 1, 2,
                 2, 3, 0
-            }, 6, BasicType::UnsignedInteger);
+            }, BasicType::UnsignedInteger);
 
         _ctx.getQueue().addCommand("sprite:puppy")
             .withAttribute(AttributeKind::Position, {
@@ -107,7 +105,7 @@ namespace gorn
             .withElements({
                 0, 1, 2,
                 2, 3, 0
-            }, 6, BasicType::UnsignedInteger);
+            }, BasicType::UnsignedInteger);
 
 		_ctx.getQueue().draw();
 	}

@@ -23,6 +23,7 @@ namespace gorn
 
         Definition& get(const std::string& name);
         const Definition& get(const std::string& name) const;
+        void set(const std::string& name, const Definition& def);
         void set(const Builder& builder);
         void set(const std::string& tag, const Builder& builder);
 
@@ -31,7 +32,14 @@ namespace gorn
     template<typename D>
     DefinitionManager<D>::DefinitionManager()
     {
-    } 
+    }
+
+    template<typename D>
+    void DefinitionManager<D>::set(const std::string& name,
+        const Definition& def)
+    {
+        _definitions[name] = def;
+    }
 
     template<typename D>
     typename DefinitionManager<D>::Definition& DefinitionManager<D>::get(

@@ -4,6 +4,7 @@ namespace gorn
 {
 
     const char* AttributeKind::Position = "position";
+    const char* AttributeKind::Normal = "normal";
     const char* AttributeKind::Color = "color";
     const char* AttributeKind::TexCoords = "texCoords";
 
@@ -15,6 +16,8 @@ namespace gorn
     const char* UniformKind::Texture5 = "texture5";
     const char* UniformKind::Texture6 = "texture6";
     const char* UniformKind::Color = "color";
-    const char* UniformKind::Transform = "transform";
+    const char* UniformKind::Model = "model";
+    const char* UniformKind::View = "view";
+    const char* UniformKind::Projection = "proj";
 	
 }

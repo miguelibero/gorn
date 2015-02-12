@@ -41,7 +41,7 @@ namespace gorn
             {
                 break;
             }
-            parts.push_back(str.substr(pos, end));
+            parts.push_back(str.substr(pos, end-pos));
             pos = end+sep.size();
         }
         parts.push_back(str.substr(pos));
@@ -117,7 +117,9 @@ namespace gorn
     template<>
     float String::convertTo(const std::string& value)
     {
-        return (float)atof(value.c_str());
+        float f;
+        sscanf(value.c_str(), "%f", &f);
+        return f;
     }
 
     template<>

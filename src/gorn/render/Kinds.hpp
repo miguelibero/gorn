@@ -9,6 +9,7 @@ namespace gorn
         AttributeKind();
     public:
         static const char* Position;
+        static const char* Normal;
         static const char* Color;
         static const char* TexCoords;
     };
@@ -26,7 +27,9 @@ namespace gorn
         static const char* Texture5;
         static const char* Texture6;
         static const char* Color;
-        static const char* Transform;
+        static const char* Model;
+        static const char* View;
+        static const char* Projection;
     };
 }
 

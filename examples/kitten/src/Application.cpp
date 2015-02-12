@@ -17,7 +17,7 @@ namespace gorn
     {
         return glm::rotate(glm::mat4(),
             glm::pi<float>()*angle,
-            glm::vec3(0,0,1));
+            glm::vec3(0.0f, 0.0f , 1.0f));
     }
 
 	void Application::load()

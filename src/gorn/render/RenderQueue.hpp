@@ -25,11 +25,14 @@ namespace gorn
     private:
         MaterialManager& _materials;
         std::vector<Command> _commands;
-        glm::mat4 _baseTransform;
+        std::map<std::string, UniformValue> _uniformValues;
     public:
         RenderQueue(MaterialManager& materials);
         void setDefaultOrder(Order order);
-        void setBaseTransform(const glm::mat4& trans);
+
+        void setUniformValue(const std::string& name, const UniformValue& value);
+        bool removeUniformValue(const std::string& name);
+
         void addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();
         RenderCommand& addCommand(const std::string& material);

@@ -28,7 +28,7 @@ namespace gorn
         if (glErr != GL_NO_ERROR)
         {
             throw gorn::Exception(std::string("OpenGL error ")+
-                what+":"+(const char*)gluErrorString(glErr));
+                what+": "+(const char*)gluErrorString(glErr));
         }
     }
 }

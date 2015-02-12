@@ -6,6 +6,7 @@
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/AssetManager.hpp>
 #include <stack>
+#include <algorithm>
 
 namespace gorn
 {
@@ -18,9 +19,21 @@ namespace gorn
     {
     }
 
-    void RenderQueue::setBaseTransform(const glm::mat4& trans)
+    void RenderQueue::setUniformValue(const std::string& name,
+        const UniformValue& value)
     {
-        _baseTransform = trans;
+        _uniformValues[name] = value;
+    }
+
+    bool RenderQueue::removeUniformValue(const std::string& name)
+    {
+        auto itr = _uniformValues.find(name);
+        if(itr != _uniformValues.end())
+        {
+            _uniformValues.erase(itr);
+            return true;
+        }
+        return false;
     }
 
     void RenderQueue::addCommand(RenderCommand&& cmd)
@@ -44,26 +57,29 @@ namespace gorn
     void RenderQueue::draw()
     {
         std::stack<glm::mat4> transforms;
-        transforms.push(_baseTransform);
+        transforms.push(glm::mat4());
         std::stack<size_t> checkpoints;
         for(auto& cmd : _commands)
         {
             VertexArray vao;
             vao.setMaterial(cmd.getMaterial());
             auto vdef = cmd.generateVertexDefinition();
-            Data vdata = cmd.generateVertexData(vdef);
+            Data vertData;
+            Data elmData;
+            auto num = cmd.getVertexData(vdef, vertData, elmData);
+            auto usage = VertexBuffer::Usage::StaticDraw;
+
             vao.addVertexData(std::make_shared<VertexBuffer>(
-                std::move(vdata),
-                VertexBuffer::Usage::DynamicDraw,
-                VertexBuffer::Target::ArrayBuffer),
-                vdef);
-            if(cmd.getElements().type != BasicType::None)
+                std::move(vertData), usage,
+                VertexBuffer::Target::ArrayBuffer), vdef);
+            vao.setElementData(std::make_shared<VertexBuffer>(
+                std::move(elmData), usage,
+                VertexBuffer::Target::ElementArrayBuffer));
+
+            for(auto itr = _uniformValues.begin();
+                itr != _uniformValues.end(); ++itr)
             {
-                vao.setElementData(std::make_shared<VertexBuffer>(
-                    std::move(cmd.getElements().data),
-                    VertexBuffer::Usage::DynamicDraw,
-                    VertexBuffer::Target::ElementArrayBuffer),
-                    cmd.getElements().type);
+                vao.setUniformValue(itr->first, itr->second);
             }
             switch(cmd.getTransformMode())
             {
@@ -77,7 +93,7 @@ namespace gorn
                     transforms.push(cmd.getTransform());
                     break;
                 case RenderCommand::TransformMode::SetNone:
-                    transforms.push(_baseTransform);
+                    transforms.push(glm::mat4());
                     break;
                 case RenderCommand::TransformMode::PushCheckpoint:
                     checkpoints.push(transforms.size());
@@ -95,10 +111,13 @@ namespace gorn
                 default:
                     break;
             }
-            vao.setUniformValue(UniformKind::Transform, transforms.top());
-            vao.draw(cmd.getElements().count, cmd.getDrawMode());
+            vao.setUniformValue(UniformKind::Model, transforms.top());
+            vao.draw(num, cmd.getDrawMode());
         }
-        _commands.clear();
+        _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
+            [](const Command& cmd){
+                return cmd.getLifetime() == RenderCommandLifetime::Frame;
+            }), _commands.end());
     }
 }
 
