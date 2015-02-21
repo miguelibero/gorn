@@ -64,6 +64,10 @@ namespace gorn
             BasicType type=BasicType::UnsignedInteger);
         RenderCommand& withElements(const std::string& name, const Data& data, 
             BasicType type=BasicType::UnsignedInteger);
+        RenderCommand& withElements(Data&& data,
+            BasicType type=BasicType::UnsignedInteger);
+        RenderCommand& withElements(const Data& data, 
+            BasicType type=BasicType::UnsignedInteger);
         RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);

@@ -60,6 +60,17 @@ namespace gorn
         return *this;
     }
 
+
+    RenderCommand& RenderCommand::withElements(Data&& data, BasicType type)
+    {
+        return withElements(AttributeKind::Position, std::move(data), type);
+    }
+
+    RenderCommand& RenderCommand::withElements(const Data& data, BasicType type)
+    {
+        return withElements(AttributeKind::Position, data, type);
+    }
+
     RenderCommand& RenderCommand::withDrawMode(DrawMode mode)
     {
         _drawMode = mode;
