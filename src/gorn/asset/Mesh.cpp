@@ -30,8 +30,7 @@ namespace gorn
         return !operator==(other);
     }
 
-	Mesh::Mesh():
-    _drawMode(DrawMode::Triangles)
+	Mesh::Mesh()
     {
     }
 
@@ -131,11 +130,6 @@ namespace gorn
         _indices.push_back(std::distance(_elements.begin(), itr));
     }
 
-    void Mesh::setDrawMode(DrawMode mode)
-    {
-        _drawMode = mode;
-    }
-
     RenderCommand Mesh::render() const
     {
         Data posData;
@@ -172,7 +166,6 @@ namespace gorn
         cmd.withAttribute(AttributeKind::TexCoords,
             std::move(texData), 2, BasicType::Float);
         cmd.withElements(_indices, BasicType::UnsignedInteger);
-        cmd.withDrawMode(_drawMode);
         return cmd;
     }   
 

@@ -36,6 +36,7 @@ namespace gorn
         Mesh mesh;
         while(in.read(line) > 0)
         {
+            String::trim(line, " \t\r");
             if(line.find(kCommentPrefix) == 0)
             {
                 continue;
@@ -86,18 +87,7 @@ namespace gorn
             }
             else if(parts.at(0) == kFacePrefix)
             {
-                if(parts.size() == 4)
-                {
-                    mesh.setDrawMode(DrawMode::Triangles);
-                }
-                else if(parts.size() == 5)
-                {
-                    mesh.setDrawMode(DrawMode::Quads);
-                }
-                else
-                {
-                    throw Exception("Face should have 3 or 4 parts");
-                }
+                std::vector<Mesh::Element> elms;
                 for(auto itr = parts.begin()+1; itr != parts.end(); ++itr)
                 {
                     auto fsparts = String::split(*itr, kFaceSeparator);
@@ -121,11 +111,30 @@ namespace gorn
                     {
                         elm.normal = fparts[2];
                     }
-                    mesh.addElement(std::move(elm));
+                    elms.push_back(std::move(elm));
+                }
+                if(elms.size() == 4)
+                {
+                    // convert quad to 2 tris
+                    mesh.addElement(elms.at(0));
+                    mesh.addElement(elms.at(1));
+                    mesh.addElement(elms.at(2));
+                    mesh.addElement(elms.at(2));
+                    mesh.addElement(elms.at(3));
+                    mesh.addElement(elms.at(0));
+                }
+                else if(elms.size() == 3)
+                {
+                    mesh.addElement(elms.at(0));
+                    mesh.addElement(elms.at(1));
+                    mesh.addElement(elms.at(2));
+                }
+                else
+                {
+                    throw Exception("Face should contain 3 or 4 elements");
                 }
             }
-        }
-        
+        } 
         return mesh;
     }
 }

@@ -2,7 +2,6 @@
 #define __gorn__Mesh__
 
 #include <vector>
-#include <gorn/render/Enums.hpp>
 #include <glm/glm.hpp>
 
 namespace gorn
@@ -40,7 +39,6 @@ namespace gorn
         TexCoords _texCoords;
         Elements _elements;
         Indices _indices;
-        DrawMode _drawMode;
 
 	public:
 		Mesh();
@@ -62,8 +60,6 @@ namespace gorn
         void addTexCoord(glm::vec2&& coord);
         void addElement(const Element& elm);
         void addElement(Element&& elm);
-
-        void setDrawMode(DrawMode mode);
 
 	    RenderCommand render() const;
 	};
