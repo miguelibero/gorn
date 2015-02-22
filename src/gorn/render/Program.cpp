@@ -86,6 +86,16 @@ namespace gorn
         return itr->second;
 	}
 
+    bool Program::hasAttribute(const std::string& name) const
+    {
+        return getAttribute(name) >= 0;
+    }
+
+    bool Program::hasUniform(const std::string& name) const
+    {
+        return getUniform(name) >= 0;
+    }
+
     void Program::setUniformValue(const std::string& name,
         const UniformValue& value)
     {

@@ -1,6 +1,7 @@
 
 #include <gorn/render/RenderCommand.hpp>
 #include <gorn/render/Kinds.hpp>
+#include <gorn/render/Program.hpp>
 
 namespace gorn
 {
@@ -9,12 +10,14 @@ namespace gorn
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(Data&& data, size_t count, BasicType type):
+    RenderCommandBlock::RenderCommandBlock(
+        Data&& data, size_t count, BasicType type):
     data(std::move(data)), count(count), type(type)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(const Data& data, size_t count, BasicType type):
+    RenderCommandBlock::RenderCommandBlock(
+        const Data& data, size_t count, BasicType type):
     data(data), count(count), type(type)
     {
     }
@@ -26,7 +29,8 @@ namespace gorn
     {
     }
 
-    RenderCommand& RenderCommand::withMaterial(const std::shared_ptr<Material>& material)
+    RenderCommand& RenderCommand::withMaterial(
+        const std::shared_ptr<Material>& material)
     {
         _material = material;
         return *this;
@@ -46,29 +50,16 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const std::string& name,
-        Data&& data, BasicType type)
-    {
-        _elements[name] = Block(std::move(data), data.size()/getSize(type), type);
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withElements(const std::string& name,
-        const Data& data, BasicType type)
-    {
-        _elements[name] = Block(data, data.size()/getSize(type), type);
-        return *this;
-    }
-
-
     RenderCommand& RenderCommand::withElements(Data&& data, BasicType type)
     {
-        return withElements(AttributeKind::Position, std::move(data), type);
+         _elements = Block(std::move(data), data.size()/getSize(type), type);
+        return *this;
     }
 
     RenderCommand& RenderCommand::withElements(const Data& data, BasicType type)
     {
-        return withElements(AttributeKind::Position, data, type);
+         _elements = Block(data, data.size()/getSize(type), type);
+        return *this;
     }
 
     RenderCommand& RenderCommand::withDrawMode(DrawMode mode)
@@ -97,29 +88,19 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand::Block& RenderCommand::getElements(const std::string& name)
-    {
-        return _elements.at(name);
-    }
-
-    const RenderCommand::Block& RenderCommand::getElements(const std::string& name) const
-    {
-        return _elements.at(name);
-    }
-
-    bool RenderCommand::hasElements(const std::string& name) const
-    {
-        return _elements.find(name) != _elements.end();
-    }
-
-    std::map<std::string, RenderCommand::Block>& RenderCommand::getElements()
+    RenderCommand::Block& RenderCommand::getElements()
     {
         return _elements;
     }
 
-    const std::map<std::string, RenderCommand::Block>& RenderCommand::getElements() const
+    const RenderCommand::Block& RenderCommand::getElements() const
     {
         return _elements;
+    }
+
+    bool RenderCommand::hasElements() const
+    {
+        return _elements.type != BasicType::None;
     }
 
     RenderCommand::Block& RenderCommand::getAttribute(const std::string& name)
@@ -137,12 +118,12 @@ namespace gorn
         return _attributes.find(name) != _attributes.end();
     }
 
-    std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes()
+    RenderCommand::BlockMap& RenderCommand::getAttributes()
     {
         return _attributes;
     }
 
-    const std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes() const
+    const RenderCommand::BlockMap& RenderCommand::getAttributes() const
     {
         return _attributes;
     }
@@ -172,17 +153,20 @@ namespace gorn
         return _lifetime;
     }
 
-    VertexDefinition RenderCommand::generateVertexDefinition() const
+    VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
     {
         VertexDefinition vdef;
         for(auto itr = _attributes.begin();
           itr != _attributes.end(); ++itr)
         {
-            auto offset = vdef.getElementSize();
-            vdef.setAttribute(itr->first)
-                .withType(itr->second.type)
-                .withCount(itr->second.count)
-                .withOffset(offset);
+            if(prog.hasAttribute(itr->first))
+            {
+                auto offset = vdef.getElementSize();
+                vdef.setAttribute(itr->first)
+                    .withType(itr->second.type)
+                    .withCount(itr->second.count)
+                    .withOffset(offset);
+            }
         }
         size_t stride = vdef.getElementSize();
         for(auto itr = vdef.getAttributes().begin();
@@ -200,6 +184,7 @@ namespace gorn
         DataOutputStream outElm(elmData);
 
         size_t n = 0;
+
         bool finished = false;
         while(!finished)
         {
@@ -218,12 +203,11 @@ namespace gorn
             }
             n++;
         }
-        // TODO: different elements for each attribute
-        auto itr = _elements.find(AttributeKind::Position);
-        if(itr != _elements.end())
+
+        if(hasElements())
         {
-            outElm.write(itr->second.data);
-            n = itr->second.count;
+            outElm.write(_elements.data);
+            n = _elements.count;
         }
         return n;
     }

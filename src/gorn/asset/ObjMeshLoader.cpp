@@ -1,30 +1,23 @@
 
 
 #include <gorn/asset/ObjMeshLoader.hpp>
-#include <gorn/render/RenderCommand.hpp>
+#include <gorn/asset/Mesh.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
+#include <gorn/base/Exception.hpp>
 #include <string>
+#include <algorithm>
 
 namespace gorn
 {
-    const char* kElementPrefix = "f";
+    const char* kFacePrefix = "f";
+    const char* kPositionPrefix = "v";
+    const char* kNormalPrefix = "vn";
+    const char* kTexCoordPrefix = "vt";
     const char* kComponentSeparator = " ";
     const char* kFaceSeparator = "/";
     const char  kCommentPrefix = '#';
-
-    const std::map<std::string,std::string> kAttrPrefixes = {
-        {"v",  AttributeKind::Position},
-        {"vt", AttributeKind::TexCoords},
-        {"vn", AttributeKind::Normal}
-    };
-
-    const std::vector<std::string> kFaceComponents = {
-        AttributeKind::Position,
-        AttributeKind::TexCoords,
-        AttributeKind::Normal
-    };
 
     ObjMeshLoader::ObjMeshLoader()
     {
@@ -35,13 +28,12 @@ namespace gorn
         return true;
     }
 
-    RenderCommand ObjMeshLoader::load(Data&& data) const
+    Mesh ObjMeshLoader::load(Data&& data) const
     {
         DataInputStream in(data);
         std::string line;
 
-        std::map<std::string, std::vector<float>> attrData;
-        std::map<std::string, std::vector<unsigned>> elmData;
+        Mesh mesh;
         while(in.read(line) > 0)
         {
             if(line.find(kCommentPrefix) == 0)
@@ -49,47 +41,91 @@ namespace gorn
                 continue;
             }
             auto parts = String::split(line, kComponentSeparator);
+            parts.erase(std::remove_if(parts.begin(), parts.end(),
+                [](const std::string& part){
+                    return part.empty();
+                }), parts.end());
             if(parts.empty())
             {
                 continue;
             }
-            auto itr = kAttrPrefixes.find(parts.at(0));
-            if(itr != kAttrPrefixes.end())
+            if(parts.at(0) == kPositionPrefix)
             {
-                auto& type = itr->second;
-                for(auto itr = parts.begin()+1; itr != parts.end(); ++itr)
+                if(parts.size() < 4)
                 {
-                    attrData[type].push_back(
-                        String::convertTo<float>(*itr));
+                    throw Exception("Position should contain 3 floats");
                 }
+                mesh.addPosition(glm::vec3(
+                    String::convertTo<float>(parts[1]),
+                    String::convertTo<float>(parts[2]),
+                    String::convertTo<float>(parts[3])
+                ));
             }
-            else if(parts.at(0) == kElementPrefix)
+            else if(parts.at(0) == kNormalPrefix)
             {
+                if(parts.size() < 4)
+                {
+                    throw Exception("Normal should contain 3 floats");
+                }
+                mesh.addNormal(glm::vec3(
+                    String::convertTo<float>(parts[1]),
+                    String::convertTo<float>(parts[2]),
+                    String::convertTo<float>(parts[3])
+                ));
+            }
+            else if(parts.at(0) == kTexCoordPrefix)
+            {
+                if(parts.size() < 3)
+                {
+                    throw Exception("Texture should contain 2 floats");
+                }
+                mesh.addTexCoord(glm::vec2(
+                    String::convertTo<float>(parts[1]),
+                    String::convertTo<float>(parts[2])
+                ));
+            }
+            else if(parts.at(0) == kFacePrefix)
+            {
+                if(parts.size() == 4)
+                {
+                    mesh.setDrawMode(DrawMode::Triangles);
+                }
+                else if(parts.size() == 5)
+                {
+                    mesh.setDrawMode(DrawMode::Quads);
+                }
+                else
+                {
+                    throw Exception("Face should have 3 or 4 parts");
+                }
                 for(auto itr = parts.begin()+1; itr != parts.end(); ++itr)
                 {
-                    auto fparts = String::split(*itr, kFaceSeparator);
-                    for(size_t i=0; i < fparts.size()
-                        && i < kFaceComponents.size(); ++i)
+                    auto fsparts = String::split(*itr, kFaceSeparator);
+                    std::vector<MeshElement::elm_t> fparts;
+                    fparts.reserve(fsparts.size());
+                    for(auto& part : fsparts)
                     {
-                        elmData[kFaceComponents[i]].push_back(
-                            String::convertTo<unsigned>(fparts[i])-1);
+                        fparts.push_back(
+                            String::convertTo<MeshElement::elm_t>(part)-1);
                     }
+                    Mesh::Element elm;
+                    if(fparts.size() > 0)
+                    {
+                        elm.position = fparts[0];
+                    }
+                    if(fparts.size() > 1)
+                    {
+                        elm.texCoord = fparts[1];
+                    }
+                    if(fparts.size() > 2)
+                    {
+                        elm.normal = fparts[2];
+                    }
+                    mesh.addElement(std::move(elm));
                 }
             }
         }
-        RenderCommand cmd;
-
-        for(auto itr = attrData.begin(); itr != attrData.end(); ++itr)
-        {
-            cmd.withAttribute(itr->first, std::move(itr->second),
-                3, BasicType::Float);
-        }
-        for(auto itr = elmData.begin(); itr != elmData.end(); ++itr)
-        {
-            cmd.withElements(itr->first, std::move(itr->second),
-                BasicType::UnsignedInteger);
-        }
-
-        return cmd;
+        
+        return mesh;
     }
 }

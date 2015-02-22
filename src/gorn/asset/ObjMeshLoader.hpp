@@ -5,14 +5,14 @@
 
 namespace gorn
 {
-    class RenderCommand;
+    class Mesh;
 
-	class ObjMeshLoader : public DataAssetLoader<RenderCommand>
+	class ObjMeshLoader : public DataAssetLoader<Mesh>
 	{
     public:
         ObjMeshLoader();
         bool validate(const Data& data) const;
-        RenderCommand load(Data&& data) const;
+        Mesh load(Data&& data) const;
 	};
 }
 

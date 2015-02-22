@@ -63,7 +63,8 @@ namespace gorn
         {
             VertexArray vao;
             vao.setMaterial(cmd.getMaterial());
-            auto vdef = cmd.generateVertexDefinition();
+            auto vdef = cmd.getVertexDefinition(
+                *cmd.getMaterial()->getProgram());
             Data vertData;
             Data elmData;
             auto num = cmd.getVertexData(vdef, vertData, elmData);

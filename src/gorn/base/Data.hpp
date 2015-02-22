@@ -102,7 +102,19 @@ namespace gorn
 		size_t write(const Data& s, size_t n=0, size_t start=0);
 		size_t write(DataInputStream& s, size_t n);
         size_t write(const std::string& s);
+
+        template<typename T>
+        size_t write(std::initializer_list<T> list);
     };
+
+    template<typename T>
+    size_t DataOutputStream::write(std::initializer_list<T> list)
+    {
+        return write(
+            reinterpret_cast<const uint8_t*>(list.begin()),
+            list.size()*sizeof(T)/sizeof(uint8_t)
+        );
+    }
 }
 
 #endif

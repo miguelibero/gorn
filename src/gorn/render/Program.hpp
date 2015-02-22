@@ -36,6 +36,9 @@ namespace gorn
         GLint getAttribute(const std::string& name) const;
 	    GLint getUniform(const std::string& name) const;
 
+        bool hasAttribute(const std::string& name) const;
+        bool hasUniform(const std::string& name) const;
+
         void setUniformValue(const std::string& name,
             const UniformValue& value);
 	    void setUniformValue(const GLint& location, const UniformValue& value);

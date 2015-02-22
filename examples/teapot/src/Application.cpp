@@ -5,7 +5,7 @@
 namespace gorn
 {
 	Context _ctx;
-
+    std::shared_ptr<Mesh> _mesh;
 
 	Application::Application()
 	{
@@ -16,6 +16,8 @@ namespace gorn
 #ifdef GORN_PLATFORM_LINUX
 		_ctx.getFiles()
             .addDefaultLoader<LocalFileLoader>("../assets/%s");
+		_ctx.getImages()
+            .addDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 		_ctx.getFiles()
             .addDefaultLoader<AssetFileLoader>("%s");
@@ -26,9 +28,10 @@ namespace gorn
 
         _ctx.getMaterials().getDefinitions()
             .set("metal", MaterialDefinition()
+                .withTexture(UniformKind::Texture0, "default.png")
                 .withProgram("diffuse"));
 
-        AssetManager<RenderCommand> meshes(_ctx.getFiles());
+        AssetManager<Mesh> meshes(_ctx.getFiles());
         meshes.addDefaultDataLoader<ObjMeshLoader>();
 
         _ctx.getQueue().setUniformValue(UniformKind::Projection,
@@ -36,21 +39,17 @@ namespace gorn
                 glm::pi<float>()/6.0f,
                 4.0f / 3.0f,
                 0.1f,
-                100.0f
+                400.0f
             ));
 
-        _ctx.getQueue().setUniformValue(UniformKind::View,
+        _ctx.getQueue().setUniformValue(UniformKind::View,  
             glm::lookAt(
-                glm::vec3(0.0f, 1.5f, 10.0f),
-                glm::vec3(0.0f, 1.5f, 0.0f),
+                glm::vec3(0.0f, 200.0f, 300.0f),
+                glm::vec3(0.0f, 50.0f, 0.0f),
                 glm::vec3(0.0f, 1.0f ,0.0f)
             ));
 
-        auto cmd = *meshes.load("teapot.obj").get().get();
-        cmd.withMaterial(_ctx.getMaterials().load("metal"));
-        cmd.withLifetime(RenderCommand::Lifetime::Forever);
-        _ctx.getQueue().addCommand(std::move(cmd));
-
+        _mesh = meshes.load("teapot.obj").get();
 	}
 
 	void Application::background()
@@ -69,6 +68,10 @@ namespace gorn
 	{
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        auto cmd = _mesh->render();
+        cmd.withMaterial(_ctx.getMaterials().load("metal"));
+        _ctx.getQueue().addCommand(std::move(cmd));
 
 		_ctx.getQueue().draw();
 	}
