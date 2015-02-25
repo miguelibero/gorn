@@ -48,6 +48,23 @@ namespace gorn
         }
     }
 
+    bool ProgramManager::validateShader(
+        const ProgramDefinition& def, ShaderType type) const
+    {
+        if(def.hasShaderData(type))
+        {
+            return true;
+        }
+        else if(def.hasShaderFile(type))
+        {
+            return validateShader(def.getShaderFile(type), type);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     std::shared_ptr<Shader> ProgramManager::loadShader(
         const std::string& name, ShaderType type)
     {
@@ -89,5 +106,41 @@ namespace gorn
         return program;
     }
 
+    bool ProgramManager::validate(const std::string& name) const
+    {
+        auto itr = _programs.find(name);
+        if(itr != _programs.end())
+        {
+            return true;
+        }
+        if(!getDefinitions().has(name))
+        {
+            return false;
+        }
+        auto def = getDefinitions().get(name);
+        if(!validateShader(def, ShaderType::Vertex))
+        {
+            return false;
+        }
+        if(!validateShader(def, ShaderType::Fragment))
+        {
+            return false;
+        }
+        return true;
+    }
 
+    bool ProgramManager::validateShader(
+        const std::string& name, ShaderType type) const
+    {
+        auto sitr = _shaders.find(type);
+        if(sitr != _shaders.end())
+        {
+            auto itr = sitr->second.find(name);
+            if(itr != sitr->second.end())
+            {
+                return true;
+            }    
+        }
+        return _files.validate(name);
+    }
 }

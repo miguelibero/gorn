@@ -28,6 +28,29 @@ namespace gorn
         return _definitions;
     }
 
+    bool MaterialManager::validate(const std::string& name) const
+    {
+        auto itr = _materials.find(name);
+        if(itr != _materials.end())
+        {
+            return true;
+        }
+        auto def = getDefinitions().get(name);
+        auto& pname = def.getProgram();
+        if(!_programs.validate(pname))
+        {
+            return false;
+        }
+        for(auto itr = def.getTextures().begin();
+            itr != def.getTextures().end(); ++itr)
+        {
+            if(!_textures.validate(itr->second))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     std::shared_ptr<Material> MaterialManager::load(const std::string& name)
     {

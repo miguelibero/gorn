@@ -30,6 +30,7 @@ namespace gorn
         const Definitions& getDefinitions() const;
         Definitions& getDefinitions();
 
+        bool validate(const std::string& name) const;
         std::shared_ptr<Material> load(const std::string& name);
     };
 

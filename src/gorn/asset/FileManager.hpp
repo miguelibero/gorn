@@ -21,7 +21,10 @@ namespace gorn
 		std::map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
         std::future<Data> load(const std::shared_ptr<Loader>& loader, const std::string& name);
 
+        std::vector<std::shared_ptr<Loader>>
+            findLoaders(const std::pair<std::string,std::string>& parts) const;
 	public:
+        bool validate(const std::string& name) const;
 	    std::future<Data> load(const std::string& name, bool cache=false);
         void preload(const std::string& name, Data&& data);
 

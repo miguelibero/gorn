@@ -24,6 +24,20 @@ namespace gorn
         return _definitions;
     }
 
+    bool TextureManager::validate(const std::string& name) const
+    {
+        auto itr = _textures.find(name);
+        if(itr != _textures.end())
+        {
+            return true;
+        }
+        if(!getDefinitions().has(name))
+        {
+            return false;
+        }
+        auto def = getDefinitions().get(name);
+        return _images.validate(def.getImageName());
+    }
 
     std::shared_ptr<Texture> TextureManager::load(const std::string& name)
     {

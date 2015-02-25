@@ -5,6 +5,7 @@
 #include <memory>
 #include <functional>
 #include <gorn/base/String.hpp>
+#include <gorn/base/Exception.hpp>
 
 namespace gorn
 {
@@ -22,11 +23,11 @@ namespace gorn
         DefinitionManager();
 
         Definition& get(const std::string& name);
-        const Definition& get(const std::string& name) const;
+        Definition get(const std::string& name) const;
+        bool has(const std::string& name) const;
         void set(const std::string& name, const Definition& def);
         void set(const Builder& builder);
         void set(const std::string& tag, const Builder& builder);
-
     };
 
     template<typename D>
@@ -68,10 +69,49 @@ namespace gorn
     }
 
     template<typename D>
-    const typename DefinitionManager<D>::Definition& DefinitionManager<D>::get(
+    typename DefinitionManager<D>::Definition DefinitionManager<D>::get(
         const std::string& name) const
     {
-        return _definitions.at(name);
+        auto itr = _definitions.find(name);
+        if(itr != _definitions.end())
+        {
+            return itr->second;
+        }
+        auto parts = String::splitTag(name);
+        auto bitr = _builders.find(parts.first);
+        if(bitr == _builders.end())
+        {
+            bitr = _builders.find(String::kDefaultTag);
+        }
+        if(bitr != _builders.end())
+        {
+            return bitr->second(name);
+        }
+        else
+        {
+            throw new Exception("Could not find definition");
+        }
+    }
+
+    template<typename D>
+    bool DefinitionManager<D>::has(const std::string& name) const
+    {
+        auto itr = _definitions.find(name);
+        if(itr != _definitions.end())
+        {
+            return true;
+        }
+        auto parts = String::splitTag(name);
+        auto bitr = _builders.find(parts.first);
+        if(bitr == _builders.end())
+        {
+            bitr = _builders.find(String::kDefaultTag);
+        }
+        if(bitr != _builders.end())
+        {
+            return true;
+        }
+        return false;
     }
 
     template<typename D>

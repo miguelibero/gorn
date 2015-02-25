@@ -36,6 +36,9 @@ namespace gorn
 
 	public:
         AssetManager(FileManager& files);
+
+        bool validate(const std::string& name) const;
+
 	    std::future<std::shared_ptr<T>> load(
             const std::string& name, bool cache=false);
 
@@ -217,6 +220,26 @@ namespace gorn
         auto asset = std::make_shared<T>(std::forward<Args>(args)...);
         (*_assets)[name] = asset;
         return *asset;
+    }
+
+    template<typename T>
+    bool AssetManager<T>::validate(const std::string& name) const
+    {
+        auto itr = _assets->find(name);
+        if(itr != _assets->end())
+        {
+            return true;
+        }
+
+        auto loaders = getLoaders(name);
+        for(auto& loader : loaders)
+	    {
+		    if(loader->validate(name))
+		    {
+			    return true;
+		    }
+	    }
+        return false;
     }
 
     template<typename T>

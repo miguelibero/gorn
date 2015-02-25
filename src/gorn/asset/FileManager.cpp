@@ -23,20 +23,9 @@ namespace gorn
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
-	std::future<Data> FileManager::load(const std::string& aname, bool cache)
-	{
-        {
-            auto itr = _preloads.find(aname);
-            if(itr != _preloads.end())
-            {
-                std::promise<Data> p;
-                p.set_value(itr->second);
-                return p.get_future();
-            }
-        }
-
-        auto parts = String::splitTag(aname);
-
+    std::vector<std::shared_ptr<FileManager::Loader>> FileManager::findLoaders(
+        const std::pair<std::string,std::string>& parts) const
+    {
         std::vector<std::shared_ptr<Loader>> loaders;
         if(parts.first != String::kDefaultTag)
         {
@@ -59,6 +48,41 @@ namespace gorn
                 }
             }
         }
+        return loaders;
+    }
+
+    bool FileManager::validate(const std::string& name) const
+    {
+        auto itr = _preloads.find(name);
+        if(itr != _preloads.end())
+        {
+            return true;
+        }
+
+        auto parts = String::splitTag(name);
+        auto loaders = findLoaders(parts);
+        for(auto& loader : loaders)
+        {
+            if(loader->validate(parts.second))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+	std::future<Data> FileManager::load(const std::string& name, bool cache)
+	{
+        auto itr = _preloads.find(name);
+        if(itr != _preloads.end())
+        {
+            std::promise<Data> p;
+            p.set_value(itr->second);
+            return p.get_future();
+        }
+
+        auto parts = String::splitTag(name);
+        auto loaders = findLoaders(parts);
         for(auto& loader : loaders)
         {
             if(loader->validate(parts.second))
