@@ -61,27 +61,6 @@ namespace gorn
         std::stack<size_t> checkpoints;
         for(auto& cmd : _commands)
         {
-            VertexArray vao;
-            vao.setMaterial(cmd.getMaterial());
-            auto vdef = cmd.getVertexDefinition(
-                *cmd.getMaterial()->getProgram());
-            Data vertData;
-            Data elmData;
-            auto num = cmd.getVertexData(vdef, vertData, elmData);
-            auto usage = VertexBuffer::Usage::StaticDraw;
-
-            vao.addVertexData(std::make_shared<VertexBuffer>(
-                std::move(vertData), usage,
-                VertexBuffer::Target::ArrayBuffer), vdef);
-            vao.setElementData(std::make_shared<VertexBuffer>(
-                std::move(elmData), usage,
-                VertexBuffer::Target::ElementArrayBuffer));
-
-            for(auto itr = _uniformValues.begin();
-                itr != _uniformValues.end(); ++itr)
-            {
-                vao.setUniformValue(itr->first, itr->second);
-            }
             switch(cmd.getTransformMode())
             {
                 case RenderCommand::TransformMode::PushLocal:
@@ -112,8 +91,33 @@ namespace gorn
                 default:
                     break;
             }
-            vao.setUniformValue(UniformKind::Model, transforms.top());
-            vao.draw(num, cmd.getDrawMode());
+
+            if(cmd.getMaterial())
+            {
+                VertexArray vao;
+                vao.setMaterial(cmd.getMaterial());
+                auto vdef = cmd.getVertexDefinition(
+                    *cmd.getMaterial()->getProgram());
+                Data vertData;
+                Data elmData;
+                auto num = cmd.getVertexData(vdef, vertData, elmData);
+                auto usage = VertexBuffer::Usage::StaticDraw;
+
+                vao.addVertexData(std::make_shared<VertexBuffer>(
+                    std::move(vertData), usage,
+                    VertexBuffer::Target::ArrayBuffer), vdef);
+                vao.setElementData(std::make_shared<VertexBuffer>(
+                    std::move(elmData), usage,
+                    VertexBuffer::Target::ElementArrayBuffer));
+
+                for(auto itr = _uniformValues.begin();
+                    itr != _uniformValues.end(); ++itr)
+                {
+                    vao.setUniformValue(itr->first, itr->second);
+                }
+                vao.setUniformValue(UniformKind::Model, transforms.top());
+                vao.draw(num, cmd.getDrawMode());
+            }
         }
         _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
             [](const Command& cmd){

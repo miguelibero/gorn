@@ -39,6 +39,7 @@ namespace gorn
 		size_t size() const;
         bool empty() const;
 
+        bool isBinary() const;
 
         static Data readFile(const std::string& path);
 

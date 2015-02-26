@@ -23,7 +23,7 @@ namespace gorn
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
-    std::vector<std::shared_ptr<FileManager::Loader>> FileManager::findLoaders(
+    std::vector<std::shared_ptr<FileManager::Loader>> FileManager::getLoaders(
         const std::pair<std::string,std::string>& parts) const
     {
         std::vector<std::shared_ptr<Loader>> loaders;
@@ -60,7 +60,7 @@ namespace gorn
         }
 
         auto parts = String::splitTag(name);
-        auto loaders = findLoaders(parts);
+        auto loaders = getLoaders(parts);
         for(auto& loader : loaders)
         {
             if(loader->validate(parts.second))
@@ -82,7 +82,7 @@ namespace gorn
         }
 
         auto parts = String::splitTag(name);
-        auto loaders = findLoaders(parts);
+        auto loaders = getLoaders(parts);
         for(auto& loader : loaders)
         {
             if(loader->validate(parts.second))

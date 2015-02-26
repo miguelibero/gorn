@@ -1,6 +1,7 @@
 #include <gorn/base/Data.hpp>
 #include <gorn/base/Exception.hpp>
 #include <cstring>
+#include <algorithm>
 
 namespace gorn
 {
@@ -107,6 +108,12 @@ namespace gorn
     bool Data::empty() const
     {
         return _mem.empty();
+    }
+
+    bool Data::isBinary() const
+    {
+        auto itr = std::find(_mem.begin(), _mem.end(), 0);
+        return itr != _mem.end();
     }
 
     DataInputStream::DataInputStream(const Data& data):

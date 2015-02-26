@@ -22,7 +22,7 @@ namespace gorn
         glCompileShader(_id);
         GLint status;
         glGetShaderiv(_id, GL_COMPILE_STATUS, &status);
-        if(status != GL_TRUE)
+        if((GLenum)status == GL_FALSE)
         {
             char buffer[512];
             glGetShaderInfoLog(_id, sizeof(buffer), NULL, buffer);

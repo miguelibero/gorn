@@ -25,7 +25,7 @@ namespace gorn
 
     bool ObjMeshLoader::validate(const Data& data) const
     {
-        return true;
+        return !data.isBinary();
     }
 
     Mesh ObjMeshLoader::load(Data&& data) const
