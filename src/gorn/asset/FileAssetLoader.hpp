@@ -114,7 +114,15 @@ namespace gorn
     bool FileAssetLoader<T>::validate(const std::string& name) const
     {
         auto loaders = getLoaders(name);
-        return !loaders.empty();
+        auto data = _files.load(name).get();
+        for(auto& loader : loaders)
+	    {
+		    if(loader->validate(data))
+		    {
+			    return true;
+		    }
+	    }
+        return false;
     }
 
     template<typename T>

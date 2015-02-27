@@ -39,6 +39,18 @@ namespace gorn
         return _images.validate(def.getImageName());
     }
 
+    glm::vec2 TextureManager::loadSize(const std::string& name)
+    {
+        auto itr = _textures.find(name);
+        if(itr != _textures.end())
+        {
+            return itr->second->getSize();
+        }
+        auto& def = getDefinitions().get(name);
+        auto img = _images.load(def.getImageName()).get();
+        return glm::vec2(img->getWidth(), img->getHeight());
+    }
+
     std::shared_ptr<Texture> TextureManager::load(const std::string& name)
     {
         auto itr = _textures.find(name);
@@ -47,7 +59,7 @@ namespace gorn
             return itr->second;
         }
         auto& def = getDefinitions().get(name);
-        auto img = _images.load(def.getImageName(), false).get();
+        auto img = _images.load(def.getImageName()).get();
         auto tex = std::make_shared<Texture>(def.getTarget());
         for(auto itr = def.getIntParameters().begin();
             itr != def.getIntParameters().end(); ++itr)

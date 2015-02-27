@@ -3,6 +3,7 @@
 
 #include <gorn/render/Gl.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <initializer_list>
 
@@ -28,11 +29,18 @@ namespace gorn
 
         std::vector<GLfloat> _float;
         std::vector<GLint> _int;
-        std::vector<glm::mat2> _mat2;
-        std::vector<glm::mat3> _mat3;
-        std::vector<glm::mat4> _mat4;
 
         Type _type;
+
+        template<typename T>
+        static size_t getGlmSize();
+
+        template<typename T>
+        void addGlmObject(const T& obj)
+        {
+    		auto ptr = glm::value_ptr(obj);
+		    _float.insert(_float.end(), ptr, ptr + getGlmSize<T>());
+        }
 
 	public:
         UniformValue();

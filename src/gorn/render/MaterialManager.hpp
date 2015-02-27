@@ -5,6 +5,7 @@
 #include <memory>
 #include <gorn/render/MaterialDefinition.hpp>
 #include <gorn/base/DefinitionManager.hpp>
+#include <glm/glm.hpp>
 
 namespace gorn
 {
@@ -32,6 +33,7 @@ namespace gorn
 
         bool validate(const std::string& name) const;
         std::shared_ptr<Material> load(const std::string& name);
+        glm::vec2 loadSize(const std::string& name);
     };
 
 }

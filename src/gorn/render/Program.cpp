@@ -12,6 +12,10 @@ namespace gorn
 	_id(0), _vertexShader(vertexShader), _fragmentShader(fragmentShader)
 	{
 		_id = glCreateProgram();
+        if(_id == 0)
+        {
+            throw Exception("Could not create program.");
+        }
         glAttachShader(_id, _fragmentShader->getId());
         glAttachShader(_id, _vertexShader->getId());
         glLinkProgram(_id);

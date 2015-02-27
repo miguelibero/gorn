@@ -16,6 +16,10 @@ namespace gorn
             glType = GL_FRAGMENT_SHADER;
         }
 		_id = glCreateShader(glType);
+        if(_id == 0)
+        {
+            throw Exception("Could not create shader.");
+        }
 		auto ptr = (const GLchar*)source.ptr();
 		auto size = (const GLint)source.size();
         glShaderSource(_id, 1, &ptr, &size);
