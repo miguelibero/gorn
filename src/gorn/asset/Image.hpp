@@ -3,28 +3,35 @@
 
 #include <gorn/base/Data.hpp>
 #include <gorn/render/Gl.hpp>
+#include <gorn/render/Enums.hpp>
+#include <glm/glm.hpp>
 
 namespace gorn
 {
+    enum class ImageFormat
+    {
+        Uncompressed
+    };
+
 	class Image
 	{
+    public:
+        typedef ImageFormat Format;
 	private:
 		Data _data;
-		GLsizei _width;
-	    GLsizei _height;
-	    GLenum _format;
-	    GLenum _type;
-	    GLint _border;
-	    GLint _internalFormat;
+		glm::vec2 _size;
+	    bool _hasAlpha;
+	    BasicType _type;
+	    Format _format;
 
 	public:
-		Image(Data&& data, GLsizei w, GLsizei h, GLenum format, GLenum type, GLint border=0, GLint internalFormat=0);
-	    GLint getInternalFormat() const;
-	    GLsizei getWidth() const;
-	    GLsizei getHeight() const;
-	    GLint getBorder() const;
-	    GLenum getFormat() const;
-	    GLenum getType() const;
+		Image(Data&& data, const glm::vec2& size, bool hasAlpha=true,
+            BasicType type=BasicType::UnsignedInteger,
+            Format format=Format::Uncompressed);
+	    const glm::vec2& getSize() const;
+        bool hasAlpha() const;
+	    BasicType getType() const;
+	    Format getFormat() const;
 	    const Data& getData() const;
 	};
 }

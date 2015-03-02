@@ -2,41 +2,31 @@
 
 namespace gorn
 {
-	Image::Image(Data&& data, GLsizei w, GLsizei h,
-        GLenum format, GLenum type, GLint border, GLint internalFormat):
-	_data(std::move(data)), _width(w), _height(h), _format(format), _type(type),
-    _border(border), _internalFormat(internalFormat==0?format:internalFormat)
+	Image::Image(Data&& data, const glm::vec2& size,
+        bool hasAlpha, BasicType type, Format format):
+	_data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
+    _type(type), _format(format)
 	{
 	}
 
-    GLsizei Image::getWidth() const
+    const glm::vec2& Image::getSize() const
     {
-    	return _width;
+    	return _size;
     }
 
-    GLsizei Image::getHeight() const
-    {
-    	return _height;
-    }
-
-    GLenum Image::getFormat() const
+    Image::Format Image::getFormat() const
     {
     	return _format;
     }
 
-    GLenum Image::getType() const
+    BasicType Image::getType() const
     {
     	return _type;
     }
 
-    GLint Image::getBorder() const
+    bool Image::hasAlpha() const
     {
-        return _border;
-    }
-
-    GLint Image::getInternalFormat() const
-    {
-        return _internalFormat;
+        return _hasAlpha;
     }
 
     const Data& Image::getData() const

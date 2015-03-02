@@ -118,7 +118,11 @@ namespace gorn
     float String::convertTo(const std::string& value)
     {
         float f;
+#ifdef GORN_PLATFORM_WINDOWS
+		sscanf_s(value.c_str(), "%f", &f);
+#else
         sscanf(value.c_str(), "%f", &f);
+#endif
         return f;
     }
 

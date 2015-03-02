@@ -141,11 +141,14 @@
     <ClInclude Include="..\src\gorn\platform\platform.hpp">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
-      <Filter>Source Files\platform</Filter>
+    <ClInclude Include="..\src\gorn\render\Enums.hpp">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\windows\GDIImageLoader.hpp">
-      <Filter>Source Files\platform</Filter>
+    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\SOILImageLoader.hpp">
+      <Filter>Header Files\platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -230,7 +233,10 @@
     <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\windows\GDIImageLoader.cpp">
+    <ClCompile Include="..\src\gorn\render\Enums.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\platform\SOILImageLoader.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
   </ItemGroup>

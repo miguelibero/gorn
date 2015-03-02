@@ -48,7 +48,7 @@ namespace gorn
         }
         auto& def = getDefinitions().get(name);
         auto img = _images.load(def.getImageName()).get();
-        return glm::vec2(img->getWidth(), img->getHeight());
+        return img->getSize();
     }
 
     std::shared_ptr<Texture> TextureManager::load(const std::string& name)

@@ -5,16 +5,18 @@
 char *className = "GORN";
 char *windowName = "GORN";
 int winX = 0, winY = 0;
-int winWidth = 300, winHeight = 300;
+int winWidth = 800, winHeight = 600;
 
 HDC hDC;
 HGLRC hGLRC;
 HPALETTE hPalette;
 gorn::Application app;
+bool loaded = false;
+_int64 timeStamp;
+_int64 timeStampFreq;
 
 void
-load()
-{
+load() {
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -22,25 +24,36 @@ load()
 	}
 	else
 	{
+		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
+		QueryPerformanceFrequency((LARGE_INTEGER *)&timeStampFreq);
 		app.load();
+		loaded = true;
 	}
 }
 
-void
-unload()
+void unload()
 {
 	app.unload();
+	loaded = false;
 }
 
-void
-update()
+void update()
 {
-	double dt = 0;
-	app.update(dt);
+	if(loaded)
+	{
+		_int64 oldTimeStamp = timeStamp;
+		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
+		double dt = (double)(timeStamp - oldTimeStamp)/timeStampFreq;
+		app.update(dt);
+	}
 }
 
-void
-foreground()
+void draw()
+{
+	SwapBuffers(hDC);
+}
+
+void foreground()
 {
 	app.foreground();
 }
@@ -189,7 +202,7 @@ LPARAM lParam)
 			UnrealizeObject(hPalette);
 			SelectPalette(hDC, hPalette, FALSE);
 			RealizePalette(hDC);
-			update();
+			draw();
 			break;
 		}
 		break;
@@ -199,7 +212,7 @@ LPARAM lParam)
 			UnrealizeObject(hPalette);
 			SelectPalette(hDC, hPalette, FALSE);
 			RealizePalette(hDC);
-			update();
+			draw();
 			return TRUE;
 		}
 		break;
@@ -208,7 +221,7 @@ LPARAM lParam)
 		PAINTSTRUCT ps;
 		BeginPaint(hWnd, &ps);
 		if (hGLRC) {
-			update();
+			draw();
 		}
 		EndPaint(hWnd, &ps);
 		return 0;
@@ -227,6 +240,7 @@ LPARAM lParam)
 	default:
 		break;
 	}
+	update();
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 

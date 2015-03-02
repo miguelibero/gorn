@@ -30,8 +30,9 @@ namespace gorn
     			throw Exception("Could not decode image data.");        
             }
             auto info = getJniObject().call("getImageInfo", std::vector<int>());
-            GLenum format = info[2] ? GL_RGBA : GL_RGB;
-			return Image(std::move(data), info[0], info[1], format, GL_UNSIGNED_BYTE);
+            bool withAlpha = info[2] != 0;
+            auto size = glm::vec2(info[0], info[1]);
+			return Image(std::move(data), size, withAlpha, BasicType::UnsignedByte);
 		}
 		catch(const JniException& e)
 		{

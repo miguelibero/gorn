@@ -158,8 +158,7 @@ namespace gorn {
 #endif
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
-        GLenum format = hasAlpha ? GL_RGBA : GL_RGB;
         return Image(std::move(data),
-            imgWidth, imgHeight, format, GL_UNSIGNED_BYTE);
+            glm::vec2(imgWidth, imgHeight), hasAlpha, BasicType::UnsignedByte);
     }
 }

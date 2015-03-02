@@ -1,4 +1,5 @@
 #include <gorn/render/Texture.hpp>
+#include <gorn/render/GlEnums.hpp>
 #include <gorn/asset/Image.hpp>
 
 namespace gorn
@@ -44,13 +45,31 @@ namespace gorn
         glTexParameterfv(_target, name, value.data());
     }
 
+    GLint getGlInternalFormat(ImageFormat f)
+    {
+        switch(f)
+        {
+        default:
+            return 0;
+        }
+    }
+
     void Texture::setImage(const Image& img, GLint lodLevel)
     {
         bind();
-        glTexImage2D(_target, lodLevel, img.getInternalFormat(),
-            img.getWidth(), img.getHeight(), img.getBorder(),
-            img.getFormat(), img.getType(), img.getData().ptr());
-        _size = glm::vec2(img.getWidth(), img.getHeight());
+        
+        GLenum format = img.hasAlpha()?GL_RGBA:GL_RGB;
+        GLenum type = getGlBasicType(img.getType());
+        _size = img.getSize();
+        GLint internalFormat = getGlInternalFormat(img.getFormat());
+        if(internalFormat == 0)
+        {
+            internalFormat = format;
+        }
+
+        glTexImage2D(_target, lodLevel, internalFormat,
+            (GLsizei)_size.x, (GLsizei)_size.y, 0,
+            format, type, img.getData().ptr());
     }
 
 	GLuint Texture::getId() const

@@ -1,31 +1,28 @@
 
-#include <gorn/render/Enums.hpp>
-#include <gorn/render/Gl.hpp>
+#include <gorn/render/GlEnums.hpp>
 
 namespace gorn
 {
-    size_t getSize(BasicType type)
+    GLenum getGlBasicType(BasicType type)
     {
         switch(type)
         {
             case BasicType::Byte:
-                return sizeof(GLbyte);
+                return GL_BYTE;
             case BasicType::UnsignedByte:
-                return sizeof(GLubyte);
+                return GL_UNSIGNED_BYTE;
             case BasicType::Short:
-                return sizeof(GLshort);
+                return GL_SHORT;
             case BasicType::UnsignedShort:
-                return sizeof(GLushort);
+                return GL_UNSIGNED_SHORT;
             case BasicType::Integer:
-                return sizeof(GLint);
+                return GL_INT;
             case BasicType::UnsignedInteger:
-                return sizeof(GLuint);
+                return GL_UNSIGNED_INT;
             case BasicType::Float:
-                return sizeof(GLfloat);
+                return GL_FLOAT;
             default:
                 return 0;               
         }
     }
-
 }
-

@@ -1,0 +1,40 @@
+
+#include <gorn/platform/SOILImageLoader.hpp>
+#include <gorn/asset/Image.hpp>
+#include <gorn/base/Exception.hpp>
+#include <SOIL2/SOIL2.h>
+
+
+namespace gorn {
+
+	bool SOILImageLoader::validate(const Data& inputData) const
+    {
+		return true;
+    }
+
+
+	Image SOILImageLoader::load(Data&& inputData) const
+    {
+		int width;
+		int height;
+		int channels;
+		unsigned char* data = SOIL_load_image_from_memory(
+			inputData.ptr(),
+			inputData.size(),
+			&width, &height, &channels,
+			SOIL_LOAD_AUTO);
+
+        bool hasAlpha = false;
+		switch (channels)
+		{
+		case 3:
+			hasAlpha = false;
+		case 4:
+			hasAlpha = true;
+		default:
+			throw Exception("Invalid amount of image channels");
+		}
+		return Image(Data(data, width*height*channels*sizeof(unsigned char)),
+			glm::vec2(width, height), hasAlpha, BasicType::UnsignedByte);
+    }
+}

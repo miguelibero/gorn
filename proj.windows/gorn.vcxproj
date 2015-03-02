@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\lib;..\src;..\lib\platform\windows\glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\lib;..\src;..\lib\platform\windows\glew\include;..\lib\soil2\src;$(IncludePath)</IncludePath>
     <LibraryPath>
     </LibraryPath>
   </PropertyGroup>
@@ -87,8 +87,9 @@
     <ClInclude Include="..\src\gorn\base\String.hpp" />
     <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp" />
     <ClInclude Include="..\src\gorn\platform\platform.hpp" />
-    <ClInclude Include="..\src\gorn\platform\windows\GDIImageLoader.hpp" />
+    <ClInclude Include="..\src\gorn\platform\SOILImageLoader.hpp" />
     <ClInclude Include="..\src\gorn\render\AttributeDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\render\Enums.hpp" />
     <ClInclude Include="..\src\gorn\render\Gl.hpp" />
     <ClInclude Include="..\src\gorn\render\Kinds.hpp" />
     <ClInclude Include="..\src\gorn\render\Material.hpp" />
@@ -117,9 +118,10 @@
     <ClCompile Include="..\src\gorn\base\Data.cpp" />
     <ClCompile Include="..\src\gorn\base\String.cpp" />
     <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp" />
-    <ClCompile Include="..\src\gorn\platform\windows\GDIImageLoader.cpp" />
+    <ClCompile Include="..\src\gorn\platform\SOILImageLoader.cpp" />
     <ClCompile Include="..\src\gorn\platform\windows\Main.cpp" />
     <ClCompile Include="..\src\gorn\render\AttributeDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\render\Enums.cpp" />
     <ClCompile Include="..\src\gorn\render\Gl.cpp" />
     <ClCompile Include="..\src\gorn\render\Kinds.cpp" />
     <ClCompile Include="..\src\gorn\render\Material.cpp" />
@@ -138,6 +140,11 @@
     <ClCompile Include="..\src\gorn\render\VertexArray.cpp" />
     <ClCompile Include="..\src\gorn\render\VertexBuffer.cpp" />
     <ClCompile Include="..\src\gorn\render\VertexDefinition.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\examples\queue\SOIL2\SOIL2.vcxproj">
+      <Project>{483243ff-baf9-45fb-bb4b-37ee68c1d9d2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
