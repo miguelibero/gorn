@@ -11,23 +11,6 @@
 
 namespace gorn
 {
-    GLenum getGlDrawMode(DrawMode mode)
-    {
-        switch(mode)
-        {
-            case DrawMode::Quads:
-                return GL_QUADS;
-            case DrawMode::Lines:
-                return GL_LINES;
-            case DrawMode::Points:
-                return GL_POINTS;
-            case DrawMode::Triangles:
-                return GL_TRIANGLES;
-            default:
-                throw Exception("Unsupported draw mode.");
-        }
-    }
-
     GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
@@ -127,10 +110,20 @@ namespace gorn
         bind();
         vbo->bind();
 		glEnableVertexAttribArray(id);
+
+        auto stride = def.getStride();
+        if(def.getStrideType() != BasicType::None)
+        {
+            stride *= getBasicTypeSize(def.getStrideType());
+        }
+        auto offset = def.getOffset();
+        if(def.getOffsetType() != BasicType::None)
+        {
+            offset *= getBasicTypeSize(def.getOffsetType());
+        }
 		glVertexAttribPointer(id, def.getCount(), 
             getGlBasicType(def.getType()),
-            def.getNormalized(), def.getStride(),
-            reinterpret_cast<const GLvoid*>(def.getOffset()));
+            def.getNormalized(), stride, (GLvoid*)offset);
 
         checkGlError("setting a vertex array attribute");
     }

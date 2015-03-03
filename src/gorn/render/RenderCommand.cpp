@@ -52,13 +52,13 @@ namespace gorn
 
     RenderCommand& RenderCommand::withElements(Data&& data, BasicType type)
     {
-         _elements = Block(std::move(data), data.size()/getSize(type), type);
+         _elements = Block(std::move(data), data.size()/getBasicTypeSize(type), type);
         return *this;
     }
 
     RenderCommand& RenderCommand::withElements(const Data& data, BasicType type)
     {
-         _elements = Block(data, data.size()/getSize(type), type);
+         _elements = Block(data, data.size()/getBasicTypeSize(type), type);
         return *this;
     }
 
@@ -192,7 +192,7 @@ namespace gorn
             for(auto itr = vdef.getAttributes().begin();
               itr != vdef.getAttributes().end(); ++itr)
             {
-                size_t elmSize = itr->second.getMemSize();
+                size_t elmSize = itr->second.getElementSize();
                 auto& block = getAttribute(itr->first);
                 size_t writeSize = outVert.write(block.data, elmSize, n*elmSize);
                 outVert.write(elmSize-writeSize);

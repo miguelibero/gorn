@@ -64,13 +64,13 @@ auto vbo = VertexBuffer(Data{
 vao.setAttribute(vbo, AttributeDefinition("position")
     .withType(BasicType::Float)
     .withCount(2)
-    .withStride(5*getSize(BasicType::Float)));
+    .withStride(5, BasicType::Float));
             
 vao.setAttribute(vbo, AttributeDefinition("color")
     .withType(BasicType::Float)
     .withCount(3)
-    .withStride(5*getSize(BasicType::Float))
-    .withOffset(2*getSize(BasicType::Float)));
+    .withStride(5, BasicType::Float)
+    .withOffset(2, BasicType::Float));
 
 vao.draw(3);
 ```

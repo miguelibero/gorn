@@ -6,6 +6,7 @@
 
 namespace gorn
 {
+    GLenum getGlDrawMode(DrawMode mode);
     GLenum getGlBasicType(BasicType type);
 }
 

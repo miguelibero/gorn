@@ -1,113 +1,117 @@
 
 #include <gorn/gorn.hpp>
 
+using namespace gorn;
+
+class QueueApplication : public gorn::Application
+{
+	gorn::Context _ctx;
+
+public:
+
+    QueueApplication();
+
+    void load() override;
+    void draw() override;
+};
+
 namespace gorn
 {
-	Context _ctx;
+    std::unique_ptr<Application> main()
+    {
+        return std::unique_ptr<Application>(new QueueApplication());
+    }
+}
 
-	Application::Application()
-	{
-	}
+QueueApplication::QueueApplication()
+{
+}
 
-	void Application::load()
-	{
+void QueueApplication::load()
+{
 #ifdef GORN_PLATFORM_LINUX
-		_ctx.getFiles()
-            .addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
-		_ctx.getFiles()
-            .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-		_ctx.getFiles()
-            .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-		_ctx.getImages()
-            .addDataLoader<PngImageLoader>("sprite");
+	_ctx.getFiles()
+        .addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
+	_ctx.getFiles()
+        .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+	_ctx.getFiles()
+        .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+	_ctx.getImages()
+        .addDataLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_WINDOWS
-		_ctx.getFiles()
-			.addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
-		_ctx.getFiles()
-			.addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-		_ctx.getFiles()
-			.addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-		_ctx.getImages()
-			.addDataLoader<SOILImageLoader>("sprite");
+	_ctx.getFiles()
+		.addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
+	_ctx.getFiles()
+		.addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+	_ctx.getFiles()
+		.addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+	_ctx.getImages()
+		.addDataLoader<SOILImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
-		_ctx.getFiles()
-            .addLoader<AssetFileLoader>("sprite", "%s.png");
-		_ctx.getFiles()
-            .addLoader<AssetFileLoader>("vsh", "%s.vsh");
-		_ctx.getFiles()
-            .addLoader<AssetFileLoader>("fsh", "%s.fsh");
-		_ctx.getImages()
-            .addDataLoader<GraphicsImageLoader>("sprite");
+	_ctx.getFiles()
+        .addLoader<AssetFileLoader>("sprite", "%s.png");
+	_ctx.getFiles()
+        .addLoader<AssetFileLoader>("vsh", "%s.vsh");
+	_ctx.getFiles()
+        .addLoader<AssetFileLoader>("fsh", "%s.fsh");
+	_ctx.getImages()
+        .addDataLoader<GraphicsImageLoader>("sprite");
 #endif
 
-        _ctx.getMaterials().getDefinitions()
-            .set("sprite", [](const std::string& name){
-                return MaterialDefinition()
-                    .withProgram("sprite")
-                    .withTexture(UniformKind::Texture0, name);
-            });
+    _ctx.getMaterials().getDefinitions()
+        .set("sprite", [](const std::string& name){
+            return MaterialDefinition()
+                .withProgram("sprite")
+                .withTexture(UniformKind::Texture0, name);
+        });
 
-	    _ctx.getPrograms().getDefinitions().get("sprite")
-            .withUniform("texture", UniformKind::Texture0)
-            .withShaderFile(ShaderType::Vertex, "vsh:shader")
-            .withShaderFile(ShaderType::Fragment, "fsh:shader");
-	}
+    _ctx.getPrograms().getDefinitions().get("sprite")
+        .withUniform("texture", UniformKind::Texture0)
+        .withShaderFile(ShaderType::Vertex, "vsh:shader")
+        .withShaderFile(ShaderType::Fragment, "fsh:shader");
+}
 
-	void Application::background()
-	{
-	}
+void QueueApplication::draw()
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    void Application::foreground()
-    {
-    }
+    _ctx.getQueue().addCommand("sprite:kitten")
+        .withAttribute(AttributeKind::Position, {
+            -0.75f,  0.75f,
+             0.25f,  0.75f,
+             0.25f, -0.25f,
+            -0.75f, -0.25f,
+             0.66f
+        }, 2, BasicType::Float)
+        .withAttribute(AttributeKind::TexCoords, {
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f
+        }, 2, BasicType::Float)
+        .withElements({
+            0, 1, 2,
+            2, 3, 0
+        }, BasicType::UnsignedInteger);
 
-	void Application::unload()
-	{
-	}
+    _ctx.getQueue().addCommand("sprite:puppy")
+        .withAttribute(AttributeKind::Position, {
+            -0.25f,  0.25f,
+             0.75f,  0.25f,
+             0.75f, -0.75f,
+            -0.25f, -0.75f
+        }, 2, BasicType::Float)
+        .withAttribute(AttributeKind::TexCoords, {
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f
+        }, 2, BasicType::Float)
+        .withElements({
+            0, 1, 2,
+            2, 3, 0
+        }, BasicType::UnsignedInteger);
 
-	void Application::update(double dt)
-	{
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        _ctx.getQueue().addCommand("sprite:kitten")
-            .withAttribute(AttributeKind::Position, {
-                -0.75f,  0.75f,
-                 0.25f,  0.75f,
-                 0.25f, -0.25f,
-                -0.75f, -0.25f,
-                 0.66f
-            }, 2, BasicType::Float)
-            .withAttribute(AttributeKind::TexCoords, {
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-                1.0f, 0.0f,
-                0.0f, 0.0f
-            }, 2, BasicType::Float)
-            .withElements({
-                0, 1, 2,
-                2, 3, 0
-            }, BasicType::UnsignedInteger);
-
-        _ctx.getQueue().addCommand("sprite:puppy")
-            .withAttribute(AttributeKind::Position, {
-                -0.25f,  0.25f,
-                 0.75f,  0.25f,
-                 0.75f, -0.75f,
-                -0.25f, -0.75f
-            }, 2, BasicType::Float)
-            .withAttribute(AttributeKind::TexCoords, {
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-                1.0f, 0.0f,
-                0.0f, 0.0f
-            }, 2, BasicType::Float)
-            .withElements({
-                0, 1, 2,
-                2, 3, 0
-            }, BasicType::UnsignedInteger);
-
-		_ctx.getQueue().draw();
-	}
-
+	_ctx.getQueue().draw();
 }

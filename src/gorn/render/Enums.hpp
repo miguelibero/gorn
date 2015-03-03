@@ -8,7 +8,6 @@ namespace gorn
     enum class DrawMode
     {
         Triangles,
-        Quads,
         Lines,
         Points
     };
@@ -25,7 +24,7 @@ namespace gorn
         UnsignedShort
     };
 
-    size_t getSize(BasicType type);
+    size_t getBasicTypeSize(BasicType type);
 }
 
 #endif

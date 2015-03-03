@@ -8,7 +8,9 @@ namespace gorn
     _type(BasicType::None),
     _count(1),
     _stride(0),
-    _offset(0)
+    _strideType(BasicType::None),
+    _offset(0),
+    _offsetType(BasicType::None)
     {
     }
 
@@ -39,12 +41,30 @@ namespace gorn
     AttributeDefinition& AttributeDefinition::withStride(size_t stride)
     {
         _stride = stride;
+        _strideType = BasicType::None;
         return *this;
     }
 
     AttributeDefinition& AttributeDefinition::withOffset(size_t offset)
     {
         _offset = offset;
+        _offsetType = BasicType::None;
+        return *this;
+    }
+
+    AttributeDefinition& AttributeDefinition::withStride(
+        size_t stride, BasicType type)
+    {
+        _stride = stride;
+        _strideType = type;
+        return *this;
+    }
+
+    AttributeDefinition& AttributeDefinition::withOffset(
+        size_t offset, BasicType type)
+    {
+        _offset = offset;
+        _offsetType = type;
         return *this;
     }
 
@@ -78,14 +98,19 @@ namespace gorn
         return _offset;
     }
 
-    size_t AttributeDefinition::getTypeSize() const
+    BasicType AttributeDefinition::getStrideType() const
     {
-        return getSize(_type);
+        return _strideType;
     }
 
-    size_t AttributeDefinition::getMemSize() const
+    BasicType AttributeDefinition::getOffsetType() const
     {
-        return getTypeSize()*getCount();
+        return _offsetType;
+    }
+
+    size_t AttributeDefinition::getElementSize() const
+    {
+        return getCount() * getBasicTypeSize(getType());
     }
 
 }

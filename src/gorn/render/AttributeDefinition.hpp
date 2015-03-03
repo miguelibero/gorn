@@ -18,8 +18,9 @@ namespace gorn
         BasicType _type;
         size_t _count;
         size_t _stride;
+        BasicType _strideType;
         size_t _offset;
-
+        BasicType _offsetType;
 	public:
 
         AttributeDefinition(const std::string& name="");
@@ -30,6 +31,8 @@ namespace gorn
         AttributeDefinition& withCount(size_t count);
         AttributeDefinition& withStride(size_t stride);
         AttributeDefinition& withOffset(size_t offset);
+        AttributeDefinition& withStride(size_t stride, BasicType type);
+        AttributeDefinition& withOffset(size_t offset, BasicType type);
 
         const std::string& getName() const;
         BasicType getType() const;
@@ -37,8 +40,9 @@ namespace gorn
         size_t getCount() const;
         size_t getStride() const;
         size_t getOffset() const;
-        size_t getTypeSize() const;
-        size_t getMemSize() const;
+        BasicType getStrideType() const;
+        BasicType getOffsetType() const;
+        size_t getElementSize() const;
 	};
 }
 

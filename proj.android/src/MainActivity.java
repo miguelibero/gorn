@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.util.Log;
 import android.opengl.GLSurfaceView;
+import android.view.View;
+import android.view.MotionEvent;
 import android.widget.Toast;
 import android.opengl.GLSurfaceView.Renderer;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -67,6 +69,13 @@ public class MainActivity extends Activity
 			    	MainActivity.this.nativeOnDrawFrame(dt);
 			    }
 			});
+            glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent ev) {
+                    MainActivity.this.nativeOnTouch(ev.getX(), ev.getY());
+                    return true;
+                }
+            });
 	        rendererSet = true;
 	        setContentView(glSurfaceView);
 	        lastDrawTime = System.currentTimeMillis();
@@ -141,6 +150,7 @@ public class MainActivity extends Activity
     public static native void nativeOnResume();
     public static native void nativeOnSurfaceCreated();
     public static native void nativeOnSurfaceChanged(int width, int height);
+    public static native void nativeOnTouch(float x, float y);
     public static native void nativeOnDrawFrame(double dt);
     public static native void nativeOnDestroy();
 }

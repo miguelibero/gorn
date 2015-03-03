@@ -1,8 +1,24 @@
 
 #include <gorn/render/GlEnums.hpp>
+#include <gorn/base/Exception.hpp>
 
 namespace gorn
 {
+    GLenum getGlDrawMode(DrawMode mode)
+    {
+        switch(mode)
+        {
+            case DrawMode::Lines:
+                return GL_LINES;
+            case DrawMode::Points:
+                return GL_POINTS;
+            case DrawMode::Triangles:
+                return GL_TRIANGLES;
+            default:
+                throw Exception("Unsupported draw mode.");
+        }
+    }
+
     GLenum getGlBasicType(BasicType type)
     {
         switch(type)

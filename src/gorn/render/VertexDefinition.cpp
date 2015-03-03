@@ -37,7 +37,7 @@ namespace gorn
         size_t size = 0;
         for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
         {
-            size += itr->second.getMemSize();
+            size +=  itr->second.getElementSize();
         }
         return size;
     }
