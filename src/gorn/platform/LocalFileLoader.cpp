@@ -8,19 +8,19 @@ namespace gorn {
 
     const char* LocalFileLoader::kPlaceholder = "%s";
 
-    LocalFileLoader::LocalFileLoader(const std::string& pathTemplate):
+    LocalFileLoader::LocalFileLoader(const std::string& pathTemplate) NOEXCEPT:
     _pathTemplate(pathTemplate)
     {
     }
 
-    std::string LocalFileLoader::getPath(const std::string& name) const
+    std::string LocalFileLoader::getPath(const std::string& name) const NOEXCEPT
     {
         std::string path(_pathTemplate);
         String::replaceAll(path, kPlaceholder, name);
         return path;
     }
 
-    bool LocalFileLoader::validate(const std::string& name) const
+    bool LocalFileLoader::validate(const std::string& name) const NOEXCEPT
     {
         auto path = getPath(name);
         struct stat buffer;   

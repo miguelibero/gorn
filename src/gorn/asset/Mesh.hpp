@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <glm/glm.hpp>
+#include <gorn/base/Config.hpp>
 
 namespace gorn
 {
@@ -16,11 +17,11 @@ namespace gorn
         elm_t normal;
         elm_t texCoord;
 
-        MeshElement(elm_t p=0, elm_t n=0, elm_t t=0);
+        MeshElement(elm_t p=0, elm_t n=0, elm_t t=0) NOEXCEPT;
 
-        MeshElement& operator=(const MeshElement& other);
-        bool operator==(const MeshElement& other) const;
-        bool operator!=(const MeshElement& other) const;
+        MeshElement& operator=(const MeshElement& other) NOEXCEPT;
+        bool operator==(const MeshElement& other) const NOEXCEPT;
+        bool operator!=(const MeshElement& other) const NOEXCEPT;
     };
 
 	class Mesh
@@ -41,25 +42,25 @@ namespace gorn
         Indices _indices;
 
 	public:
-		Mesh();
+		Mesh() NOEXCEPT;
 
-        void setPositions(const Positions& positions);
-        void setPositions(Positions&& positions);
-        void setNormals(const Normals& normals);
-        void setNormals(Normals&& normals);
-        void setTexCoords(const TexCoords& coords);
-        void setTexCoords(TexCoords&& coords);
-        void setElements(const Elements& elms);
-        void setElements(Elements&& elms);
+        void setPositions(const Positions& positions) NOEXCEPT;
+        void setPositions(Positions&& positions) NOEXCEPT;
+        void setNormals(const Normals& normals) NOEXCEPT;
+        void setNormals(Normals&& normals) NOEXCEPT;
+        void setTexCoords(const TexCoords& coords) NOEXCEPT;
+        void setTexCoords(TexCoords&& coords) NOEXCEPT;
+        void setElements(const Elements& elms) NOEXCEPT;
+        void setElements(Elements&& elms) NOEXCEPT;
 
-        void addPosition(const glm::vec3& pos);
-        void addPosition(glm::vec3&& pos);
-        void addNormal(const glm::vec3& normal);
-        void addNormal(glm::vec3&& normal);
-        void addTexCoord(const glm::vec2& coord);
-        void addTexCoord(glm::vec2&& coord);
-        void addElement(const Element& elm);
-        void addElement(Element&& elm);
+        void addPosition(const glm::vec3& pos) NOEXCEPT;
+        void addPosition(glm::vec3&& pos) NOEXCEPT;
+        void addNormal(const glm::vec3& normal) NOEXCEPT;
+        void addNormal(glm::vec3&& normal) NOEXCEPT;
+        void addTexCoord(const glm::vec2& coord) NOEXCEPT;
+        void addTexCoord(glm::vec2&& coord) NOEXCEPT;
+        void addElement(const Element& elm) NOEXCEPT;
+        void addElement(Element&& elm) NOEXCEPT;
 
 	    RenderCommand render() const;
 	};

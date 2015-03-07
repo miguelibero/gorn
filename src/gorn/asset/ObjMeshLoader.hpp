@@ -10,9 +10,9 @@ namespace gorn
 	class ObjMeshLoader : public DataAssetLoader<Mesh>
 	{
     public:
-        ObjMeshLoader();
-        bool validate(const Data& data) const;
-        Mesh load(Data&& data) const;
+        ObjMeshLoader() NOEXCEPT;
+        bool validate(const Data& data) const NOEXCEPT;
+        Mesh load(const Data& data) const;
 	};
 }
 

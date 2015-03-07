@@ -1,6 +1,8 @@
 #ifndef __gorn__DataAssetLoader__
 #define __gorn__DataAssetLoader__
 
+#include <gorn/base/Config.hpp>
+
 namespace gorn
 {
     class Data;
@@ -14,7 +16,7 @@ namespace gorn
         /**
          * @return true if the asset can be loaded
          */
-        virtual bool validate(const Data& data) const
+        virtual bool validate(const Data& data) const NOEXCEPT
         {
             return true;
         }
@@ -22,7 +24,7 @@ namespace gorn
         /**
          * @return the loaded asset
          */
-        virtual T load(Data&& data) const = 0;
+        virtual T load(const Data& data) const = 0;
 	};
 }
 

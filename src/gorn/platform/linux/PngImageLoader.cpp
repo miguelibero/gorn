@@ -18,7 +18,7 @@
 
 namespace gorn {
 
-    bool PngImageLoader::validate(const Data& inputData) const
+    bool PngImageLoader::validate(const Data& inputData) const NOEXCEPT
     {
         DataInputStream input(inputData);
         png_byte pngSig[PNGSIGSIZE];
@@ -49,7 +49,7 @@ namespace gorn {
             ->read(data, length);
     }
 
-    Image PngImageLoader::load(Data&& inputData) const
+    Image PngImageLoader::load(const Data& inputData) const
     {
         DataInputStream input(inputData);
         png_structp pngPtr = png_create_read_struct(

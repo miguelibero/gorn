@@ -15,19 +15,19 @@ namespace gorn
 
     const char* AssetFileLoader::kPlaceholder = "%s";
 
-    AssetFileLoader::AssetFileLoader(const std::string& pathTemplate):
+    AssetFileLoader::AssetFileLoader(const std::string& pathTemplate) NOEXCEPT:
     _pathTemplate(pathTemplate)
     {
     }
 
-    std::string AssetFileLoader::getPath(const std::string& name) const
+    std::string AssetFileLoader::getPath(const std::string& name) const NOEXCEPT
     {
         std::string path(_pathTemplate);
         String::replaceAll(path, kPlaceholder, name);
         return path;
     }
 
-    bool AssetFileLoader::validate(const std::string& name) const
+    bool AssetFileLoader::validate(const std::string& name) const NOEXCEPT
     {
 		try
 		{
@@ -36,7 +36,7 @@ namespace gorn
 		}
 		catch(const JniException& e)
 		{
-			throw Exception(std::string("JNI Error validating asset '")+name+"': "+e.what());
+            return false;
 		}
     }
 

@@ -2,11 +2,10 @@
 #define __gorn__AssetLoader__
 
 #include <string>
+#include <gorn/base/Config.hpp>
 
 namespace gorn
 {
-    class Data;
-
     template<typename T>
 	class AssetLoader
 	{
@@ -16,7 +15,7 @@ namespace gorn
         /**
          * @return true if the asset can be loaded
          */
-        virtual bool validate(const std::string& name) const
+        virtual bool validate(const std::string& name) const NOEXCEPT
         {
             return true;
         }

@@ -6,6 +6,7 @@
 #include <future>
 #include <vector>
 #include <map>
+#include <gorn/base/Config.hpp>
 #include <gorn/asset/AssetLoader.hpp>
 #include <gorn/asset/FileAssetLoader.hpp>
 #include <gorn/asset/FileManager.hpp>
@@ -28,48 +29,48 @@ namespace gorn
 		std::map<std::string, Loaders> _loaders;
 		std::shared_ptr<Assets> _assets;
 
-        Loaders getLoaders(const std::string& name) const;
+        Loaders getLoaders(const std::string& name) const NOEXCEPT;
 
         std::future<std::shared_ptr<T>> load(
             const std::shared_ptr<Loader>& loader,
             const std::string& name, bool cache);
 
 	public:
-        AssetManager(FileManager& files);
+        AssetManager(FileManager& files) NOEXCEPT;
 
-        bool validate(const std::string& name) const;
+        bool validate(const std::string& name) const NOEXCEPT;
 
 	    std::future<std::shared_ptr<T>> load(
-            const std::string& name, bool cache=false);
+            const std::string& name, bool cache=false) NOEXCEPT;
 
         template<typename... Args>
-        T& preload(const std::string& name, Args&&... args);
+        T& preload(const std::string& name, Args&&... args) NOEXCEPT;
 
-	    void addDefaultLoader(std::unique_ptr<Loader>&& loader);
+	    void addDefaultLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
         void addLoader(const std::string& tag,
-            std::unique_ptr<Loader>&& loader);
+            std::unique_ptr<Loader>&& loader) NOEXCEPT;
 
         template<typename L, typename... Args>
-        L& addDefaultLoader(Args&&... args);
+        L& addDefaultLoader(Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
-        L& addLoader(const std::string& tag, Args&&... args);
+        L& addLoader(const std::string& tag, Args&&... args) NOEXCEPT;
 
-	    void addDefaultDataLoader(std::unique_ptr<DataLoader>&& loader);
+	    void addDefaultDataLoader(std::unique_ptr<DataLoader>&& loader) NOEXCEPT;
         void addDataLoader(const std::string& tag,
-            std::unique_ptr<DataLoader>&& loader);
+            std::unique_ptr<DataLoader>&& loader) NOEXCEPT;
 
         template<typename L, typename... Args>
-        L& addDefaultDataLoader(Args&&... args);
+        L& addDefaultDataLoader(Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
-        L& addDataLoader(const std::string& tag, Args&&... args);
+        L& addDataLoader(const std::string& tag, Args&&... args) NOEXCEPT;
 
-        bool remove(const std::shared_ptr<T>& asset);
-        bool remove(const std::string& name);
-        void clear();
+        bool remove(const std::shared_ptr<T>& asset) NOEXCEPT;
+        bool remove(const std::string& name) NOEXCEPT;
+        void clear() NOEXCEPT;
 	};
 
     template<typename T>
-	AssetManager<T>::AssetManager(FileManager& files):
+	AssetManager<T>::AssetManager(FileManager& files) NOEXCEPT:
     _files(std::make_shared<FileLoader>(files)),
     _assets(std::make_shared<Assets>())
     {
@@ -77,14 +78,14 @@ namespace gorn
 
     template<typename T>
 	void AssetManager<T>::addDefaultLoader(
-        std::unique_ptr<Loader>&& loader)
+        std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
     template<typename T>
     void AssetManager<T>::addLoader(const std::string& tag,
-        std::unique_ptr<Loader>&& loader)
+        std::unique_ptr<Loader>&& loader) NOEXCEPT
 	{
         if(loader == nullptr)
         {
@@ -95,14 +96,14 @@ namespace gorn
 
     template<typename T>
 	void AssetManager<T>::addDefaultDataLoader(
-        std::unique_ptr<DataLoader>&& loader)
+        std::unique_ptr<DataLoader>&& loader) NOEXCEPT
     {
         addDataLoader(String::kDefaultTag, std::move(loader));
     }
 
     template<typename T>
     void AssetManager<T>::addDataLoader(const std::string& tag,
-        std::unique_ptr<DataLoader>&& loader)
+        std::unique_ptr<DataLoader>&& loader) NOEXCEPT
 	{
         if(loader == nullptr)
         {
@@ -113,7 +114,7 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    L& AssetManager<T>::addDefaultLoader(Args&&... args)
+    L& AssetManager<T>::addDefaultLoader(Args&&... args) NOEXCEPT
     {
         auto ptr = new L(std::forward<Args>(args)...);
         addDefaultLoader(std::unique_ptr<Loader>(ptr));
@@ -122,7 +123,8 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    L& AssetManager<T>::addLoader(const std::string& tag, Args&&... args)
+    L& AssetManager<T>::addLoader(
+        const std::string& tag, Args&&... args) NOEXCEPT
     {
         auto ptr = new L(std::forward<Args>(args)...);
         addLoader(tag, std::unique_ptr<Loader>(ptr));
@@ -131,7 +133,7 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    L& AssetManager<T>::addDefaultDataLoader(Args&&... args)
+    L& AssetManager<T>::addDefaultDataLoader(Args&&... args) NOEXCEPT
     {
         auto ptr = new L(std::forward<Args>(args)...);
         addDefaultDataLoader(std::unique_ptr<DataLoader>(ptr));
@@ -140,7 +142,8 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    L& AssetManager<T>::addDataLoader(const std::string& tag, Args&&... args)
+    L& AssetManager<T>::addDataLoader(
+        const std::string& tag, Args&&... args) NOEXCEPT
     {
         auto ptr = new L(std::forward<Args>(args)...);
         addDataLoader(tag, std::unique_ptr<DataLoader>(ptr));
@@ -148,13 +151,13 @@ namespace gorn
     }
 
     template<typename T>
-	void AssetManager<T>::clear()
+	void AssetManager<T>::clear() NOEXCEPT
     {
         _assets->clear();
     }
 
     template<typename T>
-	bool AssetManager<T>::remove(const std::string& name)
+	bool AssetManager<T>::remove(const std::string& name) NOEXCEPT
     {
         auto itr = _assets->find(name);        
         if(itr != _assets->end())
@@ -166,7 +169,7 @@ namespace gorn
     }
 
     template<typename T>
-	bool AssetManager<T>::remove(const std::shared_ptr<T>& asset)
+	bool AssetManager<T>::remove(const std::shared_ptr<T>& asset) NOEXCEPT
     {
         bool found = false;
         for(auto itr = _assets.begin(); itr != _assets.end();)
@@ -186,7 +189,7 @@ namespace gorn
 
     template<typename T>
     typename AssetManager<T>::Loaders AssetManager<T>::getLoaders(
-        const std::string& name) const
+        const std::string& name) const NOEXCEPT
     {
         auto parts = String::splitTag(name);
         auto itr = _loaders.find(parts.first);
@@ -215,7 +218,8 @@ namespace gorn
 
     template<typename T>
     template<typename... Args>
-    T& AssetManager<T>::preload(const std::string& name, Args&&... args)
+    T& AssetManager<T>::preload(const std::string& name,
+        Args&&... args) NOEXCEPT
     {
         auto asset = std::make_shared<T>(std::forward<Args>(args)...);
         (*_assets)[name] = asset;
@@ -223,7 +227,7 @@ namespace gorn
     }
 
     template<typename T>
-    bool AssetManager<T>::validate(const std::string& name) const
+    bool AssetManager<T>::validate(const std::string& name) const NOEXCEPT
     {
         auto itr = _assets->find(name);
         if(itr != _assets->end())
@@ -244,7 +248,7 @@ namespace gorn
 
     template<typename T>
 	std::future<std::shared_ptr<T>> AssetManager<T>::load(
-        const std::string& name, bool cache)
+        const std::string& name, bool cache) NOEXCEPT
 	{
         auto itr = _assets->find(name);
         if(itr != _assets->end())
@@ -259,7 +263,7 @@ namespace gorn
 	    {
 		    if(loader->validate(name))
 		    {
-			    return load(loader, name, cache);
+    	        return load(loader, name, cache);
 		    }
 	    }
 		throw Exception("Could not load asset.");

@@ -5,12 +5,12 @@
 
 namespace gorn
 {
-    MeshElement::MeshElement(elm_t p, elm_t n, elm_t t):
+    MeshElement::MeshElement(elm_t p, elm_t n, elm_t t) NOEXCEPT:
     position(p), normal(n), texCoord(t)
     {
     }
 
-    MeshElement& MeshElement::operator=(const MeshElement& other)
+    MeshElement& MeshElement::operator=(const MeshElement& other) NOEXCEPT
     {
         position = other.position;
         normal = other.normal;
@@ -18,53 +18,53 @@ namespace gorn
         return *this;
     }
 
-    bool MeshElement::operator==(const MeshElement& other) const
+    bool MeshElement::operator==(const MeshElement& other) const NOEXCEPT
     {
         return position == other.position
             && normal == other.normal
             && texCoord == other.texCoord;
     }
 
-    bool MeshElement::operator!=(const MeshElement& other) const
+    bool MeshElement::operator!=(const MeshElement& other) const NOEXCEPT
     {
         return !operator==(other);
     }
 
-	Mesh::Mesh()
+	Mesh::Mesh() NOEXCEPT
     {
     }
 
-    void Mesh::setPositions(const Positions& positions)
+    void Mesh::setPositions(const Positions& positions) NOEXCEPT
     {
         _positions = positions;
     }
 
-    void Mesh::setPositions(Positions&& positions)
+    void Mesh::setPositions(Positions&& positions) NOEXCEPT
     {
         _positions = std::move(positions);
     }
 
-    void Mesh::setNormals(const Normals& normals)
+    void Mesh::setNormals(const Normals& normals) NOEXCEPT
     {
         _normals = normals;
     }
 
-    void Mesh::setNormals(Normals&& normals)
+    void Mesh::setNormals(Normals&& normals) NOEXCEPT
     {
         _normals = std::move(normals);
     }
 
-    void Mesh::setTexCoords(const TexCoords& coords)
+    void Mesh::setTexCoords(const TexCoords& coords) NOEXCEPT
     {
         _texCoords = coords;
     }
 
-    void Mesh::setTexCoords(TexCoords&& coords)
+    void Mesh::setTexCoords(TexCoords&& coords) NOEXCEPT
     {
         _texCoords = std::move(coords);
     }
 
-    void Mesh::setElements(const Elements& elms)
+    void Mesh::setElements(const Elements& elms) NOEXCEPT
     {
         for(auto& elm : elms)
         {
@@ -72,7 +72,7 @@ namespace gorn
         }
     }
 
-    void Mesh::setElements(Elements&& elms)
+    void Mesh::setElements(Elements&& elms) NOEXCEPT
     {
         for(auto&& elm : elms)
         {
@@ -80,37 +80,37 @@ namespace gorn
         }
     }
 
-    void Mesh::addPosition(const glm::vec3& pos)
+    void Mesh::addPosition(const glm::vec3& pos) NOEXCEPT
     {
         _positions.push_back(pos);
     }
 
-    void Mesh::addPosition(glm::vec3&& pos)
+    void Mesh::addPosition(glm::vec3&& pos) NOEXCEPT
     {
         _positions.push_back(std::move(pos));
     }
 
-    void Mesh::addNormal(const glm::vec3& normal)
+    void Mesh::addNormal(const glm::vec3& normal) NOEXCEPT
     {
         _normals.push_back(normal);
     }
 
-    void Mesh::addNormal(glm::vec3&& normal)
+    void Mesh::addNormal(glm::vec3&& normal) NOEXCEPT
     {
         _normals.push_back(std::move(normal));
     }
 
-    void Mesh::addTexCoord(const glm::vec2& coord)
+    void Mesh::addTexCoord(const glm::vec2& coord) NOEXCEPT
     {
         _texCoords.push_back(coord);
     }
 
-    void Mesh::addTexCoord(glm::vec2&& coord)
+    void Mesh::addTexCoord(glm::vec2&& coord) NOEXCEPT
     {
         _texCoords.push_back(std::move(coord));
     }
 
-    void Mesh::addElement(const Element& elm)
+    void Mesh::addElement(const Element& elm) NOEXCEPT
     {
         auto itr = std::find(_elements.begin(), _elements.end(), elm);
         if(itr == _elements.end())
@@ -120,7 +120,7 @@ namespace gorn
         _indices.push_back(std::distance(_elements.begin(), itr));
     }
 
-    void Mesh::addElement(Element&& elm)
+    void Mesh::addElement(Element&& elm) NOEXCEPT
     {
         auto itr = std::find(_elements.begin(), _elements.end(), elm);
         if(itr == _elements.end())

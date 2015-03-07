@@ -14,12 +14,12 @@ namespace gorn
 		return obj;
 	}
 
-    bool GraphicsImageLoader::validate(const Data& input) const
+    bool GraphicsImageLoader::validate(const Data& input) const NOEXCEPT
     {
         return true;
     }
 
-    Image GraphicsImageLoader::load(Data&& input) const
+    Image GraphicsImageLoader::load(const Data& input) const
     {
 		try
 		{

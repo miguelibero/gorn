@@ -19,16 +19,16 @@ namespace gorn
     const char* kFaceSeparator = "/";
     const char  kCommentPrefix = '#';
 
-    ObjMeshLoader::ObjMeshLoader()
+    ObjMeshLoader::ObjMeshLoader() NOEXCEPT
     {
     }
 
-    bool ObjMeshLoader::validate(const Data& data) const
+    bool ObjMeshLoader::validate(const Data& data) const NOEXCEPT
     {
         return !data.isBinary();
     }
 
-    Mesh ObjMeshLoader::load(Data&& data) const
+    Mesh ObjMeshLoader::load(const Data& data) const
     {
         DataInputStream in(data);
         std::string line;

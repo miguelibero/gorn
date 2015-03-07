@@ -9,22 +9,22 @@
 namespace gorn
 {
 
-	void FileManager::addLoader(const std::string& tag, std::unique_ptr<Loader>&& loader)
+	void FileManager::addLoader(const std::string& tag,
+        std::unique_ptr<Loader>&& loader) NOEXCEPT
 	{
-        if(loader == nullptr)
+        if(loader != nullptr)
         {
-            throw Exception("Cannot add an empty loader");
+    		_loaders[tag].push_back(std::move(loader));
         }
-		_loaders[tag].push_back(std::move(loader));
 	}
 
-    void FileManager::addLoader(std::unique_ptr<Loader>&& loader)
+    void FileManager::addLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
     std::vector<std::shared_ptr<FileManager::Loader>> FileManager::getLoaders(
-        const std::pair<std::string,std::string>& parts) const
+        const std::pair<std::string,std::string>& parts) const NOEXCEPT
     {
         std::vector<std::shared_ptr<Loader>> loaders;
         if(parts.first != String::kDefaultTag)
@@ -51,7 +51,7 @@ namespace gorn
         return loaders;
     }
 
-    bool FileManager::validate(const std::string& name) const
+    bool FileManager::validate(const std::string& name) const NOEXCEPT
     {
         auto itr = _preloads.find(name);
         if(itr != _preloads.end())
@@ -103,7 +103,7 @@ namespace gorn
         }, name);
     }
 
-    void FileManager::preload(const std::string& name, Data&& data)
+    void FileManager::preload(const std::string& name, Data&& data) NOEXCEPT
     {
         _preloads[name] = std::move(data);
     }

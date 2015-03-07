@@ -2,6 +2,7 @@
 #define __gorn__FileLoader__
 
 #include <string>
+#include <gorn/base/Config.hpp>
 
 namespace gorn
 {
@@ -15,7 +16,7 @@ namespace gorn
         /**
          * @return true if the file can be loaded
          */
-        virtual bool validate(const std::string& name) const;
+        virtual bool validate(const std::string& name) const NOEXCEPT;
 
         /**
          * @return the new file data

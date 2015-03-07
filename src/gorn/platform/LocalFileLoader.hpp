@@ -12,10 +12,10 @@ namespace gorn {
         static const char* kPlaceholder;
 
         std::string _pathTemplate;
-        std::string getPath(const std::string& name) const;
+        std::string getPath(const std::string& name) const NOEXCEPT;
     public:
-        LocalFileLoader(const std::string& pathTemplate=kPlaceholder);
-        bool validate(const std::string& name) const;
+        LocalFileLoader(const std::string& pathTemplate=kPlaceholder) NOEXCEPT;
+        bool validate(const std::string& name) const NOEXCEPT;
         Data load(const std::string& name) const;
     };
 }

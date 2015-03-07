@@ -8,7 +8,7 @@ namespace gorn
     {
     }
 
-    bool FileLoader::validate(const std::string& name) const
+    bool FileLoader::validate(const std::string& name) const NOEXCEPT
     {
         return true;
     }
