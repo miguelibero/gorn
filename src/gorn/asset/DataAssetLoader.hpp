@@ -3,10 +3,10 @@
 
 #include <gorn/base/Config.hpp>
 
+class buffer;
+
 namespace gorn
 {
-    class Data;
-
     template<typename T>
 	class DataAssetLoader
 	{
@@ -16,7 +16,7 @@ namespace gorn
         /**
          * @return true if the asset can be loaded
          */
-        virtual bool validate(const Data& data) const NOEXCEPT
+        virtual bool validate(const buffer& data) const NOEXCEPT
         {
             return true;
         }

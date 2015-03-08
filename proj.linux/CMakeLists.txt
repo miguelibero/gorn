@@ -9,6 +9,9 @@ add_definitions(-DGORN_PLATFORM_LINUX)
 # glm
 add_subdirectory(../lib/glm "${CMAKE_CURRENT_BINARY_DIR}/glm")
 
+# buffer
+add_subdirectory(../lib/buffer "${CMAKE_CURRENT_BINARY_DIR}/buffer")
+
 # library
 include_directories(../src)
 include_directories(../lib)
