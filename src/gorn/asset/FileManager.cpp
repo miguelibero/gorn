@@ -2,7 +2,7 @@
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/asset/FileLoader.hpp>
 #include <gorn/base/Exception.hpp>
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/base/String.hpp>
 #include <algorithm>
 
@@ -71,12 +71,12 @@ namespace gorn
         return false;
     }
 
-	std::future<Data> FileManager::load(const std::string& name, bool cache)
+	std::future<buffer> FileManager::load(const std::string& name, bool cache)
 	{
         auto itr = _preloads.find(name);
         if(itr != _preloads.end())
         {
-            std::promise<Data> p;
+            std::promise<buffer> p;
             p.set_value(itr->second);
             return p.get_future();
         }
@@ -95,7 +95,7 @@ namespace gorn
             +parts.second+"' with tag '"+parts.first+"'.");
 	}
 
-    std::future<Data> FileManager::load(
+    std::future<buffer> FileManager::load(
       const std::shared_ptr<Loader>& loader, const std::string& name)
     {
         return std::async(std::launch::async, [loader](const std::string& name){
@@ -103,7 +103,7 @@ namespace gorn
         }, name);
     }
 
-    void FileManager::preload(const std::string& name, Data&& data) NOEXCEPT
+    void FileManager::preload(const std::string& name, buffer&& data) NOEXCEPT
     {
         _preloads[name] = std::move(data);
     }

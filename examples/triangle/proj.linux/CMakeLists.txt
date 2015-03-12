@@ -16,6 +16,7 @@ add_subdirectory(../../../proj.linux "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gorn")
 #TODO: find include dirs
 include_directories(../../../src)
 include_directories(../../../lib)
+include_directories(../../../lib/buffer/src)
 
 file(GLOB SOURCES "../src/*.cpp")
 add_executable(triangle ${SOURCES})

@@ -46,7 +46,7 @@ void TriangleApplication::load()
 
     _vao.setProgram(_ctx.getPrograms().load("shader"));
 
-    auto vbo = std::make_shared<gorn::VertexBuffer>(gorn::Data{
+    auto vbo = std::make_shared<gorn::VertexBuffer>(buffer{
      //  Position     Color 
          0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
          0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green

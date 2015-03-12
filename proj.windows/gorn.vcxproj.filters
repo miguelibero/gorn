@@ -37,6 +37,9 @@
     <Filter Include="Header Files\platform">
       <UniqueIdentifier>{d4160315-5039-4141-920f-6dcdbf0535c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\platform\SOIL">
+      <UniqueIdentifier>{350975a3-02e7-42c3-8abf-686725e8c9f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\gorn\asset\asset.hpp">
@@ -64,9 +67,6 @@
       <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="..\src\gorn\base\Context.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\Data.hpp">
       <Filter>Header Files\base</Filter>
     </ClInclude>
     <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp">
@@ -147,7 +147,7 @@
     <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\SOILImageLoader.hpp">
+    <ClInclude Include="..\src\gorn\platform\windows\SOILImageLoader.hpp">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
   </ItemGroup>
@@ -165,9 +165,6 @@
       <Filter>Source Files\base</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\base\Context.cpp">
-      <Filter>Source Files\base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\base\Data.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\render\AttributeDefinition.cpp">
@@ -227,17 +224,50 @@
     <ClCompile Include="..\src\gorn\render\VertexDefinition.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gorn\render\Enums.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\etc1_utils.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\image_DXT.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\image_helper.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\SOIL2.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image_write.c">
+      <Filter>Source Files\platform\SOIL</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\gorn\platform\windows\Main.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp">
       <Filter>Source Files\platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Enums.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\SOILImageLoader.cpp">
+    <ClCompile Include="..\src\gorn\platform\windows\SOILImageLoader.cpp">
       <Filter>Source Files\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Application.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\buffer\src\buffer.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\buffer\src\buffer_reader.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\GlEnums.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

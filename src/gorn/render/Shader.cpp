@@ -1,9 +1,10 @@
 #include <gorn/render/Shader.hpp>
 #include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {
-	Shader::Shader(const Data& source, ShaderType type):
+	Shader::Shader(const buffer& source, ShaderType type):
 	_id(0)
 	{
         GLenum glType = 0;
@@ -20,7 +21,7 @@ namespace gorn
         {
             throw Exception("Could not create shader.");
         }
-		auto ptr = (const GLchar*)source.ptr();
+		auto ptr = (const GLchar*)source.data();
 		auto size = (const GLint)source.size();
         glShaderSource(_id, 1, &ptr, &size);
         glCompileShader(_id);

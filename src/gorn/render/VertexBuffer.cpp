@@ -1,6 +1,6 @@
 
 #include <gorn/render/VertexBuffer.hpp>
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {
@@ -31,7 +31,7 @@ namespace gorn
 	}
 
 
-    VertexBuffer::VertexBuffer(const Data& data, Usage usage, Target target):
+    VertexBuffer::VertexBuffer(const buffer& data, Usage usage, Target target):
     _id(0), _target(target), _size(0)
     {
         setData(data, usage);
@@ -76,21 +76,21 @@ namespace gorn
         }
     }
 
-    void VertexBuffer::setData(const Data& data, Usage usage)
+    void VertexBuffer::setData(const buffer& data, Usage usage)
     {
         bind();
         _size = data.size();
 		glBufferData(getGlTarget(_target), data.size(),
-            data.ptr(), getGlUsage(usage));
+            data.data(), getGlUsage(usage));
 
         checkGlError("setting the data of a vertex buffer");
     }
 
-    void VertexBuffer::setSubData(const Data& data, size_t offset)
+    void VertexBuffer::setSubData(const buffer& data, size_t offset)
     {
         bind();
 		glBufferSubData(getGlTarget(_target), offset,
-            data.size(), data.ptr());
+            data.size(), data.data());
 
         checkGlError("setting the a part of the data of a vertex buffer");
     }

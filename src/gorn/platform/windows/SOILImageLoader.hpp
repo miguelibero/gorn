@@ -11,8 +11,8 @@ namespace gorn {
 	class SOILImageLoader : public DataAssetLoader<Image>
     {
     public:
-        bool validate(const Data& input) const;
-        Image load(Data&& input) const;
+        bool validate(const buffer& input) const;
+		Image load(const buffer& input) const;
     };
 }
 

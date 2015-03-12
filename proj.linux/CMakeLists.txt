@@ -15,6 +15,7 @@ add_subdirectory(../lib/buffer "${CMAKE_CURRENT_BINARY_DIR}/buffer")
 # library
 include_directories(../src)
 include_directories(../lib)
+include_directories(../lib/buffer/src)
 set(GORN_SOURCE_DIR "../src/gorn")
 set(GORN_INCLUDE_DIR "../src")
 
@@ -27,4 +28,4 @@ file(GLOB GORN_SOURCES
 	"${GORN_SOURCE_DIR}/platform/linux/*.cpp"
 )
 add_library(gorn ${GORN_SOURCES})
-target_link_libraries(gorn GL GLU GLEW X11 Xxf86vm Xrandr pthread Xi png)
+target_link_libraries(gorn GL GLU GLEW X11 Xxf86vm Xrandr pthread Xi png buffer)

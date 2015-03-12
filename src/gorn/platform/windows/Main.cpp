@@ -10,7 +10,7 @@ int winWidth = 800, winHeight = 600;
 HDC hDC;
 HGLRC hGLRC;
 HPALETTE hPalette;
-gorn::Application app;
+std::unique_ptr<gorn::Application> app;
 bool loaded = false;
 _int64 timeStamp;
 _int64 timeStampFreq;
@@ -26,14 +26,15 @@ load() {
 	{
 		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
 		QueryPerformanceFrequency((LARGE_INTEGER *)&timeStampFreq);
-		app.load();
+		app = gorn::main();
+		app->realLoad();
 		loaded = true;
 	}
 }
 
 void unload()
 {
-	app.unload();
+	app->realUnload();
 	loaded = false;
 }
 
@@ -44,7 +45,7 @@ void update()
 		_int64 oldTimeStamp = timeStamp;
 		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
 		double dt = (double)(timeStamp - oldTimeStamp)/timeStampFreq;
-		app.update(dt);
+		app->realUpdate(dt);
 	}
 }
 
@@ -55,12 +56,12 @@ void draw()
 
 void foreground()
 {
-	app.foreground();
+	app->realForeground();
 }
 
 void background()
 {
-	app.background();
+	app->realBackground();
 }
 
 void

@@ -1,4 +1,5 @@
 #include <gorn/render/ProgramDefinition.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {
@@ -15,7 +16,7 @@ namespace gorn
     }
 
     ProgramDefinition& ProgramDefinition::withShaderData(
-        ShaderType type, Data&& data)
+        ShaderType type, buffer&& data)
     {
         _shaderData[type] = std::move(data);
         return *this;
@@ -24,7 +25,7 @@ namespace gorn
     ProgramDefinition& ProgramDefinition::withShaderData(
         ShaderType type, const std::string& data)
     {
-        return withShaderData(type, Data(data));
+        return withShaderData(type, buffer(data.data(), data.size()));
     }
 
     ProgramDefinition& ProgramDefinition::withUniform(
@@ -66,7 +67,7 @@ namespace gorn
         return itr != _shaderData.end();
     }
 
-    const Data& ProgramDefinition::getShaderData(ShaderType type) const
+    const buffer& ProgramDefinition::getShaderData(ShaderType type) const
     {
         return _shaderData.at(type);
     }

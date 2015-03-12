@@ -98,8 +98,8 @@ namespace gorn
                 vao.setMaterial(cmd.getMaterial());
                 auto vdef = cmd.getVertexDefinition(
                     *cmd.getMaterial()->getProgram());
-                Data vertData;
-                Data elmData;
+                buffer vertData;
+                buffer elmData;
                 auto num = cmd.getVertexData(vdef, vertData, elmData);
                 auto usage = VertexBuffer::Usage::StaticDraw;
 

@@ -7,6 +7,7 @@ namespace gorn
 {
     enum class DrawMode
     {
+        Quads,
         Triangles,
         Lines,
         Points

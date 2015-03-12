@@ -7,9 +7,10 @@
 #include <string>
 #include <map>
 
+class buffer;
+
 namespace gorn
 {
-
 	class ProgramDefinition
 	{
     public:
@@ -18,7 +19,7 @@ namespace gorn
         typedef std::map<std::string, UniformValue> UniformValues;
 	private:
 		std::map<ShaderType, std::string> _shaderFiles;
-        std::map<ShaderType, Data> _shaderData;
+        std::map<ShaderType, buffer> _shaderData;
 		Uniforms _uniforms;
 		Attributes _attributes;
 		UniformValues _uniformValues;
@@ -26,7 +27,7 @@ namespace gorn
 		ProgramDefinition();
         ProgramDefinition& withShaderFile(ShaderType type,
             const std::string& name);
-        ProgramDefinition& withShaderData(ShaderType type, Data&& data);
+        ProgramDefinition& withShaderData(ShaderType type, buffer&& data);
         ProgramDefinition& withShaderData(ShaderType type,
             const std::string& data);
         ProgramDefinition& withUniform(const std::string& name,
@@ -39,7 +40,7 @@ namespace gorn
             const UniformValue& value);
 
         bool hasShaderData(ShaderType type) const;
-        const Data& getShaderData(ShaderType type) const;
+        const buffer& getShaderData(ShaderType type) const;
         bool hasShaderFile(ShaderType type) const;
 		const std::string& getShaderFile(ShaderType type) const;
 		const Uniforms& getUniforms() const;

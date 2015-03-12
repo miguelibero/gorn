@@ -1,8 +1,9 @@
 #ifndef __gorn__Shader__
 #define __gorn__Shader__
 
-#include <gorn/base/Data.hpp>
 #include <gorn/render/Gl.hpp>
+
+class buffer;
 
 namespace gorn
 {
@@ -19,7 +20,7 @@ namespace gorn
 	public:
         typedef ShaderType Type;
 
-		Shader(const Data& source, ShaderType type);
+		Shader(const buffer& source, ShaderType type);
 		~Shader();
 		GLuint getId() const;
 	};

@@ -2,6 +2,7 @@
 #include <gorn/render/Shader.hpp>
 #include <gorn/render/Program.hpp>
 #include <gorn/asset/FileManager.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {

@@ -1,7 +1,7 @@
 #ifndef __gorn__RenderCommand__
 #define __gorn__RenderCommand__
 
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/Material.hpp>
@@ -14,13 +14,13 @@ namespace gorn
 
     struct RenderCommandBlock
     {
-        Data data;
+        buffer data;
         size_t count;
         BasicType type;
 
         RenderCommandBlock();
-        RenderCommandBlock(Data&& data, size_t count, BasicType type);
-        RenderCommandBlock(const Data& data, size_t count, BasicType type);
+        RenderCommandBlock(buffer&& data, size_t count, BasicType type);
+        RenderCommandBlock(const buffer& data, size_t count, BasicType type);
     };
 
     enum class RenderCommandTransformMode
@@ -60,12 +60,12 @@ namespace gorn
         RenderCommand();
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
-            Data&& data, size_t count, BasicType type=BasicType::Float);
+            buffer&& data, size_t count, BasicType type=BasicType::Float);
         RenderCommand& withAttribute(const std::string& name,
-            const Data& data, size_t count, BasicType type=BasicType::Float);
-        RenderCommand& withElements(Data&& data,
+            const buffer& data, size_t count, BasicType type=BasicType::Float);
+        RenderCommand& withElements(buffer&& data,
             BasicType type=BasicType::UnsignedInteger);
-        RenderCommand& withElements(const Data& data,
+        RenderCommand& withElements(const buffer& data,
             BasicType type=BasicType::UnsignedInteger);
         RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
@@ -88,7 +88,7 @@ namespace gorn
 
         VertexDefinition getVertexDefinition(const Program& prog) const;
         size_t getVertexData(const VertexDefinition& vdef,
-            Data& vertData, Data& elmData) const;
+            buffer& vertData, buffer& elmData) const;
 
         const glm::mat4& getTransform() const;
         TransformMode getTransformMode() const;

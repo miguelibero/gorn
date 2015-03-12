@@ -3,9 +3,10 @@
 #include <gorn/asset/ObjMeshLoader.hpp>
 #include <gorn/asset/Mesh.hpp>
 #include <gorn/render/Kinds.hpp>
-#include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
+#include <buffer_reader.hpp>
 #include <string>
 #include <algorithm>
 
@@ -23,14 +24,14 @@ namespace gorn
     {
     }
 
-    bool ObjMeshLoader::validate(const Data& data) const NOEXCEPT
+    bool ObjMeshLoader::validate(const buffer& data) const NOEXCEPT
     {
-        return !data.isBinary();
+        return !data.binary();
     }
 
-    Mesh ObjMeshLoader::load(const Data& data) const
+    Mesh ObjMeshLoader::load(const buffer& data) const
     {
-        DataInputStream in(data);
+        buffer_reader in(data);
         std::string line;
 
         Mesh mesh;

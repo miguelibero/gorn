@@ -3,6 +3,8 @@
 #include <gorn/platform/linux/PngImageLoader.hpp>
 #include <gorn/asset/Image.hpp>
 #include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
+#include <buffer_reader.hpp>
 #include <cstring>
 #include <png.h>
 #ifdef GORN_DEBUG_PNG_IMAGE_LOADER
@@ -18,9 +20,9 @@
 
 namespace gorn {
 
-    bool PngImageLoader::validate(const Data& inputData) const NOEXCEPT
+    bool PngImageLoader::validate(const buffer& inputData) const NOEXCEPT
     {
-        DataInputStream input(inputData);
+        buffer_reader input(inputData);
         png_byte pngSig[PNGSIGSIZE];
         memset(pngSig, 0, PNGSIGSIZE);
         bool isPng = false;
@@ -45,13 +47,13 @@ namespace gorn {
         (png_structp pngPtr, png_bytep data, png_size_t length)
     {
         png_voidp a = png_get_io_ptr(pngPtr);
-        static_cast<DataInputStream*>(a)
+        static_cast<buffer_reader*>(a)
             ->read(data, length);
     }
 
-    Image PngImageLoader::load(const Data& inputData) const
+    Image PngImageLoader::load(const buffer& inputData) const
     {
-        DataInputStream input(inputData);
+        buffer_reader input(inputData);
         png_structp pngPtr = png_create_read_struct(
             PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
         if (!pngPtr)
@@ -115,12 +117,12 @@ namespace gorn {
         const png_size_t rowBytes = png_get_rowbytes(pngPtr, infoPtr);
         rowPtrs = new png_bytep[imgHeight];
         const size_t len = rowBytes * imgHeight;
-        Data data(len);
+        buffer data(len);
 
         for (size_t i = 0; i < imgHeight; i++)
         {
             png_size_t q = (imgHeight - i - 1) * rowBytes;
-            rowPtrs[i] = data.ptr() + q;
+            rowPtrs[i] = data.data() + q;
         }
         png_read_image(pngPtr, rowPtrs);
         png_read_end(pngPtr, NULL);

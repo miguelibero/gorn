@@ -1,8 +1,9 @@
 #include <gorn/asset/Image.hpp>
+#include <utility>
 
 namespace gorn
 {
-	Image::Image(Data&& data, const glm::vec2& size,
+	Image::Image(buffer&& data, const glm::vec2& size,
         bool hasAlpha, BasicType type, Format format) NOEXCEPT:
 	_data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
     _type(type), _format(format)
@@ -29,7 +30,7 @@ namespace gorn
         return _hasAlpha;
     }
 
-    const Data& Image::getData() const NOEXCEPT
+    const buffer& Image::getData() const NOEXCEPT
     {
     	return _data;
     }

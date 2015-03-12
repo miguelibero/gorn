@@ -24,7 +24,7 @@ namespace gorn
         /**
          * @return the loaded asset
          */
-        virtual T load(const Data& data) const = 0;
+        virtual T load(const buffer& data) const = 0;
 	};
 }
 

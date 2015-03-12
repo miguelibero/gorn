@@ -4,10 +4,10 @@
 #include <string>
 #include <gorn/base/Config.hpp>
 
+class buffer;
+
 namespace gorn
 {
-    class Data;
-
 	class FileLoader
 	{
     public:
@@ -21,7 +21,7 @@ namespace gorn
         /**
          * @return the new file data
          */
-        virtual Data load(const std::string& name) const = 0;
+        virtual buffer load(const std::string& name) const = 0;
 	};
 
 }

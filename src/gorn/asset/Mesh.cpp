@@ -2,6 +2,7 @@
 #include <gorn/render/Kinds.hpp>
 #include <gorn/render/RenderCommand.hpp>
 #include <algorithm>
+#include <buffer_writer.hpp>
 
 namespace gorn
 {
@@ -132,12 +133,12 @@ namespace gorn
 
     RenderCommand Mesh::render() const
     {
-        Data posData;
-        Data normData;
-        Data texData;
-        DataOutputStream posOut(posData);
-        DataOutputStream normOut(normData);
-        DataOutputStream texOut(texData);
+        buffer posData;
+        buffer normData;
+        buffer texData;
+        buffer_writer posOut(posData);
+        buffer_writer normOut(normData);
+        buffer_writer texOut(texData);
 
         for(const Element& elm : _elements)
         {

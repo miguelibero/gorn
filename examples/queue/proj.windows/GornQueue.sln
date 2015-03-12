@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GornQueue", "GornQueue.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn", "..\..\..\proj.windows\gorn.vcxproj", "{088DB418-4DE7-4FEB-9327-4C97704A9E93}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SOIL2", "..\SOIL2\SOIL2.vcxproj", "{483243FF-BAF9-45FB-BB4B-37EE68C1D9D2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -23,10 +21,6 @@ Global
 		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Debug|Win32.Build.0 = Debug|Win32
 		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Release|Win32.ActiveCfg = Release|Win32
 		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Release|Win32.Build.0 = Release|Win32
-		{483243FF-BAF9-45FB-BB4B-37EE68C1D9D2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{483243FF-BAF9-45FB-BB4B-37EE68C1D9D2}.Debug|Win32.Build.0 = Debug|Win32
-		{483243FF-BAF9-45FB-BB4B-37EE68C1D9D2}.Release|Win32.ActiveCfg = Release|Win32
-		{483243FF-BAF9-45FB-BB4B-37EE68C1D9D2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

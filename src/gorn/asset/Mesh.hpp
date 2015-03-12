@@ -7,7 +7,6 @@
 
 namespace gorn
 {
-    
     class RenderCommand;
 
     struct MeshElement

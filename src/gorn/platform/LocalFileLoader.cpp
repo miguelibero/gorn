@@ -1,7 +1,8 @@
 
 #include <gorn/platform/LocalFileLoader.hpp>
-#include <gorn/base/Data.hpp>
 #include <gorn/base/String.hpp>
+#include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
 #include <sys/stat.h>
 
 namespace gorn {
@@ -27,9 +28,32 @@ namespace gorn {
         return (stat (path.c_str(), &buffer) == 0); 
     }
 
-    Data LocalFileLoader::load(const std::string& name) const
+    buffer LocalFileLoader::load(const std::string& name) const
     {
         auto path = getPath(name);
-        return Data::readFile(path);
+        FILE *fh = nullptr;
+#ifdef GORN_PLATFORM_WINDOWS
+		if(fopen_s(&fh, path.c_str(), "rb") != 0)
+		{
+			fh = nullptr;
+		}
+#else
+        fh = fopen(path.c_str(), "rb");
+#endif
+		if (fh == nullptr)
+        { 
+            throw Exception("Could not open file.");
+        } 
+        fseek(fh, 0, SEEK_END);
+        size_t size = ftell(fh);
+        fseek(fh, 0, SEEK_SET);
+        buffer buffer(size);
+        if (size != fread(buffer.data(), 1, size, fh)) 
+        { 
+            fclose(fh);
+            throw Exception("Could not read file.");
+        } 
+        fclose(fh);
+        return buffer;
     }
 }

@@ -2,6 +2,7 @@
 #include <gorn/render/RenderCommand.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/render/Program.hpp>
+#include <buffer_writer.hpp>
 
 namespace gorn
 {
@@ -11,13 +12,13 @@ namespace gorn
     }
 
     RenderCommandBlock::RenderCommandBlock(
-        Data&& data, size_t count, BasicType type):
+        buffer&& data, size_t count, BasicType type):
     data(std::move(data)), count(count), type(type)
     {
     }
 
     RenderCommandBlock::RenderCommandBlock(
-        const Data& data, size_t count, BasicType type):
+        const buffer& data, size_t count, BasicType type):
     data(data), count(count), type(type)
     {
     }
@@ -37,26 +38,26 @@ namespace gorn
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        Data&& data, size_t count, BasicType type)
+        buffer&& data, size_t count, BasicType type)
     {
         _attributes[name] = Block(std::move(data), count, type);
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        const Data& data, size_t count, BasicType type)
+        const buffer& data, size_t count, BasicType type)
     {
         _attributes[name] = Block(data, count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(Data&& data, BasicType type)
+    RenderCommand& RenderCommand::withElements(buffer&& data, BasicType type)
     {
          _elements = Block(std::move(data), data.size()/getBasicTypeSize(type), type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const Data& data, BasicType type)
+    RenderCommand& RenderCommand::withElements(const buffer& data, BasicType type)
     {
          _elements = Block(data, data.size()/getBasicTypeSize(type), type);
         return *this;
@@ -178,10 +179,10 @@ namespace gorn
     }
 
     size_t RenderCommand::getVertexData(const VertexDefinition& vdef,
-        Data& vertData, Data& elmData) const
+        buffer& vertData, buffer& elmData) const
     {
-        DataOutputStream outVert(vertData);
-        DataOutputStream outElm(elmData);
+        buffer_writer outVert(vertData);
+        buffer_writer outElm(elmData);
 
         size_t n = 0;
 
@@ -195,7 +196,7 @@ namespace gorn
                 size_t elmSize = itr->second.getElementSize();
                 auto& block = getAttribute(itr->first);
                 size_t writeSize = outVert.write(block.data, elmSize, n*elmSize);
-                outVert.write(elmSize-writeSize);
+                outVert.fill(0, elmSize-writeSize);
                 if(writeSize != 0)
                 {
                     finished = false;

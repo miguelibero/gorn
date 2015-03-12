@@ -69,7 +69,7 @@ namespace gorn
 
         glTexImage2D(_target, lodLevel, internalFormat,
             (GLsizei)_size.x, (GLsizei)_size.y, 0,
-            format, type, img.getData().ptr());
+            format, type, img.getData().data());
     }
 
 	GLuint Texture::getId() const

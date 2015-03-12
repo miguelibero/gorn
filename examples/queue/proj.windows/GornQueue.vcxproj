@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\lib;..\..\..\src;..\..\..\lib\platform\windows\glew\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\lib;..\..\..\src;..\..\..\lib\platform\windows\glew\include;..\..\..\lib\buffer\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\lib\platform\windows\glew\lib\Release\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

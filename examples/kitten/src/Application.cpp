@@ -79,7 +79,7 @@ void KittenApplication::load()
 
     _vao.setMaterial(_ctx.getMaterials().load("kitten"));
 
-    auto vbo = std::make_shared<VertexBuffer>(Data{
+    auto vbo = std::make_shared<VertexBuffer>(buffer{
      //  Position     Color             texCoords
         -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // Top-left
          0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // Top-right
@@ -105,7 +105,7 @@ void KittenApplication::load()
 
     _vao.addVertexData(vbo, vdef);
 
-    vbo =  std::make_shared<VertexBuffer>(Data{
+    vbo =  std::make_shared<VertexBuffer>(buffer{
         0, 1, 2,
         2, 3, 0
     }, VertexBuffer::Usage::StaticDraw,
