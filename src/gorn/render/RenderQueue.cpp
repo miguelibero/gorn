@@ -106,10 +106,12 @@ namespace gorn
                 vao.addVertexData(std::make_shared<VertexBuffer>(
                     std::move(vertData), usage,
                     VertexBuffer::Target::ArrayBuffer), vdef);
-                vao.setElementData(std::make_shared<VertexBuffer>(
-                    std::move(elmData), usage,
-                    VertexBuffer::Target::ElementArrayBuffer));
-
+                if(!elmData.empty())
+                {
+                    vao.setElementData(std::make_shared<VertexBuffer>(
+                        std::move(elmData), usage,
+                        VertexBuffer::Target::ElementArrayBuffer));
+                }
                 for(auto itr = _uniformValues.begin();
                     itr != _uniformValues.end(); ++itr)
                 {

@@ -47,7 +47,7 @@ void TeapotApplication::load()
 
     _ctx.getMaterials().getDefinitions()
         .set("metal", MaterialDefinition()
-            .withTexture(UniformKind::Texture0, "default.png")
+            .withTexture(gorn::UniformKind::Texture0, "default.png")
             .withProgram("diffuse"));
 
     AssetManager<Mesh> meshes(_ctx.getFiles());

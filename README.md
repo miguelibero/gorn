@@ -54,7 +54,7 @@ void main()
 auto vao = VertexArray()
 vao.setProgram(Program(vsh, fsh));
 
-auto vbo = VertexBuffer(Data{
+auto vbo = VertexBuffer(buffer{
     //  Position     Color 
         0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
