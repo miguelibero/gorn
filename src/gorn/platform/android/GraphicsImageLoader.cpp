@@ -16,7 +16,15 @@ namespace gorn
 
     bool GraphicsImageLoader::validate(const buffer& input) const NOEXCEPT
     {
-        return true;
+		try
+		{
+            std::vector<uint8_t> vect(input.data(), input.data()+input.size());
+            return getJniObject().call("validateImage", false, vect);
+		}
+		catch(const JniException& e)
+		{
+		}
+        return false;
     }
 
     Image GraphicsImageLoader::load(const buffer& input) const

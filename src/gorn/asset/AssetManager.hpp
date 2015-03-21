@@ -277,7 +277,10 @@ namespace gorn
     	        return load(loader, name, cache);
 		    }
 	    }
-		throw Exception("Could not load asset.");
+        std::promise<std::shared_ptr<T>> p;
+        p.set_exception(std::make_exception_ptr(
+            Exception("Could not load asset.")));
+        return p.get_future();
     }
 
     template<typename T>

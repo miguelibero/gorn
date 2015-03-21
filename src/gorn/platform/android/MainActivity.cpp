@@ -11,8 +11,11 @@ extern "C" {
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnSurfaceCreated(JNIEnv* env, jclass cls)
 	{
-        app = std::move(gorn::main());
-		app->realLoad();
+        if(app == nullptr)
+        {
+            app = std::move(gorn::main());
+		    app->realLoad();
+        }
 	}
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnPause(JNIEnv* env, jclass cls)

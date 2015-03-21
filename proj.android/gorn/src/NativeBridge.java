@@ -61,6 +61,30 @@ public enum NativeBridge
         Log.v(TAG, ""+data.length+" bytes "+start+"..."+end+".");
     }
 
+	public boolean validateImage(byte[] data) throws IOException
+	{
+		Log.v(TAG, "validating image...");
+        logByteArray(data);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        return bitmap != null;
+    }
+
+    private byte[] reverseImageArray(byte[] data, int components)
+    {
+        for(int i=0; i<data.length/2; i+=components)
+        {
+            for(int j=0;j<components; j++)
+            {
+                int a = i+j;
+                int b = data.length-components-i+j;
+                byte temp = data[a];
+                data[a] = data[b];
+                data[b] = temp;
+            }
+        }
+        return data;
+    }
+
 	public byte[] loadImage(byte[] data) throws IOException
 	{
 		Log.v(TAG, "loading image...");
@@ -82,7 +106,7 @@ public enum NativeBridge
             };
 		    ByteBuffer buffer = ByteBuffer.allocate(bytes);
 		    bitmap.copyPixelsToBuffer(buffer);
-		    return buffer.array();
+		    return reverseImageArray(buffer.array(), 4);
         }
         else
         {
