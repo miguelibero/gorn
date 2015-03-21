@@ -48,22 +48,22 @@ void KittenApplication::load()
 
 #ifdef GORN_PLATFORM_LINUX
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+        .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+        .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("tex", "../assets/%s.png");
+        .makeLoader<LocalFileLoader>("tex", "../assets/%s.png");
 	_ctx.getImages()
-        .addDefaultDataLoader<PngImageLoader>();
+        .makeDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("fsh", "%s.fsh");
+        .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("vsh", "%s.vsh");
+        .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("tex", "%s.png");
+        .makeLoader<AssetFileLoader>("tex", "%s.png");
 	_ctx.getImages()
-        .addDefaultDataLoader<GraphicsImageLoader>();
+        .makeDefaultDataLoader<GraphicsImageLoader>();
 #endif
 
     _ctx.getPrograms().getDefinitions().get("shader")

@@ -15,6 +15,7 @@ LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 INCLUDES += $(BASE_PATH)/src
 INCLUDES += $(BASE_PATH)/lib
+INCLUDES += $(BASE_PATH)/lib/buffer/src
 INCLUDES += $(BASE_PATH)/lib/platform/android
 INCLUDES += $(BASE_PATH)/lib/platform/android/jniobject/src
 

@@ -34,15 +34,15 @@ void TeapotApplication::load()
 {
 #ifdef GORN_PLATFORM_LINUX
 	_ctx.getFiles()
-        .addDefaultLoader<LocalFileLoader>("../assets/%s");
+        .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 	_ctx.getImages()
-        .addDefaultDataLoader<PngImageLoader>();
+        .makeDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
-        .addDefaultLoader<AssetFileLoader>("%s");
+        .makeDefaultLoader<AssetFileLoader>("%s");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
-    .addDefaultLoader<BundleFileLoader>("%s");
+    .makeDefaultLoader<BundleFileLoader>("%s");
 #endif
 
     _ctx.getMaterials().getDefinitions()

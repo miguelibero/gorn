@@ -3,7 +3,7 @@
 #include <JniObject.hpp>
 #include <gorn/base/Exception.hpp>
 #include <gorn/asset/Image.hpp>
-#include <android/log.h>
+#include <buffer.hpp>
 
 namespace gorn
 {
@@ -14,17 +14,17 @@ namespace gorn
 		return obj;
 	}
 
-    bool GraphicsImageLoader::validate(const Data& input) const NOEXCEPT
+    bool GraphicsImageLoader::validate(const buffer& input) const NOEXCEPT
     {
         return true;
     }
 
-    Image GraphicsImageLoader::load(const Data& input) const
+    Image GraphicsImageLoader::load(const buffer& input) const
     {
 		try
 		{
-            auto data = Data(getJniObject().call("loadImage",
-                std::vector<uint8_t>(), input.mem()));
+            auto data = buffer(getJniObject().call("loadImage",
+                std::vector<uint8_t>(), input.data()));
             if(data.empty())
             {
     			throw Exception("Could not decode image data.");        

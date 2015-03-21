@@ -35,13 +35,13 @@ void TriangleApplication::load()
 {
 #ifdef GORN_PLATFORM_LINUX
 	_ctx.getFiles()
-        .addDefaultLoader<gorn::LocalFileLoader>("../assets/%s");
+        .makeDefaultLoader<gorn::LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
-        .addDefaultLoader<gorn::AssetFileLoader>("%s");
+        .makeDefaultLoader<gorn::AssetFileLoader>("%s");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
-    .addDefaultLoader<gorn::BundleFileLoader>("%s");
+        .makeDefaultLoader<gorn::BundleFileLoader>("%s");
 #endif
 
     _vao.setProgram(_ctx.getPrograms().load("shader"));

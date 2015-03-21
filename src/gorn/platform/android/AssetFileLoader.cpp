@@ -1,7 +1,7 @@
 
 #include <gorn/platform/android/AssetFileLoader.hpp>
 #include <JniObject.hpp>
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Exception.hpp>
 
@@ -40,12 +40,12 @@ namespace gorn
 		}
     }
 
-    Data AssetFileLoader::load(const std::string& name) const
+    buffer AssetFileLoader::load(const std::string& name) const
     {
 		try
 		{
             auto path = getPath(name);
-			return Data(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
+			return buffer(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
 		}
 		catch(const JniException& e)
 		{

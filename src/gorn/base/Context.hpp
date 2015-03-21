@@ -11,6 +11,7 @@
 namespace gorn
 {
     class Image;
+    class Application;
 
     class Context
     {
@@ -45,7 +46,6 @@ namespace gorn
 
         template<typename T>
         AssetManager<T> createAssetManager();
-
     };
 
     template<typename T>

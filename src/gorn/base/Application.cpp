@@ -5,12 +5,24 @@
 namespace gorn
 {
     Application::Application():
-    _size(480, 320), _name("GORN")
+    _size(480, 320), _name("GORN"),
+    _drawInterval(0.0f), _maxFramesPerSecond(60.0f),
+    _framesPerSecond(0.0f)
     {
     }
 
     Application::~Application()
     {
+    }
+
+    void Application::setMaxFramesPerSecond(double fps)
+    {
+        _maxFramesPerSecond = fps;
+    }
+
+    double Application::getFramesPerSecond() const
+    {
+        return _framesPerSecond;
     }
 
     const glm::vec2& Application::getSize()
@@ -83,8 +95,14 @@ namespace gorn
 
     void Application::realUpdate(double dt)
     {
+        _drawInterval += dt;
         update(dt);
-        draw();
+
+        if(_drawInterval > 1.0f/_maxFramesPerSecond)
+        {
+            _framesPerSecond = 1.0f/_drawInterval;
+            draw();
+        }
     }
 
     void Application::realTouch(const glm::vec2& p)

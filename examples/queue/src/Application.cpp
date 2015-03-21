@@ -31,31 +31,31 @@ void QueueApplication::load()
 {
 #ifdef GORN_PLATFORM_LINUX
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
+        .makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+        .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
-        .addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+        .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 	_ctx.getImages()
-        .addDataLoader<PngImageLoader>("sprite");
+        .makeDataLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_WINDOWS
 	_ctx.getFiles()
-		.addLoader<LocalFileLoader>("sprite", "../assets/%s.png");
+		.makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
 	_ctx.getFiles()
-		.addLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
+		.makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
-		.addLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
+		.makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 	_ctx.getImages()
-		.addDataLoader<SOILImageLoader>("sprite");
+		.makeDataLoader<SOILImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("sprite", "%s.png");
+        .makeLoader<AssetFileLoader>("sprite", "%s.png");
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("vsh", "%s.vsh");
+        .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
 	_ctx.getFiles()
-        .addLoader<AssetFileLoader>("fsh", "%s.fsh");
+        .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
 	_ctx.getImages()
-        .addDataLoader<GraphicsImageLoader>("sprite");
+        .makeDataLoader<GraphicsImageLoader>("sprite");
 #endif
 
     _ctx.getMaterials().getDefinitions()

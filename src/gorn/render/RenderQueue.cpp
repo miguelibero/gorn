@@ -11,7 +11,7 @@
 namespace gorn
 {
     RenderQueue::RenderQueue(MaterialManager& materials):
-    _materials(materials)
+    _materials(materials), _updateInterval(0.0)
     {
     }
 
@@ -54,8 +54,21 @@ namespace gorn
         return cmd;
     }
 
+    void RenderQueue::update(double dt)
+    {
+        _updateInterval += dt;
+    }
+
+    const RenderQueue::DebugInfo& RenderQueue::getDebugInfo() const
+    {
+        return _debugInfo;
+    }
+
     void RenderQueue::draw()
     {
+        _debugInfo.framesPerSecond = 1.0/_updateInterval;
+        _updateInterval = 0.0;
+
         std::stack<glm::mat4> transforms;
         transforms.push(glm::mat4());
         std::stack<size_t> checkpoints;
@@ -125,6 +138,11 @@ namespace gorn
             [](const Command& cmd){
                 return cmd.getLifetime() == RenderCommandLifetime::Frame;
             }), _commands.end());
+    }
+
+    RenderQueueDebugInfo::RenderQueueDebugInfo():
+    framesPerSecond(0.0), drawCalls(0), drawCallsBatched(0)
+    {
     }
 }
 

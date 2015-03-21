@@ -36,20 +36,20 @@ namespace gorn
         void addLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
 
         template<typename L, typename... Args>
-        void addLoader(const std::string& tag, Args&&... args) NOEXCEPT;
+        void makeLoader(const std::string& tag, Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
-        void addDefaultLoader(Args&&... args) NOEXCEPT;
+        void makeDefaultLoader(Args&&... args) NOEXCEPT;
 
 	};
 
     template<typename L, typename... Args>
-    void FileManager::addLoader(const std::string& tag, Args&&... args) NOEXCEPT
+    void FileManager::makeLoader(const std::string& tag, Args&&... args) NOEXCEPT
     {
         addLoader(tag, std::unique_ptr<Loader>(new L(std::forward<Args>(args)...)));
     }
 
     template<typename L, typename... Args>
-    void FileManager::addDefaultLoader(Args&&... args) NOEXCEPT
+    void FileManager::makeDefaultLoader(Args&&... args) NOEXCEPT
     {
         addLoader(std::unique_ptr<Loader>(new L(std::forward<Args>(args)...)));
     }

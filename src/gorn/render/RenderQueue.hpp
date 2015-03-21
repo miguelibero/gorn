@@ -12,6 +12,15 @@ namespace gorn
         GroupByMaterial
     };
 
+    struct RenderQueueDebugInfo
+    {
+        double framesPerSecond;
+        double drawCalls;
+        double drawCallsBatched;
+
+        RenderQueueDebugInfo();
+    };
+
     class MaterialManager;
     
     template<typename A>
@@ -22,10 +31,13 @@ namespace gorn
     public:
         typedef RenderCommand Command;
         typedef RenderQueueOrder Order;
+        typedef RenderQueueDebugInfo DebugInfo;
     private:
         MaterialManager& _materials;
         std::vector<Command> _commands;
         std::map<std::string, UniformValue> _uniformValues;
+        double _updateInterval;
+        DebugInfo _debugInfo;
     public:
         RenderQueue(MaterialManager& materials);
         void setDefaultOrder(Order order);
@@ -36,7 +48,11 @@ namespace gorn
         void addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();
         RenderCommand& addCommand(const std::string& material);
+
+        void update(double dt);
         void draw();
+
+        const DebugInfo& getDebugInfo() const;
     };
 }
 

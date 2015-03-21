@@ -15,8 +15,8 @@ namespace gorn {
     private:
         static JniObject& getJniObject();
     public:
-        bool validate(const Data& input) const NOEXCEPT;
-        Image load(const Data& input) const;
+        bool validate(const buffer& input) const NOEXCEPT;
+        Image load(const buffer& input) const;
     };
 }
 

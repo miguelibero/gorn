@@ -81,9 +81,9 @@ tags.
 ```c++
 Context ctx;
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("sprite", "../%s.png");
+    .makeLoader<LocalFileLoader>("sprite", "../%s.png");
 ctx.getImages()
-    .addDefaultDataLoader<PngImageLoader>();
+    .makeDefaultDataLoader<PngImageLoader>();
 
 auto img = ctx.getImages().load("sprite:kitten");
 ```

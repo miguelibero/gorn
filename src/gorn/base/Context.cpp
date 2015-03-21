@@ -1,4 +1,5 @@
 #include <gorn/base/Context.hpp>
+#include <gorn/base/Exception.hpp>
 
 namespace gorn
 {

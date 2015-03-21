@@ -37,9 +37,9 @@ namespace gorn
             std::unique_ptr<Loader>&& loader) NOEXCEPT;
 
         template<typename L, typename... Args>
-        void addDefaultLoader(Args&&... args) NOEXCEPT;
+        void makeDefaultLoader(Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
-        void addLoader(const std::string& tag, Args&&... args) NOEXCEPT;
+        void makeLoader(const std::string& tag, Args&&... args) NOEXCEPT;
 	};
 
     template<typename T>
@@ -68,7 +68,7 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    void FileAssetLoader<T>::addDefaultLoader(Args&&... args) NOEXCEPT
+    void FileAssetLoader<T>::makeDefaultLoader(Args&&... args) NOEXCEPT
     {
         addDefaultLoader(std::unique_ptr<Loader>(
             new L(std::forward<Args>(args)...)));
@@ -76,7 +76,7 @@ namespace gorn
 
     template<typename T>
     template<typename L, typename... Args>
-    void FileAssetLoader<T>::addLoader(const std::string& tag,
+    void FileAssetLoader<T>::makeLoader(const std::string& tag,
         Args&&... args) NOEXCEPT
     {
         addLoader(tag, std::unique_ptr<Loader>(
@@ -115,14 +115,20 @@ namespace gorn
     bool FileAssetLoader<T>::validate(const std::string& name) const NOEXCEPT
     {
         auto loaders = getLoaders(name);
-        auto data = _files.load(name).get();
-        for(auto& loader : loaders)
-	    {
-		    if(loader->validate(data))
-		    {
-			    return true;
-		    }
-	    }
+        try
+        {
+            auto data = _files.load(name).get();
+            for(auto& loader : loaders)
+	        {
+		        if(loader->validate(data))
+		        {
+			        return true;
+		        }
+	        }
+        }
+        catch(const Exception&)
+        {
+        }
         return false;
     }
 

@@ -7,9 +7,6 @@
 #include <buffer_reader.hpp>
 #include <cstring>
 #include <png.h>
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-#include <iostream>
-#endif
 
 /**
  * this png loader is based on this blog post
@@ -28,18 +25,6 @@ namespace gorn {
         bool isPng = false;
         input.read(reinterpret_cast<uint8_t*>(pngSig), PNGSIGSIZE);
         isPng = png_sig_cmp(pngSig, 0, PNGSIGSIZE) == 0;
-        
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-        std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::validate "
-            << (isPng?"yes":"no") << std::endl;
-        std::cout << "signature " << std::hex;
-        for(unsigned i=0; i<PNGSIGSIZE; i++)
-        {
-            std::cout << (int) pngSig[i];    
-        }
-        std::cout << std::dec << std::endl << "<<<<" << std::endl;
-#endif
         return isPng;
     }
 
@@ -127,37 +112,6 @@ namespace gorn {
         png_read_image(pngPtr, rowPtrs);
         png_read_end(pngPtr, NULL);
 
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-
-        std::string colorTypeStr;
-        switch (colorType)
-        {
-        case PNG_COLOR_TYPE_GRAY:
-            colorTypeStr = "gray";
-            break;
-        case PNG_COLOR_TYPE_GRAY_ALPHA:
-            colorTypeStr = "gray with alpha";
-            break;        
-        case PNG_COLOR_TYPE_PALETTE:
-            colorTypeStr = "palette";
-            break;        
-        case PNG_COLOR_TYPE_RGB:
-            colorTypeStr = "rgb";
-            break;        
-        case PNG_COLOR_TYPE_RGB_ALPHA:
-            colorTypeStr = "rgb with alpha";
-            break;        
-        }
-        png_uint_32 channels = rowBytes/imgWidth;
-        
-        std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::load " << colorTypeStr
-            << ", " << len << " bytes " << std::endl;
-        std::cout << "size " << imgWidth << "x" << imgHeight
-            << ", depth " << bitDepth;
-        std::cout << ", channels " << channels << std::endl;
-        std::cout << "<<<<" << std::endl;
-#endif
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
         return Image(std::move(data),

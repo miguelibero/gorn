@@ -19,7 +19,7 @@ namespace gorn
     public:
         AssetFileLoader(const std::string& pathTemplate=kPlaceholder) NOEXCEPT;
         bool validate(const std::string& name) const NOEXCEPT;
-        Data load(const std::string& name) const;
+        buffer load(const std::string& name) const;
     };
 }
 
