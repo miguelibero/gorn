@@ -69,17 +69,18 @@ public enum NativeBridge
         return bitmap != null;
     }
 
-    private byte[] reverseImageArray(byte[] data, int components)
+    private byte[] invertImageArrayHeight(byte[] data, int h)
     {
-        for(int i=0; i<data.length/2; i+=components)
+        int c = data.length/h;
+        for(int y=0; y<h/2; y++)
         {
-            for(int j=0;j<components; j++)
+            for(int x=0; x<c; x++)
             {
-                int a = i+j;
-                int b = data.length-components-i+j;
-                byte temp = data[a];
+                int a = y*c+x;
+                int b = (h-y-1)*c+x;
+                byte t = data[a];
                 data[a] = data[b];
-                data[b] = temp;
+                data[b] = t;
             }
         }
         return data;
@@ -98,15 +99,14 @@ public enum NativeBridge
         if(bitmap != null)
         {
             Log.v(TAG, "loaded bitmap "+bitmap.getConfig());
-		    int bytes = bitmap.getByteCount();
             mImageInfo = new int[]{
                 bitmap.getWidth(),
                 bitmap.getHeight(),
                 1,
             };
-		    ByteBuffer buffer = ByteBuffer.allocate(bytes);
+		    ByteBuffer buffer = ByteBuffer.allocate(bitmap.getByteCount());
 		    bitmap.copyPixelsToBuffer(buffer);
-		    return reverseImageArray(buffer.array(), 4);
+		    return invertImageArrayHeight(buffer.array(), mImageInfo[1]);
         }
         else
         {
