@@ -71,8 +71,15 @@ public class MainActivity extends Activity
 			});
             glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public boolean onTouch(View view, MotionEvent ev) {
-                    MainActivity.this.nativeOnTouch(ev.getX(), ev.getY());
+                public boolean onTouch(View v, MotionEvent ev) {
+                    final float x = ev.getX() / (float) v.getWidth() * 2  - 1;
+                    final float y = (1 - ev.getY() / (float) v.getHeight()) * 2 - 1;
+                    glSurfaceView.queueEvent(new Runnable() {
+                        public void run()
+                        {
+                            MainActivity.this.nativeOnTouch(x, y);
+                        }
+                    });
                     return true;
                 }
             });

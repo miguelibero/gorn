@@ -14,5 +14,5 @@ LOCAL_WHOLE_STATIC_LIBRARIES := gorn gorn_queue
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-add-path,$(BASE_PATH)/../..)
-$(call import-module,proj.android/jni)
+$(call import-add-path,$(BASE_PATH)/../../proj.android)
+$(call import-module,gorn/jni)

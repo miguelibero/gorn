@@ -3,6 +3,7 @@
 #include <gorn/render/Gl.hpp>
 #include <JniObject.hpp>
 #include <memory>
+#include <glm/glm.hpp>
 
 std::unique_ptr<gorn::Application> app;
 
@@ -16,17 +17,26 @@ extern "C" {
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnPause(JNIEnv* env, jclass cls)
 	{
-        app->realBackground();
+        if(app != nullptr)
+        {
+            app->realBackground();
+        }
 	}
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnResume(JNIEnv* env, jclass cls)
 	{
-        app->realForeground();
+        if(app != nullptr)
+        {
+            app->realForeground();
+        }
 	}
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnDestroy(JNIEnv* env, jclass cls)
 	{
-        app->realUnload();
+        if(app != nullptr)
+        {
+            app->realUnload();
+        }
 	}
 	 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnSurfaceChanged(JNIEnv* env, jclass cls, jint width, jint height)
@@ -35,12 +45,18 @@ extern "C" {
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnTouch(JNIEnv* env, jclass cls, jfloat x, jfloat y)
 	{
-        app->realTouch(x, y);
+        if(app != nullptr)
+        {
+            app->realTouch(glm::vec2(x, y));
+        }
 	}
 	 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnDrawFrame(JNIEnv* env, jclass cls, jdouble dt)
 	{
-		app->realUpdate(dt);
+        if(app != nullptr)
+        {
+		    app->realUpdate(dt);
+        }
 	}
 
 	jint JNI_OnLoad(JavaVM *vm, void *reserved)

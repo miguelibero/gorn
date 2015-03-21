@@ -1,4 +1,4 @@
-package me.ibero.gorn.examples.queue;
+package me.ibero.gorn.examples.teapot;
 
 public class MainActivity extends me.ibero.gorn.MainActivity
 {

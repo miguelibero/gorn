@@ -1,6 +1,9 @@
 #include <gorn/gorn.hpp>
 #include <cmath>
 #include <iostream>
+#if GORN_PLATFORM_ANDROID
+#include <android/log.h>
+#endif
 
 class TriangleApplication : public gorn::Application
 {
@@ -68,6 +71,10 @@ void TriangleApplication::load()
 void TriangleApplication::touch(const glm::vec2& p)
 {
     std::cout << "touch " << p.x << " " << p.y << std::endl;
+#if GORN_PLATFORM_ANDROID
+    __android_log_print(ANDROID_LOG_VERBOSE, "gorn_triangle",
+        "touch %f %f", p.x, p.y);
+#endif
      _vao.getProgram()->setUniformValue("touchPos", p);
 }
 

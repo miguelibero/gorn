@@ -17,7 +17,7 @@ android {
     defaultConfig {
         minSdkVersion 12
         ndk {
-            moduleName "gorn_kitten"
+            moduleName "gorn_teapot"
             stl "c++_shared"
         }
     }

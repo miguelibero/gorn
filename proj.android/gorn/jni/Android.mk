@@ -4,13 +4,15 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := gorn
 
-BASE_PATH := $(LOCAL_PATH)/../..
+BASE_PATH := $(LOCAL_PATH)/../../..
 PLATFORM_DIR_FILTER := ! \( -path \*/platform/\* ! -regex .\*/platform/android/\*.\* \)
 
 #Recursive include all .cpp files in the SRC directory
 FILE_LIST := $(shell find $(BASE_PATH)/src -type f -iname \*.cpp $(PLATFORM_DIR_FILTER) )
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 FILE_LIST := $(shell find $(BASE_PATH)/lib/platform/android -type f -iname \*.cpp )
+LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
+FILE_LIST := $(shell find $(BASE_PATH)/lib/buffer/src -type f -iname \*.cpp )
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 INCLUDES += $(BASE_PATH)/src

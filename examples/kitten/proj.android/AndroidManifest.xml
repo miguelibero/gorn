@@ -16,7 +16,7 @@
         android:icon="@drawable/icon"
         >
 
-        <activity android:name="me.ibero.gorn.examples.queue.MainActivity"
+        <activity android:name="me.ibero.gorn.examples.kitten.MainActivity"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   android:configChanges="orientation">

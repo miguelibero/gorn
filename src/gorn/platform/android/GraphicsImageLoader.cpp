@@ -23,8 +23,9 @@ namespace gorn
     {
 		try
 		{
+            std::vector<uint8_t> vect(input.data(), input.data()+input.size());
             auto data = buffer(getJniObject().call("loadImage",
-                std::vector<uint8_t>(), input.data()));
+                std::vector<uint8_t>(), vect));
             if(data.empty())
             {
     			throw Exception("Could not decode image data.");        
