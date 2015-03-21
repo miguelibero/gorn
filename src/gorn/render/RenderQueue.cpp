@@ -66,6 +66,7 @@ namespace gorn
 
     void RenderQueue::draw()
     {
+        _debugInfo = DebugInfo();
         _debugInfo.framesPerSecond = 1.0/_updateInterval;
         _updateInterval = 0.0;
 
@@ -132,6 +133,7 @@ namespace gorn
                 }
                 vao.setUniformValue(UniformKind::Model, transforms.top());
                 vao.draw(num, cmd.getDrawMode());
+                _debugInfo.drawCalls++;
             }
         }
         _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
