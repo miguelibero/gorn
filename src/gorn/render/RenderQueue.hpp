@@ -10,7 +10,6 @@ class buffer;
 
 namespace gorn
 {
-
     class MaterialManager;
     class VertexDefinition;
     
@@ -19,25 +18,12 @@ namespace gorn
 
     struct RenderQueueDebugInfo
     {
-        double framesPerSecond;
-        double drawCalls;
-        double drawCallsBatched;
+        float framesPerSecond;
+        size_t drawCalls;
+        size_t drawCallsBatched;
+        size_t vertexCount;
 
         RenderQueueDebugInfo();
-    };
-
-    struct RenderQueueDrawBlock
-    {
-        std::shared_ptr<Material> material;
-        VertexDefinition definition;
-        buffer vertices;
-        std::vector<unsigned> elements;
-        glm::mat4 transform;
-        DrawMode mode;
-
-        RenderQueueDrawBlock(
-            const std::shared_ptr<Material>& material=nullptr,
-            DrawMode mode=DrawMode::Triangles);
     };
 
     class RenderQueueDrawState
@@ -47,10 +33,32 @@ namespace gorn
         typedef std::stack<size_t> Checkpoints;
         Transforms _transforms;
         Checkpoints _checkpoints;
+
     public:
         RenderQueueDrawState();
         void update(const Command& cmd);
         const glm::mat4& getTransform() const;
+    };
+
+    class RenderQueue;
+
+    struct RenderQueueDrawBlock
+    {
+        typedef RenderQueueDebugInfo DebugInfo;
+        typedef RenderQueueDrawState DrawState;
+
+        std::shared_ptr<Material> material;
+        VertexDefinition definition;
+        buffer vertices;
+        std::vector<unsigned> elements;
+        DrawMode mode;
+        glm::mat4 transform;
+
+        RenderQueueDrawBlock(
+            const std::shared_ptr<Material>& material=nullptr,
+            DrawMode mode=DrawMode::Triangles);
+
+        void draw(const RenderQueue& queue, DebugInfo& debug);
     };
 
     class RenderQueue
@@ -60,20 +68,22 @@ namespace gorn
         typedef RenderQueueDebugInfo DebugInfo;
         typedef RenderQueueDrawBlock DrawBlock;
         typedef RenderQueueDrawState DrawState;
+        typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
-
         MaterialManager& _materials;
         std::vector<Command> _commands;
-        std::map<std::string, UniformValue> _uniformValues;
+        DrawState _state;
         double _updateInterval;
         DebugInfo _debugInfo;
+        UniformValueMap _uniforms;
 
-        bool draw(DrawBlock&& block) const;
+        void draw(DrawBlock& block, DebugInfo& debug, const DrawState& state);
     public:
         RenderQueue(MaterialManager& materials);
 
         void setUniformValue(const std::string& name, const UniformValue& value);
         bool removeUniformValue(const std::string& name);
+        const UniformValueMap& getUniformValues() const;
 
         void addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();

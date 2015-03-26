@@ -156,6 +156,14 @@ namespace gorn
         }
     }
 
+    void VertexArray::setUniformValues(const UniformValueMap& values)
+    {
+        for(auto itr = values.begin(); itr != values.end(); ++itr)
+        {
+            setUniformValue(itr->first, itr->second);
+        }
+    }
+
     void VertexArray::draw(size_t count, DrawMode mode, size_t offset)
     {
         activate();

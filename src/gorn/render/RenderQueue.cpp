@@ -19,18 +19,23 @@ namespace gorn
     void RenderQueue::setUniformValue(const std::string& name,
         const UniformValue& value)
     {
-        _uniformValues[name] = value;
+        _uniforms[name] = value;
     }
 
     bool RenderQueue::removeUniformValue(const std::string& name)
     {
-        auto itr = _uniformValues.find(name);
-        if(itr != _uniformValues.end())
+        auto itr = _uniforms.find(name);
+        if(itr != _uniforms.end())
         {
-            _uniformValues.erase(itr);
+            _uniforms.erase(itr);
             return true;
         }
         return false;
+    }
+
+    const RenderQueue::UniformValueMap& RenderQueue::getUniformValues() const
+    {
+        return _uniforms;
     }
 
     void RenderQueue::addCommand(RenderCommand&& cmd)
@@ -80,10 +85,7 @@ namespace gorn
             auto cmdMode = cmd.getDrawMode();
             if(cmdMaterial != block.material || cmdMode != block.mode)
             {
-                if(draw(std::move(block)))
-                {
-                    _debugInfo.drawCalls++;
-                }
+                block.draw(*this, _debugInfo);
                 block = DrawBlock(cmdMaterial, cmdMode);
             }
             else
@@ -92,48 +94,19 @@ namespace gorn
             }
              
             auto& transform = state.getTransform();
+            // TODO: load def first
             block.definition += cmd.getVertexDefinition(
                 *block.material->getProgram());
+
             cmd.getVertexData(block.vertices, block.elements,
                 block.definition, transform);
         }
-        if(draw(std::move(block)))
-        {
-            _debugInfo.drawCalls++;
-        }
+        block.draw(*this, _debugInfo);
 
         _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
             [](const Command& cmd){
                 return cmd.getLifetime() == RenderCommandLifetime::Frame;
             }), _commands.end());
-    }
-
-    bool RenderQueue::draw(DrawBlock&& block) const
-    {
-        if(block.vertices.empty() || block.material == nullptr
-            || block.material->getProgram() == nullptr)
-        {
-            return false;
-        }
-        VertexArray vao;
-        auto usage = VertexBuffer::Usage::StaticDraw;
-        auto num = block.elements.size();
-        vao.setMaterial(block.material);
-        vao.addVertexData(std::make_shared<VertexBuffer>(
-            std::move(block.vertices), usage,
-            VertexBuffer::Target::ArrayBuffer),
-            block.definition);
-        vao.setElementData(std::make_shared<VertexBuffer>(
-            std::move(block.elements), usage,
-            VertexBuffer::Target::ElementArrayBuffer));
-        for(auto itr = _uniformValues.begin();
-            itr != _uniformValues.end(); ++itr)
-        {
-            vao.setUniformValue(itr->first, itr->second);
-        }
-        vao.setUniformValue(UniformKind::Model, block.transform);
-        vao.draw(num, block.mode);
-        return true;
     }
 
     RenderQueueDrawBlock::RenderQueueDrawBlock(
@@ -143,8 +116,39 @@ namespace gorn
     {
     }
 
+    void RenderQueueDrawBlock::draw(const RenderQueue& queue,
+        DebugInfo& debug)
+    {
+        if(vertices.empty() || material == nullptr
+            || material->getProgram() == nullptr)
+        {
+            return;
+        }
+
+        VertexArray vao;
+        auto usage = VertexBuffer::Usage::StaticDraw;
+        auto elmsCount = elements.size();
+        auto vertsCount = vertices.size()/definition.getElementSize();
+        vao.setMaterial(material);
+        vao.addVertexData(std::make_shared<VertexBuffer>(
+            std::move(vertices), usage,
+            VertexBuffer::Target::ArrayBuffer),
+            definition);
+        vao.setElementData(std::make_shared<VertexBuffer>(
+            std::move(elements), usage,
+            VertexBuffer::Target::ElementArrayBuffer));
+        
+        vao.setUniformValues(queue.getUniformValues());
+        vao.setUniformValue(UniformKind::Model, transform);
+    
+        vao.draw(elmsCount, mode);
+        debug.vertexCount += vertsCount;
+        debug.drawCalls++;
+    }
+
     RenderQueueDebugInfo::RenderQueueDebugInfo():
-    framesPerSecond(0.0), drawCalls(0), drawCallsBatched(0)
+    framesPerSecond(0.0), drawCalls(0),
+    drawCallsBatched(0), vertexCount(0)
     {
     }
 

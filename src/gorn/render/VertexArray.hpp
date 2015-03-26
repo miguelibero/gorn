@@ -4,6 +4,7 @@
 #include <gorn/render/Enums.hpp>
 #include <gorn/render/Gl.hpp>
 #include <vector>
+#include <map>
 #include <memory>
 
 namespace gorn
@@ -17,6 +18,8 @@ namespace gorn
 
     class VertexArray
     {
+    public:
+        typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
         static GLuint s_currentId;
         mutable GLuint _id;
@@ -42,6 +45,7 @@ namespace gorn
         const std::shared_ptr<Material>& getMaterial() const;
         void setUniformValue(const std::string& name, const UniformValue& value);
 	    void setUniformValue(const GLint& location, const UniformValue& value);
+        void setUniformValues(const UniformValueMap& values);
 
         void draw(size_t count, DrawMode mode=DrawMode::Triangles, size_t offset=0);
     };
