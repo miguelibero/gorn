@@ -10,9 +10,9 @@ Its main goals are:
 * simplicity
 * performance
 * reusability
-* draw call batching (TODO)
+* draw call batching
 * drawing in separate thread (TODO)
-* support for Linux, Windows, Android and iOS (WIP)
+* support for Linux, Android, Windows (WIP), and iOS (WIP)
 
 ## Examples
 
@@ -134,7 +134,7 @@ ctx.getQueue().addCommand("sprite:kitten")
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, 6, BasicType::UnsignedInteger);
+    });
 
 ctx.getQueue().addCommand("sprite:puppy")
     .withAttribute(AttributeKind::Position, {
@@ -152,7 +152,7 @@ ctx.getQueue().addCommand("sprite:puppy")
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, 6, BasicType::UnsignedInteger);
+    });
 
 ctx.getQueue().draw();
 ```

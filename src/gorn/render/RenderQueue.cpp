@@ -5,17 +5,14 @@
 #include <gorn/render/MaterialManager.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/asset/AssetManager.hpp>
-#include <stack>
 #include <algorithm>
+#include <cmath>
+#include <glm/gtc/matrix_inverse.hpp>
 
 namespace gorn
 {
     RenderQueue::RenderQueue(MaterialManager& materials):
     _materials(materials), _updateInterval(0.0)
-    {
-    }
-
-    void RenderQueue::setDefaultOrder(Order order)
     {
     }
 
@@ -69,82 +66,128 @@ namespace gorn
         _debugInfo = DebugInfo();
         _debugInfo.framesPerSecond = 1.0/_updateInterval;
         _updateInterval = 0.0;
+        DrawState state;
+        DrawBlock block;
 
-        std::stack<glm::mat4> transforms;
-        transforms.push(glm::mat4());
-        std::stack<size_t> checkpoints;
         for(auto& cmd : _commands)
         {
-            switch(cmd.getTransformMode())
+            state.update(cmd);
+            auto cmdMaterial = cmd.getMaterial();
+            if(!cmdMaterial)
             {
-                case RenderCommand::TransformMode::PushLocal:
-                    transforms.push(transforms.top()*cmd.getTransform());
-                    break;
-                case RenderCommand::TransformMode::PopLocal:
-                    transforms.pop();
-                    break;
-                case RenderCommand::TransformMode::SetGlobal:
-                    transforms.push(cmd.getTransform());
-                    break;
-                case RenderCommand::TransformMode::SetNone:
-                    transforms.push(glm::mat4());
-                    break;
-                case RenderCommand::TransformMode::PushCheckpoint:
-                    checkpoints.push(transforms.size());
-                    break;
-                case RenderCommand::TransformMode::PopCheckpoint:
-                {
-                    size_t size = checkpoints.top();
-                    checkpoints.pop();
-                    while(transforms.size() > size)
-                    {
-                        transforms.pop();
-                    }
-                    break;
-                }
-                default:
-                    break;
+                continue;
             }
-
-            if(cmd.getMaterial())
+            auto cmdMode = cmd.getDrawMode();
+            if(cmdMaterial != block.material || cmdMode != block.mode)
             {
-                VertexArray vao;
-                vao.setMaterial(cmd.getMaterial());
-                auto vdef = cmd.getVertexDefinition(
-                    *cmd.getMaterial()->getProgram());
-                buffer vertData;
-                buffer elmData;
-                auto num = cmd.getVertexData(vdef, vertData, elmData);
-                auto usage = VertexBuffer::Usage::StaticDraw;
-
-                vao.addVertexData(std::make_shared<VertexBuffer>(
-                    std::move(vertData), usage,
-                    VertexBuffer::Target::ArrayBuffer), vdef);
-                if(!elmData.empty())
+                if(draw(std::move(block)))
                 {
-                    vao.setElementData(std::make_shared<VertexBuffer>(
-                        std::move(elmData), usage,
-                        VertexBuffer::Target::ElementArrayBuffer));
+                    _debugInfo.drawCalls++;
                 }
-                for(auto itr = _uniformValues.begin();
-                    itr != _uniformValues.end(); ++itr)
-                {
-                    vao.setUniformValue(itr->first, itr->second);
-                }
-                vao.setUniformValue(UniformKind::Model, transforms.top());
-                vao.draw(num, cmd.getDrawMode());
-                _debugInfo.drawCalls++;
+                block = DrawBlock(cmdMaterial, cmdMode);
             }
+            else
+            {
+                _debugInfo.drawCallsBatched++;
+            }
+             
+            auto& transform = state.getTransform();
+            block.definition += cmd.getVertexDefinition(
+                *block.material->getProgram());
+            cmd.getVertexData(block.vertices, block.elements,
+                block.definition, transform);
         }
+        if(draw(std::move(block)))
+        {
+            _debugInfo.drawCalls++;
+        }
+
         _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
             [](const Command& cmd){
                 return cmd.getLifetime() == RenderCommandLifetime::Frame;
             }), _commands.end());
     }
 
+    bool RenderQueue::draw(DrawBlock&& block) const
+    {
+        if(block.vertices.empty() || block.material == nullptr
+            || block.material->getProgram() == nullptr)
+        {
+            return false;
+        }
+        VertexArray vao;
+        auto usage = VertexBuffer::Usage::StaticDraw;
+        auto num = block.elements.size();
+        vao.setMaterial(block.material);
+        vao.addVertexData(std::make_shared<VertexBuffer>(
+            std::move(block.vertices), usage,
+            VertexBuffer::Target::ArrayBuffer),
+            block.definition);
+        vao.setElementData(std::make_shared<VertexBuffer>(
+            std::move(block.elements), usage,
+            VertexBuffer::Target::ElementArrayBuffer));
+        for(auto itr = _uniformValues.begin();
+            itr != _uniformValues.end(); ++itr)
+        {
+            vao.setUniformValue(itr->first, itr->second);
+        }
+        vao.setUniformValue(UniformKind::Model, block.transform);
+        vao.draw(num, block.mode);
+        return true;
+    }
+
+    RenderQueueDrawBlock::RenderQueueDrawBlock(
+        const std::shared_ptr<Material>& material,
+        DrawMode mode):
+        material(material), mode(mode)
+    {
+    }
+
     RenderQueueDebugInfo::RenderQueueDebugInfo():
     framesPerSecond(0.0), drawCalls(0), drawCallsBatched(0)
     {
+    }
+
+    RenderQueueDrawState::RenderQueueDrawState()
+    {
+        _transforms.push(glm::mat4());
+    }
+
+    void RenderQueueDrawState::update(const Command& cmd)
+    {
+        switch(cmd.getTransformMode())
+        {
+            case RenderCommand::TransformMode::PushLocal:
+                _transforms.push(_transforms.top()*cmd.getTransform());
+                break;
+            case RenderCommand::TransformMode::PopLocal:
+                _transforms.pop();
+                break;
+            case RenderCommand::TransformMode::SetGlobal:
+                _transforms.push(cmd.getTransform());
+                break;
+                break;
+            case RenderCommand::TransformMode::PushCheckpoint:
+                _checkpoints.push(_transforms.size());
+                break;
+            case RenderCommand::TransformMode::PopCheckpoint:
+            {
+                size_t size = _checkpoints.top();
+                _checkpoints.pop();
+                while(_transforms.size() > size)
+                {
+                    _transforms.pop();
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    const glm::mat4& RenderQueueDrawState::getTransform() const
+    {
+        return _transforms.top();
     }
 }
 

@@ -1,5 +1,7 @@
 #include <gorn/render/Program.hpp>
+#include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/UniformValue.hpp>
+#include <gorn/render/Kinds.hpp>
 #include <gorn/base/Exception.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -52,20 +54,26 @@ namespace gorn
         }
     }
 
-    GLint Program::loadAttribute(const std::string& name,
-        const std::string& alias)
+    void Program::loadDefinition(const Definition& def)
     {
-        auto id = getAttribute(name);
-        _attributes[alias] = id;
-        return id;
-    }
-
-    GLint Program::loadUniform(const std::string& name,
-        const std::string& alias)
-    {
-        auto id = getUniform(name);
-        _uniforms[alias] = id;
-        return id;
+        for(auto itr = def.getAttributes().begin();
+            itr != def.getAttributes().end(); ++itr)
+        {
+            auto id = getAttribute(itr->second.name);
+            _attributes[itr->first] = id;
+            _transformableAttributes[itr->first]
+                 = itr->second.transformable;
+        }
+        for(auto itr = def.getUniforms().begin();
+            itr != def.getUniforms().end(); ++itr)
+        {
+            auto id = getUniform(itr->second.name);
+            _uniforms[itr->first] = id;
+            if(!itr->second.value.empty())
+            {
+                setUniformValue(id, itr->second.value);
+            }
+        }
     }
 
     GLint Program::getAttribute(const std::string& name) const
@@ -89,6 +97,20 @@ namespace gorn
         }
         return itr->second;
 	}
+
+    bool Program::hasTransformableAttribute(const std::string& name) const
+    {
+        auto itr = _transformableAttributes.find(name);
+        if(itr != _transformableAttributes.end())
+        {
+            return itr->second;
+        }
+        if(AttributeKind::isTransformable(name) && hasAttribute(name))
+        {
+            return true;
+        }
+        return false;
+    }
 
     bool Program::hasAttribute(const std::string& name) const
     {

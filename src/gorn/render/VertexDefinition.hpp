@@ -15,6 +15,9 @@ namespace gorn
 
         VertexDefinition();
 
+        VertexDefinition& operator+=(const VertexDefinition& other);
+        VertexDefinition operator+(const VertexDefinition& other) const;
+
         VertexDefinition& withAttribute(const AttributeDefinition& attr);
         AttributeDefinition& setAttribute(const std::string& name);
 

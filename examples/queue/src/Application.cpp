@@ -93,7 +93,25 @@ void QueueApplication::draw()
         .withElements({
             0, 1, 2,
             2, 3, 0
-        }, BasicType::UnsignedInteger);
+        });
+
+    _ctx.getQueue().addCommand("sprite:kitten")
+        .withAttribute(AttributeKind::Position, {
+             0.25f,  0.75f,
+             0.75f,  0.75f,
+             0.75f, -0.25f,
+             0.25f, -0.25f
+        }, 2, BasicType::Float)
+        .withAttribute(AttributeKind::TexCoords, {
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f
+        }, 2, BasicType::Float)
+        .withElements({
+            0, 1, 2,
+            2, 3, 0
+        });
 
     _ctx.getQueue().addCommand("sprite:puppy")
         .withAttribute(AttributeKind::Position, {
@@ -111,7 +129,7 @@ void QueueApplication::draw()
         .withElements({
             0, 1, 2,
             2, 3, 0
-        }, BasicType::UnsignedInteger);
+        });
 
 	_ctx.getQueue().draw();
 }

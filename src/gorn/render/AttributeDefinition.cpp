@@ -10,7 +10,8 @@ namespace gorn
     _stride(0),
     _strideType(BasicType::None),
     _offset(0),
-    _offsetType(BasicType::None)
+    _offsetType(BasicType::None),
+    _transformable(false)
     {
     }
 
@@ -68,6 +69,12 @@ namespace gorn
         return *this;
     }
 
+    AttributeDefinition& AttributeDefinition::withTransformable(bool enabled)
+    {
+        _transformable = enabled;
+        return *this;
+    }
+
     const std::string& AttributeDefinition::getName() const
     {
         return _name;
@@ -106,6 +113,11 @@ namespace gorn
     BasicType AttributeDefinition::getOffsetType() const
     {
         return _offsetType;
+    }
+
+    bool AttributeDefinition::getTransformable() const
+    {
+        return _transformable;
     }
 
     size_t AttributeDefinition::getElementSize() const

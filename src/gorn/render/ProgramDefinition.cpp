@@ -1,4 +1,5 @@
 #include <gorn/render/ProgramDefinition.hpp>
+#include <gorn/render/Kinds.hpp>
 #include <buffer.hpp>
 
 namespace gorn
@@ -29,36 +30,23 @@ namespace gorn
     }
 
     ProgramDefinition& ProgramDefinition::withUniform(
-        const std::string& name)
+        const std::string& alias,
+        const Uniform& uniform)
     {
-        return withUniform(name, name);
-    }
-
-    ProgramDefinition& ProgramDefinition::withUniform(
-        const std::string& name, const std::string& alias)
-    {
-        _uniforms[alias] = name;
+        _uniforms[alias] = uniform;
         return *this;
     }
 
-    ProgramDefinition& ProgramDefinition::withAttribute(
-        const std::string& name)
+	ProgramDefinition& ProgramDefinition::withAttribute(
+        const std::string& alias,
+        const Attribute& attribute)
     {
-        return withAttribute(name, name);
-    }
-
-    ProgramDefinition& ProgramDefinition::withAttribute(
-        const std::string& name, const std::string& alias)
-    {
-        _attributes[alias] = name;
+        _attributes[alias] = attribute;
+        if(AttributeKind::isTransformable(alias))
+        {
+            _attributes[alias].transformable = true;
+        }
         return *this;
-    }
-
-    ProgramDefinition& ProgramDefinition::withUniformValue(
-        const std::string& name, const UniformValue& value)
-    {
-        _uniformValues[name] = value;
-		return *this;
     }
 
     bool ProgramDefinition::hasShaderData(ShaderType type) const
@@ -93,11 +81,5 @@ namespace gorn
 	{
 		return _attributes;
 	}
-
-	const ProgramDefinition::UniformValues& ProgramDefinition::
-        getUniformValues() const
-    {
-        return _uniformValues;
-    }
 
 }

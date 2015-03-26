@@ -93,16 +93,7 @@ namespace gorn
         auto fragment = loadShader(def, ShaderType::Fragment);
 
         auto program = std::make_shared<Program>(vertex, fragment);
-        for(auto itr = def.getAttributes().begin();
-            itr != def.getAttributes().end(); ++itr)
-        {
-            program->loadAttribute(itr->second, itr->first);
-        }
-        for(auto itr = def.getUniforms().begin();
-            itr != def.getUniforms().end(); ++itr)
-        {
-            program->loadUniform(itr->second, itr->first);
-        }
+        program->loadDefinition(def);
         _programs.insert(itr, {name, program});
         return program;
     }

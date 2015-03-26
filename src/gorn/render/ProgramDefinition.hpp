@@ -3,7 +3,8 @@
 
 #include <gorn/render/Gl.hpp>
 #include <gorn/render/Shader.hpp>
-#include <gorn/render/UniformValue.hpp>
+#include <gorn/render/ProgramAttributeDefinition.hpp>
+#include <gorn/render/ProgramUniformDefinition.hpp>
 #include <string>
 #include <map>
 
@@ -11,18 +12,19 @@ class buffer;
 
 namespace gorn
 {
+
 	class ProgramDefinition
 	{
     public:
-        typedef std::map<std::string, std::string> Uniforms;
-        typedef std::map<std::string, std::string> Attributes;
-        typedef std::map<std::string, UniformValue> UniformValues;
+        typedef ProgramAttributeDefinition Attribute;
+        typedef ProgramUniformDefinition Uniform;
+        typedef std::map<std::string, Uniform> Uniforms;
+        typedef std::map<std::string, Attribute> Attributes;
 	private:
 		std::map<ShaderType, std::string> _shaderFiles;
         std::map<ShaderType, buffer> _shaderData;
 		Uniforms _uniforms;
 		Attributes _attributes;
-		UniformValues _uniformValues;
 	public:
 		ProgramDefinition();
         ProgramDefinition& withShaderFile(ShaderType type,
@@ -30,14 +32,11 @@ namespace gorn
         ProgramDefinition& withShaderData(ShaderType type, buffer&& data);
         ProgramDefinition& withShaderData(ShaderType type,
             const std::string& data);
-        ProgramDefinition& withUniform(const std::string& name,
-            const std::string& alias);
-        ProgramDefinition& withUniform(const std::string& name);
-		ProgramDefinition& withAttribute(const std::string& name);
-		ProgramDefinition& withAttribute(const std::string& name,
-            const std::string& alias);
-  		ProgramDefinition& withUniformValue(const std::string& name,
-            const UniformValue& value);
+
+        ProgramDefinition& withUniform(const std::string& alias,
+            const Uniform& uniform);
+		ProgramDefinition& withAttribute(const std::string& alias,
+            const Attribute& attribute);
 
         bool hasShaderData(ShaderType type) const;
         const buffer& getShaderData(ShaderType type) const;
@@ -45,7 +44,6 @@ namespace gorn
 		const std::string& getShaderFile(ShaderType type) const;
 		const Uniforms& getUniforms() const;
 		const Attributes& getAttributes() const;
-		const UniformValues& getUniformValues() const;
 	};
 
 }

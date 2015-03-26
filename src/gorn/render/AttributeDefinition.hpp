@@ -21,6 +21,7 @@ namespace gorn
         BasicType _strideType;
         size_t _offset;
         BasicType _offsetType;
+        bool _transformable;
 	public:
 
         AttributeDefinition(const std::string& name="");
@@ -33,7 +34,8 @@ namespace gorn
         AttributeDefinition& withOffset(size_t offset);
         AttributeDefinition& withStride(size_t stride, BasicType type);
         AttributeDefinition& withOffset(size_t offset, BasicType type);
-
+        AttributeDefinition& withTransformable(bool enabled);
+    
         const std::string& getName() const;
         BasicType getType() const;
         bool getNormalized() const;
@@ -43,6 +45,7 @@ namespace gorn
         BasicType getStrideType() const;
         BasicType getOffsetType() const;
         size_t getElementSize() const;
+        bool getTransformable() const;
 	};
 }
 

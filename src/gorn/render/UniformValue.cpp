@@ -287,5 +287,10 @@ namespace gorn
 
         checkGlError("setting uniform value");
     }
+
+    bool UniformValue::empty() const
+    {
+        return _type == Type::Empty;
+    }
 }
 

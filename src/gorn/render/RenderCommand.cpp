@@ -2,25 +2,64 @@
 #include <gorn/render/RenderCommand.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/render/Program.hpp>
+#include <gorn/base/Exception.hpp>
 #include <buffer_writer.hpp>
 
 namespace gorn
 {
-    RenderCommandBlock::RenderCommandBlock():
+    RenderCommandAttribute::RenderCommandAttribute():
     count(0), type(BasicType::None)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(
+    RenderCommandAttribute::RenderCommandAttribute(
         buffer&& data, size_t count, BasicType type):
     data(std::move(data)), count(count), type(type)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(
+    RenderCommandAttribute::RenderCommandAttribute(
         const buffer& data, size_t count, BasicType type):
     data(data), count(count), type(type)
     {
+    }
+
+    size_t RenderCommandAttribute::write(buffer_writer& out,
+        const Definition& def, size_t pos) const
+    {
+        size_t elmSize = def.getElementSize();
+        return out.write(data, elmSize, pos*elmSize);
+    }
+
+    size_t RenderCommandAttribute::write(buffer_writer& out,
+        const Definition& def, size_t pos, const glm::mat4& t) const
+    {
+        if(def.getType() != BasicType::Float)
+        {
+            throw Exception("Only transformable floats supported.");
+        }
+        auto count = def.getCount();
+        size_t elmSize = def.getElementSize();
+        if(elmSize*pos >= data.size())
+        {
+            return 0;
+        }
+        if(count == 3)
+        {
+            auto vecs = reinterpret_cast<const glm::vec3*>(data.data());
+            auto vec = glm::vec3(t*glm::vec4(vecs[pos], 1.0f));
+            return out.write(glm::value_ptr(vec), elmSize);
+        }
+        else if(count == 2)
+        {
+            auto vecs = reinterpret_cast<const glm::vec2*>(data.data());
+            auto vec = glm::vec2(t*glm::vec4(vecs[pos], 0.0f, 1.0f));
+            return out.write(glm::value_ptr(vec), elmSize);
+        }
+        else
+        {
+            throw Exception("Only transformable vec2 or vec3 supported.");
+        }
     }
 
     RenderCommand::RenderCommand():
@@ -40,26 +79,26 @@ namespace gorn
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
         buffer&& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(std::move(data), count, type);
+        _attributes[name] = Attribute(std::move(data), count, type);
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
         const buffer& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(data, count, type);
+        _attributes[name] = Attribute(data, count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(buffer&& data, BasicType type)
+    RenderCommand& RenderCommand::withElements(Elements&& elms)
     {
-         _elements = Block(std::move(data), data.size()/getBasicTypeSize(type), type);
+         _elements = std::move(elms);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const buffer& data, BasicType type)
+    RenderCommand& RenderCommand::withElements(const Elements& elms)
     {
-         _elements = Block(data, data.size()/getBasicTypeSize(type), type);
+         _elements = elms;
         return *this;
     }
 
@@ -89,27 +128,27 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand::Block& RenderCommand::getElements()
+    RenderCommand::Elements& RenderCommand::getElements()
     {
         return _elements;
     }
 
-    const RenderCommand::Block& RenderCommand::getElements() const
+    const RenderCommand::Elements& RenderCommand::getElements() const
     {
         return _elements;
     }
 
     bool RenderCommand::hasElements() const
     {
-        return _elements.type != BasicType::None;
+        return !_elements.empty();
     }
 
-    RenderCommand::Block& RenderCommand::getAttribute(const std::string& name)
+    RenderCommand::Attribute& RenderCommand::getAttribute(const std::string& name)
     {
         return _attributes.at(name);
     }
 
-    const RenderCommand::Block& RenderCommand::getAttribute(const std::string& name) const
+    const RenderCommand::Attribute& RenderCommand::getAttribute(const std::string& name) const
     {
         return _attributes.at(name);
     }
@@ -119,12 +158,12 @@ namespace gorn
         return _attributes.find(name) != _attributes.end();
     }
 
-    RenderCommand::BlockMap& RenderCommand::getAttributes()
+    RenderCommand::AttributeMap& RenderCommand::getAttributes()
     {
         return _attributes;
     }
 
-    const RenderCommand::BlockMap& RenderCommand::getAttributes() const
+    const RenderCommand::AttributeMap& RenderCommand::getAttributes() const
     {
         return _attributes;
     }
@@ -163,10 +202,12 @@ namespace gorn
             if(prog.hasAttribute(itr->first))
             {
                 auto offset = vdef.getElementSize();
+                auto trans = prog.hasTransformableAttribute(itr->first);
                 vdef.setAttribute(itr->first)
                     .withType(itr->second.type)
                     .withCount(itr->second.count)
-                    .withOffset(offset);
+                    .withOffset(offset)
+                    .withTransformable(trans);
             }
         }
         size_t stride = vdef.getElementSize();
@@ -178,12 +219,12 @@ namespace gorn
         return vdef;
     }
 
-    size_t RenderCommand::getVertexData(const VertexDefinition& vdef,
-        buffer& vertData, buffer& elmData) const
+    void RenderCommand::getVertexData(buffer& data, Elements& elms,
+        const VertexDefinition& vdef, const glm::mat4& transform) const
     {
-        buffer_writer outVert(vertData);
-        buffer_writer outElm(elmData);
-
+        buffer_writer out(data);
+        out.advance(data.size());
+        size_t s = data.size()/vdef.getElementSize();
         size_t n = 0;
 
         bool finished = false;
@@ -193,10 +234,19 @@ namespace gorn
             for(auto itr = vdef.getAttributes().begin();
               itr != vdef.getAttributes().end(); ++itr)
             {
-                size_t elmSize = itr->second.getElementSize();
                 auto& block = getAttribute(itr->first);
-                size_t writeSize = outVert.write(block.data, elmSize, n*elmSize);
-                outVert.fill(0, elmSize-writeSize);
+                auto& def = itr->second;
+                size_t writeSize = 0;
+                if(itr->second.getTransformable())
+                {
+                    writeSize = block.write(out, def, n, transform);
+                }
+                else
+                {
+                    writeSize = block.write(out, def, n);
+                }
+                size_t elmSize = def.getElementSize();
+                out.fill(0, elmSize-writeSize);
                 if(writeSize != 0)
                 {
                     finished = false;
@@ -207,10 +257,21 @@ namespace gorn
 
         if(hasElements())
         {
-            outElm.write(_elements.data);
-            n = _elements.count;
+            const Elements& nelms = getElements();
+            elms.reserve(elms.size()+nelms.size());
+            for(auto itr = nelms.begin(); itr != nelms.end(); ++itr)
+            {
+                elms.push_back(s+*itr);
+            }
         }
-        return n;
+        else
+        {
+            elms.reserve(elms.size()+n);
+            for(unsigned int i=0;i<n;i++)
+            {
+                elms.push_back(s+i);
+            }
+        }
     }
 
 }

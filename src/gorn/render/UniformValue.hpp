@@ -77,6 +77,7 @@ namespace gorn
         Type getType() const;
 
         void set(GLint location) const;
+        bool empty() const;
 	};
 
 }

@@ -166,7 +166,7 @@ namespace gorn
             std::move(normData), 3, BasicType::Float);
         cmd.withAttribute(AttributeKind::TexCoords,
             std::move(texData), 2, BasicType::Float);
-        cmd.withElements(_indices, BasicType::UnsignedInteger);
+        cmd.withElements(_indices);
         return cmd;
     }   
 
