@@ -16,14 +16,15 @@ namespace gorn
     template<typename A>
     class AssetManager;
 
-    struct RenderQueueDebugInfo
+    struct RenderQueueInfo
     {
         float framesPerSecond;
         size_t drawCalls;
         size_t drawCallsBatched;
         size_t vertexCount;
 
-        RenderQueueDebugInfo();
+        RenderQueueInfo();
+        RenderQueueInfo average(size_t amount) const;
     };
 
     class RenderQueueDrawState
@@ -44,7 +45,7 @@ namespace gorn
 
     struct RenderQueueDrawBlock
     {
-        typedef RenderQueueDebugInfo DebugInfo;
+        typedef RenderQueueInfo Info;
         typedef RenderQueueDrawState DrawState;
 
         std::shared_ptr<Material> material;
@@ -58,14 +59,14 @@ namespace gorn
             const std::shared_ptr<Material>& material=nullptr,
             DrawMode mode=DrawMode::Triangles);
 
-        void draw(const RenderQueue& queue, DebugInfo& debug);
+        void draw(const RenderQueue& queue, Info& info);
     };
 
     class RenderQueue
     {
     public:
         typedef RenderCommand Command;
-        typedef RenderQueueDebugInfo DebugInfo;
+        typedef RenderQueueInfo Info;
         typedef RenderQueueDrawBlock DrawBlock;
         typedef RenderQueueDrawState DrawState;
         typedef std::map<std::string, UniformValue> UniformValueMap;
@@ -73,13 +74,17 @@ namespace gorn
         MaterialManager& _materials;
         std::vector<Command> _commands;
         DrawState _state;
-        double _updateInterval;
-        DebugInfo _debugInfo;
         UniformValueMap _uniforms;
 
-        void draw(DrawBlock& block, DebugInfo& debug, const DrawState& state);
+        Info _info;
+        Info _tempInfo;
+        double _infoUpdateInterval;
+        size_t _infoUpdatesPerSecond;
+        size_t _tempInfoAmount;
     public:
         RenderQueue(MaterialManager& materials);
+
+        void setInfoUpdatesPerSecond(size_t ups);
 
         void setUniformValue(const std::string& name, const UniformValue& value);
         bool removeUniformValue(const std::string& name);
@@ -92,7 +97,7 @@ namespace gorn
         void update(double dt);
         void draw();
 
-        const DebugInfo& getDebugInfo() const;
+        const Info& getInfo() const;
     };
 }
 

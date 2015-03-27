@@ -12,8 +12,14 @@
 namespace gorn
 {
     RenderQueue::RenderQueue(MaterialManager& materials):
-    _materials(materials), _updateInterval(0.0)
+    _materials(materials), _infoUpdateInterval(0.0),
+    _infoUpdatesPerSecond(10), _tempInfoAmount(0)
     {
+    }
+
+    void RenderQueue::setInfoUpdatesPerSecond(size_t ups)
+    {
+        _infoUpdatesPerSecond = ups;
     }
 
     void RenderQueue::setUniformValue(const std::string& name,
@@ -58,19 +64,30 @@ namespace gorn
 
     void RenderQueue::update(double dt)
     {
-        _updateInterval += dt;
+        _infoUpdateInterval += dt;
     }
 
-    const RenderQueue::DebugInfo& RenderQueue::getDebugInfo() const
+    const RenderQueue::Info& RenderQueue::getInfo() const
     {
-        return _debugInfo;
+        return _info;
     }
 
     void RenderQueue::draw()
     {
-        _debugInfo = DebugInfo();
-        _debugInfo.framesPerSecond = 1.0/_updateInterval;
-        _updateInterval = 0.0;
+        auto infoDuration = 1.0/_infoUpdatesPerSecond;
+        if(_infoUpdateInterval > infoDuration)
+        {
+            _tempInfo.framesPerSecond = 1.0 / _infoUpdateInterval;
+            _info = _tempInfo.average(_tempInfoAmount);
+            _tempInfoAmount = 0;
+            _tempInfo = Info();
+            while(_infoUpdateInterval > infoDuration)
+            {
+                _infoUpdateInterval -= infoDuration;
+            }
+        }
+        _tempInfoAmount++;
+
         DrawState state;
         DrawBlock block;
 
@@ -85,12 +102,12 @@ namespace gorn
             auto cmdMode = cmd.getDrawMode();
             if(cmdMaterial != block.material || cmdMode != block.mode)
             {
-                block.draw(*this, _debugInfo);
+                block.draw(*this, _tempInfo);
                 block = DrawBlock(cmdMaterial, cmdMode);
             }
             else
             {
-                _debugInfo.drawCallsBatched++;
+                _tempInfo.drawCallsBatched++;
             }
              
             auto& transform = state.getTransform();
@@ -101,7 +118,7 @@ namespace gorn
             cmd.getVertexData(block.vertices, block.elements,
                 block.definition, transform);
         }
-        block.draw(*this, _debugInfo);
+        block.draw(*this, _tempInfo);
 
         _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
             [](const Command& cmd){
@@ -117,7 +134,7 @@ namespace gorn
     }
 
     void RenderQueueDrawBlock::draw(const RenderQueue& queue,
-        DebugInfo& debug)
+        Info& info)
     {
         if(vertices.empty() || material == nullptr
             || material->getProgram() == nullptr)
@@ -142,14 +159,24 @@ namespace gorn
         vao.setUniformValue(UniformKind::Model, transform);
     
         vao.draw(elmsCount, mode);
-        debug.vertexCount += vertsCount;
-        debug.drawCalls++;
+        info.vertexCount += vertsCount;
+        info.drawCalls++;
     }
 
-    RenderQueueDebugInfo::RenderQueueDebugInfo():
+    RenderQueueInfo::RenderQueueInfo():
     framesPerSecond(0.0), drawCalls(0),
     drawCallsBatched(0), vertexCount(0)
     {
+    }
+
+    RenderQueueInfo RenderQueueInfo::average(size_t amount) const
+    {
+        RenderQueueInfo result(*this);
+        result.framesPerSecond *= amount;
+        result.drawCalls /= amount;
+        result.drawCallsBatched /= amount;
+        result.vertexCount /= amount;
+        return result;
     }
 
     RenderQueueDrawState::RenderQueueDrawState()

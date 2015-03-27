@@ -6,8 +6,9 @@ namespace gorn
 {
     Application::Application():
     _size(480, 320), _name("GORN"),
-    _drawInterval(0.0f), _maxFramesPerSecond(60.0f),
-    _framesPerSecond(0.0f)
+    _drawInterval(0.0),
+    _maxFramesPerSecond(60),
+    _framesPerSecond(0.0)
     {
     }
 
@@ -15,9 +16,14 @@ namespace gorn
     {
     }
 
-    void Application::setMaxFramesPerSecond(double fps)
+    void Application::setMaxFramesPerSecond(size_t fps)
     {
         _maxFramesPerSecond = fps;
+    }
+
+    size_t Application::getMaxFramesPerSecond() const
+    {
+        return _maxFramesPerSecond;
     }
 
     double Application::getFramesPerSecond() const
@@ -95,13 +101,25 @@ namespace gorn
 
     void Application::realUpdate(double dt)
     {
-        _drawInterval += dt;
         update(dt);
-
-        if(_drawInterval > 1.0f/_maxFramesPerSecond)
+        if(_maxFramesPerSecond == 0.0)
         {
-            _framesPerSecond = 1.0f/_drawInterval;
+            _framesPerSecond = 1.0/dt;
             draw();
+        }
+        else
+        {
+            _drawInterval += dt;
+            auto frameDuration = 1.0/_maxFramesPerSecond;
+            if(_drawInterval > frameDuration)
+            {
+                _framesPerSecond = 1.0/_drawInterval;
+                draw();
+                while(_drawInterval > frameDuration)
+                {
+                    _drawInterval -= frameDuration;
+                }
+            }
         }
     }
 

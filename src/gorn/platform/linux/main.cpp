@@ -56,12 +56,12 @@ int main(void)
     fd_set inFds;
     struct timeval currTime;
     gettimeofday(&currTime, NULL);
-    struct timeval frameRate;
-    frameRate.tv_usec = 1000000.0f/60;
-    frameRate.tv_sec = 0;
     int x11Fd = ConnectionNumber(display);
     XWindowAttributes gwa;
     XEvent xev;
+
+    Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(display, window, &wmDeleteMessage, 1);
 
     app->realLoad();
 
@@ -71,13 +71,12 @@ int main(void)
         gettimeofday(&currTime, NULL);
         FD_ZERO(&inFds);
         FD_SET(x11Fd, &inFds);
-        select(x11Fd+1, &inFds, 0, 0, &frameRate);
 
         XGetWindowAttributes(display, window, &gwa);
         glViewport(0, 0, gwa.width, gwa.height);
 
         double dt = ((double)currTime.tv_sec - lastTime.tv_sec)
-            + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000*1000);
+            + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000000.0);
 
         app->realUpdate(dt);
 
@@ -91,6 +90,12 @@ int main(void)
                 break;
             case FocusOut:
                 app->realBackground();
+                break;
+            case ClientMessage:
+                if ((Atom)xev.xclient.data.l[0] == wmDeleteMessage)
+                {
+                    finished = true;
+                }
                 break;
             case ButtonPress:
                 glm::vec2 p(xev.xbutton.x, xev.xbutton.y);
