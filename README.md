@@ -93,9 +93,9 @@ Loading assets can be done with definitions.
 ```c++
 Context ctx;
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+    .makeLoader<LocalFileLoader>("vsh", "../%s.vsh");
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+    .makeLoader<LocalFileLoader>("fsh", "../%s.fsh");
 ctx.getPrograms().getDefinitions().get("sprite")
     .withUniform("texture", UniformKind::Texture0)
     .withShaderFile(ShaderType::Vertex, "vsh:shader")
