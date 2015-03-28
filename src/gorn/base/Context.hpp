@@ -46,6 +46,8 @@ namespace gorn
 
         template<typename T>
         AssetManager<T> createAssetManager();
+
+        void reload();
     };
 
     template<typename T>

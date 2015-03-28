@@ -26,6 +26,7 @@ namespace gorn
         AssetManager<Image>& _images;
         Definitions _definitions;
 
+        std::shared_ptr<Texture> doLoad(const std::string& name);
     public:
         TextureManager(AssetManager<Image>& images);
 
@@ -35,6 +36,7 @@ namespace gorn
         bool validate(const std::string& name) const;
         std::shared_ptr<Texture> load(const std::string& name);
         glm::vec2 loadSize(const std::string& name);
+        void reload();
 
     };
 }

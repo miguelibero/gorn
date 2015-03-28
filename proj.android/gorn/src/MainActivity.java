@@ -18,9 +18,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends Activity
 {
-	private GLSurfaceView glSurfaceView;
-	private boolean rendererSet;
-	private long lastDrawTime;
+	private GLSurfaceView glSurfaceView = null;
+	private boolean rendererSet = false;
+	private long lastDrawTime = 0;
 
 	protected void onCreate(Bundle savedInstanceState)
     {
@@ -69,12 +69,12 @@ public class MainActivity extends Activity
 			    	MainActivity.this.nativeOnDrawFrame(dt);
 			    }
 			});
-            glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            glSurfaceView.setOnTouchListener(new View.OnTouchListener(){
                 @Override
-                public boolean onTouch(View v, MotionEvent ev) {
+                public boolean onTouch(View v, MotionEvent ev){
                     final float x = ev.getX() / (float) v.getWidth() * 2  - 1;
                     final float y = (1 - ev.getY() / (float) v.getHeight()) * 2 - 1;
-                    glSurfaceView.queueEvent(new Runnable() {
+                    glSurfaceView.queueEvent(new Runnable(){
                         public void run()
                         {
                             MainActivity.this.nativeOnTouch(x, y);
@@ -115,7 +115,7 @@ public class MainActivity extends Activity
         {
         	glSurfaceView.onResume();
     	}
-        nativeOnResume();
+        MainActivity.this.nativeOnResume();
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class MainActivity extends Activity
         {
         	glSurfaceView.onPause();
     	}
-        nativeOnPause();
+        MainActivity.this.nativeOnPause();
 	}
 
 	@Override

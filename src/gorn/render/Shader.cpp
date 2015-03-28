@@ -41,7 +41,11 @@ namespace gorn
 
 	Shader::~Shader()
 	{
-        glDeleteShader(_id);
+        if(glIsShader(_id) == GL_TRUE)
+        {
+            glDeleteShader(_id);
+            checkGlError("deleting shader");
+        }
 	}
 
 	GLuint Shader::getId() const

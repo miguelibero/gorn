@@ -58,6 +58,13 @@ namespace gorn
         {
             return itr->second;
         }
+        auto tex = doLoad(name);
+        _textures.insert(itr, {name, tex});
+        return tex;
+    }
+
+    std::shared_ptr<Texture> TextureManager::doLoad(const std::string& name)
+    {
         auto& def = getDefinitions().get(name);
         auto img = _images.load(def.getImageName()).get();
         auto tex = std::make_shared<Texture>(def.getTarget());
@@ -82,8 +89,14 @@ namespace gorn
             tex->setParameter(itr->first, itr->second);
         }
         tex->setImage(*img, def.getLevelOfDetail());
-        _textures.insert(itr, {name, tex});
         return tex;
     }
 
+    void TextureManager::reload()
+    {
+        for(auto itr = _textures.begin(); itr != _textures.end(); ++itr)
+        {
+            *itr->second = std::move(*doLoad(itr->first));
+        }
+    }
 }

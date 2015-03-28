@@ -44,15 +44,47 @@ namespace gorn
 	
 	VertexBuffer::~VertexBuffer()
     {
+        cleanup();
+    }
+
+    void VertexBuffer::cleanup()
+    {
         if(_id != 0)
         {
-            glDeleteBuffers(1, &_id);
 			GLenum target = getGlTarget(_target);
 			if (s_currentIds[target] == _id)
 			{
 				s_currentIds[target] = 0;
 			}
+            glDeleteBuffers(1, &_id);
+            checkGlError("deleting a vertex buffer");
         }
+    }
+
+    VertexBuffer::VertexBuffer(VertexBuffer&& other):
+    _id(other._id),
+    _target(other._target),
+    _size(other._size)
+    {
+        other._size = 0;
+        other._id = 0;
+    }
+
+    VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+		    _id = other._id;
+            _target = other._target;
+            _size = other._size;
+            other._size = 0;
+            other._id = 0;
+        }
+        return *this;
     }
 
     GLuint VertexBuffer::getId() const

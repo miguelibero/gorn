@@ -31,15 +31,23 @@ namespace gorn
 		mutable GLuint _id;
         Target _target;
         size_t _size;
-	public:
 
+        void cleanup();
+
+	public:
 		VertexBuffer(const buffer& data,
             Usage usage=Usage::DynamicDraw,
             Target target=Target::ArrayBuffer);
         VertexBuffer(Target target=Target::ArrayBuffer);
 		~VertexBuffer();
-		GLuint getId() const;
 
+        VertexBuffer(const VertexBuffer& other) = delete;
+        VertexBuffer& operator=(const VertexBuffer& other) = delete;
+
+        VertexBuffer(VertexBuffer&& other);
+        VertexBuffer& operator=(VertexBuffer&& other);
+
+		GLuint getId() const;
         void bind() const;
         void setData(const buffer& data, Usage usage);
         void setSubData(const buffer& data, size_t offset);

@@ -16,8 +16,11 @@ namespace gorn
         double _drawInterval;
         size_t _maxFramesPerSecond;
         double _framesPerSecond;
+        bool _loaded;
+        bool _needsReload;
     protected:
 	    virtual void load();
+	    virtual void reload();
 	    virtual void unload();
 	    virtual void background();
 	    virtual void foreground();

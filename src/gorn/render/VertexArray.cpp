@@ -20,10 +20,52 @@ namespace gorn
 	
 	VertexArray::~VertexArray()
     {
+        cleanup();
+    }
+
+    void VertexArray::cleanup()
+    {
         if(_id != 0)
         {
+            if(s_currentId == _id)
+            {
+                s_currentId = 0;
+            }
             glDeleteVertexArrays(1, &_id);
+            checkGlError("deleting a vertex array");
         }
+    }
+
+    VertexArray::VertexArray(VertexArray&& other):
+    _id(other._id),
+    _elementVbo(std::move(other._elementVbo)),
+    _elementType(other._elementType),
+    _vertexVbos(std::move(other._vertexVbos)),
+    _program(std::move(other._program)),
+    _material(std::move(other._material))
+    {
+        other._elementType = BasicType::None;
+        other._id = 0;
+    }
+
+    VertexArray& VertexArray::operator=(VertexArray&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+            _id = other._id;
+            _elementVbo = std::move(other._elementVbo);
+            _elementType = other._elementType;
+            _vertexVbos = std::move(other._vertexVbos);
+            _program = std::move(other._program);
+            _material = std::move(other._material);
+            other._elementType = BasicType::None;
+            other._id = 0;
+        }
+        return *this;
     }
 
     GLuint VertexArray::getId() const

@@ -73,4 +73,10 @@ namespace gorn
         return _materials;
     }
 
+    void Context::reload()
+    {
+        _textures.reload();
+        _programs.reload();
+    }
+
 }

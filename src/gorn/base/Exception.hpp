@@ -3,6 +3,9 @@
 
 #include <string>
 #include <exception>
+#ifdef GORN_PLATFORM_ANDROID
+#include <android/log.h>
+#endif
 
 namespace gorn
 {
@@ -14,6 +17,10 @@ namespace gorn
 		Exception(const std::string& msg):
 		_msg(msg)
 		{
+#ifdef GORN_PLATFORM_ANDROID
+            __android_log_print(ANDROID_LOG_ERROR, "gorn",
+                "exception: %s", msg.c_str());
+#endif
 		}
 
 		virtual const char* what() const throw()

@@ -19,15 +19,53 @@ namespace gorn
             throw Exception("Could not create program.");
         }
         glAttachShader(_id, _fragmentShader->getId());
+        checkGlError("attaching fragment shader");
         glAttachShader(_id, _vertexShader->getId());
+        checkGlError("attaching vertex shader");
         glLinkProgram(_id);
-
         checkGlError("linking a program");
 	}
 
+    void Program::cleanup()
+    {
+        if(s_currentId == _id)
+        {
+            s_currentId = 0;
+        }
+        if(_id != 0 && glIsProgram(_id) == GL_TRUE)
+        {
+            glDeleteProgram(_id);
+            checkGlError("deleting program");
+        }
+    }
+
+
+    Program::Program(Program&& other):
+    _id(other._id), _vertexShader(other._vertexShader),
+    _fragmentShader(other._fragmentShader)
+    {
+        other._id = 0;
+    }
+
+    Program& Program::operator=(Program&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+            _id = other._id;
+            _vertexShader = std::move(other._vertexShader);
+            _fragmentShader = std::move(other._fragmentShader);
+            other._id = 0;
+        }
+        return *this;
+    }
+
 	Program::~Program()
 	{
-        glDeleteProgram(_id);
+       cleanup();
 	}
 
 	GLuint Program::getId() const

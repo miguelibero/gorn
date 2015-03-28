@@ -8,7 +8,9 @@ namespace gorn
     _size(480, 320), _name("GORN"),
     _drawInterval(0.0),
     _maxFramesPerSecond(60),
-    _framesPerSecond(0.0)
+    _framesPerSecond(0.0),
+    _loaded(false),
+    _needsReload(false)
     {
     }
 
@@ -55,6 +57,10 @@ namespace gorn
     {
     }
 
+    void Application::reload()
+    {
+    }
+
     void Application::unload()
     {
     }
@@ -81,16 +87,31 @@ namespace gorn
 
     void Application::realLoad()
     {
-        load();
+        if(_loaded)
+        {
+            reload();
+        }
+        else
+        {
+            _loaded = true;
+            load();
+        }
     }
 
     void Application::realUnload()
     {
-        unload();
+        if(_loaded)
+        {
+            _loaded = false;
+            unload();
+        }
     }
 
     void Application::realForeground()
     {
+#ifdef GORN_PLATFORM_ANDROID
+        _needsReload = true;
+#endif
         foreground();
     }
 
@@ -101,6 +122,11 @@ namespace gorn
 
     void Application::realUpdate(double dt)
     {
+        if(_needsReload)
+        {
+            _needsReload = false;
+            reload();
+        }
         update(dt);
         if(_maxFramesPerSecond == 0.0)
         {

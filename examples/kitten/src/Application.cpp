@@ -69,9 +69,9 @@ void KittenApplication::load()
     _ctx.getPrograms().getDefinitions().get("shader")
         .withShaderFile(ShaderType::Vertex, "vsh:shader")
         .withShaderFile(ShaderType::Fragment, "fsh:shader")
-        .withUniform("transform", UniformKind::Model)
-        .withUniform("texture", UniformKind::Texture0)
-        .withUniformValue(UniformKind::Model, getTransform(0.25f));
+        .withUniform(UniformKind::Texture0, "texture")
+        .withUniform(UniformKind::Model, ProgramUniformDefinition(
+            "transform", getTransform(0.25f)));
 
     _ctx.getMaterials().getDefinitions().get("kitten")
         .withProgram("shader")

@@ -14,8 +14,8 @@ extern "C" {
         if(app == nullptr)
         {
             app = std::move(gorn::main());
-		    app->realLoad();
         }
+        app->realLoad();
 	}
 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnPause(JNIEnv* env, jclass cls)

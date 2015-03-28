@@ -15,11 +15,54 @@ namespace gorn
 
 	Texture::~Texture()
 	{
-		if(_id != 0)
+        cleanup();
+	}
+
+    void Texture::cleanup()
+    {
+        if(s_currentIds[_target] == _id)
+        {
+            s_currentIds.erase(_target);
+        }
+        for(auto itr = s_activeIds.begin(); itr != s_activeIds.end();)
+        {
+            if(itr->second == _id)
+            {
+                s_activeIds.erase(itr++);
+            }
+            else
+            {
+                ++itr;
+            }
+        }
+		if(_id != 0 && glIsTexture(_id) == GL_TRUE)
 		{
 			glDeleteTextures(1, &_id);
+            checkGlError("deleting texture");
 		}
-	}
+    }
+
+    Texture::Texture(Texture&& other):
+    _id(other._id), _target(other._target), _size(other._size)
+    {
+        other._id = 0;
+    }
+
+    Texture& Texture::operator=(Texture&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+            _id = other._id;
+            _size = other._size;
+            _target = other._target;
+            other._id = 0;
+        }
+        return *this;
+    }
 
     void Texture::setParameter(GLenum name, GLint value)
     {

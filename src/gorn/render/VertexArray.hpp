@@ -29,11 +29,19 @@ namespace gorn
         std::shared_ptr<Program> _program;
         std::shared_ptr<Material> _material;
 
+        void cleanup();
+
     public:
         VertexArray();
         ~VertexArray();
-        GLuint getId() const;
 
+        VertexArray(const VertexArray& other) = delete;
+        VertexArray& operator=(const VertexArray& other) = delete;
+
+        VertexArray(VertexArray&& other);
+        VertexArray& operator=(VertexArray&& other);
+
+        GLuint getId() const;
         void bind() const;
         void activate() const;
         void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const AttributeDefinition& def);

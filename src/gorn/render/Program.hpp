@@ -25,10 +25,18 @@ namespace gorn
         mutable std::map<std::string, GLint> _uniforms;
         mutable std::map<std::string, GLint> _attributes;
         std::map<std::string, bool> _transformableAttributes;
+
+        void cleanup();
 	public:
 		Program(const std::shared_ptr<Shader>& vertexShader,
             const std::shared_ptr<Shader>& fragmentShader);
 		~Program();
+
+        Program(const Program& other) = delete;
+        Program& operator=(const Program& other) = delete;
+
+        Program(Program&& other);
+        Program& operator=(Program&& other);
 
         void use() const;
 		GLuint getId() const;

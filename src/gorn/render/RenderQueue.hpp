@@ -5,6 +5,7 @@
 #include <gorn/render/Enums.hpp>
 #include <glm/glm.hpp>
 #include <stack>
+#include <mutex>
 
 class buffer;
 
@@ -59,6 +60,7 @@ namespace gorn
             const std::shared_ptr<Material>& material=nullptr,
             DrawMode mode=DrawMode::Triangles);
 
+        bool supports(const RenderCommand& cmd) const;
         void draw(const RenderQueue& queue, Info& info);
     };
 
@@ -73,6 +75,7 @@ namespace gorn
     private:
         MaterialManager& _materials;
         std::vector<Command> _commands;
+        std::mutex _commandsMutex;
         DrawState _state;
         UniformValueMap _uniforms;
 

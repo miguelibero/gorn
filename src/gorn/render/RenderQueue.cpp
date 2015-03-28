@@ -46,11 +46,13 @@ namespace gorn
 
     void RenderQueue::addCommand(RenderCommand&& cmd)
     {
+        std::lock_guard<std::mutex> lock(_commandsMutex);
         _commands.push_back(std::move(cmd));
     }
 
     RenderCommand& RenderQueue::addCommand()
     {
+        std::lock_guard<std::mutex> lock(_commandsMutex);
         _commands.push_back(RenderCommand());
         return _commands.back();
     }
@@ -75,7 +77,7 @@ namespace gorn
     void RenderQueue::draw()
     {
         auto infoDuration = 1.0/_infoUpdatesPerSecond;
-        if(_infoUpdateInterval > infoDuration)
+        if(_infoUpdateInterval > infoDuration && _tempInfoAmount > 0)
         {
             _tempInfo.framesPerSecond = 1.0 / _infoUpdateInterval;
             _info = _tempInfo.average(_tempInfoAmount);
@@ -91,39 +93,42 @@ namespace gorn
         DrawState state;
         DrawBlock block;
 
-        for(auto& cmd : _commands)
+        std::vector<Command> commands;
         {
+            std::lock_guard<std::mutex> lock(_commandsMutex);  
+            commands = std::move(_commands);
+            _commands.clear();
+        }
+
+        for(auto itr = commands.begin(); itr != commands.end(); ++itr)
+        {
+            auto& cmd = *itr;
             state.update(cmd);
-            auto cmdMaterial = cmd.getMaterial();
-            if(!cmdMaterial)
+            if(!cmd.getMaterial())
             {
                 continue;
             }
-            auto cmdMode = cmd.getDrawMode();
-            if(cmdMaterial != block.material || cmdMode != block.mode)
+            if(!block.supports(cmd))
             {
                 block.draw(*this, _tempInfo);
-                block = DrawBlock(cmdMaterial, cmdMode);
+                block = DrawBlock(cmd.getMaterial(), cmd.getDrawMode());
+                auto ditr = itr;
+                while(ditr != commands.end() && block.supports(*ditr))
+                {
+                    block.definition += cmd.getVertexDefinition(
+                        *block.material->getProgram());
+                    ++ditr;
+                }
             }
             else
             {
                 _tempInfo.drawCallsBatched++;
             }
-             
             auto& transform = state.getTransform();
-            // TODO: load def first
-            block.definition += cmd.getVertexDefinition(
-                *block.material->getProgram());
-
             cmd.getVertexData(block.vertices, block.elements,
                 block.definition, transform);
         }
         block.draw(*this, _tempInfo);
-
-        _commands.erase(std::remove_if(_commands.begin(), _commands.end(),
-            [](const Command& cmd){
-                return cmd.getLifetime() == RenderCommandLifetime::Frame;
-            }), _commands.end());
     }
 
     RenderQueueDrawBlock::RenderQueueDrawBlock(
@@ -131,6 +136,11 @@ namespace gorn
         DrawMode mode):
         material(material), mode(mode)
     {
+    }
+
+    bool RenderQueueDrawBlock::supports(const RenderCommand& cmd) const
+    {
+        return cmd.getMaterial() == material && cmd.getDrawMode() == mode;
     }
 
     void RenderQueueDrawBlock::draw(const RenderQueue& queue,
@@ -171,6 +181,10 @@ namespace gorn
 
     RenderQueueInfo RenderQueueInfo::average(size_t amount) const
     {
+        if(amount == 0)
+        {
+            return RenderQueueInfo();
+        }
         RenderQueueInfo result(*this);
         result.framesPerSecond *= amount;
         result.drawCalls /= amount;

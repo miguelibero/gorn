@@ -2,7 +2,6 @@
 #include <gorn/gorn.hpp>
 #include <glm/gtx/transform.hpp>
 
-
 using namespace gorn;
 
 class TeapotApplication : public gorn::Application
@@ -51,7 +50,7 @@ void TeapotApplication::load()
             .withProgram("diffuse"));
 
     AssetManager<Mesh> meshes(_ctx.getFiles());
-    meshes.addDefaultDataLoader<ObjMeshLoader>();
+    meshes.makeDefaultDataLoader<ObjMeshLoader>();
 
     _ctx.getQueue().setUniformValue(UniformKind::Projection,
         glm::perspective(

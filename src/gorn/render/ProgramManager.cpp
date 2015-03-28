@@ -88,14 +88,29 @@ namespace gorn
         {
             return itr->second;
         }
+        auto program = doLoad(name);
+        _programs.insert(itr, {name, program});
+        return program;
+    }
+
+    std::shared_ptr<Program> ProgramManager::doLoad(const std::string& name)
+    {
         auto& def = getDefinitions().get(name);
         auto vertex = loadShader(def, ShaderType::Vertex);
         auto fragment = loadShader(def, ShaderType::Fragment);
 
         auto program = std::make_shared<Program>(vertex, fragment);
         program->loadDefinition(def);
-        _programs.insert(itr, {name, program});
         return program;
+    }
+
+    void ProgramManager::reload()
+    {
+        _shaders.clear();
+        for(auto itr = _programs.begin(); itr != _programs.end(); ++itr)
+        {
+            *itr->second = std::move(*doLoad(itr->first));
+        }
     }
 
     bool ProgramManager::validate(const std::string& name) const

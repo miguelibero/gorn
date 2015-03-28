@@ -8,6 +8,10 @@
 
 namespace gorn
 {
+    FileManager::FileManager():
+    _files(std::make_shared<Files>())
+    {
+    }
 
 	void FileManager::addLoader(const std::string& tag,
         std::unique_ptr<Loader>&& loader) NOEXCEPT
@@ -53,8 +57,8 @@ namespace gorn
 
     bool FileManager::validate(const std::string& name) const NOEXCEPT
     {
-        auto itr = _preloads.find(name);
-        if(itr != _preloads.end())
+        auto itr = _files->find(name);
+        if(itr != _files->end())
         {
             return true;
         }
@@ -73,8 +77,8 @@ namespace gorn
 
 	std::future<buffer> FileManager::load(const std::string& name, bool cache)
 	{
-        auto itr = _preloads.find(name);
-        if(itr != _preloads.end())
+        auto itr = _files->find(name);
+        if(itr != _files->end())
         {
             std::promise<buffer> p;
             p.set_value(itr->second);
@@ -87,7 +91,7 @@ namespace gorn
         {
             if(loader->validate(parts.second))
             {
-                return load(loader, parts.second);
+                return load(loader, parts.second, cache);
             }
         }
        
@@ -95,17 +99,47 @@ namespace gorn
             +parts.second+"' with tag '"+parts.first+"'.");
 	}
 
-    std::future<buffer> FileManager::load(
-      const std::shared_ptr<Loader>& loader, const std::string& name)
+    bool FileManager::unload(const std::string& name) NOEXCEPT
     {
-        return std::async(std::launch::async, [loader](const std::string& name){
-            return loader->load(name);
-        }, name);
+        auto itr = _files->find(name);
+        if(itr != _files->end())
+        {
+            _files->erase(itr);
+            return true;
+        }
+        return false;
+    }
+
+    void FileManager::unloadAll() NOEXCEPT
+    {
+        _files->clear();
+    }
+
+    buffer fileLoadAsync(
+      const std::shared_ptr<FileManager::Loader>& loader,
+      const std::shared_ptr<FileManager::Files>& files,
+      const std::string& name)
+    {
+        auto buffer = loader->load(name);
+        if(files)
+        {
+            (*files)[name] = buffer;
+        }
+        return buffer;
+    }
+
+    std::future<buffer> FileManager::load(
+        const std::shared_ptr<Loader>& loader,
+        const std::string& name, bool cache)
+    {
+        auto files = cache?_files:nullptr;
+        return std::async(std::launch::async, &fileLoadAsync,
+          loader, files, name);
     }
 
     void FileManager::preload(const std::string& name, buffer&& data) NOEXCEPT
     {
-        _preloads[name] = std::move(data);
+        (*_files)[name] = std::move(data);
     }
 
 }

@@ -17,19 +17,24 @@ namespace gorn
 	{
     public:
         typedef FileLoader Loader;
+        typedef std::map<std::string, buffer> Files;
 	private:
-		std::map<std::string, buffer> _preloads;
+		std::shared_ptr<Files> _files;
 		std::map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
         std::future<buffer> load(const std::shared_ptr<Loader>& loader,
-            const std::string& name);
+            const std::string& name, bool cache);
 
         std::vector<std::shared_ptr<Loader>>
             getLoaders(const std::pair<std::string,std::string>& parts)
             const NOEXCEPT;
 	public:
+        FileManager();
+
         bool validate(const std::string& name) const NOEXCEPT;
 	    std::future<buffer> load(const std::string& name, bool cache=false);
         void preload(const std::string& name, buffer&& data) NOEXCEPT;
+        bool unload(const std::string& name) NOEXCEPT;
+        void unloadAll() NOEXCEPT;
 
 	    void addLoader(const std::string& tag,
             std::unique_ptr<Loader>&& loader) NOEXCEPT;

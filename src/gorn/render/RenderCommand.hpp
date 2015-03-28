@@ -41,19 +41,12 @@ namespace gorn
         PopCheckpoint
     };
 
-    enum class RenderCommandLifetime
-    {
-        Frame,
-        Forever
-    };
-
     class RenderCommand
     {
     public:
         typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
-        typedef RenderCommandLifetime Lifetime;
         typedef std::vector<unsigned> Elements;
     private:
         AttributeMap _attributes;
@@ -62,7 +55,6 @@ namespace gorn
         DrawMode _drawMode;
         glm::mat4 _transform;
         TransformMode _transformMode;
-        Lifetime _lifetime;
 
     public:
         RenderCommand();
@@ -77,7 +69,6 @@ namespace gorn
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);
         RenderCommand& withTransformMode(TransformMode mode);
-        RenderCommand& withLifetime(Lifetime lifetime);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -99,8 +90,6 @@ namespace gorn
 
         const glm::mat4& getTransform() const;
         TransformMode getTransformMode() const;
-
-        Lifetime getLifetime() const;
 
     };
 }

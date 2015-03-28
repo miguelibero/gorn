@@ -33,6 +33,7 @@ namespace gorn
         bool validateShader(
             const Definition& def, ShaderType type) const;
 
+        std::shared_ptr<Program> doLoad(const std::string& name);
     public:
         ProgramManager(FileManager& files);
 
@@ -47,6 +48,7 @@ namespace gorn
         bool validateShader(
             const std::string& name, ShaderType type) const;
 
+        void reload();
     };
 }
 

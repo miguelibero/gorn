@@ -117,7 +117,7 @@ namespace gorn
         auto loaders = getLoaders(name);
         try
         {
-            auto data = _files.load(name).get();
+            auto data = _files.load(name, true).get();
             for(auto& loader : loaders)
 	        {
 		        if(loader->validate(data))
@@ -136,7 +136,7 @@ namespace gorn
     T FileAssetLoader<T>::load(const std::string& name) const
     {
         auto loaders = getLoaders(name);
-        auto data = _files.load(name).get();
+        auto data = _files.load(name, true).get();
         for(auto& loader : loaders)
 	    {
 		    if(loader->validate(data))

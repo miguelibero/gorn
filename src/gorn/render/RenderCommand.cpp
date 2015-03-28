@@ -64,8 +64,7 @@ namespace gorn
 
     RenderCommand::RenderCommand():
     _drawMode(DrawMode::Triangles),
-    _transformMode(TransformMode::NoChange),
-    _lifetime(Lifetime::Frame)
+    _transformMode(TransformMode::NoChange)
     {
     }
 
@@ -119,12 +118,6 @@ namespace gorn
     RenderCommand& RenderCommand::withTransformMode(TransformMode mode)
     {
         _transformMode = mode;
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withLifetime(Lifetime lifetime)
-    {
-        _lifetime = lifetime;
         return *this;
     }
 
@@ -186,11 +179,6 @@ namespace gorn
     RenderCommand::TransformMode RenderCommand::getTransformMode() const
     {
         return _transformMode;
-    }
-
-    RenderCommand::Lifetime RenderCommand::getLifetime() const
-    {
-        return _lifetime;
     }
 
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
