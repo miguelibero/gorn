@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(gorn)
 
-add_definitions(-Wall -std=c++11 -Wno-unknown-pragmas)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 add_definitions(-DGLM_FORCE_RADIANS)
 add_definitions(-DGORN_PLATFORM_LINUX)
 
