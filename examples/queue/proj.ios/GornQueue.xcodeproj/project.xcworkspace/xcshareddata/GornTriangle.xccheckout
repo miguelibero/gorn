@@ -22,7 +22,7 @@
 		<key>0859B7651548761E8CD7AB9C8CED404441DC5FA4</key>
 		<string>../../../../..</string>
 		<key>4A131C6D61F940DE5452CB4F908FD849CEE0D370</key>
-		<string>../../../../../lib/buffer</string>
+		<string>../../../../../lib/buffer/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:miguelibero/gorn.git</string>

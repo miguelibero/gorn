@@ -11,7 +11,6 @@
 		068C75561A7627700017E482 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75061A7627700017E482 /* FileManager.cpp */; };
 		068C75571A7627700017E482 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75081A7627700017E482 /* Image.cpp */; };
 		068C75581A7627700017E482 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C750D1A7627700017E482 /* Context.cpp */; };
-		068C75591A7627700017E482 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C750F1A7627700017E482 /* Data.cpp */; };
 		068C755A1A7627700017E482 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75131A7627700017E482 /* String.cpp */; };
 		068C755E1A7627700017E482 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 068C751F1A7627700017E482 /* AppDelegate.m */; };
 		068C755F1A7627700017E482 /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 068C75211A7627700017E482 /* GameViewController.mm */; };
@@ -35,6 +34,17 @@
 		068C75761A7627700017E482 /* VertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C754F1A7627700017E482 /* VertexArray.cpp */; };
 		068C75771A7627700017E482 /* VertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75511A7627700017E482 /* VertexBuffer.cpp */; };
 		068C75781A7627700017E482 /* VertexDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75531A7627700017E482 /* VertexDefinition.cpp */; };
+		06A9B8A81ACEE48400A78C64 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A21ACEE48400A78C64 /* buffer.cpp */; };
+		06A9B8A91ACEE48400A78C64 /* buffer_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A41ACEE48400A78C64 /* buffer_reader.cpp */; };
+		06A9B8AA1ACEE48400A78C64 /* buffer_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A61ACEE48400A78C64 /* buffer_writer.cpp */; };
+		06A9B8B31ACEE4BF00A78C64 /* Enums.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8AB1ACEE4BF00A78C64 /* Enums.cpp */; };
+		06A9B8B41ACEE4BF00A78C64 /* GlEnums.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8AD1ACEE4BF00A78C64 /* GlEnums.cpp */; };
+		06A9B8B51ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8AF1ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp */; };
+		06A9B8B61ACEE4BF00A78C64 /* ProgramUniformDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8B11ACEE4BF00A78C64 /* ProgramUniformDefinition.cpp */; };
+		06A9B8B91ACEE4CF00A78C64 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8B71ACEE4CF00A78C64 /* Application.cpp */; };
+		06A9B8C01ACEE4E300A78C64 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BC1ACEE4E300A78C64 /* Mesh.cpp */; };
+		06A9B8C11ACEE4E300A78C64 /* ObjMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */; };
+		06A9B8D41ACEF2E100A78C64 /* UIImageLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -314,8 +324,6 @@
 		068C750C1A7627700017E482 /* base.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base.hpp; sourceTree = "<group>"; };
 		068C750D1A7627700017E482 /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
 		068C750E1A7627700017E482 /* Context.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Context.hpp; sourceTree = "<group>"; };
-		068C750F1A7627700017E482 /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
-		068C75101A7627700017E482 /* Data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
 		068C75111A7627700017E482 /* DefinitionManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DefinitionManager.hpp; sourceTree = "<group>"; };
 		068C75121A7627700017E482 /* Exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Exception.hpp; sourceTree = "<group>"; };
 		068C75131A7627700017E482 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
@@ -369,6 +377,30 @@
 		068C75801A7629BE0017E482 /* BundleFileLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BundleFileLoader.hpp; sourceTree = "<group>"; };
 		068C75821A762B370017E482 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		068C75961A76A0DA0017E482 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		06A9B8A21ACEE48400A78C64 /* buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer.cpp; sourceTree = "<group>"; };
+		06A9B8A31ACEE48400A78C64 /* buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
+		06A9B8A41ACEE48400A78C64 /* buffer_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer_reader.cpp; sourceTree = "<group>"; };
+		06A9B8A51ACEE48400A78C64 /* buffer_reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffer_reader.hpp; sourceTree = "<group>"; };
+		06A9B8A61ACEE48400A78C64 /* buffer_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer_writer.cpp; sourceTree = "<group>"; };
+		06A9B8A71ACEE48400A78C64 /* buffer_writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffer_writer.hpp; sourceTree = "<group>"; };
+		06A9B8AB1ACEE4BF00A78C64 /* Enums.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enums.cpp; sourceTree = "<group>"; };
+		06A9B8AC1ACEE4BF00A78C64 /* Enums.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Enums.hpp; sourceTree = "<group>"; };
+		06A9B8AD1ACEE4BF00A78C64 /* GlEnums.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlEnums.cpp; sourceTree = "<group>"; };
+		06A9B8AE1ACEE4BF00A78C64 /* GlEnums.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GlEnums.hpp; sourceTree = "<group>"; };
+		06A9B8AF1ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgramAttributeDefinition.cpp; sourceTree = "<group>"; };
+		06A9B8B01ACEE4BF00A78C64 /* ProgramAttributeDefinition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProgramAttributeDefinition.hpp; sourceTree = "<group>"; };
+		06A9B8B11ACEE4BF00A78C64 /* ProgramUniformDefinition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgramUniformDefinition.cpp; sourceTree = "<group>"; };
+		06A9B8B21ACEE4BF00A78C64 /* ProgramUniformDefinition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProgramUniformDefinition.hpp; sourceTree = "<group>"; };
+		06A9B8B71ACEE4CF00A78C64 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		06A9B8B81ACEE4CF00A78C64 /* Config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Config.hpp; sourceTree = "<group>"; };
+		06A9B8BA1ACEE4E300A78C64 /* DataAssetLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataAssetLoader.hpp; sourceTree = "<group>"; };
+		06A9B8BB1ACEE4E300A78C64 /* FileAssetLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FileAssetLoader.hpp; sourceTree = "<group>"; };
+		06A9B8BC1ACEE4E300A78C64 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		06A9B8BD1ACEE4E300A78C64 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjMeshLoader.cpp; sourceTree = "<group>"; };
+		06A9B8BF1ACEE4E300A78C64 /* ObjMeshLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjMeshLoader.hpp; sourceTree = "<group>"; };
+		06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIImageLoader.mm; sourceTree = "<group>"; };
+		06A9B8D31ACEF2E100A78C64 /* UIImageLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIImageLoader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -385,8 +417,6 @@
 		066B385C19EDB8E900A11F1A = {
 			isa = PBXGroup;
 			children = (
-				068C75961A76A0DA0017E482 /* GLKit.framework */,
-				068C75821A762B370017E482 /* OpenGLES.framework */,
 				066B386719EDB8E900A11F1A /* gorn */,
 				066B386619EDB8E900A11F1A /* Products */,
 			);
@@ -413,6 +443,8 @@
 		066B386819EDB8E900A11F1A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				068C75961A76A0DA0017E482 /* GLKit.framework */,
+				068C75821A762B370017E482 /* OpenGLES.framework */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -420,6 +452,7 @@
 		066B3A2919EDC2CC00A11F1A /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8A11ACEE48400A78C64 /* buffer */,
 				066B3A4019EDC2CC00A11F1A /* glm */,
 			);
 			name = lib;
@@ -723,6 +756,12 @@
 		068C75001A7627700017E482 /* asset */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8BA1ACEE4E300A78C64 /* DataAssetLoader.hpp */,
+				06A9B8BB1ACEE4E300A78C64 /* FileAssetLoader.hpp */,
+				06A9B8BC1ACEE4E300A78C64 /* Mesh.cpp */,
+				06A9B8BD1ACEE4E300A78C64 /* Mesh.hpp */,
+				06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */,
+				06A9B8BF1ACEE4E300A78C64 /* ObjMeshLoader.hpp */,
 				068C75011A7627700017E482 /* asset.hpp */,
 				068C75021A7627700017E482 /* AssetLoader.hpp */,
 				068C75031A7627700017E482 /* AssetManager.hpp */,
@@ -739,12 +778,12 @@
 		068C750A1A7627700017E482 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8B71ACEE4CF00A78C64 /* Application.cpp */,
+				06A9B8B81ACEE4CF00A78C64 /* Config.hpp */,
 				068C750B1A7627700017E482 /* Application.hpp */,
 				068C750C1A7627700017E482 /* base.hpp */,
 				068C750D1A7627700017E482 /* Context.cpp */,
 				068C750E1A7627700017E482 /* Context.hpp */,
-				068C750F1A7627700017E482 /* Data.cpp */,
-				068C75101A7627700017E482 /* Data.hpp */,
 				068C75111A7627700017E482 /* DefinitionManager.hpp */,
 				068C75121A7627700017E482 /* Exception.hpp */,
 				068C75131A7627700017E482 /* String.cpp */,
@@ -765,6 +804,8 @@
 		068C751D1A7627700017E482 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */,
+				06A9B8D31ACEF2E100A78C64 /* UIImageLoader.hpp */,
 				068C751E1A7627700017E482 /* AppDelegate.h */,
 				068C751F1A7627700017E482 /* AppDelegate.m */,
 				068C75201A7627700017E482 /* GameViewController.h */,
@@ -778,6 +819,14 @@
 		068C752D1A7627700017E482 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8AB1ACEE4BF00A78C64 /* Enums.cpp */,
+				06A9B8AC1ACEE4BF00A78C64 /* Enums.hpp */,
+				06A9B8AD1ACEE4BF00A78C64 /* GlEnums.cpp */,
+				06A9B8AE1ACEE4BF00A78C64 /* GlEnums.hpp */,
+				06A9B8AF1ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp */,
+				06A9B8B01ACEE4BF00A78C64 /* ProgramAttributeDefinition.hpp */,
+				06A9B8B11ACEE4BF00A78C64 /* ProgramUniformDefinition.cpp */,
+				06A9B8B21ACEE4BF00A78C64 /* ProgramUniformDefinition.hpp */,
 				068C752E1A7627700017E482 /* AttributeDefinition.cpp */,
 				068C752F1A7627700017E482 /* AttributeDefinition.hpp */,
 				068C75301A7627700017E482 /* Gl.cpp */,
@@ -819,6 +868,20 @@
 				068C75541A7627700017E482 /* VertexDefinition.hpp */,
 			);
 			path = render;
+			sourceTree = "<group>";
+		};
+		06A9B8A11ACEE48400A78C64 /* buffer */ = {
+			isa = PBXGroup;
+			children = (
+				06A9B8A21ACEE48400A78C64 /* buffer.cpp */,
+				06A9B8A31ACEE48400A78C64 /* buffer.hpp */,
+				06A9B8A41ACEE48400A78C64 /* buffer_reader.cpp */,
+				06A9B8A51ACEE48400A78C64 /* buffer_reader.hpp */,
+				06A9B8A61ACEE48400A78C64 /* buffer_writer.cpp */,
+				06A9B8A71ACEE48400A78C64 /* buffer_writer.hpp */,
+			);
+			name = buffer;
+			path = buffer/src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -878,30 +941,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A9B8B61ACEE4BF00A78C64 /* ProgramUniformDefinition.cpp in Sources */,
 				068C75731A7627700017E482 /* TextureDefinition.cpp in Sources */,
 				068C75751A7627700017E482 /* UniformValue.cpp in Sources */,
+				06A9B8B31ACEE4BF00A78C64 /* Enums.cpp in Sources */,
 				068C75661A7627700017E482 /* AttributeDefinition.cpp in Sources */,
 				068C75681A7627700017E482 /* Kinds.cpp in Sources */,
 				068C75771A7627700017E482 /* VertexBuffer.cpp in Sources */,
 				068C755E1A7627700017E482 /* AppDelegate.m in Sources */,
+				06A9B8B51ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp in Sources */,
 				068C75711A7627700017E482 /* Shader.cpp in Sources */,
 				068C75691A7627700017E482 /* Material.cpp in Sources */,
 				068C75561A7627700017E482 /* FileManager.cpp in Sources */,
 				068C75571A7627700017E482 /* Image.cpp in Sources */,
 				068C755A1A7627700017E482 /* String.cpp in Sources */,
 				068C756E1A7627700017E482 /* ProgramManager.cpp in Sources */,
+				06A9B8AA1ACEE48400A78C64 /* buffer_writer.cpp in Sources */,
+				06A9B8A91ACEE48400A78C64 /* buffer_reader.cpp in Sources */,
 				068C755F1A7627700017E482 /* GameViewController.mm in Sources */,
+				06A9B8C01ACEE4E300A78C64 /* Mesh.cpp in Sources */,
 				068C75671A7627700017E482 /* Gl.cpp in Sources */,
 				068C75721A7627700017E482 /* Texture.cpp in Sources */,
 				068C75781A7627700017E482 /* VertexDefinition.cpp in Sources */,
 				068C756D1A7627700017E482 /* ProgramDefinition.cpp in Sources */,
+				06A9B8C11ACEE4E300A78C64 /* ObjMeshLoader.cpp in Sources */,
 				068C756B1A7627700017E482 /* MaterialManager.cpp in Sources */,
 				068C756F1A7627700017E482 /* RenderCommand.cpp in Sources */,
+				06A9B8D41ACEF2E100A78C64 /* UIImageLoader.mm in Sources */,
 				068C756C1A7627700017E482 /* Program.cpp in Sources */,
+				06A9B8B41ACEE4BF00A78C64 /* GlEnums.cpp in Sources */,
 				068C75761A7627700017E482 /* VertexArray.cpp in Sources */,
+				06A9B8B91ACEE4CF00A78C64 /* Application.cpp in Sources */,
+				06A9B8A81ACEE48400A78C64 /* buffer.cpp in Sources */,
 				068C75551A7627700017E482 /* FileLoader.cpp in Sources */,
 				068C756A1A7627700017E482 /* MaterialDefinition.cpp in Sources */,
-				068C75591A7627700017E482 /* Data.cpp in Sources */,
 				068C75611A7627700017E482 /* BundleFileLoader.mm in Sources */,
 				068C75581A7627700017E482 /* Context.cpp in Sources */,
 				068C75701A7627700017E482 /* RenderQueue.cpp in Sources */,
@@ -953,6 +1026,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../lib/,
 					../src/,
+					../lib/buffer/src,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = ../lib/;
@@ -1000,6 +1074,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../lib/,
 					../src/,
+					../lib/buffer/src,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = ../lib/;

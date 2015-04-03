@@ -12,6 +12,7 @@
 #include <gorn/platform/android/GraphicsImageLoader.hpp>
 #elif GORN_PLATFORM_IOS
 #include <gorn/platform/ios/BundleFileLoader.hpp>
+#include <gorn/platform/ios/UIImageLoader.hpp>
 #endif
 
 #endif

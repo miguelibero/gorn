@@ -5,9 +5,9 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>BFCD9716-13A9-4D70-A954-830D3B6A4975</string>
+	<string>4B6F0CE8-38BF-41E9-A07E-A98A9A289490</string>
 	<key>IDESourceControlProjectName</key>
-	<string>GornTriangle</string>
+	<string>GornQueue</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>0859B7651548761E8CD7AB9C8CED404441DC5FA4</key>
@@ -16,13 +16,13 @@
 		<string>github.com:miguelibero/buffer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>examples/triangle/proj.ios/GornTriangle.xcodeproj</string>
+	<string>examples/queue/proj.ios/GornQueue.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>0859B7651548761E8CD7AB9C8CED404441DC5FA4</key>
 		<string>../../../../..</string>
 		<key>4A131C6D61F940DE5452CB4F908FD849CEE0D370</key>
-		<string>../../../../../lib/buffer</string>
+		<string>../../../../..lib/buffer</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:miguelibero/gorn.git</string>

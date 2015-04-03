@@ -56,6 +56,15 @@ void QueueApplication::load()
         .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
 	_ctx.getImages()
         .makeDataLoader<GraphicsImageLoader>("sprite");
+#elif GORN_PLATFORM_IOS
+    _ctx.getFiles()
+        .makeLoader<BundleFileLoader>("sprite", "%s.png");
+    _ctx.getFiles()
+        .makeLoader<BundleFileLoader>("vsh", "%s.vsh");
+    _ctx.getFiles()
+        .makeLoader<BundleFileLoader>("fsh", "%s.fsh");
+    _ctx.getImages()
+        .makeDataLoader<UIImageLoader>("sprite");
 #endif
 
     _ctx.getMaterials().getDefinitions()

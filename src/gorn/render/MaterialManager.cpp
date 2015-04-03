@@ -101,7 +101,6 @@ namespace gorn
         {
             material->setUniformValue(itr->first, itr->second);
         }
-
         _materials.insert(itr, {name, material});
         return material;
     }

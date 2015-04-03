@@ -10,5 +10,6 @@
 #import <GLKit/GLKit.h>
 
 @interface GameViewController : GLKViewController
-
+- (void)applicationDidEnterBackground:(UIApplication *)application;
+- (void)applicationWillEnterForeground:(UIApplication *)application;
 @end

@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		068C757A1A7628AB0017E482 /* libgorn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C75791A7628AB0017E482 /* libgorn.a */; };
-		068C75871A769D830017E482 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068C75861A769D830017E482 /* Application.cpp */; };
-		068C758C1A769D900017E482 /* shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 068C758A1A769D900017E482 /* shader.fsh */; };
-		068C758D1A769D900017E482 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 068C758B1A769D900017E482 /* shader.vsh */; };
 		068C758F1A769DB00017E482 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 068C758E1A769DB00017E482 /* main.m */; };
 		068C75991A76A10A0017E482 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C75981A76A10A0017E482 /* GLKit.framework */; };
 		068C759B1A76A1DB0017E482 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 068C759A1A76A1DB0017E482 /* Foundation.framework */; };
+		06A9B8CB1ACEF11E00A78C64 /* kitten.png in Resources */ = {isa = PBXBuildFile; fileRef = 06A9B8C71ACEF11E00A78C64 /* kitten.png */; };
+		06A9B8CC1ACEF11E00A78C64 /* puppy.png in Resources */ = {isa = PBXBuildFile; fileRef = 06A9B8C81ACEF11E00A78C64 /* puppy.png */; };
+		06A9B8CD1ACEF11E00A78C64 /* shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 06A9B8C91ACEF11E00A78C64 /* shader.fsh */; };
+		06A9B8CE1ACEF11E00A78C64 /* shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 06A9B8CA1ACEF11E00A78C64 /* shader.vsh */; };
+		06A9B8D01ACEF13500A78C64 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8CF1ACEF13500A78C64 /* Application.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,16 +29,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		068C743D1A7626260017E482 /* GornTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GornTriangle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		068C743D1A7626260017E482 /* GornQueue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GornQueue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		068C74411A7626260017E482 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		068C74651A76265B0017E482 /* gorn.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gorn.xcodeproj; path = ../../../proj.ios/gorn.xcodeproj; sourceTree = "<group>"; };
 		068C75791A7628AB0017E482 /* libgorn.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgorn.a; path = "../../../proj.ios/build/Debug-iphoneos/libgorn.a"; sourceTree = "<group>"; };
-		068C75861A769D830017E482 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
-		068C758A1A769D900017E482 /* shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.fsh; sourceTree = "<group>"; };
-		068C758B1A769D900017E482 /* shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = shader.vsh; sourceTree = "<group>"; };
-		068C758E1A769DB00017E482 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../../src/gorn/platform/ios/main.m; sourceTree = "<group>"; };
+		068C758E1A769DB00017E482 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../src/gorn/platform/ios/main.m; sourceTree = "<group>"; };
 		068C75981A76A10A0017E482 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
 		068C759A1A76A1DB0017E482 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		06A9B8C71ACEF11E00A78C64 /* kitten.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kitten.png; path = ../examples/queue/assets/kitten.png; sourceTree = "<group>"; };
+		06A9B8C81ACEF11E00A78C64 /* puppy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = puppy.png; path = ../examples/queue/assets/puppy.png; sourceTree = "<group>"; };
+		06A9B8C91ACEF11E00A78C64 /* shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.fsh; path = ../examples/queue/assets/shader.fsh; sourceTree = "<group>"; };
+		06A9B8CA1ACEF11E00A78C64 /* shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = shader.vsh; path = ../examples/queue/assets/shader.vsh; sourceTree = "<group>"; };
+		06A9B8CF1ACEF13500A78C64 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../examples/queue/src/Application.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				068C74651A76265B0017E482 /* gorn.xcodeproj */,
-				068C743F1A7626260017E482 /* GornTriangle */,
+				068C743F1A7626260017E482 /* GornQueue */,
 				068C743E1A7626260017E482 /* Products */,
 				068C75791A7628AB0017E482 /* libgorn.a */,
 			);
@@ -66,19 +70,20 @@
 		068C743E1A7626260017E482 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				068C743D1A7626260017E482 /* GornTriangle.app */,
+				068C743D1A7626260017E482 /* GornQueue.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		068C743F1A7626260017E482 /* GornTriangle */ = {
+		068C743F1A7626260017E482 /* GornQueue */ = {
 			isa = PBXGroup;
 			children = (
 				068C75891A769D900017E482 /* assets */,
 				068C75851A769D830017E482 /* src */,
 				068C74401A7626260017E482 /* Supporting Files */,
 			);
-			path = GornTriangle;
+			name = GornQueue;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		068C74401A7626260017E482 /* Supporting Files */ = {
@@ -103,7 +108,7 @@
 		068C75851A769D830017E482 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				068C75861A769D830017E482 /* Application.cpp */,
+				06A9B8CF1ACEF13500A78C64 /* Application.cpp */,
 			);
 			name = src;
 			path = ../../src;
@@ -112,8 +117,10 @@
 		068C75891A769D900017E482 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				068C758A1A769D900017E482 /* shader.fsh */,
-				068C758B1A769D900017E482 /* shader.vsh */,
+				06A9B8C71ACEF11E00A78C64 /* kitten.png */,
+				06A9B8C81ACEF11E00A78C64 /* puppy.png */,
+				06A9B8C91ACEF11E00A78C64 /* shader.fsh */,
+				06A9B8CA1ACEF11E00A78C64 /* shader.vsh */,
 			);
 			name = assets;
 			path = ../../assets;
@@ -122,9 +129,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		068C743C1A7626260017E482 /* GornTriangle */ = {
+		068C743C1A7626260017E482 /* GornQueue */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 068C74621A7626270017E482 /* Build configuration list for PBXNativeTarget "GornTriangle" */;
+			buildConfigurationList = 068C74621A7626270017E482 /* Build configuration list for PBXNativeTarget "GornQueue" */;
 			buildPhases = (
 				068C74391A7626260017E482 /* Sources */,
 				068C743A1A7626260017E482 /* Frameworks */,
@@ -134,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = GornTriangle;
+			name = GornQueue;
 			productName = GornTriangle;
-			productReference = 068C743D1A7626260017E482 /* GornTriangle.app */;
+			productReference = 068C743D1A7626260017E482 /* GornQueue.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -152,7 +159,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 068C74361A7625B10017E482 /* Build configuration list for PBXProject "GornTriangle" */;
+			buildConfigurationList = 068C74361A7625B10017E482 /* Build configuration list for PBXProject "GornQueue" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -171,7 +178,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				068C743C1A7626260017E482 /* GornTriangle */,
+				068C743C1A7626260017E482 /* GornQueue */,
 			);
 		};
 /* End PBXProject section */
@@ -191,8 +198,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				068C758D1A769D900017E482 /* shader.vsh in Resources */,
-				068C758C1A769D900017E482 /* shader.fsh in Resources */,
+				06A9B8CE1ACEF11E00A78C64 /* shader.vsh in Resources */,
+				06A9B8CC1ACEF11E00A78C64 /* puppy.png in Resources */,
+				06A9B8CB1ACEF11E00A78C64 /* kitten.png in Resources */,
+				06A9B8CD1ACEF11E00A78C64 /* shader.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,8 +212,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A9B8D01ACEF13500A78C64 /* Application.cpp in Sources */,
 				068C758F1A769DB00017E482 /* main.m in Sources */,
-				068C75871A769D830017E482 /* Application.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,7 +286,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = GornTriangle/Info.plist;
+				INFOPLIST_FILE = GornQueue/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -321,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = GornTriangle/Info.plist;
+				INFOPLIST_FILE = GornQueue/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -339,7 +348,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		068C74361A7625B10017E482 /* Build configuration list for PBXProject "GornTriangle" */ = {
+		068C74361A7625B10017E482 /* Build configuration list for PBXProject "GornQueue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				068C74371A7625B10017E482 /* Debug */,
@@ -348,7 +357,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		068C74621A7626270017E482 /* Build configuration list for PBXNativeTarget "GornTriangle" */ = {
+		068C74621A7626270017E482 /* Build configuration list for PBXNativeTarget "GornQueue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				068C745E1A7626270017E482 /* Debug */,

@@ -212,8 +212,8 @@ namespace gorn
     {
         buffer_writer out(data);
         out.advance(data.size());
-        size_t s = data.size()/vdef.getElementSize();
-        size_t n = 0;
+        elm_t s = (elm_t)data.size()/vdef.getElementSize();
+        elm_t n = 0;
 
         bool finished = false;
         while(!finished)
