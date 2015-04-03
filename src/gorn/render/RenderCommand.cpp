@@ -65,7 +65,7 @@ namespace gorn
     RenderCommand::RenderCommand():
     _drawMode(DrawMode::Triangles),
     _transformMode(TransformMode::NoChange),
-    _hasBoundingBox(false)
+    _boundingMode(BoundingMode::None)
     {
     }
 
@@ -122,11 +122,17 @@ namespace gorn
         return *this;
     }
 
-    
-    RenderCommand& RenderCommand::withBoundingBox(const Rect& bb)
+    RenderCommand& RenderCommand::withBounding(const Rect& bb,
+        BoundingMode mode)
     {
         _boundingBox = bb;
-        _hasBoundingBox = true;
+        _boundingMode = mode;
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withBoundingMode(BoundingMode mode)
+    {
+        _boundingMode = mode;
         return *this;
     }
 
@@ -249,7 +255,10 @@ namespace gorn
                     finished = false;
                 }
             }
-            n++;
+            if(!finished)
+            {
+                n++;
+            }
         }
 
         if(hasElements())
@@ -271,9 +280,9 @@ namespace gorn
         }
     }
 
-    bool RenderCommand::hasBoundingBox() const
+    RenderCommand::BoundingMode RenderCommand::getBoundingMode() const
     {
-        return _hasBoundingBox;
+        return _boundingMode;
     }
 
     const Rect& RenderCommand::getBoundingBox() const

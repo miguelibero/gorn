@@ -34,12 +34,18 @@ namespace gorn
         typedef RenderCommand Command;
         typedef std::stack<glm::mat4> Transforms;
         typedef std::stack<size_t> Checkpoints;
+        typedef RenderCommandBoundingMode BoundingMode;
+        typedef RenderCommandTransformMode TransformMode;
+
+        static Rect _screenRect;
         Transforms _transforms;
         Checkpoints _checkpoints;
+        size_t _boundingEnds;
 
     public:
         RenderQueueDrawState();
-        void update(const Command& cmd);
+        void updateTransform(const Command& cmd);
+        bool checkBounding(const Command& cmd, const glm::mat4& viewProj);
         const glm::mat4& getTransform() const;
     };
 
@@ -74,7 +80,6 @@ namespace gorn
         typedef RenderQueueDrawState DrawState;
         typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
-        static Rect _glRect;
         MaterialManager& _materials;
         std::vector<Command> _commands;
         std::mutex _commandsMutex;

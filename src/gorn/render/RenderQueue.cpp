@@ -11,8 +11,6 @@
 
 namespace gorn
 {
-    Rect RenderQueue::_glRect(glm::vec2(-1.0f), glm::vec2(2.0f));
-
     RenderQueue::RenderQueue(MaterialManager& materials):
     _materials(materials), _infoUpdateInterval(0.0),
     _infoUpdatesPerSecond(10), _tempInfoAmount(0)
@@ -119,25 +117,17 @@ namespace gorn
         for(auto itr = commands.begin(); itr != commands.end(); ++itr)
         {
             auto& cmd = *itr;
-            state.update(cmd);
+            state.updateTransform(cmd);
             if(!cmd.getMaterial())
             {
                 continue;
             }
-            auto& transform = state.getTransform();
-            if(cmd.hasBoundingBox())
+            if(!state.checkBounding(cmd, _viewProjTrans))
             {
-                auto frustum = _viewProjTrans*transform;
-                auto rect = cmd.getBoundingBox()*frustum;
-                rect.origin.z = 0.0f;
-                rect.size.z = 0.0f;
-                if(!_glRect.overlaps(rect))
-                {
-                    _tempInfo.drawCallsCulled++;
-                    continue;
-                }
+                _tempInfo.drawCallsCulled++;
+                continue;
             }
-
+            auto& transform = state.getTransform();
             if(!block.supports(cmd))
             {
                 block.draw(*this, _tempInfo);
@@ -204,7 +194,8 @@ namespace gorn
 
     RenderQueueInfo::RenderQueueInfo():
     framesPerSecond(0.0), drawCalls(0),
-    drawCallsBatched(0), vertexCount(0)
+    drawCallsBatched(0), drawCallsCulled(0),
+    vertexCount(0)
     {
     }
 
@@ -222,29 +213,32 @@ namespace gorn
         return result;
     }
 
-    RenderQueueDrawState::RenderQueueDrawState()
+    Rect RenderQueueDrawState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));
+
+    RenderQueueDrawState::RenderQueueDrawState():
+    _boundingEnds(0)
     {
         _transforms.push(glm::mat4());
     }
 
-    void RenderQueueDrawState::update(const Command& cmd)
+    void RenderQueueDrawState::updateTransform(const Command& cmd)
     {
         switch(cmd.getTransformMode())
         {
-            case RenderCommand::TransformMode::PushLocal:
+            case TransformMode::PushLocal:
                 _transforms.push(_transforms.top()*cmd.getTransform());
                 break;
-            case RenderCommand::TransformMode::PopLocal:
+            case TransformMode::PopLocal:
                 _transforms.pop();
                 break;
-            case RenderCommand::TransformMode::SetGlobal:
+            case TransformMode::SetGlobal:
                 _transforms.push(cmd.getTransform());
                 break;
                 break;
-            case RenderCommand::TransformMode::PushCheckpoint:
+            case TransformMode::PushCheckpoint:
                 _checkpoints.push(_transforms.size());
                 break;
-            case RenderCommand::TransformMode::PopCheckpoint:
+            case TransformMode::PopCheckpoint:
             {
                 size_t size = _checkpoints.top();
                 _checkpoints.pop();
@@ -257,6 +251,36 @@ namespace gorn
             default:
                 break;
         }
+    }
+
+    bool RenderQueueDrawState::checkBounding(const Command& cmd, const glm::mat4& viewProj)
+    {
+        auto bound = cmd.getBoundingMode();
+        if(bound == BoundingMode::End)
+        {
+            _boundingEnds--;
+        }
+        if(_boundingEnds > 0)
+        {
+            return false;
+        }
+        if(bound != BoundingMode::Start &&
+            bound != BoundingMode::Local)
+        {
+            return true;
+        }
+        auto rect = cmd.getBoundingBox()*(viewProj*getTransform());
+        rect.origin.z = 0.0f;
+        rect.size.z = 0.0f;
+        if(!_screenRect.overlaps(rect))
+        {
+            if(bound == RenderCommand::BoundingMode::Start)
+            {
+                _boundingEnds++;
+            }
+            return false;
+        }
+        return true;
     }
 
     const glm::mat4& RenderQueueDrawState::getTransform() const

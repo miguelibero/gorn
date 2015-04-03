@@ -10,9 +10,13 @@ Its main goals are:
 * simplicity
 * performance
 * reusability
-* draw call batching
-* drawing in separate thread (TODO)
 * support for Linux, Android, iOS and Windows (WIP)
+
+Some functionalities that the render queue supports:
+
+* automatic draw call batching
+* frustum culling (WIP)
+* drawing in separate thread (TODO)
 
 ## Examples
 

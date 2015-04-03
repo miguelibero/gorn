@@ -42,10 +42,19 @@ namespace gorn
         PopCheckpoint
     };
 
+    enum class RenderCommandBoundingMode
+    {
+        None,
+        Start,
+        Local,
+        End
+    };
+
     class RenderCommand
     {
     public:
         typedef RenderCommandTransformMode TransformMode;
+        typedef RenderCommandBoundingMode BoundingMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef unsigned elm_t;
@@ -57,7 +66,7 @@ namespace gorn
         DrawMode _drawMode;
         glm::mat4 _transform;
         TransformMode _transformMode;
-        bool _hasBoundingBox;
+        BoundingMode _boundingMode;
         Rect _boundingBox;
 
     public:
@@ -73,7 +82,10 @@ namespace gorn
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);
         RenderCommand& withTransformMode(TransformMode mode);
-        RenderCommand& withBoundingBox(const Rect& rect);
+
+        RenderCommand& withBounding(const Rect& rect,
+            BoundingMode mode=BoundingMode::Local);
+        RenderCommand& withBoundingMode(BoundingMode mode);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -96,7 +108,7 @@ namespace gorn
         const glm::mat4& getTransform() const;
         TransformMode getTransformMode() const;
 
-        bool hasBoundingBox() const;
+        BoundingMode getBoundingMode() const;
         const Rect& getBoundingBox() const;
 
     };
