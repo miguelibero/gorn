@@ -6,10 +6,11 @@
 #include <functional>
 #include <gorn/base/DefinitionManager.hpp>
 #include <gorn/render/TextureDefinition.hpp>
+#include <gorn/asset/Image.hpp>
+#include <glm/glm.hpp>
 
 namespace gorn
 {
-    class Image;
     class Texture;
 
     template<typename T>
@@ -25,13 +26,17 @@ namespace gorn
         AssetManager<Image>& _images;
         Definitions _definitions;
 
+        std::shared_ptr<Texture> doLoad(const std::string& name);
     public:
         TextureManager(AssetManager<Image>& images);
 
         const Definitions& getDefinitions() const;
         Definitions& getDefinitions();
 
+        bool validate(const std::string& name) const;
         std::shared_ptr<Texture> load(const std::string& name);
+        glm::vec2 loadSize(const std::string& name);
+        void reload();
 
     };
 }

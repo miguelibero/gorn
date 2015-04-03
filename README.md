@@ -10,9 +10,9 @@ Its main goals are:
 * simplicity
 * performance
 * reusability
-* draw call batching (TODO)
+* draw call batching
 * drawing in separate thread (TODO)
-* support for Linux, Windows, Android and iOS (WIP)
+* support for Linux, Android, Windows (WIP), and iOS (WIP)
 
 ## Examples
 
@@ -54,7 +54,7 @@ void main()
 auto vao = VertexArray()
 vao.setProgram(Program(vsh, fsh));
 
-auto vbo = VertexBuffer(Data{
+auto vbo = VertexBuffer(buffer{
     //  Position     Color 
         0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
@@ -62,15 +62,15 @@ auto vbo = VertexBuffer(Data{
 }, VertexBuffer::Usage::StaticDraw);
 
 vao.setAttribute(vbo, AttributeDefinition("position")
-    .withType(GL_FLOAT)
+    .withType(BasicType::Float)
     .withCount(2)
-    .withStride(5*sizeof(GLfloat)));
+    .withStride(5, BasicType::Float));
             
 vao.setAttribute(vbo, AttributeDefinition("color")
-    .withType(GL_FLOAT)
+    .withType(BasicType::Float)
     .withCount(3)
-    .withStride(5*sizeof(GLfloat))
-    .withOffset(2*sizeof(GLfloat)));
+    .withStride(5, BasicType::Float)
+    .withOffset(2, BasicType::Float));
 
 vao.draw(3);
 ```
@@ -81,7 +81,9 @@ tags.
 ```c++
 Context ctx;
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("sprite", "../%s.png");
+    .makeLoader<LocalFileLoader>("sprite", "../%s.png");
+ctx.getImages()
+    .makeDefaultDataLoader<PngImageLoader>();
 
 auto img = ctx.getImages().load("sprite:kitten");
 ```
@@ -91,9 +93,9 @@ Loading assets can be done with definitions.
 ```c++
 Context ctx;
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("vsh", "../%s.vsh");
+    .makeLoader<LocalFileLoader>("vsh", "../%s.vsh");
 ctx.getFiles()
-    .addLoader<LocalFileLoader>("fsh", "../%s.fsh");
+    .makeLoader<LocalFileLoader>("fsh", "../%s.fsh");
 ctx.getPrograms().getDefinitions().get("sprite")
     .withUniform("texture", UniformKind::Texture0)
     .withShaderFile(ShaderType::Vertex, "vsh:shader")
@@ -121,19 +123,18 @@ ctx.getQueue().addCommand("sprite:kitten")
         -0.75f,  0.75f,
          0.25f,  0.75f,
          0.25f, -0.25f,
-        -0.75f, -0.25f,
-         0.66f
-    }, GL_FLOAT, 2)
+        -0.75f, -0.25f
+    }, 2, BasicType::Float)
     .withAttribute(AttributeKind::TexCoords, {
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, GL_UNSIGNED_INT, 6);
+    });
 
 ctx.getQueue().addCommand("sprite:puppy")
     .withAttribute(AttributeKind::Position, {
@@ -141,17 +142,17 @@ ctx.getQueue().addCommand("sprite:puppy")
          0.75f,  0.25f,
          0.75f, -0.75f,
         -0.25f, -0.75f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withAttribute(AttributeKind::TexCoords, {
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, GL_FLOAT, 2)
+    }, 2, BasicType::Float)
     .withElements({
         0, 1, 2,
         2, 3, 0
-    }, GL_UNSIGNED_INT, 6);
+    });
 
 ctx.getQueue().draw();
 ```

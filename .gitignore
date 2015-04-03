@@ -11,4 +11,10 @@ proj.linux/bin/
 .gradle
 .DS_Store
 build/
+*.obj
+*.sdf
+*.tlog/
 xcuserdata/
+Debug/
+Release/
+*vcxproj.user

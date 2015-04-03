@@ -2,17 +2,17 @@
 #ifndef __gorn__PngImageLoader__
 #define __gorn__PngImageLoader__
 
-#include <gorn/asset/AssetLoader.hpp>
+#include <gorn/asset/DataAssetLoader.hpp>
 
 namespace gorn {
 
     class Image;
 
-    class PngImageLoader : public AssetLoader<Image>
+    class PngImageLoader : public DataAssetLoader<Image>
     {
     public:
-        bool validate(const Data& input) const;
-        Image load(Data&& input) const;
+        bool validate(const buffer& input) const NOEXCEPT;
+        Image load(const buffer& input) const;
     };
 }
 

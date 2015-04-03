@@ -1,24 +1,34 @@
 #ifndef __gorn__RenderCommand__
 #define __gorn__RenderCommand__
 
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
+#include <gorn/render/VertexArray.hpp>
 #include <gorn/render/Material.hpp>
 #include <glm/glm.hpp>
+
+
+class buffer_writer;
 
 namespace gorn
 {
     class VertexDefinition;
+    class Program;
 
-    struct RenderCommandBlock
+    struct RenderCommandAttribute
     {
-        Data data;
-        GLenum type;
-        GLsizei count;
+        typedef AttributeDefinition Definition;
+        buffer data;
+        size_t count;
+        BasicType type;
 
-        RenderCommandBlock();
-        RenderCommandBlock(Data&& data, GLenum type, GLsizei count);
-        RenderCommandBlock(const Data& data, GLenum type, GLsizei count);
+        RenderCommandAttribute();
+        RenderCommandAttribute(buffer&& data, size_t count, BasicType type);
+        RenderCommandAttribute(const buffer& data, size_t count, BasicType type);
+
+        size_t write(buffer_writer& out, const Definition& def, size_t pos) const;
+        size_t write(buffer_writer& out, const Definition& def, size_t pos,
+            const glm::mat4& transform) const;
     };
 
     enum class RenderCommandTransformMode
@@ -27,50 +37,56 @@ namespace gorn
         PushLocal,
         PopLocal,
         SetGlobal,
-        SetNone
+        PushCheckpoint,
+        PopCheckpoint
     };
 
     class RenderCommand
     {
     public:
         typedef RenderCommandTransformMode TransformMode;
-        typedef RenderCommandBlock Block;
+        typedef RenderCommandAttribute Attribute;
+        typedef std::map<std::string, Attribute> AttributeMap;
+        typedef std::vector<unsigned> Elements;
     private:
-        std::map<std::string, Block> _attributes;
-        Block _elements;
+        AttributeMap _attributes;
+        Elements _elements;
         std::shared_ptr<Material> _material;
-        GLenum _drawMode;
+        DrawMode _drawMode;
         glm::mat4 _transform;
         TransformMode _transformMode;
+
     public:
         RenderCommand();
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
-            Data&& data, GLenum type, GLsizei count);
+            buffer&& data, size_t count, BasicType type=BasicType::Float);
         RenderCommand& withAttribute(const std::string& name,
-            const Data& data, GLenum type, GLsizei count);
-        RenderCommand& withElements(Data&& data, GLenum type, GLsizei count);
-        RenderCommand& withElements(const Data& data, GLenum type, GLsizei count);
-        RenderCommand& withElementCount(GLsizei count);
-        RenderCommand& withDrawMode(GLenum mode);
+            const buffer& data, size_t count, BasicType type=BasicType::Float);
+        RenderCommand& withElements(Elements&& elms);
+        RenderCommand& withElements(const Elements& elms);
+        RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);
         RenderCommand& withTransformMode(TransformMode mode);
 
-        Block& getElements();
-        const Block& getElements() const;
+        Elements& getElements();
+        const Elements& getElements() const;
+        bool hasElements() const;
 
-        Block& getAttribute(const std::string& name);
-        const Block& getAttribute(const std::string& name) const;
+        Attribute& getAttribute(const std::string& name);
+        const Attribute& getAttribute(const std::string& name) const;
         bool hasAttribute(const std::string& name) const;
-        std::map<std::string, Block>& getAttributes();
-        const std::map<std::string, Block>& getAttributes() const;
+        AttributeMap& getAttributes();
+        const AttributeMap& getAttributes() const;
 
         const std::shared_ptr<Material>& getMaterial() const;
-        GLenum getDrawMode() const;
+        DrawMode getDrawMode() const;
 
-        VertexDefinition generateVertexDefinition() const;
-        Data generateVertexData(const VertexDefinition& vdef) const;
+        VertexDefinition getVertexDefinition(const Program& prog) const;
+        void getVertexData(buffer& data, Elements& elms,
+            const VertexDefinition& vdef,            
+            const glm::mat4& transform=glm::mat4(1.0f)) const;
 
         const glm::mat4& getTransform() const;
         TransformMode getTransformMode() const;

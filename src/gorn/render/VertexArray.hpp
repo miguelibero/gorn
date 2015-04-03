@@ -1,8 +1,10 @@
 #ifndef __gorn__VertexArray__
 #define __gorn__VertexArray__
 
+#include <gorn/render/Enums.hpp>
 #include <gorn/render/Gl.hpp>
 #include <vector>
+#include <map>
 #include <memory>
 
 namespace gorn
@@ -16,35 +18,44 @@ namespace gorn
 
     class VertexArray
     {
+    public:
+        typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
         static GLuint s_currentId;
         mutable GLuint _id;
         std::shared_ptr<VertexBuffer> _elementVbo;
-        GLenum _elementType;
+        BasicType _elementType;
         std::vector<std::shared_ptr<VertexBuffer>> _vertexVbos;
         std::shared_ptr<Program> _program;
         std::shared_ptr<Material> _material;
+
+        void cleanup();
+
     public:
         VertexArray();
         ~VertexArray();
-        GLuint getId() const;
 
+        VertexArray(const VertexArray& other) = delete;
+        VertexArray& operator=(const VertexArray& other) = delete;
+
+        VertexArray(VertexArray&& other);
+        VertexArray& operator=(VertexArray&& other);
+
+        GLuint getId() const;
         void bind() const;
         void activate() const;
-        void setAttribute(GLuint attribute, const std::shared_ptr<VertexBuffer>& buffer,
-            GLenum type, GLboolean normalized, GLint size,
-            GLsizei stride=0, GLsizei offset=0);
         void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const AttributeDefinition& def);
         void addVertexData(const std::shared_ptr<VertexBuffer>& vbo, const VertexDefinition& def);
-        void setElementData(const std::shared_ptr<VertexBuffer>& vbo, GLenum type=GL_UNSIGNED_INT);
+        void setElementData(const std::shared_ptr<VertexBuffer>& vbo, BasicType type=BasicType::UnsignedInteger);
         void setProgram(const std::shared_ptr<Program>& program);
         void setMaterial(const std::shared_ptr<Material>& material);
         const std::shared_ptr<Program>& getProgram() const;
         const std::shared_ptr<Material>& getMaterial() const;
         void setUniformValue(const std::string& name, const UniformValue& value);
 	    void setUniformValue(const GLint& location, const UniformValue& value);
+        void setUniformValues(const UniformValueMap& values);
 
-        void draw(GLsizei count, GLenum mode=GL_TRIANGLES, GLint offset=0);
+        void draw(size_t count, DrawMode mode=DrawMode::Triangles, size_t offset=0);
     };
 }
 

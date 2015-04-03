@@ -55,4 +55,9 @@ void gornInitGlExtensions();
 
 #endif
 
+namespace gorn
+{
+    void checkGlError(const char* what);
+}
+
 #endif

@@ -6,7 +6,23 @@ namespace gorn
     {
     }
 
-    VertexDefinition& VertexDefinition::withAttribute(const AttributeDefinition& attr)
+    VertexDefinition& VertexDefinition::operator+=(
+        const VertexDefinition& other)
+    {
+        _attributes.insert(other._attributes.begin(), other._attributes.end());
+        return *this;
+    }
+
+    VertexDefinition VertexDefinition::operator+(
+        const VertexDefinition& other) const
+    {
+        VertexDefinition sum(*this);
+        sum += other;
+        return sum;
+    }
+
+    VertexDefinition& VertexDefinition::withAttribute(
+        const AttributeDefinition& attr)
     {
         _attributes[attr.getName()] = attr;
         return *this;
@@ -22,22 +38,24 @@ namespace gorn
         return itr->second;
     }
 
-    const std::map<std::string, AttributeDefinition>& VertexDefinition::getAttributes() const
+    const std::map<std::string, AttributeDefinition>&
+        VertexDefinition::getAttributes() const
     {
         return _attributes;
     }
 
-    std::map<std::string, AttributeDefinition>& VertexDefinition::getAttributes()
+    std::map<std::string, AttributeDefinition>&
+        VertexDefinition::getAttributes()
     {
         return _attributes;
     }
 
-    GLsizei VertexDefinition::getElementSize() const
+    size_t VertexDefinition::getElementSize() const
     {
-        GLsizei size = 0;
+        size_t size = 0;
         for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
         {
-            size += itr->second.getMemSize();
+            size +=  itr->second.getElementSize();
         }
         return size;
     }

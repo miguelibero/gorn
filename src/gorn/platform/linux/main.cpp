@@ -9,18 +9,6 @@
 #include <GL/glew.h>
 #include <sys/time.h>
 
-#ifndef GORN_WINDOW_WIDTH
-#define GORN_WINDOW_WIDTH 640
-#endif
-
-#ifndef GORN_WINDOW_HEIGHT
-#define GORN_WINDOW_HEIGHT 480
-#endif
-
-#ifndef GORN_WINDOW_TITLE
-#define GORN_WINDOW_TITLE "GORN"
-#endif
-
 int main(void)
 {
     Window root;
@@ -32,7 +20,7 @@ int main(void)
     Window window;
     GLXContext glxContext;
     bool finished = false;
-    gorn::Application app;
+    auto app = gorn::main();
 
     display = XOpenDisplay(NULL);
 
@@ -52,9 +40,9 @@ int main(void)
     cmap = XCreateColormap(display, root, vi->visual, AllocNone);
     swa.colormap = cmap;
     swa.event_mask = ExposureMask | KeyPressMask | PointerMotionMask | ButtonPressMask | ButtonReleaseMask;
-    window = XCreateWindow(display, root, 0, 0, GORN_WINDOW_WIDTH, GORN_WINDOW_HEIGHT, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
+    window = XCreateWindow(display, root, 0, 0, app->getSize().x, app->getSize().y, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
     XMapWindow(display, window);
-    XStoreName(display, window, GORN_WINDOW_TITLE);
+    XStoreName(display, window, app->getName().c_str());
     glxContext = glXCreateContext(display, vi, NULL, GL_TRUE);
     glXMakeCurrent(display, window, glxContext);
 
@@ -68,14 +56,14 @@ int main(void)
     fd_set inFds;
     struct timeval currTime;
     gettimeofday(&currTime, NULL);
-    struct timeval frameRate;
-    frameRate.tv_usec = 1000000.0f/60;
-    frameRate.tv_sec = 0;
     int x11Fd = ConnectionNumber(display);
     XWindowAttributes gwa;
     XEvent xev;
 
-    app.load();
+    Atom wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(display, window, &wmDeleteMessage, 1);
+
+    app->realLoad();
 
     while(!finished)
     {
@@ -83,25 +71,45 @@ int main(void)
         gettimeofday(&currTime, NULL);
         FD_ZERO(&inFds);
         FD_SET(x11Fd, &inFds);
-        select(x11Fd+1, &inFds, 0, 0, &frameRate);
 
         XGetWindowAttributes(display, window, &gwa);
         glViewport(0, 0, gwa.width, gwa.height);
 
         double dt = ((double)currTime.tv_sec - lastTime.tv_sec)
-            + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000*1000);
+            + ((double)currTime.tv_usec-lastTime.tv_usec)/(1000000.0);
 
-        app.update(dt);
+        app->realUpdate(dt);
 
         while(XPending(display))
         {
             XNextEvent(display, &xev);
+            switch( xev.type )
+            {
+            case FocusIn:
+                app->realForeground();
+                break;
+            case FocusOut:
+                app->realBackground();
+                break;
+            case ClientMessage:
+                if ((Atom)xev.xclient.data.l[0] == wmDeleteMessage)
+                {
+                    finished = true;
+                }
+                break;
+            case ButtonPress:
+                glm::vec2 p(xev.xbutton.x, xev.xbutton.y);
+                p.y = app->getSize().y - p.y;
+                p = (p/app->getSize())*2.0f-glm::vec2(1.0f);
+                app->realTouch(p);
+                break;
+            }
         }
 
         glXSwapBuffers(display, window);
     }
 
-    app.unload();
+    app->realUnload();
     glXMakeCurrent(display, None, NULL);
     glXDestroyContext(display, glxContext);
     XDestroyWindow(display, window);

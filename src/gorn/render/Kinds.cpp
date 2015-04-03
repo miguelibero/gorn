@@ -4,8 +4,14 @@ namespace gorn
 {
 
     const char* AttributeKind::Position = "position";
+    const char* AttributeKind::Normal = "normal";
     const char* AttributeKind::Color = "color";
     const char* AttributeKind::TexCoords = "texCoords";
+
+    bool AttributeKind::isTransformable(const std::string& name)
+    {
+        return name == Position || name == Normal;
+    }
 
     const char* UniformKind::Texture0 = "texture0";
     const char* UniformKind::Texture1 = "texture1";
@@ -15,6 +21,8 @@ namespace gorn
     const char* UniformKind::Texture5 = "texture5";
     const char* UniformKind::Texture6 = "texture6";
     const char* UniformKind::Color = "color";
-    const char* UniformKind::Transform = "transform";
+    const char* UniformKind::Model = "model";
+    const char* UniformKind::View = "view";
+    const char* UniformKind::Projection = "proj";
 	
 }

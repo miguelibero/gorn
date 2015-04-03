@@ -5,9 +5,13 @@ namespace gorn
     AttributeDefinition::AttributeDefinition(const std::string& name):
     _name(name),
     _normalized(false),
+    _type(BasicType::None),
     _count(1),
     _stride(0),
-    _offset(0)
+    _strideType(BasicType::None),
+    _offset(0),
+    _offsetType(BasicType::None),
+    _transformable(false)
     {
     }
 
@@ -17,33 +21,57 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withType(GLenum type)
+    AttributeDefinition& AttributeDefinition::withType(BasicType type)
     {
         _type = type;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withNormalized(GLboolean enabled)
+    AttributeDefinition& AttributeDefinition::withNormalized(bool enabled)
     {
         _normalized = enabled;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withCount(GLint count)
+    AttributeDefinition& AttributeDefinition::withCount(size_t count)
     {
         _count = count;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withStride(GLsizei stride)
+    AttributeDefinition& AttributeDefinition::withStride(size_t stride)
     {
         _stride = stride;
+        _strideType = BasicType::None;
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withOffset(GLsizei offset)
+    AttributeDefinition& AttributeDefinition::withOffset(size_t offset)
     {
         _offset = offset;
+        _offsetType = BasicType::None;
+        return *this;
+    }
+
+    AttributeDefinition& AttributeDefinition::withStride(
+        size_t stride, BasicType type)
+    {
+        _stride = stride;
+        _strideType = type;
+        return *this;
+    }
+
+    AttributeDefinition& AttributeDefinition::withOffset(
+        size_t offset, BasicType type)
+    {
+        _offset = offset;
+        _offsetType = type;
+        return *this;
+    }
+
+    AttributeDefinition& AttributeDefinition::withTransformable(bool enabled)
+    {
+        _transformable = enabled;
         return *this;
     }
 
@@ -52,7 +80,7 @@ namespace gorn
         return _name;
     }
 
-    GLenum AttributeDefinition::getType() const
+    BasicType AttributeDefinition::getType() const
     {
         return _type;
     }
@@ -62,47 +90,39 @@ namespace gorn
         return _normalized;
     }
 
-    GLint AttributeDefinition::getCount() const
+    size_t AttributeDefinition::getCount() const
     {
         return _count;
     }
 
-    GLsizei AttributeDefinition::getStride() const
+    size_t AttributeDefinition::getStride() const
     {
         return _stride;
     }
 
-    GLsizei AttributeDefinition::getOffset() const
+    size_t AttributeDefinition::getOffset() const
     {
         return _offset;
     }
 
-    GLsizei AttributeDefinition::getTypeSize() const
+    BasicType AttributeDefinition::getStrideType() const
     {
-        switch(_type)
-        {
-            case GL_BYTE:
-                return sizeof(GLbyte);
-            case GL_UNSIGNED_BYTE:
-                return sizeof(GLubyte);
-            case GL_SHORT:
-                return sizeof(GLshort);
-            case GL_UNSIGNED_SHORT:
-                return sizeof(GLushort);
-            case GL_INT:
-                return sizeof(GLint);
-            case GL_UNSIGNED_INT:
-                return sizeof(GLuint);
-            case GL_FLOAT:
-                return sizeof(GLfloat);
-            default:
-                return 0;               
-        }
+        return _strideType;
     }
 
-    GLsizei AttributeDefinition::getMemSize() const
+    BasicType AttributeDefinition::getOffsetType() const
     {
-        return getTypeSize()*getCount();
+        return _offsetType;
+    }
+
+    bool AttributeDefinition::getTransformable() const
+    {
+        return _transformable;
+    }
+
+    size_t AttributeDefinition::getElementSize() const
+    {
+        return getCount() * getBasicTypeSize(getType());
     }
 
 }

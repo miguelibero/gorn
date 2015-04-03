@@ -5,6 +5,7 @@
 #include <gorn/render/AttributeDefinition.hpp>
 #include <gorn/render/Program.hpp>
 #include <gorn/render/Material.hpp>
+#include <gorn/render/GlEnums.hpp>
 #include <gorn/base/Exception.hpp>
 #include <algorithm>
 
@@ -13,16 +14,58 @@ namespace gorn
     GLuint VertexArray::s_currentId = 0;
 
     VertexArray::VertexArray():
-    _id(0), _elementType(0)
+    _id(0), _elementType(BasicType::None)
     {   
     }
 	
 	VertexArray::~VertexArray()
     {
+        cleanup();
+    }
+
+    void VertexArray::cleanup()
+    {
         if(_id != 0)
         {
+            if(s_currentId == _id)
+            {
+                s_currentId = 0;
+            }
             glDeleteVertexArrays(1, &_id);
+            checkGlError("deleting a vertex array");
         }
+    }
+
+    VertexArray::VertexArray(VertexArray&& other):
+    _id(other._id),
+    _elementVbo(std::move(other._elementVbo)),
+    _elementType(other._elementType),
+    _vertexVbos(std::move(other._vertexVbos)),
+    _program(std::move(other._program)),
+    _material(std::move(other._material))
+    {
+        other._elementType = BasicType::None;
+        other._id = 0;
+    }
+
+    VertexArray& VertexArray::operator=(VertexArray&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+            _id = other._id;
+            _elementVbo = std::move(other._elementVbo);
+            _elementType = other._elementType;
+            _vertexVbos = std::move(other._vertexVbos);
+            _program = std::move(other._program);
+            _material = std::move(other._material);
+            other._elementType = BasicType::None;
+            other._id = 0;
+        }
+        return *this;
     }
 
     GLuint VertexArray::getId() const
@@ -30,6 +73,7 @@ namespace gorn
         if(_id == 0)
         {
             glGenVertexArrays(1, &_id);
+			checkGlError("generating a vertex array");
         }
         return _id;
 	};
@@ -63,7 +107,7 @@ namespace gorn
         return _material;
     }
 
-    void VertexArray::setElementData(const std::shared_ptr<VertexBuffer>& vbo, GLenum type)
+    void VertexArray::setElementData(const std::shared_ptr<VertexBuffer>& vbo, BasicType type)
     {
         _elementVbo = vbo;
         _elementType = type;
@@ -92,7 +136,7 @@ namespace gorn
     void VertexArray::setAttribute(const std::shared_ptr<VertexBuffer>& vbo,
         const AttributeDefinition& def)
     {
-        if(!def.getType())
+        if(def.getType() == BasicType::None)
         {
             throw Exception("no type defined");
         }
@@ -108,9 +152,22 @@ namespace gorn
         bind();
         vbo->bind();
 		glEnableVertexAttribArray(id);
-		glVertexAttribPointer(id, def.getCount(), def.getType(),
-            def.getNormalized(), def.getStride(),
-            reinterpret_cast<const GLvoid*>(def.getOffset()));
+
+        auto stride = def.getStride();
+        if(def.getStrideType() != BasicType::None)
+        {
+            stride *= getBasicTypeSize(def.getStrideType());
+        }
+        auto offset = def.getOffset();
+        if(def.getOffsetType() != BasicType::None)
+        {
+            offset *= getBasicTypeSize(def.getOffsetType());
+        }
+		glVertexAttribPointer(id, def.getCount(), 
+            getGlBasicType(def.getType()),
+            def.getNormalized(), stride, (GLvoid*)offset);
+
+        checkGlError("setting a vertex array attribute");
     }
 
     void VertexArray::addVertexData(const std::shared_ptr<VertexBuffer>& vbo,
@@ -141,19 +198,29 @@ namespace gorn
         }
     }
 
-    void VertexArray::draw(GLsizei count, GLenum mode, GLint offset)
+    void VertexArray::setUniformValues(const UniformValueMap& values)
+    {
+        for(auto itr = values.begin(); itr != values.end(); ++itr)
+        {
+            setUniformValue(itr->first, itr->second);
+        }
+    }
+
+    void VertexArray::draw(size_t count, DrawMode mode, size_t offset)
     {
         activate();
-        if(_elementVbo && _elementType)
+        GLenum glMode = getGlDrawMode(mode);
+        if(_elementVbo && _elementType != BasicType::None)
         {
-    		glDrawElements(mode, count, _elementType,
+    		glDrawElements(glMode, count, getGlBasicType(_elementType),
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else
         {
-		    glDrawArrays(mode, offset, count);
+		    glDrawArrays(glMode, offset, count);
         }
 
+        checkGlError("drawing a vertex array");
     }
 }
 

@@ -1,9 +1,10 @@
 #include <gorn/render/Shader.hpp>
 #include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {
-	Shader::Shader(const Data& source, ShaderType type):
+	Shader::Shader(const buffer& source, ShaderType type):
 	_id(0)
 	{
         GLenum glType = 0;
@@ -16,13 +17,17 @@ namespace gorn
             glType = GL_FRAGMENT_SHADER;
         }
 		_id = glCreateShader(glType);
-		auto ptr = (const GLchar*)source.ptr();
+        if(_id == 0)
+        {
+            throw Exception("Could not create shader.");
+        }
+		auto ptr = (const GLchar*)source.data();
 		auto size = (const GLint)source.size();
         glShaderSource(_id, 1, &ptr, &size);
         glCompileShader(_id);
         GLint status;
         glGetShaderiv(_id, GL_COMPILE_STATUS, &status);
-        if(status != GL_TRUE)
+        if((GLenum)status == GL_FALSE)
         {
             char buffer[512];
             glGetShaderInfoLog(_id, sizeof(buffer), NULL, buffer);
@@ -36,7 +41,11 @@ namespace gorn
 
 	Shader::~Shader()
 	{
-        glDeleteShader(_id);
+        if(glIsShader(_id) == GL_TRUE)
+        {
+            glDeleteShader(_id);
+            checkGlError("deleting shader");
+        }
 	}
 
 	GLuint Shader::getId() const

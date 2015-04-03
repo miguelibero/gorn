@@ -1,4 +1,5 @@
 #include <gorn/base/Context.hpp>
+#include <gorn/base/Exception.hpp>
 
 namespace gorn
 {
@@ -70,6 +71,12 @@ namespace gorn
     const MaterialManager& Context::getMaterials() const
     {
         return _materials;
+    }
+
+    void Context::reload()
+    {
+        _textures.reload();
+        _programs.reload();
     }
 
 }

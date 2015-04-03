@@ -1,4 +1,6 @@
 #include <gorn/render/Gl.hpp>
+#include <gorn/base/Exception.hpp>
+#include <sstream>
 
 #ifdef GORN_PLATFORM_ANDROID
 
@@ -18,3 +20,17 @@ void gornInitGlExtensions() {
 }
 
 #endif
+
+namespace gorn
+{
+    void checkGlError(const char* what)
+    {
+        GLenum glErr = glGetError();
+        if (glErr != GL_NO_ERROR)
+        {
+            std::stringstream ss;
+            ss << "OpenGL error " << glErr << " " << what;
+            throw gorn::Exception(ss.str());
+        }
+    }
+}

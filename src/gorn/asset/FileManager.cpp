@@ -2,41 +2,34 @@
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/asset/FileLoader.hpp>
 #include <gorn/base/Exception.hpp>
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/base/String.hpp>
 #include <algorithm>
 
 namespace gorn
 {
+    FileManager::FileManager():
+    _files(std::make_shared<Files>())
+    {
+    }
 
-	void FileManager::addLoader(const std::string& tag, std::unique_ptr<Loader>&& loader)
+	void FileManager::addLoader(const std::string& tag,
+        std::unique_ptr<Loader>&& loader) NOEXCEPT
 	{
-        if(loader == nullptr)
+        if(loader != nullptr)
         {
-            throw Exception("Cannot add an empty loader");
+    		_loaders[tag].push_back(std::move(loader));
         }
-		_loaders[tag].push_back(std::move(loader));
 	}
 
-    void FileManager::addLoader(std::unique_ptr<Loader>&& loader)
+    void FileManager::addLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
-	std::future<Data> FileManager::load(const std::string& aname, bool cache)
-	{
-        {
-            auto itr = _preloads.find(aname);
-            if(itr != _preloads.end())
-            {
-                std::promise<Data> p;
-                p.set_value(itr->second);
-                return p.get_future();
-            }
-        }
-
-        auto parts = String::splitTag(aname);
-
+    std::vector<std::shared_ptr<FileManager::Loader>> FileManager::getLoaders(
+        const std::pair<std::string,std::string>& parts) const NOEXCEPT
+    {
         std::vector<std::shared_ptr<Loader>> loaders;
         if(parts.first != String::kDefaultTag)
         {
@@ -59,11 +52,46 @@ namespace gorn
                 }
             }
         }
+        return loaders;
+    }
+
+    bool FileManager::validate(const std::string& name) const NOEXCEPT
+    {
+        auto itr = _files->find(name);
+        if(itr != _files->end())
+        {
+            return true;
+        }
+
+        auto parts = String::splitTag(name);
+        auto loaders = getLoaders(parts);
         for(auto& loader : loaders)
         {
             if(loader->validate(parts.second))
             {
-                return load(loader, parts.second);
+                return true;
+            }
+        }
+        return false;
+    }
+
+	std::future<buffer> FileManager::load(const std::string& name, bool cache)
+	{
+        auto itr = _files->find(name);
+        if(itr != _files->end())
+        {
+            std::promise<buffer> p;
+            p.set_value(itr->second);
+            return p.get_future();
+        }
+
+        auto parts = String::splitTag(name);
+        auto loaders = getLoaders(parts);
+        for(auto& loader : loaders)
+        {
+            if(loader->validate(parts.second))
+            {
+                return load(loader, parts.second, cache);
             }
         }
        
@@ -71,17 +99,47 @@ namespace gorn
             +parts.second+"' with tag '"+parts.first+"'.");
 	}
 
-    std::future<Data> FileManager::load(
-      const std::shared_ptr<Loader>& loader, const std::string& name)
+    bool FileManager::unload(const std::string& name) NOEXCEPT
     {
-        return std::async(std::launch::async, [loader](const std::string& name){
-            return loader->load(name);
-        }, name);
+        auto itr = _files->find(name);
+        if(itr != _files->end())
+        {
+            _files->erase(itr);
+            return true;
+        }
+        return false;
     }
 
-    void FileManager::preload(const std::string& name, Data&& data)
+    void FileManager::unloadAll() NOEXCEPT
     {
-        _preloads[name] = std::move(data);
+        _files->clear();
+    }
+
+    buffer fileLoadAsync(
+      const std::shared_ptr<FileManager::Loader>& loader,
+      const std::shared_ptr<FileManager::Files>& files,
+      const std::string& name)
+    {
+        auto buffer = loader->load(name);
+        if(files)
+        {
+            (*files)[name] = buffer;
+        }
+        return buffer;
+    }
+
+    std::future<buffer> FileManager::load(
+        const std::shared_ptr<Loader>& loader,
+        const std::string& name, bool cache)
+    {
+        auto files = cache?_files:nullptr;
+        return std::async(std::launch::async, &fileLoadAsync,
+          loader, files, name);
+    }
+
+    void FileManager::preload(const std::string& name, buffer&& data) NOEXCEPT
+    {
+        (*_files)[name] = std::move(data);
     }
 
 }

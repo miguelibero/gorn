@@ -14,14 +14,14 @@ namespace gorn {
     {
     }
     
-    std::string BundleFileLoader::getName(const std::string& name) const
+    std::string BundleFileLoader::getName(const std::string& name) const NOEXCEPT
     {
         std::string rname(_nameTemplate);
         String::replaceAll(rname, kPlaceholder, name);
         return rname;
     }
     
-    bool BundleFileLoader::validate(const std::string& name) const
+    bool BundleFileLoader::validate(const std::string& name) const NOEXCEPT
     {
         NSString* nsname = [NSString stringWithUTF8String:getName(name).c_str()];
         return [[NSBundle mainBundle] pathForResource:nsname ofType:nil] != nil;

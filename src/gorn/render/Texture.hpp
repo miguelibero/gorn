@@ -18,9 +18,17 @@ namespace gorn
 		GLuint _id;
         GLenum _target;
         glm::vec2 _size;
+        void cleanup();
 	public:
 		Texture(GLenum target=GL_TEXTURE_2D);
 		~Texture();
+
+        Texture(const Texture& other) = delete;
+        Texture& operator=(const Texture& other) = delete;
+
+        Texture(Texture&& other);
+        Texture& operator=(Texture&& other);
+
 		GLuint getId() const;
         void setImage(const Image& img, GLint lodLevel=0);
         void setParameter(GLenum name, GLint value);
@@ -30,7 +38,6 @@ namespace gorn
         void bind();
         void activate(size_t pos);
         const glm::vec2& getSize() const;
-        float getScale() const;
 	};
 }
 

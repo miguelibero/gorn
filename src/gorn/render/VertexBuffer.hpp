@@ -4,6 +4,8 @@
 #include <gorn/render/Gl.hpp>
 #include <map>
 
+class buffer;
+
 namespace gorn
 {
     enum class VertexBufferUsage
@@ -19,8 +21,6 @@ namespace gorn
         ArrayBuffer
     };
 
-    class Data;
-
 	class VertexBuffer
 	{
 	public:
@@ -31,18 +31,26 @@ namespace gorn
 		mutable GLuint _id;
         Target _target;
         size_t _size;
-	public:
 
-		VertexBuffer(const Data& data,
+        void cleanup();
+
+	public:
+		VertexBuffer(const buffer& data,
             Usage usage=Usage::DynamicDraw,
             Target target=Target::ArrayBuffer);
         VertexBuffer(Target target=Target::ArrayBuffer);
 		~VertexBuffer();
-		GLuint getId() const;
 
+        VertexBuffer(const VertexBuffer& other) = delete;
+        VertexBuffer& operator=(const VertexBuffer& other) = delete;
+
+        VertexBuffer(VertexBuffer&& other);
+        VertexBuffer& operator=(VertexBuffer&& other);
+
+		GLuint getId() const;
         void bind() const;
-        void setData(const Data& data, Usage usage);
-        void setSubData(const Data& data, size_t offset);
+        void setData(const buffer& data, Usage usage);
+        void setSubData(const buffer& data, size_t offset);
         size_t getSize() const;
 	};
 }

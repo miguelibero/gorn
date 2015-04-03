@@ -6,17 +6,17 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_definitions(-Wall -std=c++11 -Wno-unknown-pragmas)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-unknown-pragmas")
 add_definitions(-DGLM_FORCE_RADIANS)
 add_definitions(-DGORN_PLATFORM_LINUX)
-add_definitions(-DGORN_DEBUG_PNG_IMAGE_LOADER)
 
 add_subdirectory(../../../proj.linux "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/gorn")
 
 #TODO: find include dirs
 include_directories(../../../src)
 include_directories(../../../lib)
+include_directories(../../../lib/buffer/src)
 
-file(GLOB SOURCES "../*.cpp")
+file(GLOB SOURCES "../src/*.cpp")
 add_executable(kitten ${SOURCES})
 target_link_libraries(kitten gorn)

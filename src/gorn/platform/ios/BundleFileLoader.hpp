@@ -11,10 +11,10 @@ namespace gorn {
         static const char* kPlaceholder;
         
         std::string _nameTemplate;
-        std::string getName(const std::string& name) const;
+        std::string getName(const std::string& name) const NOEXCEPT;
     public:
-        BundleFileLoader(const std::string& nameTemplate=kPlaceholder);
-        virtual bool validate(const std::string& name) const;
+        BundleFileLoader(const std::string& nameTemplate=kPlaceholder) NOEXCEPT;
+        virtual bool validate(const std::string& name) const NOEXCEPT;
         virtual Data load(const std::string& name) const;
     };
 }

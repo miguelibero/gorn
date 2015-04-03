@@ -3,11 +3,10 @@
 #include <gorn/platform/linux/PngImageLoader.hpp>
 #include <gorn/asset/Image.hpp>
 #include <gorn/base/Exception.hpp>
+#include <buffer.hpp>
+#include <buffer_reader.hpp>
 #include <cstring>
 #include <png.h>
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-#include <iostream>
-#endif
 
 /**
  * this png loader is based on this blog post
@@ -18,26 +17,14 @@
 
 namespace gorn {
 
-    bool PngImageLoader::validate(const Data& inputData) const
+    bool PngImageLoader::validate(const buffer& inputData) const NOEXCEPT
     {
-        DataInputStream input(inputData);
+        buffer_reader input(inputData);
         png_byte pngSig[PNGSIGSIZE];
         memset(pngSig, 0, PNGSIGSIZE);
         bool isPng = false;
         input.read(reinterpret_cast<uint8_t*>(pngSig), PNGSIGSIZE);
         isPng = png_sig_cmp(pngSig, 0, PNGSIGSIZE) == 0;
-        
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-        std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::validate "
-            << (isPng?"yes":"no") << std::endl;
-        std::cout << "signature " << std::hex;
-        for(unsigned i=0; i<PNGSIGSIZE; i++)
-        {
-            std::cout << (int) pngSig[i];    
-        }
-        std::cout << std::dec << std::endl << "<<<<" << std::endl;
-#endif
         return isPng;
     }
 
@@ -45,13 +32,13 @@ namespace gorn {
         (png_structp pngPtr, png_bytep data, png_size_t length)
     {
         png_voidp a = png_get_io_ptr(pngPtr);
-        static_cast<DataInputStream*>(a)
+        static_cast<buffer_reader*>(a)
             ->read(data, length);
     }
 
-    Image PngImageLoader::load(Data&& inputData) const
+    Image PngImageLoader::load(const buffer& inputData) const
     {
-        DataInputStream input(inputData);
+        buffer_reader input(inputData);
         png_structp pngPtr = png_create_read_struct(
             PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
         if (!pngPtr)
@@ -115,51 +102,19 @@ namespace gorn {
         const png_size_t rowBytes = png_get_rowbytes(pngPtr, infoPtr);
         rowPtrs = new png_bytep[imgHeight];
         const size_t len = rowBytes * imgHeight;
-        Data data(len);
+        buffer data(len);
 
         for (size_t i = 0; i < imgHeight; i++)
         {
             png_size_t q = (imgHeight - i - 1) * rowBytes;
-            rowPtrs[i] = data.ptr() + q;
+            rowPtrs[i] = data.data() + q;
         }
         png_read_image(pngPtr, rowPtrs);
         png_read_end(pngPtr, NULL);
 
-#ifdef GORN_DEBUG_PNG_IMAGE_LOADER
-
-        std::string colorTypeStr;
-        switch (colorType)
-        {
-        case PNG_COLOR_TYPE_GRAY:
-            colorTypeStr = "gray";
-            break;
-        case PNG_COLOR_TYPE_GRAY_ALPHA:
-            colorTypeStr = "gray with alpha";
-            break;        
-        case PNG_COLOR_TYPE_PALETTE:
-            colorTypeStr = "palette";
-            break;        
-        case PNG_COLOR_TYPE_RGB:
-            colorTypeStr = "rgb";
-            break;        
-        case PNG_COLOR_TYPE_RGB_ALPHA:
-            colorTypeStr = "rgb with alpha";
-            break;        
-        }
-        png_uint_32 channels = rowBytes/imgWidth;
-        
-        std::cout << ">>>>" << std::endl;        
-        std::cout << "PngImageLoader::load " << colorTypeStr
-            << ", " << len << " bytes " << std::endl;
-        std::cout << "size " << imgWidth << "x" << imgHeight
-            << ", depth " << bitDepth;
-        std::cout << ", channels " << channels << std::endl;
-        std::cout << "<<<<" << std::endl;
-#endif
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
-        GLenum format = hasAlpha ? GL_RGBA : GL_RGB;
         return Image(std::move(data),
-            imgWidth, imgHeight, format, GL_UNSIGNED_BYTE);
+            glm::vec2(imgWidth, imgHeight), hasAlpha, BasicType::UnsignedByte);
     }
 }

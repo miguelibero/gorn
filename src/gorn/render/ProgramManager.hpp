@@ -30,6 +30,10 @@ namespace gorn
         std::shared_ptr<Shader> loadShader(
             const Definition& def, ShaderType type);
 
+        bool validateShader(
+            const Definition& def, ShaderType type) const;
+
+        std::shared_ptr<Program> doLoad(const std::string& name);
     public:
         ProgramManager(FileManager& files);
 
@@ -40,6 +44,11 @@ namespace gorn
             const std::string& name, ShaderType type);
         std::shared_ptr<Program> load(const std::string& name);
 
+        bool validate(const std::string& name) const;
+        bool validateShader(
+            const std::string& name, ShaderType type) const;
+
+        void reload();
     };
 }
 

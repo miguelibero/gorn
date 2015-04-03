@@ -1,67 +1,107 @@
 
 #include <gorn/render/RenderCommand.hpp>
+#include <gorn/render/Kinds.hpp>
+#include <gorn/render/Program.hpp>
+#include <gorn/base/Exception.hpp>
+#include <buffer_writer.hpp>
 
 namespace gorn
 {
-    RenderCommandBlock::RenderCommandBlock():
-    type(0), count(0)
+    RenderCommandAttribute::RenderCommandAttribute():
+    count(0), type(BasicType::None)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(Data&& data, GLenum type, GLsizei count):
-    data(std::move(data)), type(type), count(count)
+    RenderCommandAttribute::RenderCommandAttribute(
+        buffer&& data, size_t count, BasicType type):
+    data(std::move(data)), count(count), type(type)
     {
     }
 
-    RenderCommandBlock::RenderCommandBlock(const Data& data, GLenum type, GLsizei count):
-    data(data), type(type), count(count)
+    RenderCommandAttribute::RenderCommandAttribute(
+        const buffer& data, size_t count, BasicType type):
+    data(data), count(count), type(type)
     {
+    }
+
+    size_t RenderCommandAttribute::write(buffer_writer& out,
+        const Definition& def, size_t pos) const
+    {
+        size_t elmSize = def.getElementSize();
+        return out.write(data, elmSize, pos*elmSize);
+    }
+
+    size_t RenderCommandAttribute::write(buffer_writer& out,
+        const Definition& def, size_t pos, const glm::mat4& t) const
+    {
+        if(def.getType() != BasicType::Float)
+        {
+            throw Exception("Only transformable floats supported.");
+        }
+        auto count = def.getCount();
+        size_t elmSize = def.getElementSize();
+        if(elmSize*pos >= data.size())
+        {
+            return 0;
+        }
+        if(count == 3)
+        {
+            auto vecs = reinterpret_cast<const glm::vec3*>(data.data());
+            auto vec = glm::vec3(t*glm::vec4(vecs[pos], 1.0f));
+            return out.write(glm::value_ptr(vec), elmSize);
+        }
+        else if(count == 2)
+        {
+            auto vecs = reinterpret_cast<const glm::vec2*>(data.data());
+            auto vec = glm::vec2(t*glm::vec4(vecs[pos], 0.0f, 1.0f));
+            return out.write(glm::value_ptr(vec), elmSize);
+        }
+        else
+        {
+            throw Exception("Only transformable vec2 or vec3 supported.");
+        }
     }
 
     RenderCommand::RenderCommand():
-    _drawMode(GL_TRIANGLES), _transformMode(TransformMode::NoChange)
+    _drawMode(DrawMode::Triangles),
+    _transformMode(TransformMode::NoChange)
     {
     }
 
-    RenderCommand& RenderCommand::withMaterial(const std::shared_ptr<Material>& material)
+    RenderCommand& RenderCommand::withMaterial(
+        const std::shared_ptr<Material>& material)
     {
         _material = material;
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        Data&& data, GLenum type, GLint count)
+        buffer&& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(std::move(data), type, count);
+        _attributes[name] = Attribute(std::move(data), count, type);
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
-        const Data& data, GLenum type, GLint count)
+        const buffer& data, size_t count, BasicType type)
     {
-        _attributes[name] = Block(data, type, count);
+        _attributes[name] = Attribute(data, count, type);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(Data&& data, GLenum type, GLsizei count)
+    RenderCommand& RenderCommand::withElements(Elements&& elms)
     {
-        _elements = Block(std::move(data), type, count);
+         _elements = std::move(elms);
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElements(const Data& data, GLenum type, GLsizei count)
+    RenderCommand& RenderCommand::withElements(const Elements& elms)
     {
-        _elements = Block(data, type, count);
+         _elements = elms;
         return *this;
     }
 
-    RenderCommand& RenderCommand::withElementCount(GLsizei count)
-    {
-        _elements.count = count;
-        return *this;
-    }
-
-    RenderCommand& RenderCommand::withDrawMode(GLenum mode)
+    RenderCommand& RenderCommand::withDrawMode(DrawMode mode)
     {
         _drawMode = mode;
         return *this;
@@ -81,22 +121,27 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand::Block& RenderCommand::getElements()
+    RenderCommand::Elements& RenderCommand::getElements()
     {
         return _elements;
     }
 
-    const RenderCommand::Block& RenderCommand::getElements() const
+    const RenderCommand::Elements& RenderCommand::getElements() const
     {
         return _elements;
     }
 
-    RenderCommand::Block& RenderCommand::getAttribute(const std::string& name)
+    bool RenderCommand::hasElements() const
+    {
+        return !_elements.empty();
+    }
+
+    RenderCommand::Attribute& RenderCommand::getAttribute(const std::string& name)
     {
         return _attributes.at(name);
     }
 
-    const RenderCommand::Block& RenderCommand::getAttribute(const std::string& name) const
+    const RenderCommand::Attribute& RenderCommand::getAttribute(const std::string& name) const
     {
         return _attributes.at(name);
     }
@@ -106,12 +151,12 @@ namespace gorn
         return _attributes.find(name) != _attributes.end();
     }
 
-    std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes()
+    RenderCommand::AttributeMap& RenderCommand::getAttributes()
     {
         return _attributes;
     }
 
-    const std::map<std::string, RenderCommand::Block>& RenderCommand::getAttributes() const
+    const RenderCommand::AttributeMap& RenderCommand::getAttributes() const
     {
         return _attributes;
     }
@@ -121,7 +166,7 @@ namespace gorn
         return _material;
     }
 
-    GLenum RenderCommand::getDrawMode() const
+    DrawMode RenderCommand::getDrawMode() const
     {
         return _drawMode;
     }
@@ -136,19 +181,24 @@ namespace gorn
         return _transformMode;
     }
 
-    VertexDefinition RenderCommand::generateVertexDefinition() const
+    VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
     {
         VertexDefinition vdef;
         for(auto itr = _attributes.begin();
           itr != _attributes.end(); ++itr)
         {
-            auto offset = vdef.getElementSize();
-            vdef.setAttribute(itr->first)
-                .withType(itr->second.type)
-                .withCount(itr->second.count)
-                .withOffset(offset);
+            if(prog.hasAttribute(itr->first))
+            {
+                auto offset = vdef.getElementSize();
+                auto trans = prog.hasTransformableAttribute(itr->first);
+                vdef.setAttribute(itr->first)
+                    .withType(itr->second.type)
+                    .withCount(itr->second.count)
+                    .withOffset(offset)
+                    .withTransformable(trans);
+            }
         }
-        GLsizei stride = vdef.getElementSize();
+        size_t stride = vdef.getElementSize();
         for(auto itr = vdef.getAttributes().begin();
           itr != vdef.getAttributes().end(); ++itr)
         {
@@ -157,12 +207,14 @@ namespace gorn
         return vdef;
     }
 
-    Data RenderCommand::generateVertexData(const VertexDefinition& vdef) const
+    void RenderCommand::getVertexData(buffer& data, Elements& elms,
+        const VertexDefinition& vdef, const glm::mat4& transform) const
     {
-        Data data;
-        DataOutputStream out(data);
-
+        buffer_writer out(data);
+        out.advance(data.size());
+        size_t s = data.size()/vdef.getElementSize();
         size_t n = 0;
+
         bool finished = false;
         while(!finished)
         {
@@ -170,10 +222,19 @@ namespace gorn
             for(auto itr = vdef.getAttributes().begin();
               itr != vdef.getAttributes().end(); ++itr)
             {
-                size_t elmSize = itr->second.getMemSize();
                 auto& block = getAttribute(itr->first);
-                size_t writeSize = out.write(block.data, elmSize, n*elmSize);
-                out.write(elmSize-writeSize);
+                auto& def = itr->second;
+                size_t writeSize = 0;
+                if(itr->second.getTransformable())
+                {
+                    writeSize = block.write(out, def, n, transform);
+                }
+                else
+                {
+                    writeSize = block.write(out, def, n);
+                }
+                size_t elmSize = def.getElementSize();
+                out.fill(0, elmSize-writeSize);
                 if(writeSize != 0)
                 {
                     finished = false;
@@ -181,9 +242,25 @@ namespace gorn
             }
             n++;
         }
-        return data;
-    }
 
+        if(hasElements())
+        {
+            const Elements& nelms = getElements();
+            elms.reserve(elms.size()+nelms.size());
+            for(auto itr = nelms.begin(); itr != nelms.end(); ++itr)
+            {
+                elms.push_back(s+*itr);
+            }
+        }
+        else
+        {
+            elms.reserve(elms.size()+n);
+            for(unsigned int i=0;i<n;i++)
+            {
+                elms.push_back(s+i);
+            }
+        }
+    }
 
 }
 

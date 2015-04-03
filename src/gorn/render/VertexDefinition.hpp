@@ -15,13 +15,16 @@ namespace gorn
 
         VertexDefinition();
 
+        VertexDefinition& operator+=(const VertexDefinition& other);
+        VertexDefinition operator+(const VertexDefinition& other) const;
+
         VertexDefinition& withAttribute(const AttributeDefinition& attr);
         AttributeDefinition& setAttribute(const std::string& name);
 
         const std::map<std::string, AttributeDefinition>& getAttributes() const;
         std::map<std::string, AttributeDefinition>& getAttributes();
 
-        GLsizei getElementSize() const;
+        size_t getElementSize() const;
 	};
 }
 

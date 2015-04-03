@@ -24,7 +24,6 @@ namespace gorn
             const UniformValue& value);
 
         const glm::vec2& getSize() const;
-        float getScale() const;
 		const std::shared_ptr<Program>& getProgram() const;
         void activate();
 	};

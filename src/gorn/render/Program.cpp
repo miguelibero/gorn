@@ -1,5 +1,7 @@
 #include <gorn/render/Program.hpp>
+#include <gorn/render/ProgramDefinition.hpp>
 #include <gorn/render/UniformValue.hpp>
+#include <gorn/render/Kinds.hpp>
 #include <gorn/base/Exception.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -12,14 +14,58 @@ namespace gorn
 	_id(0), _vertexShader(vertexShader), _fragmentShader(fragmentShader)
 	{
 		_id = glCreateProgram();
+        if(_id == 0)
+        {
+            throw Exception("Could not create program.");
+        }
         glAttachShader(_id, _fragmentShader->getId());
+        checkGlError("attaching fragment shader");
         glAttachShader(_id, _vertexShader->getId());
+        checkGlError("attaching vertex shader");
         glLinkProgram(_id);
+        checkGlError("linking a program");
 	}
+
+    void Program::cleanup()
+    {
+        if(s_currentId == _id)
+        {
+            s_currentId = 0;
+        }
+        if(_id != 0 && glIsProgram(_id) == GL_TRUE)
+        {
+            glDeleteProgram(_id);
+            checkGlError("deleting program");
+        }
+    }
+
+
+    Program::Program(Program&& other):
+    _id(other._id), _vertexShader(other._vertexShader),
+    _fragmentShader(other._fragmentShader)
+    {
+        other._id = 0;
+    }
+
+    Program& Program::operator=(Program&& other)
+    {
+        if(this != &other)
+        {
+            if(_id != other._id)
+            {
+                cleanup();
+            }
+            _id = other._id;
+            _vertexShader = std::move(other._vertexShader);
+            _fragmentShader = std::move(other._fragmentShader);
+            other._id = 0;
+        }
+        return *this;
+    }
 
 	Program::~Program()
 	{
-        glDeleteProgram(_id);
+       cleanup();
 	}
 
 	GLuint Program::getId() const
@@ -46,20 +92,26 @@ namespace gorn
         }
     }
 
-    GLint Program::loadAttribute(const std::string& name,
-        const std::string& alias)
+    void Program::loadDefinition(const Definition& def)
     {
-        auto id = getAttribute(name);
-        _attributes[alias] = id;
-        return id;
-    }
-
-    GLint Program::loadUniform(const std::string& name,
-        const std::string& alias)
-    {
-        auto id = getUniform(name);
-        _uniforms[alias] = id;
-        return id;
+        for(auto itr = def.getAttributes().begin();
+            itr != def.getAttributes().end(); ++itr)
+        {
+            auto id = getAttribute(itr->second.name);
+            _attributes[itr->first] = id;
+            _transformableAttributes[itr->first]
+                 = itr->second.transformable;
+        }
+        for(auto itr = def.getUniforms().begin();
+            itr != def.getUniforms().end(); ++itr)
+        {
+            auto id = getUniform(itr->second.name);
+            _uniforms[itr->first] = id;
+            if(!itr->second.value.empty())
+            {
+                setUniformValue(id, itr->second.value);
+            }
+        }
     }
 
     GLint Program::getAttribute(const std::string& name) const
@@ -84,6 +136,30 @@ namespace gorn
         return itr->second;
 	}
 
+    bool Program::hasTransformableAttribute(const std::string& name) const
+    {
+        auto itr = _transformableAttributes.find(name);
+        if(itr != _transformableAttributes.end())
+        {
+            return itr->second;
+        }
+        if(AttributeKind::isTransformable(name) && hasAttribute(name))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool Program::hasAttribute(const std::string& name) const
+    {
+        return getAttribute(name) >= 0;
+    }
+
+    bool Program::hasUniform(const std::string& name) const
+    {
+        return getUniform(name) >= 0;
+    }
+
     void Program::setUniformValue(const std::string& name,
         const UniformValue& value)
     {
@@ -95,6 +171,7 @@ namespace gorn
 	{
         if(location >= 0)
         {
+            use();
             value.set(location);
         }
 	}
