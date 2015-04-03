@@ -22,6 +22,7 @@ namespace gorn
         float framesPerSecond;
         size_t drawCalls;
         size_t drawCallsBatched;
+        size_t drawCallsCulled;
         size_t vertexCount;
 
         RenderQueueInfo();
@@ -73,21 +74,26 @@ namespace gorn
         typedef RenderQueueDrawState DrawState;
         typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
+        static Rect _glRect;
         MaterialManager& _materials;
         std::vector<Command> _commands;
         std::mutex _commandsMutex;
         DrawState _state;
         UniformValueMap _uniforms;
-
         Info _info;
         Info _tempInfo;
         double _infoUpdateInterval;
         size_t _infoUpdatesPerSecond;
         size_t _tempInfoAmount;
+        glm::mat4 _viewTrans;
+        glm::mat4 _projTrans;
+        glm::mat4 _viewProjTrans;
+
     public:
         RenderQueue(MaterialManager& materials);
 
-        void setInfoUpdatesPerSecond(size_t ups);
+        void setViewTransform(const glm::mat4& view);
+        void setProjectionTransform(const glm::mat4& proj);
 
         void setUniformValue(const std::string& name, const UniformValue& value);
         bool removeUniformValue(const std::string& name);
@@ -101,6 +107,8 @@ namespace gorn
         void draw();
 
         const Info& getInfo() const;
+        void setInfoUpdatesPerSecond(size_t ups);
+
     };
 }
 

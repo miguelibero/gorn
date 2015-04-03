@@ -150,6 +150,12 @@
     <ClInclude Include="..\src\gorn\platform\windows\SOILImageLoader.hpp">
       <Filter>Header Files\platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\gorn\render\ProgramUniformDefinition.hpp">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\ProgramAttributeDefinition.hpp">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\gorn\asset\FileLoader.cpp">
@@ -267,6 +273,12 @@
       <Filter>Source Files\base</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\render\GlEnums.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\ProgramUniformDefinition.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\ProgramAttributeDefinition.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>

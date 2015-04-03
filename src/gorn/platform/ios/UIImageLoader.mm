@@ -15,22 +15,6 @@ namespace gorn
         return img != nil;
     }
     
-    void invertImageArrayHeight(buffer& data, size_t h)
-    {
-        size_t c = data.size()/h;
-        for(size_t y=0; y<h/2; y++)
-        {
-            for(size_t x=0; x<c; x++)
-            {
-                size_t a = y*c+x;
-                size_t b = (h-y-1)*c+x;
-                uint8_t t = data[a];
-                data[a] = data[b];
-                data[b] = t;
-            }
-        }
-    }
-
     Image UIImageLoader::load(const buffer& input) const
     {
         NSData* data = [NSData dataWithBytes:input.data() length:input.size()];
@@ -51,8 +35,6 @@ namespace gorn
         CGColorSpaceRelease(colorSpace);
         CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
         CGContextRelease(context);
-        
-        invertImageArrayHeight(raw, height);
         
         return Image(std::move(raw), glm::vec2(width, height), true, BasicType::UnsignedByte);
 	}

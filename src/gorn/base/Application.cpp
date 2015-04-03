@@ -109,6 +109,10 @@ namespace gorn
 
     void Application::realForeground()
     {
+        if(!_loaded)
+        {
+            return;
+        }
 #ifdef GORN_PLATFORM_ANDROID
         _needsReload = true;
 #endif
@@ -117,11 +121,19 @@ namespace gorn
 
     void Application::realBackground()
     {
+        if (!_loaded)
+        {
+            return;
+        }
         background();
     }
 
     void Application::realUpdate(double dt)
     {
+        if (!_loaded)
+        {
+            return;
+        }
         if(_needsReload)
         {
             _needsReload = false;
@@ -151,6 +163,10 @@ namespace gorn
 
     void Application::realTouch(const glm::vec2& p)
     {
+        if (!_loaded)
+        {
+            return;
+        }
         touch(p);
     }
 }

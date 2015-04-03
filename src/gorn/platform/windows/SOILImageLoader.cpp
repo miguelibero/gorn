@@ -27,10 +27,13 @@ namespace gorn {
 		{
 		case 3:
 			hasAlpha = false;
+			break;
 		case 4:
 			hasAlpha = true;
+			break;
 		default:
 			throw Exception("Invalid amount of image channels");
+			break;
 		}
 		return Image(buffer(data, width*height*channels*sizeof(unsigned char)),
 			glm::vec2(width, height), hasAlpha, BasicType::UnsignedByte);

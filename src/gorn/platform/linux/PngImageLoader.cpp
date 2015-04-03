@@ -36,6 +36,22 @@ namespace gorn {
             ->read(data, length);
     }
 
+    void invertImageArrayHeight(buffer& data, size_t h)
+    {
+        size_t c = data.size()/h;
+        for(size_t y=0; y<h/2; y++)
+        {
+            for(size_t x=0; x<c; x++)
+            {
+                size_t a = y*c+x;
+                size_t b = (h-y-1)*c+x;
+                uint8_t t = data[a];
+                data[a] = data[b];
+                data[b] = t;
+            }
+        }
+    }
+
     Image PngImageLoader::load(const buffer& inputData) const
     {
         buffer_reader input(inputData);
@@ -106,7 +122,7 @@ namespace gorn {
 
         for (size_t i = 0; i < imgHeight; i++)
         {
-            png_size_t q = (imgHeight - i - 1) * rowBytes;
+            png_size_t q = i * rowBytes;
             rowPtrs[i] = data.data() + q;
         }
         png_read_image(pngPtr, rowPtrs);
@@ -114,6 +130,7 @@ namespace gorn {
 
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
+
         return Image(std::move(data),
             glm::vec2(imgWidth, imgHeight), hasAlpha, BasicType::UnsignedByte);
     }

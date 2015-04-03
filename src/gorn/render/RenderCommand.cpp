@@ -64,7 +64,8 @@ namespace gorn
 
     RenderCommand::RenderCommand():
     _drawMode(DrawMode::Triangles),
-    _transformMode(TransformMode::NoChange)
+    _transformMode(TransformMode::NoChange),
+    _hasBoundingBox(false)
     {
     }
 
@@ -118,6 +119,14 @@ namespace gorn
     RenderCommand& RenderCommand::withTransformMode(TransformMode mode)
     {
         _transformMode = mode;
+        return *this;
+    }
+
+    
+    RenderCommand& RenderCommand::withBoundingBox(const Rect& bb)
+    {
+        _boundingBox = bb;
+        _hasBoundingBox = true;
         return *this;
     }
 
@@ -260,6 +269,16 @@ namespace gorn
                 elms.push_back(s+i);
             }
         }
+    }
+
+    bool RenderCommand::hasBoundingBox() const
+    {
+        return _hasBoundingBox;
+    }
+
+    const Rect& RenderCommand::getBoundingBox() const
+    {
+        return _boundingBox;
     }
 
 }

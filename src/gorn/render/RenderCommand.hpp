@@ -5,6 +5,7 @@
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/render/VertexArray.hpp>
 #include <gorn/render/Material.hpp>
+#include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 
 
@@ -56,6 +57,8 @@ namespace gorn
         DrawMode _drawMode;
         glm::mat4 _transform;
         TransformMode _transformMode;
+        bool _hasBoundingBox;
+        Rect _boundingBox;
 
     public:
         RenderCommand();
@@ -70,6 +73,7 @@ namespace gorn
         RenderCommand& withTransform(const glm::mat4& trans,
             TransformMode mode=TransformMode::PushLocal);
         RenderCommand& withTransformMode(TransformMode mode);
+        RenderCommand& withBoundingBox(const Rect& rect);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -91,6 +95,9 @@ namespace gorn
 
         const glm::mat4& getTransform() const;
         TransformMode getTransformMode() const;
+
+        bool hasBoundingBox() const;
+        const Rect& getBoundingBox() const;
 
     };
 }

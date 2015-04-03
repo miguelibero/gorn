@@ -2,16 +2,10 @@
 #include <gorn/render/Gl.hpp>
 #include <gorn/base/Application.hpp>
 
-char *className = "GORN";
-char *windowName = "GORN";
-int winX = 0, winY = 0;
-int winWidth = 800, winHeight = 600;
-
 HDC hDC;
 HGLRC hGLRC;
 HPALETTE hPalette;
 std::unique_ptr<gorn::Application> app;
-bool loaded = false;
 _int64 timeStamp;
 _int64 timeStampFreq;
 
@@ -26,24 +20,22 @@ load() {
 	{
 		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
 		QueryPerformanceFrequency((LARGE_INTEGER *)&timeStampFreq);
-		app = gorn::main();
 		app->realLoad();
-		loaded = true;
 	}
 }
 
 void unload()
 {
-	app->realUnload();
-	loaded = false;
+	if (app) {
+		app->realUnload();
+	}
 }
 
 void update()
 {
-	if(loaded)
-	{
-		_int64 oldTimeStamp = timeStamp;
-		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
+	_int64 oldTimeStamp = timeStamp;
+	QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
+	if (app) {
 		double dt = (double)(timeStamp - oldTimeStamp)/timeStampFreq;
 		app->realUpdate(dt);
 	}
@@ -56,19 +48,23 @@ void draw()
 
 void foreground()
 {
-	app->realForeground();
+	if (app) {
+		app->realForeground();
+	}
 }
 
 void background()
 {
-	app->realBackground();
+	if (app) {
+		app->realBackground();
+	}
 }
 
 void
-resize(void)
+resize(int width, int height)
 {
 	/* set viewport to cover the window */
-	glViewport(0, 0, winWidth, winHeight);
+	glViewport(0, 0, width, height);
 }
 
 void
@@ -192,9 +188,7 @@ LPARAM lParam)
 	case WM_SIZE:
 		/* track window size changes */
 		if (hGLRC) {
-			winWidth = (int)LOWORD(lParam);
-			winHeight = (int)HIWORD(lParam);
-			resize();
+			resize((int)LOWORD(lParam), (int)HIWORD(lParam));
 			return 0;
 		}
 	case WM_PALETTECHANGED:
@@ -252,6 +246,7 @@ HINSTANCE hPreviousInst,
 LPSTR lpszCmdLine,
 int nCmdShow)
 {
+	app = gorn::main();
 	WNDCLASS wndClass;
 	HWND hWnd;
 	MSG msg;
@@ -266,14 +261,14 @@ int nCmdShow)
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wndClass.lpszMenuName = NULL;
-	wndClass.lpszClassName = className;
+	wndClass.lpszClassName = app->getName().c_str();
 	RegisterClass(&wndClass);
 
 	/* create window */
 	hWnd = CreateWindow(
-		className, windowName,
+		app->getName().c_str(), app->getName().c_str(),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		winX, winY, winWidth, winHeight,
+		0, 0, app->getSize().x, app->getSize().y,
 		NULL, NULL, hCurrentInst, NULL);
 
 	/* display window */

@@ -11,6 +11,8 @@
 
 namespace gorn
 {
+    Rect RenderQueue::_glRect(glm::vec2(-1.0f), glm::vec2(2.0f));
+
     RenderQueue::RenderQueue(MaterialManager& materials):
     _materials(materials), _infoUpdateInterval(0.0),
     _infoUpdatesPerSecond(10), _tempInfoAmount(0)
@@ -74,6 +76,20 @@ namespace gorn
         return _info;
     }
 
+    void RenderQueue::setViewTransform(const glm::mat4& view)
+    {
+        setUniformValue(UniformKind::View, view);
+        _viewTrans = view;
+        _viewProjTrans = _viewTrans*_projTrans;
+    }
+
+    void RenderQueue::setProjectionTransform(const glm::mat4& proj)
+    {
+        setUniformValue(UniformKind::Projection, proj);
+        _projTrans = proj;
+        _viewProjTrans = _viewTrans*_projTrans;
+    }
+
     void RenderQueue::draw()
     {
         auto infoDuration = 1.0/_infoUpdatesPerSecond;
@@ -108,6 +124,20 @@ namespace gorn
             {
                 continue;
             }
+            auto& transform = state.getTransform();
+            if(cmd.hasBoundingBox())
+            {
+                auto frustum = _viewProjTrans*transform;
+                auto rect = cmd.getBoundingBox()*frustum;
+                rect.origin.z = 0.0f;
+                rect.size.z = 0.0f;
+                if(!_glRect.overlaps(rect))
+                {
+                    _tempInfo.drawCallsCulled++;
+                    continue;
+                }
+            }
+
             if(!block.supports(cmd))
             {
                 block.draw(*this, _tempInfo);
@@ -124,7 +154,6 @@ namespace gorn
             {
                 _tempInfo.drawCallsBatched++;
             }
-            auto& transform = state.getTransform();
             cmd.getVertexData(block.vertices, block.elements,
                 block.definition, transform);
         }
