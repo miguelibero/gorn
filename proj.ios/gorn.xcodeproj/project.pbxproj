@@ -44,6 +44,7 @@
 		06A9B8B91ACEE4CF00A78C64 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8B71ACEE4CF00A78C64 /* Application.cpp */; };
 		06A9B8C01ACEE4E300A78C64 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BC1ACEE4E300A78C64 /* Mesh.cpp */; };
 		06A9B8C11ACEE4E300A78C64 /* ObjMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */; };
+		06A9B8D41ACEF2E100A78C64 /* UIImageLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -398,6 +399,8 @@
 		06A9B8BD1ACEE4E300A78C64 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
 		06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjMeshLoader.cpp; sourceTree = "<group>"; };
 		06A9B8BF1ACEE4E300A78C64 /* ObjMeshLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjMeshLoader.hpp; sourceTree = "<group>"; };
+		06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIImageLoader.mm; sourceTree = "<group>"; };
+		06A9B8D31ACEF2E100A78C64 /* UIImageLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIImageLoader.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,8 +417,6 @@
 		066B385C19EDB8E900A11F1A = {
 			isa = PBXGroup;
 			children = (
-				068C75961A76A0DA0017E482 /* GLKit.framework */,
-				068C75821A762B370017E482 /* OpenGLES.framework */,
 				066B386719EDB8E900A11F1A /* gorn */,
 				066B386619EDB8E900A11F1A /* Products */,
 			);
@@ -442,6 +443,8 @@
 		066B386819EDB8E900A11F1A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				068C75961A76A0DA0017E482 /* GLKit.framework */,
+				068C75821A762B370017E482 /* OpenGLES.framework */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -801,6 +804,8 @@
 		068C751D1A7627700017E482 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */,
+				06A9B8D31ACEF2E100A78C64 /* UIImageLoader.hpp */,
 				068C751E1A7627700017E482 /* AppDelegate.h */,
 				068C751F1A7627700017E482 /* AppDelegate.m */,
 				068C75201A7627700017E482 /* GameViewController.h */,
@@ -962,6 +967,7 @@
 				06A9B8C11ACEE4E300A78C64 /* ObjMeshLoader.cpp in Sources */,
 				068C756B1A7627700017E482 /* MaterialManager.cpp in Sources */,
 				068C756F1A7627700017E482 /* RenderCommand.cpp in Sources */,
+				06A9B8D41ACEF2E100A78C64 /* UIImageLoader.mm in Sources */,
 				068C756C1A7627700017E482 /* Program.cpp in Sources */,
 				06A9B8B41ACEE4BF00A78C64 /* GlEnums.cpp in Sources */,
 				068C75761A7627700017E482 /* VertexArray.cpp in Sources */,

@@ -12,7 +12,7 @@ Its main goals are:
 * reusability
 * draw call batching
 * drawing in separate thread (TODO)
-* support for Linux, Android, Windows (WIP), and iOS (WIP)
+* support for Linux, Android, iOS and Windows (WIP)
 
 ## Examples
 

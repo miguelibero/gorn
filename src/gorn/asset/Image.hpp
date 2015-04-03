@@ -27,7 +27,7 @@ namespace gorn
 
 	public:
 		Image(buffer&& data, const glm::vec2& size, bool hasAlpha=true,
-            BasicType type=BasicType::UnsignedInteger,
+            BasicType type=BasicType::UnsignedByte,
             Format format=Format::Uncompressed) NOEXCEPT;
 	    const glm::vec2& getSize() const NOEXCEPT;
         bool hasAlpha() const NOEXCEPT;
