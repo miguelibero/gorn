@@ -56,8 +56,6 @@
 		068C74321A7625B10017E482 = {
 			isa = PBXGroup;
 			children = (
-				068C759A1A76A1DB0017E482 /* Foundation.framework */,
-				068C75981A76A10A0017E482 /* GLKit.framework */,
 				068C74651A76265B0017E482 /* gorn.xcodeproj */,
 				068C743F1A7626260017E482 /* GornTriangle */,
 				068C743E1A7626260017E482 /* Products */,
@@ -86,6 +84,8 @@
 		068C74401A7626260017E482 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				068C75981A76A10A0017E482 /* GLKit.framework */,
+				068C759A1A76A1DB0017E482 /* Foundation.framework */,
 				068C758E1A769DB00017E482 /* main.m */,
 				068C74411A7626260017E482 /* Info.plist */,
 			);
@@ -224,6 +224,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../../src/,
 					../../../lib/,
+					../../../lib/buffer/src,
 				);
 			};
 			name = Debug;
@@ -240,6 +241,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../../src/,
 					../../../lib/,
+					../../../lib/buffer/src,
 				);
 			};
 			name = Release;

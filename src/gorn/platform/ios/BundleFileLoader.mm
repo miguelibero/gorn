@@ -1,7 +1,7 @@
 
 
 #include <gorn/platform/ios/BundleFileLoader.hpp>
-#include <gorn/base/Data.hpp>
+#include <buffer.hpp>
 #include <gorn/base/String.hpp>
 #import <Foundation/Foundation.h>
 
@@ -9,7 +9,7 @@ namespace gorn {
     
     const char* BundleFileLoader::kPlaceholder = "%s";
 
-    BundleFileLoader::BundleFileLoader(const std::string& nameTemplate):
+    BundleFileLoader::BundleFileLoader(const std::string& nameTemplate) NOEXCEPT:
     _nameTemplate(nameTemplate)
     {
     }
@@ -27,12 +27,12 @@ namespace gorn {
         return [[NSBundle mainBundle] pathForResource:nsname ofType:nil] != nil;
     }
     
-    Data BundleFileLoader::load(const std::string& name) const
+    buffer BundleFileLoader::load(const std::string& name) const
     {
         NSString* nsname = [NSString stringWithUTF8String:getName(name).c_str()];
         NSString* path = [[NSBundle mainBundle] pathForResource:nsname ofType:nil];
         NSData* data = [NSData dataWithContentsOfFile:path];
         uint8_t* ptr = (uint8_t*)data.bytes;
-        return Data(ptr, data.length);
+        return buffer(ptr, data.length);
     }
 }

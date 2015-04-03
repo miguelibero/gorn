@@ -47,7 +47,8 @@ namespace gorn
         typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
-        typedef std::vector<unsigned> Elements;
+        typedef unsigned elm_t;
+        typedef std::vector<elm_t> Elements;
     private:
         AttributeMap _attributes;
         Elements _elements;

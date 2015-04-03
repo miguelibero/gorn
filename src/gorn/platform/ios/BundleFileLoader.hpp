@@ -15,7 +15,7 @@ namespace gorn {
     public:
         BundleFileLoader(const std::string& nameTemplate=kPlaceholder) NOEXCEPT;
         virtual bool validate(const std::string& name) const NOEXCEPT;
-        virtual Data load(const std::string& name) const;
+        virtual buffer load(const std::string& name) const;
     };
 }
 

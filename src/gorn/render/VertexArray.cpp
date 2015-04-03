@@ -163,9 +163,9 @@ namespace gorn
         {
             offset *= getBasicTypeSize(def.getOffsetType());
         }
-		glVertexAttribPointer(id, def.getCount(), 
+		glVertexAttribPointer(id, (GLint)def.getCount(),
             getGlBasicType(def.getType()),
-            def.getNormalized(), stride, (GLvoid*)offset);
+            def.getNormalized(), (GLsizei)stride, (GLvoid*)offset);
 
         checkGlError("setting a vertex array attribute");
     }
@@ -212,12 +212,12 @@ namespace gorn
         GLenum glMode = getGlDrawMode(mode);
         if(_elementVbo && _elementType != BasicType::None)
         {
-    		glDrawElements(glMode, count, getGlBasicType(_elementType),
+    		glDrawElements(glMode, (GLsizei)count, getGlBasicType(_elementType),
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else
         {
-		    glDrawArrays(glMode, offset, count);
+		    glDrawArrays(glMode, (GLint)offset, (GLsizei)count);
         }
 
         checkGlError("drawing a vertex array");

@@ -12,6 +12,8 @@
 	<dict>
 		<key>0859B7651548761E8CD7AB9C8CED404441DC5FA4</key>
 		<string>github.com:miguelibero/gorn.git</string>
+		<key>4A131C6D61F940DE5452CB4F908FD849CEE0D370</key>
+		<string>github.com:miguelibero/buffer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>examples/triangle/proj.ios/GornTriangle.xcodeproj</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>0859B7651548761E8CD7AB9C8CED404441DC5FA4</key>
 		<string>../../../../..</string>
+		<key>4A131C6D61F940DE5452CB4F908FD849CEE0D370</key>
+		<string>../../../../../lib/buffer/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:miguelibero/gorn.git</string>
@@ -28,6 +32,14 @@
 	<string>0859B7651548761E8CD7AB9C8CED404441DC5FA4</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4A131C6D61F940DE5452CB4F908FD849CEE0D370</string>
+			<key>IDESourceControlWCCName</key>
+			<string>buffer</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
