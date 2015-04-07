@@ -8,6 +8,7 @@
 #include <gorn/render/AttributeDefinition.hpp>
 #include <gorn/render/UniformValue.hpp>
 #include <gorn/render/Kinds.hpp>
+#include <gorn/render/FrameBuffer.hpp>
 
 #endif
 

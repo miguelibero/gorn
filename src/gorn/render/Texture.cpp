@@ -136,6 +136,24 @@ namespace gorn
         }
     }
 
+    void Texture::attachToFrameBufferAsColor(int pos)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER,
+            GL_COLOR_ATTACHMENT0+pos,
+            _target,
+            _id,
+            0);
+    }
+
+    void Texture::attachToFrameBufferAsDepth()
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER,
+            GL_DEPTH_ATTACHMENT,
+            _target,
+            _id,
+            0);
+    }
+
     void Texture::activate(size_t pos)
     {
         bind();

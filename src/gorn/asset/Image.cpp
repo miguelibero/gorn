@@ -10,6 +10,13 @@ namespace gorn
 	{
 	}
 
+    Image::Image(const glm::vec2& size, bool hasAlpha,
+            BasicType type) NOEXCEPT:
+	_size(size), _hasAlpha(hasAlpha),
+    _type(type), _format(Format::Uncompressed)
+	{
+	}
+
     const glm::vec2& Image::getSize() const NOEXCEPT
     {
     	return _size;
