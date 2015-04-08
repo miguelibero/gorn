@@ -9,6 +9,7 @@
 #include <gorn/render/UniformValue.hpp>
 #include <gorn/render/Kinds.hpp>
 #include <gorn/render/FrameBuffer.hpp>
+#include <gorn/render/RenderBuffer.hpp>
 
 #endif
 

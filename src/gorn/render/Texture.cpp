@@ -143,6 +143,7 @@ namespace gorn
             _target,
             _id,
             0);
+        checkGlError("attaching texture to frame buffer");
     }
 
     void Texture::attachToFrameBufferAsDepth()
@@ -152,6 +153,7 @@ namespace gorn
             _target,
             _id,
             0);
+        checkGlError("attaching texture to frame buffer");
     }
 
     void Texture::activate(size_t pos)

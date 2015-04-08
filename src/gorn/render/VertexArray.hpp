@@ -30,7 +30,7 @@ namespace gorn
         std::shared_ptr<Material> _material;
 
         void cleanup();
-
+        static void bindId(GLuint id);
     public:
         VertexArray();
         ~VertexArray();
@@ -43,6 +43,7 @@ namespace gorn
 
         GLuint getId() const;
         void bind() const;
+        static void unbind();
         void activate() const;
         void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const AttributeDefinition& def);
         void addVertexData(const std::shared_ptr<VertexBuffer>& vbo, const VertexDefinition& def);

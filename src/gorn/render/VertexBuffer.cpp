@@ -4,8 +4,6 @@
 
 namespace gorn
 {
-    std::map<GLenum, GLuint> VertexBuffer::s_currentIds;
-
 	GLenum getGlTarget(VertexBufferTarget target)
 	{
 		switch (target)
@@ -51,11 +49,6 @@ namespace gorn
     {
         if(_id != 0)
         {
-			GLenum target = getGlTarget(_target);
-			if (s_currentIds[target] == _id)
-			{
-				s_currentIds[target] = 0;
-			}
             glDeleteBuffers(1, &_id);
             checkGlError("deleting a vertex buffer");
         }
@@ -97,15 +90,19 @@ namespace gorn
         return _id;
 	};
 
+    void VertexBuffer::bindId(GLuint id, GLenum target)
+    {
+        glBindBuffer(target, id);
+    }
+
     void VertexBuffer::bind() const
     {
-        GLenum target = getGlTarget(_target);
-        GLuint id = getId();
-        if(s_currentIds[target] != id)
-        {
-		    glBindBuffer(target, id);
-            s_currentIds[target] = id;
-        }
+        bindId(getId(), getGlTarget(_target));
+    }
+
+    void VertexBuffer::unbind() const
+    {
+        bindId(0, getGlTarget(_target));
     }
 
     void VertexBuffer::setData(const buffer& data, Usage usage)
