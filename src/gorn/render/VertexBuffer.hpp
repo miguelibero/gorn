@@ -27,13 +27,12 @@ namespace gorn
         typedef VertexBufferUsage Usage;
         typedef VertexBufferTarget Target;
 	private:
-        static std::map<GLenum, GLuint> s_currentIds;
 		mutable GLuint _id;
         Target _target;
         size_t _size;
 
         void cleanup();
-
+        static void bindId(GLuint id, GLenum target);
 	public:
 		VertexBuffer(const buffer& data,
             Usage usage=Usage::DynamicDraw,
@@ -49,6 +48,7 @@ namespace gorn
 
 		GLuint getId() const;
         void bind() const;
+        void unbind() const;
         void setData(const buffer& data, Usage usage);
         void setSubData(const buffer& data, size_t offset);
         size_t getSize() const;

@@ -36,6 +36,7 @@ namespace gorn
         void setParameter(GLenum name, const std::vector<GLint>& value);
         void setParameter(GLenum name, const std::vector<GLfloat>& value);
         void bind();
+        void attachToFrameBuffer(GLenum type);
         void activate(size_t pos);
         const glm::vec2& getSize() const;
 	};

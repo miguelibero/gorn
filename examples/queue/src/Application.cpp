@@ -94,10 +94,10 @@ void QueueApplication::draw()
              0.66f
         }, 2, BasicType::Float)
         .withAttribute(AttributeKind::TexCoords, {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
+            0.0f, 1.0f,
             1.0f, 1.0f,
-            0.0f, 1.0f
+            1.0f, 0.0f,
+            0.0f, 0.0f
         }, 2, BasicType::Float)
         .withElements({
             0, 1, 2,
@@ -112,10 +112,10 @@ void QueueApplication::draw()
              0.25f, -0.25f
         }, 2, BasicType::Float)
         .withAttribute(AttributeKind::TexCoords, {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
+            0.0f, 1.0f,
             1.0f, 1.0f,
-            0.0f, 1.0f
+            1.0f, 0.0f,
+            0.0f, 0.0f
         }, 2, BasicType::Float)
         .withElements({
             0, 1, 2,
@@ -130,10 +130,10 @@ void QueueApplication::draw()
             -0.25f, -0.75f
         }, 2, BasicType::Float)
         .withAttribute(AttributeKind::TexCoords, {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
+            0.0f, 1.0f,
             1.0f, 1.0f,
-            0.0f, 1.0f
+            1.0f, 0.0f,
+            0.0f, 0.0f
         }, 2, BasicType::Float)
         .withElements({
             0, 1, 2,

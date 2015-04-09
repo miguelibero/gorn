@@ -113,15 +113,27 @@ namespace gorn
         _elementType = type;
         bind();
         vbo->bind();
+        unbind();
+        vbo->unbind();
+    }
+
+    void VertexArray::bindId(GLuint id)
+    {
+        if(s_currentId != id)
+        {
+		    glBindVertexArray(id);
+            s_currentId = id;
+        }
     }
 
     void VertexArray::bind() const
     {
-        if(s_currentId != getId())
-        {
-		    glBindVertexArray(getId());
-            s_currentId = getId();
-        }
+	    bindId(getId());
+    }
+
+    void VertexArray::unbind()
+    {
+	    bindId(0);
     }
 
     void VertexArray::activate() const
@@ -152,7 +164,7 @@ namespace gorn
         bind();
         vbo->bind();
 		glEnableVertexAttribArray(id);
-
+ 
         auto stride = def.getStride();
         if(def.getStrideType() != BasicType::None)
         {
@@ -168,6 +180,9 @@ namespace gorn
             def.getNormalized(), (GLsizei)stride, (GLvoid*)offset);
 
         checkGlError("setting a vertex array attribute");
+        glEnableVertexAttribArray(0);
+        unbind();
+        vbo->unbind();
     }
 
     void VertexArray::addVertexData(const std::shared_ptr<VertexBuffer>& vbo,
@@ -221,6 +236,7 @@ namespace gorn
         }
 
         checkGlError("drawing a vertex array");
+        unbind();
     }
 }
 
