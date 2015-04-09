@@ -49,15 +49,17 @@ namespace gorn
        cleanup();
 	}
 
-    void FrameBuffer::setTexture(const std::shared_ptr<Texture>& texture)
+    void FrameBuffer::attach(
+        const std::shared_ptr<Texture>& texture, AttachType type)
     {
-        _texture = texture;
+        _textures[type].push_back(texture);
     }
 
-    void FrameBuffer::setRenderBuffer(
+    void FrameBuffer::attach(
         const std::shared_ptr<RenderBuffer>& buffer)
     {
-        _render = buffer;
+        auto type = buffer->getType();
+        _renderBuffers[type].push_back(buffer);
     }
 
 	GLuint FrameBuffer::getId() const
@@ -88,21 +90,51 @@ namespace gorn
         bindId(getId());
     }
 
+    GLenum FrameBuffer::getAttachTypeEnum(AttachType type)
+    {
+        switch(type)
+        {
+        case AttachType::Depth:
+            return GL_DEPTH_ATTACHMENT;
+        case AttachType::Color:
+            return GL_COLOR_ATTACHMENT0;
+        case AttachType::Stencil:
+            return GL_STENCIL_ATTACHMENT;
+        }
+        return 0;
+    }
+
     void FrameBuffer::activate()
     {
         bind();
         std::vector<GLenum> buffers;
-        if(_render != nullptr)
+        for(auto itr = _textures.begin(); itr != _textures.end(); ++itr)
         {
-            _render->attachToFrameBufferAsDepth();
-            buffers.push_back(GL_DEPTH_ATTACHMENT);
+            GLenum type = getAttachTypeEnum(itr->first);
+            for(auto& texture : itr->second)
+            {
+                texture->attachToFrameBuffer(type);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                buffers.push_back(type);
+                if(itr->first == AttachType::Color)
+                {
+                    type++;
+                }
+            }
         }
-        if(_texture != nullptr)
+        for(auto itr = _renderBuffers.begin(); itr != _renderBuffers.end(); ++itr)
         {
-            _texture->attachToFrameBufferAsColor(0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            buffers.push_back(GL_COLOR_ATTACHMENT0);
+            GLenum type = getAttachTypeEnum(itr->first);
+            for(auto& render : itr->second)
+            {
+                render->attachToFrameBuffer(type);
+                buffers.push_back(type);
+                if(itr->first == AttachType::Color)
+                {
+                    type++;
+                }
+            }
         }
         glDrawBuffers(buffers.size(), buffers.data());
         auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

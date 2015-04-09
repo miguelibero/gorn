@@ -5,10 +5,15 @@ namespace gorn
 {
     GLuint RenderBuffer::s_currentId = 0;
 
-	RenderBuffer::RenderBuffer(const glm::vec2& size, GLenum format):
-	_id(0), _size(size), _format(format)
+	RenderBuffer::RenderBuffer(const glm::vec2& size, Type type):
+	_id(0), _size(size), _type(type)
 	{
 	}
+
+    RenderBuffer::Type RenderBuffer::getType() const
+    {
+        return _type;
+    }
 
     void RenderBuffer::cleanup()
     {
@@ -23,6 +28,19 @@ namespace gorn
         }
     }
 
+    GLenum RenderBuffer::getTypeFormat(Type type)
+    {
+        switch(type)
+        {
+        case Type::Depth:
+            return GL_DEPTH_COMPONENT16;
+        case Type::Color:
+            return GL_RGBA;
+        case Type::Stencil:
+            return GL_STENCIL_INDEX8;
+        }
+        return 0;
+    }
 
     RenderBuffer::RenderBuffer(RenderBuffer&& other):
     _id(other._id), _size(other._size), _format(other._format)
@@ -62,7 +80,15 @@ namespace gorn
             }
             auto oldId = s_currentId;
             bindId(_id);
-            glRenderbufferStorage(GL_RENDERBUFFER, _format, _size.x, _size.y);
+            glRenderbufferStorage(GL_RENDERBUFFER,
+                getTypeFormat(_type), _size.x, _size.y);
+
+            int w=_size.x, h=_size.y;
+            glGetRenderbufferParameteriv(GL_RENDERBUFFER,
+                GL_RENDERBUFFER_WIDTH, &w);
+            glGetRenderbufferParameteriv(GL_RENDERBUFFER,
+                GL_RENDERBUFFER_HEIGHT, &h);
+
             bindId(oldId);
         }
 		return _id;
@@ -97,19 +123,10 @@ namespace gorn
         bindId(oldId);
     }
 
-    void RenderBuffer::attachToFrameBufferAsColor(int pos)
+    void RenderBuffer::attachToFrameBuffer(GLenum type)
     {
         glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-            GL_COLOR_ATTACHMENT0+pos,
-            GL_RENDERBUFFER, getId());
-        checkGlError("attaching render buffer to frame buffer");
-    }
-
-    void RenderBuffer::attachToFrameBufferAsDepth()
-    {
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-            GL_DEPTH_ATTACHMENT,
-            GL_RENDERBUFFER, getId());
+            type, GL_RENDERBUFFER, getId());
         checkGlError("attaching render buffer to frame buffer");
     }
 

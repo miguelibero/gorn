@@ -36,7 +36,8 @@ namespace gorn
         CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
         CGContextRelease(context);
         
-        return Image(std::move(raw), glm::vec2(width, height), true, BasicType::UnsignedByte);
+        return Image(std::move(raw), Image::DataOrigin::TopLeft,
+            glm::vec2(width, height), true, BasicType::UnsignedByte);
 	}
 
 }

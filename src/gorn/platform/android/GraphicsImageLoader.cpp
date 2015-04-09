@@ -41,7 +41,8 @@ namespace gorn
             auto info = getJniObject().call("getImageInfo", std::vector<int>());
             bool withAlpha = info[2] != 0;
             auto size = glm::vec2(info[0], info[1]);
-			return Image(std::move(data), size, withAlpha, BasicType::UnsignedByte);
+			return Image(std::move(data), Image::DataOrigin::TopLeft,
+                size, withAlpha, BasicType::UnsignedByte);
 		}
 		catch(const JniException& e)
 		{

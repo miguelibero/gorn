@@ -25,6 +25,13 @@ namespace gorn
         UnsignedShort
     };
 
+    enum class FrameBufferAttachType
+    {
+        Depth,
+        Color,
+        Stencil
+    };
+
     size_t getBasicTypeSize(BasicType type);
 }
 

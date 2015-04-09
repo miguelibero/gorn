@@ -4,21 +4,26 @@
 #include <gorn/render/Gl.hpp>
 #include <gorn/render/Texture.hpp>
 #include <gorn/render/RenderBuffer.hpp>
+#include <gorn/render/Enums.hpp>
 #include <memory>
 
 namespace gorn
 {
-
 	class FrameBuffer
 	{
+    public:
+        typedef FrameBufferAttachType AttachType;
     private:
+        typedef std::vector<std::shared_ptr<Texture>> Textures;
+        typedef std::vector<std::shared_ptr<RenderBuffer>> RenderBuffers;
 		static GLuint s_currentId;
 		mutable GLuint _id;
-        std::shared_ptr<Texture> _texture;
-        std::shared_ptr<RenderBuffer> _render;
+        std::map<AttachType,Textures> _textures;
+        std::map<AttachType,RenderBuffers> _renderBuffers;
 
         void cleanup();
         static void bindId(GLuint id);
+        static GLenum getAttachTypeEnum(AttachType type);
 	public:
 		FrameBuffer();
 		~FrameBuffer();
@@ -29,8 +34,9 @@ namespace gorn
         FrameBuffer(FrameBuffer&& other);
         FrameBuffer& operator=(FrameBuffer&& other);
 
-        void setTexture(const std::shared_ptr<Texture>& texture);
-        void setRenderBuffer(const std::shared_ptr<RenderBuffer>& buffer);
+        void attach(const std::shared_ptr<Texture>& texture,
+            AttachType type=AttachType::Color);
+        void attach(const std::shared_ptr<RenderBuffer>& buffer);
 
         void bind() const;
         static void unbind();

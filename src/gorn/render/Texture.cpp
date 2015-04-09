@@ -136,23 +136,10 @@ namespace gorn
         }
     }
 
-    void Texture::attachToFrameBufferAsColor(int pos)
+    void Texture::attachToFrameBuffer(GLenum type)
     {
         glFramebufferTexture2D(GL_FRAMEBUFFER,
-            GL_COLOR_ATTACHMENT0+pos,
-            _target,
-            _id,
-            0);
-        checkGlError("attaching texture to frame buffer");
-    }
-
-    void Texture::attachToFrameBufferAsDepth()
-    {
-        glFramebufferTexture2D(GL_FRAMEBUFFER,
-            GL_DEPTH_ATTACHMENT,
-            _target,
-            _id,
-            0);
+            type, _target, _id, 0);
         checkGlError("attaching texture to frame buffer");
     }
 

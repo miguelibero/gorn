@@ -131,7 +131,7 @@ namespace gorn {
         delete[] rowPtrs;
         png_destroy_read_struct(&pngPtr, &infoPtr, nullptr);
 
-        return Image(std::move(data),
+        return Image(std::move(data), Image::DataOrigin::TopLeft,
             glm::vec2(imgWidth, imgHeight), hasAlpha, BasicType::UnsignedByte);
     }
 }

@@ -11,12 +11,14 @@ class FramebufferApplication : public gorn::Application
     gorn::VertexArray _vao1;
     gorn::FrameBuffer _fbo;
     gorn::VertexArray _vao2;
+    float _time;
 
 public:
 
     FramebufferApplication();
 
     void load() override;
+    void update(double dt) override;
     void draw() override;
 };
 
@@ -29,7 +31,8 @@ namespace gorn
     }
 }
 
-FramebufferApplication::FramebufferApplication()
+FramebufferApplication::FramebufferApplication():
+_time(0.0f)
 {
 }
 
@@ -53,15 +56,15 @@ void FramebufferApplication::load()
         .withProgram("sprite")
         .withTexture(UniformKind::Texture0, "kitten.png");
 
-    _ctx.getMaterials().getDefinitions().set("sepia",
-        MaterialDefinition().withProgram("sepia"));
+    _ctx.getMaterials().getDefinitions().set("glass",
+        MaterialDefinition().withProgram("glass"));
 
-    _ctx.getPrograms().getDefinitions().get("sepia")
+    _ctx.getPrograms().getDefinitions().get("glass")
         .withShaderFile(gorn::ShaderType::Vertex, "sprite.vsh")
-        .withShaderFile(gorn::ShaderType::Fragment, "sepia.fsh");
+        .withShaderFile(gorn::ShaderType::Fragment, "glass.fsh");
 
     _vao1.setMaterial(_ctx.getMaterials().load("kitten"));
-    _vao2.setMaterial(_ctx.getMaterials().load("sepia"));
+    _vao2.setMaterial(_ctx.getMaterials().load("glass"));
 
     VertexDefinition vdef;
     vdef.setAttribute("position")
@@ -76,19 +79,19 @@ void FramebufferApplication::load()
 
     auto vbo = std::make_shared<VertexBuffer>(buffer{
      //  Position     texCoords
-        -0.5f,  0.5f, 0.0f, 0.0f, // Top-left
-         0.5f,  0.5f, 1.0f, 0.0f, // Top-right
-         0.5f, -0.5f, 1.0f, 1.0f, // Bottom-right
-        -0.5f, -0.5f, 0.0f, 1.0f  // Bottom-left
+        -0.5f,  0.5f, 0.0f, 1.0f, // Top-left
+         0.5f,  0.5f, 1.0f, 1.0f, // Top-right
+         0.5f, -0.5f, 1.0f, 0.0f, // Bottom-right
+        -0.5f, -0.5f, 0.0f, 0.0f  // Bottom-left
     }, VertexBuffer::Usage::StaticDraw);
     _vao1.addVertexData(vbo, vdef);
 
     vbo = std::make_shared<VertexBuffer>(buffer{
      //  Position     texCoords
-        -1.0f,  1.0f, 0.0f, 0.0f, // Top-left
-         1.0f,  1.0f, 1.0f, 0.0f, // Top-right
-         1.0f, -1.0f, 1.0f, 1.0f, // Bottom-right
-        -1.0f, -1.0f, 0.0f, 1.0f  // Bottom-left
+        -1.0f,  1.0f, 0.0f, 1.0f, // Top-left
+         1.0f,  1.0f, 1.0f, 1.0f, // Top-right
+         1.0f, -1.0f, 1.0f, 0.0f, // Bottom-right
+        -1.0f, -1.0f, 0.0f, 0.0f  // Bottom-left
     }, VertexBuffer::Usage::StaticDraw);
     _vao2.addVertexData(vbo, vdef);
 
@@ -102,23 +105,26 @@ void FramebufferApplication::load()
     _vao2.setElementData(vbo);
 
     auto fbtex = std::make_shared<Texture>();
-    fbtex->setImage(Image(glm::vec2(500)));
-    //_fbo.setRenderBuffer(std::make_shared<RenderBuffer>(glm::vec2(256)));
-    _fbo.setTexture(fbtex);
+    fbtex->setImage(Image(getSize()));
+    _fbo.attach(fbtex);
     _vao2.getMaterial()->setTexture(UniformKind::Texture0, fbtex);
+}
+
+void FramebufferApplication::update(double dt)
+{
+    _time += dt;
 }
 
 void FramebufferApplication::draw()
 {
     _fbo.activate();
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
 	_vao1.draw(6);
     _fbo.unbind();
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    _vao2.getProgram()->setUniformValue("time", _time);
     _vao2.draw(6);
 }
 
