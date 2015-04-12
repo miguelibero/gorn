@@ -1,7 +1,7 @@
 #ifndef __gorn__AttributeDefinition__
 #define __gorn__AttributeDefinition__
 
-#include <gorn/render/Enums.hpp>
+#include <gorn/render/RenderEnums.hpp>
 #include <string>
 
 namespace gorn

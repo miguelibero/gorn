@@ -4,7 +4,7 @@
 #include <X11/Xlib.h>
 #include <gorn/base/Application.hpp>
 #include <gorn/base/Exception.hpp>
-#include <gorn/render/Gl.hpp>
+#include <gorn/gl/GlBase.hpp>
 #include <GL/glx.h>
 #include <GL/glew.h>
 #include <sys/time.h>

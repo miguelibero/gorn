@@ -1,4 +1,5 @@
 #include <gorn/base/Rect.hpp>
+#include <gorn/base/Shapes.hpp>
 #include <buffer.hpp>
 #include <limits>
 
@@ -22,6 +23,15 @@ namespace gorn
     glm::vec3 Rect::max() const
     {
         return origin+size;
+    }
+
+    glm::vec3 Rect::exterior(const glm::vec3& normal) const
+    {
+        int idx = 0;
+        if( normal.z >= 0 ) idx |= 1;
+        if( normal.y >= 0 ) idx |= 2;
+        if( normal.x >= 0 ) idx |= 4;
+        return shape().corners()[idx];
     }
 
     bool Rect::flat() const
@@ -97,106 +107,22 @@ namespace gorn
         return size.x*size.y;
     }
 
-    buffer Rect::getVertices(DrawMode mode) const
+    CubeShape Rect::shape() const
     {
-        auto tmin = min();
-        auto tmax = max();
-        bool tflat = flat();
-        switch(mode)
-        {
-        case DrawMode::Quads:
-        {
-            if(tflat)
-            {
-                return buffer({
-                    tmin.x, tmin.y,
-                    tmax.x, tmin.y,
-                    tmax.x, tmax.y,
-                    tmin.x, tmax.y
-                });
-            }
-            else
-            {
-                // TODO
-                return buffer();
-            }
-            break;
-        }
-        case DrawMode::Triangles:
-        {
-            if(tflat)
-            {
-                return buffer({
-                    tmin.x, tmin.y,
-                    tmax.x, tmin.y,
-                    tmin.x, tmax.y,
-                    tmax.x, tmax.y,
-                    tmin.x, tmax.y,
-                    tmax.x, tmin.y
-                });
-            }
-            else
-            {
-                // TODO
-                return buffer();
-            }
-            break;
-        }
-        case DrawMode::Lines:
-        {
-            if(tflat)
-            {
-                return buffer({
-                    tmin.x, tmin.y,
-                    tmax.x, tmin.y,
-                    tmax.x, tmin.y,
-                    tmax.x, tmax.y,
-                    tmax.x, tmax.y,
-                    tmin.x, tmax.y,
-                    tmin.x, tmax.y,
-                    tmin.x, tmin.y
-                });
-            }
-            else
-            {
-                // TODO
-                return buffer();
-            }
-            break;
-        }
-        default:
-            return buffer();
-            break;
-        }
-    }
-
-    size_t Rect::getVertexCount(DrawMode mode)
-    {
-        switch(mode)
-        {
-        case DrawMode::Quads:
-            return 4;
-        case DrawMode::Triangles:
-            return 6;
-        case DrawMode::Lines:
-            return 8;
-        default:
-            return 0;
-        }
-    }
-
-    Rect::Corners Rect::corners() const
-    {
-        return Corners({            
-            glm::vec3(origin.x,        origin.y,        origin.z),
-            glm::vec3(origin.x+size.x, origin.y,        origin.z),
-            glm::vec3(origin.x+size.x, origin.y+size.y, origin.z),
-            glm::vec3(origin.x,        origin.y+size.y, origin.z),
-            glm::vec3(origin.x,        origin.y,        origin.z+size.z),
-            glm::vec3(origin.x+size.x, origin.y,        origin.z+size.z),
-            glm::vec3(origin.x+size.x, origin.y+size.y, origin.z+size.z),
-            glm::vec3(origin.x,        origin.y+size.y, origin.z+size.z)
-        });
+        return CubeShape(
+            PlaneShape(
+                glm::vec3(origin.x,        origin.y,        origin.z),
+                glm::vec3(origin.x+size.x, origin.y,        origin.z),
+                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z),
+                glm::vec3(origin.x,        origin.y+size.y, origin.z)
+            ),
+            PlaneShape(
+                glm::vec3(origin.x,        origin.y,        origin.z+size.z),
+                glm::vec3(origin.x+size.x, origin.y,        origin.z+size.z),
+                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z+size.z),
+                glm::vec3(origin.x,        origin.y+size.y, origin.z+size.z)
+            )
+        );
     }
 
     Rect Rect::operator*(const glm::mat4& t) const
@@ -208,10 +134,10 @@ namespace gorn
 
     Rect& Rect::operator*=(const glm::mat4& t)
     {
-        auto cs = corners();
+        auto cs = shape().corners();
         glm::vec3 max;
         glm::vec3 min;
-        bool init = false;    
+        bool init = false;
         for(auto& p : cs)
         {
             p = glm::vec3(t*glm::vec4(p, 1.0f));

@@ -2,7 +2,8 @@
 #define __gorn__RenderQueue__
 
 #include <gorn/render/RenderCommand.hpp>
-#include <gorn/render/Enums.hpp>
+#include <gorn/render/RenderEnums.hpp>
+#include <gorn/base/Frustum.hpp>
 #include <glm/glm.hpp>
 #include <stack>
 #include <mutex>
@@ -37,15 +38,17 @@ namespace gorn
         typedef RenderCommandBoundingMode BoundingMode;
         typedef RenderCommandTransformMode TransformMode;
 
+        size_t _boundingEnds;
         static Rect _screenRect;
         Transforms _transforms;
+        Frustum _frustum;
+        Frustum _baseFrustum;
         Checkpoints _checkpoints;
-        size_t _boundingEnds;
 
     public:
-        RenderQueueDrawState();
+        RenderQueueDrawState(const Frustum& frustum);
         void updateTransform(const Command& cmd);
-        bool checkBounding(const Command& cmd, const glm::mat4& viewProj);
+        bool checkBounding(const Command& cmd);
         const glm::mat4& getTransform() const;
     };
 
@@ -83,7 +86,6 @@ namespace gorn
         MaterialManager& _materials;
         std::vector<Command> _commands;
         std::mutex _commandsMutex;
-        DrawState _state;
         UniformValueMap _uniforms;
         Info _info;
         Info _tempInfo;
@@ -92,7 +94,7 @@ namespace gorn
         size_t _tempInfoAmount;
         glm::mat4 _viewTrans;
         glm::mat4 _projTrans;
-        glm::mat4 _viewProjTrans;
+        Frustum _frustum;
 
     public:
         RenderQueue(MaterialManager& materials);

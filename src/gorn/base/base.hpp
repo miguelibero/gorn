@@ -7,5 +7,6 @@
 #include <gorn/base/String.hpp>
 #include <gorn/base/Context.hpp>
 #include <gorn/base/Rect.hpp>
+#include <gorn/base/Shapes.hpp>
 
 #endif

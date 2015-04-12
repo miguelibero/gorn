@@ -2,7 +2,7 @@
 
 #include <gorn/asset/ObjMeshLoader.hpp>
 #include <gorn/asset/Mesh.hpp>
-#include <gorn/render/Kinds.hpp>
+#include <gorn/render/RenderKinds.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Exception.hpp>
 #include <buffer.hpp>
