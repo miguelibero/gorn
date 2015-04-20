@@ -136,7 +136,7 @@ namespace gorn
                 }
             }
         }
-        glDrawBuffers(buffers.size(), buffers.data());
+        //glDrawBuffers(buffers.size(), buffers.data());
         auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if(status != GL_FRAMEBUFFER_COMPLETE)
         {

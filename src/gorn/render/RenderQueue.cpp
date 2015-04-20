@@ -78,14 +78,19 @@ namespace gorn
     {
         setUniformValue(UniformKind::View, view);
         _viewTrans = view;
-        _frustum = _viewTrans*_projTrans;
+        _frustum = _projTrans*_viewTrans;
     }
 
     void RenderQueue::setProjectionTransform(const glm::mat4& proj)
     {
         setUniformValue(UniformKind::Projection, proj);
         _projTrans = proj;
-        _frustum = _viewTrans*_projTrans;
+        _frustum = _projTrans*_viewTrans;
+    }
+
+    const Frustum& RenderQueue::getFrustum() const
+    {
+        return _frustum;
     }
 
     void RenderQueue::draw()

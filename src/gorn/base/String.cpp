@@ -34,7 +34,7 @@ namespace gorn
     {
         std::vector<std::string> parts;
         size_t pos = 0;
-        while(max==npos || parts.size() < max)    
+        while(max==npos || parts.size() < max)
         {
             size_t end = str.find(sep, pos);
             if(end == std::string::npos)
@@ -79,14 +79,14 @@ namespace gorn
             return chrs.find(chr) == std::string::npos;
         }));
     }
-    
+
     void String::rtrim(std::string& str, const std::string& chrs)
     {
         str.erase(std::find_if(str.rbegin(), str.rend(), [&chrs](const char chr){
             return chrs.find(chr) == std::string::npos;
         }).base(), str.end());
     }
-    
+
     void String::trim(std::string& str, const std::string& chrs)
     {
         ltrim(str, chrs);

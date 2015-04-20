@@ -9,15 +9,15 @@ namespace gorn
 
     PlaneShape::PlaneShape(const glm::vec3& bl,  
         const glm::vec3& br,
-        const glm::vec3& tr,
-        const glm::vec3& tl):
-    bottomleft(bl), bottomright(br), topright(tr), topleft(tl)
+        const glm::vec3& tl,
+        const glm::vec3& tr):
+    bottomleft(bl), bottomright(br), topleft(tl), topright(tr)
     {
     }
 
     PlaneShape::PlaneShape(const Corners& corners):
     bottomleft(corners[0]), bottomright(corners[1]),
-    topright(corners[2]), topleft(corners[3])
+    topleft(corners[2]), topright(corners[3])
     {
     }
 
@@ -50,8 +50,8 @@ namespace gorn
         return Corners{
             bottomleft,
             bottomright,
-            topright,
-            topleft
+            topleft,
+            topright
         };  
     }
 

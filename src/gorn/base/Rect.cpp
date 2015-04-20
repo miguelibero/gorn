@@ -28,9 +28,9 @@ namespace gorn
     glm::vec3 Rect::exterior(const glm::vec3& normal) const
     {
         int idx = 0;
-        if( normal.z >= 0 ) idx |= 1;
+        if( normal.z >= 0 ) idx |= 4;
         if( normal.y >= 0 ) idx |= 2;
-        if( normal.x >= 0 ) idx |= 4;
+        if( normal.x >= 0 ) idx |= 1;
         return shape().corners()[idx];
     }
 
@@ -113,14 +113,14 @@ namespace gorn
             PlaneShape(
                 glm::vec3(origin.x,        origin.y,        origin.z),
                 glm::vec3(origin.x+size.x, origin.y,        origin.z),
-                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z),
-                glm::vec3(origin.x,        origin.y+size.y, origin.z)
+                glm::vec3(origin.x,        origin.y+size.y, origin.z),
+                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z)
             ),
             PlaneShape(
                 glm::vec3(origin.x,        origin.y,        origin.z+size.z),
                 glm::vec3(origin.x+size.x, origin.y,        origin.z+size.z),
-                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z+size.z),
-                glm::vec3(origin.x,        origin.y+size.y, origin.z+size.z)
+                glm::vec3(origin.x,        origin.y+size.y, origin.z+size.z),
+                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z+size.z)
             )
         );
     }

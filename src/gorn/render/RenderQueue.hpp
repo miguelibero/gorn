@@ -101,6 +101,7 @@ namespace gorn
 
         void setViewTransform(const glm::mat4& view);
         void setProjectionTransform(const glm::mat4& proj);
+        const Frustum& getFrustum() const;
 
         void setUniformValue(const std::string& name, const UniformValue& value);
         bool removeUniformValue(const std::string& name);

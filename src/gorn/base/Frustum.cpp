@@ -79,30 +79,22 @@ namespace gorn
 
     Frustum::MatchType Frustum::matches(const Rect& rect) const
     {
-        MatchType mtype = MatchType::Outside;
+        MatchType mtype = MatchType::Inside;
         for(size_t i = 0; i < _planes.size(); ++i)
         {
             auto& plane = _planes[i];
             auto pnorm = glm::vec3(plane);
             auto p = rect.exterior(pnorm);
             float dext = glm::dot(p, pnorm) + plane.w;
-            if(dext <= kDotProductMargin && dext >= -kDotProductMargin)
+            if(dext < 0)
             {
-                return MatchType::Partial;
+                return MatchType::Outside;
             }
             p = rect.exterior(-pnorm);
             float dint = glm::dot(p, pnorm) + plane.w;
-            if(dint <= kDotProductMargin && dint >= -kDotProductMargin)
+            if(dint < 0)
             {
-                return MatchType::Partial;
-            }
-            if(dint*dext < kDotProductMargin)
-            {
-                return MatchType::Partial;
-            }
-            if(dint < kDotProductMargin)
-            {
-                mtype = MatchType::Inside;
+                mtype = MatchType::Partial;
             }
         }
         return mtype;
@@ -117,14 +109,14 @@ namespace gorn
     CubeShape Frustum::shape() const
     {
         CubeShape::Corners corners{
-            glm::vec3(-1.0f, -1.0f, -1.0f),
-            glm::vec3( 1.0f, -1.0f, -1.0f),
-            glm::vec3( 1.0f,  1.0f, -1.0f),
-            glm::vec3(-1.0f,  1.0f, -1.0f),
             glm::vec3(-1.0f, -1.0f,  1.0f),
             glm::vec3( 1.0f, -1.0f,  1.0f),
+            glm::vec3(-1.0f,  1.0f,  1.0f),
             glm::vec3( 1.0f,  1.0f,  1.0f),
-            glm::vec3(-1.0f,  1.0f,  1.0f)
+            glm::vec3(-1.0f, -1.0f, -1.0f),
+            glm::vec3( 1.0f, -1.0f, -1.0f),
+            glm::vec3(-1.0f,  1.0f, -1.0f),
+            glm::vec3( 1.0f,  1.0f, -1.0f)
         };
 
         auto inverse = glm::inverse(_matrix);
@@ -135,5 +127,5 @@ namespace gorn
         }
         return CubeShape(corners);
     }
-   
+
 }

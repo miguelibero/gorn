@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="me.ibero.gorn.examples.queue"
+      package="me.ibero.gorn.examples.frustum"
       android:versionCode="1"
       android:versionName="1.0">
 
@@ -16,7 +16,7 @@
         android:icon="@drawable/icon"
         >
 
-        <activity android:name="me.ibero.gorn.examples.queue.MainActivity"
+        <activity android:name="me.ibero.gorn.examples.frustum.MainActivity"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   android:configChanges="orientation">

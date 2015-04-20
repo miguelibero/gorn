@@ -59,33 +59,44 @@ void FrustumApplication::load()
         .withProgram("shader")
         .withUniformValue(UniformKind::Color, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)));
 
-    _ctx.getQueue().setProjectionTransform(
-        glm::perspective(
-            glm::pi<float>()/6.0f,
-            4.0f / 3.0f,
-            0.1f,
-            200.0f
-        ));
-
+    auto proj = glm::perspective(
+        glm::pi<float>()/6.0f,
+        4.0f / 3.0f,
+        0.1f,
+        200.0f
+    );
     auto view = glm::lookAt(
-            glm::vec3(-50.0f, 50.0f, 50.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 1.0f ,0.0f)
-        );
-
+        glm::vec3(-50.0f, 50.0f, 50.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f ,0.0f)
+    );
+    _ctx.getQueue().setProjectionTransform(proj);
     _ctx.getQueue().setViewTransform(view);
-    _frustum = glm::frustum(-10.f, 10.f, -10.f, 10.f, 0.1f, -10.f);
+
+
+    _frustum = glm::ortho(-7.0f, 7.0f, -5.0f, 5.0f);
+    _frustum = glm::perspective(
+        glm::pi<float>()/3.0f,
+        4.0f / 3.0f,
+        -0.1f,
+        20.0f
+    )*glm::lookAt(
+        glm::vec3(0.0f, 0.0f, 20.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f ,0.0f));
 
     _sphereMesh = ShapeMeshFactory::create(
         SphereShape().withRings(10).withSectors(10));
 
     _frustumMesh = ShapeMeshFactory::create(_frustum, DrawMode::Lines);
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 void FrustumApplication::draw()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     auto cmd = _frustumMesh.render();
     cmd.withMaterial(_ctx.getMaterials().load("frustum"));
@@ -108,7 +119,6 @@ void FrustumApplication::draw()
             cmd.withMaterial(_ctx.getMaterials().load(in?"in":"out"));
             cmd.withTransform(glm::translate(glm::mat4(), p),
                 RenderCommand::TransformMode::SetGlobal);
-            cmd.withBounding(aabb);
             _ctx.getQueue().addCommand(std::move(cmd));
         }
     }

@@ -12,8 +12,8 @@ namespace gorn
 
         glm::vec3 bottomleft;  
         glm::vec3 bottomright;
-        glm::vec3 topright;
         glm::vec3 topleft;
+        glm::vec3 topright;
 
         PlaneShape();
         PlaneShape(const glm::vec3& bottomleft,  
