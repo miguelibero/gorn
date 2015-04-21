@@ -45,6 +45,7 @@
 		06A9B8C01ACEE4E300A78C64 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BC1ACEE4E300A78C64 /* Mesh.cpp */; };
 		06A9B8C11ACEE4E300A78C64 /* ObjMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8BE1ACEE4E300A78C64 /* ObjMeshLoader.cpp */; };
 		06A9B8D41ACEF2E100A78C64 /* UIImageLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */; };
+		06E2754D1AE68CC000EDA67B /* Rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06E2754C1AE68CC000EDA67B /* Rect.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -401,6 +402,8 @@
 		06A9B8BF1ACEE4E300A78C64 /* ObjMeshLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjMeshLoader.hpp; sourceTree = "<group>"; };
 		06A9B8D21ACEF2E100A78C64 /* UIImageLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIImageLoader.mm; sourceTree = "<group>"; };
 		06A9B8D31ACEF2E100A78C64 /* UIImageLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UIImageLoader.hpp; sourceTree = "<group>"; };
+		06E2754B1AE68CC000EDA67B /* Rect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Rect.hpp; sourceTree = "<group>"; };
+		06E2754C1AE68CC000EDA67B /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rect.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -778,6 +781,8 @@
 		068C750A1A7627700017E482 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				06E2754B1AE68CC000EDA67B /* Rect.hpp */,
+				06E2754C1AE68CC000EDA67B /* Rect.cpp */,
 				06A9B8B71ACEE4CF00A78C64 /* Application.cpp */,
 				06A9B8B81ACEE4CF00A78C64 /* Config.hpp */,
 				068C750B1A7627700017E482 /* Application.hpp */,
@@ -947,6 +952,7 @@
 				06A9B8B31ACEE4BF00A78C64 /* Enums.cpp in Sources */,
 				068C75661A7627700017E482 /* AttributeDefinition.cpp in Sources */,
 				068C75681A7627700017E482 /* Kinds.cpp in Sources */,
+				06E2754D1AE68CC000EDA67B /* Rect.cpp in Sources */,
 				068C75771A7627700017E482 /* VertexBuffer.cpp in Sources */,
 				068C755E1A7627700017E482 /* AppDelegate.m in Sources */,
 				06A9B8B51ACEE4BF00A78C64 /* ProgramAttributeDefinition.cpp in Sources */,
