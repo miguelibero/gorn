@@ -14,8 +14,8 @@ Its main goals are:
 
 Some functionalities that the render queue supports:
 
-* automatic draw call batching
-* frustum culling (WIP)
+* draw call batching
+* frustum culling
 * drawing in separate thread (TODO)
 
 ## Examples
