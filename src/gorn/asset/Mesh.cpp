@@ -1,4 +1,5 @@
 #include <gorn/asset/Mesh.hpp>
+#include <gorn/base/Exception.hpp>
 #include <gorn/render/RenderKinds.hpp>
 #include <gorn/render/RenderCommand.hpp>
 #include <algorithm>
@@ -39,6 +40,10 @@ namespace gorn
     void Mesh::setDrawMode(DrawMode mode) NOEXCEPT
     {
         _drawMode = mode;
+        if(!empty())
+        {
+            throw Exception("Mesh is not empty");
+        }
     }
 
     void Mesh::setPositions(const Positions& positions) NOEXCEPT
@@ -85,6 +90,31 @@ namespace gorn
         {
             addElement(std::move(elm));
         }
+    }
+
+    const Mesh::Positions& Mesh::getPositions() const NOEXCEPT
+    {
+        return _positions;
+    }
+
+    const Mesh::Normals& Mesh::getNormals() const NOEXCEPT
+    {
+        return _normals;
+    }
+
+    const Mesh::TexCoords& Mesh::getTexCoords() const NOEXCEPT
+    {
+        return _texCoords;
+    }
+
+    const Mesh::Elements& Mesh::getElements() const NOEXCEPT
+    {
+        return _elements;
+    }
+
+    DrawMode Mesh::getDrawMode() const NOEXCEPT
+    {
+        return _drawMode;
     }
 
     void Mesh::addPosition(const glm::vec3& pos) NOEXCEPT
@@ -135,6 +165,53 @@ namespace gorn
             itr = _elements.insert(itr, std::move(elm));
         }
         _indices.push_back(std::distance(_elements.begin(), itr));
+    }
+
+    Mesh& Mesh::operator+=(const Mesh& other)
+    {
+        if(getDrawMode() != other.getDrawMode())
+        {
+            throw Exception("Only meshes with the same draw mode can be added");
+        }
+
+        auto posSize = _positions.size();
+        auto normSize = _normals.size();
+        auto texSize = _texCoords.size();
+        for(auto elm : other._elements)
+        {
+            elm.position += posSize;
+            elm.normal += normSize;
+            elm.texCoord += texSize;
+            addElement(elm);
+        }
+        _positions.insert(_positions.end(), other._positions.begin(),
+            other._positions.end());
+        _normals.insert(_normals.end(), other._normals.begin(),
+            other._normals.end());
+        _texCoords.insert(_texCoords.end(), other._texCoords.begin(),
+            other._texCoords.end());
+        return *this;
+    }
+
+    Mesh Mesh::operator+(const Mesh& other) const
+    {
+        Mesh sum(*this);
+        sum += other;
+        return sum;
+    }
+
+    void Mesh::clear()
+    {
+        _positions.clear();
+        _normals.clear();
+        _texCoords.clear();
+        _indices.clear();
+        _elements.clear();
+    }
+
+    bool Mesh::empty() const
+    {
+        return _elements.empty();
     }
 
     RenderCommand Mesh::render() const

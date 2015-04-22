@@ -55,6 +55,17 @@ namespace gorn
         void setElements(Elements&& elms) NOEXCEPT;
         void setDrawMode(DrawMode mode) NOEXCEPT;
 
+        const Positions& getPositions() const NOEXCEPT;
+        const Normals& getNormals() const NOEXCEPT;
+        const TexCoords& getTexCoords() const NOEXCEPT;
+        const Elements& getElements() const NOEXCEPT;
+        DrawMode getDrawMode() const NOEXCEPT;
+
+        Mesh& operator+=(const Mesh& other);
+        Mesh operator+(const Mesh& other) const;
+        void clear();
+        bool empty() const;
+
         void addPosition(const glm::vec3& pos) NOEXCEPT;
         void addPosition(glm::vec3&& pos) NOEXCEPT;
         void addNormal(const glm::vec3& normal) NOEXCEPT;

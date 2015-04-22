@@ -44,10 +44,11 @@ namespace gorn
         return _uniforms;
     }
 
-    void RenderQueue::addCommand(RenderCommand&& cmd)
+    RenderCommand& RenderQueue::addCommand(RenderCommand&& cmd)
     {
         std::lock_guard<std::mutex> lock(_commandsMutex);
         _commands.push_back(std::move(cmd));
+        return _commands.back();
     }
 
     RenderCommand& RenderQueue::addCommand()

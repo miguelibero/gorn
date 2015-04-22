@@ -107,7 +107,7 @@ namespace gorn
         bool removeUniformValue(const std::string& name);
         const UniformValueMap& getUniformValues() const;
 
-        void addCommand(RenderCommand&& cmd);
+        RenderCommand& addCommand(RenderCommand&& cmd);
         RenderCommand& addCommand();
         RenderCommand& addCommand(const std::string& material);
 
