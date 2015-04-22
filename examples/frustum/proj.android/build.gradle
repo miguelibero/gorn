@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.14.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 12
+        ndk {
+            moduleName "gorn_frustum"
+            stl "c++_shared"
+        }
+    }
+
+    dependencies {
+        compile project(':gorn')
+    }
+
+    buildTypes {
+        debug {
+            jniDebuggable true
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['../assets']
+        }
+    }
+}
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task ndkBuild(type: Exec) {
+    def params = ['-j']
+    def env = []
+    def cmd = []
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        cmd += 'ndk-build.cmd'
+    } else {
+        cmd += 'ndk-build'
+    }
+    commandLine cmd + params
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn ndkBuild
+}
+
+tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
+    pkgTask.jniFolders = new HashSet<File>()
+    pkgTask.jniFolders.add(new File(projectDir, 'libs'))
+}

@@ -1,9 +1,10 @@
 
 #include <gorn/render/RenderCommand.hpp>
-#include <gorn/render/Kinds.hpp>
-#include <gorn/render/Program.hpp>
+#include <gorn/render/RenderKinds.hpp>
+#include <gorn/gl/Program.hpp>
 #include <gorn/base/Exception.hpp>
 #include <buffer_writer.hpp>
+#include <iostream>
 
 namespace gorn
 {

@@ -1,9 +1,9 @@
 
 #include <gorn/render/RenderQueue.hpp>
-#include <gorn/render/VertexArray.hpp>
-#include <gorn/render/VertexBuffer.hpp>
-#include <gorn/render/MaterialManager.hpp>
-#include <gorn/render/Kinds.hpp>
+#include <gorn/gl/VertexArray.hpp>
+#include <gorn/gl/VertexBuffer.hpp>
+#include <gorn/gl/MaterialManager.hpp>
+#include <gorn/render/RenderKinds.hpp>
 #include <gorn/asset/AssetManager.hpp>
 #include <algorithm>
 #include <cmath>
@@ -78,14 +78,19 @@ namespace gorn
     {
         setUniformValue(UniformKind::View, view);
         _viewTrans = view;
-        _viewProjTrans = _viewTrans*_projTrans;
+        _frustum = _projTrans*_viewTrans;
     }
 
     void RenderQueue::setProjectionTransform(const glm::mat4& proj)
     {
         setUniformValue(UniformKind::Projection, proj);
         _projTrans = proj;
-        _viewProjTrans = _viewTrans*_projTrans;
+        _frustum = _projTrans*_viewTrans;
+    }
+
+    const Frustum& RenderQueue::getFrustum() const
+    {
+        return _frustum;
     }
 
     void RenderQueue::draw()
@@ -104,7 +109,7 @@ namespace gorn
         }
         _tempInfoAmount++;
 
-        DrawState state;
+        DrawState state(_frustum);
         DrawBlock block;
 
         std::vector<Command> commands;
@@ -122,7 +127,7 @@ namespace gorn
             {
                 continue;
             }
-            if(!state.checkBounding(cmd, _viewProjTrans))
+            if(!state.checkBounding(cmd))
             {
                 _tempInfo.drawCallsCulled++;
                 continue;
@@ -215,25 +220,28 @@ namespace gorn
 
     Rect RenderQueueDrawState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));
 
-    RenderQueueDrawState::RenderQueueDrawState():
-    _boundingEnds(0)
+    RenderQueueDrawState::RenderQueueDrawState(const Frustum& frustum):
+    _boundingEnds(0), _frustum(frustum), _baseFrustum(frustum)
     {
         _transforms.push(glm::mat4());
     }
 
     void RenderQueueDrawState::updateTransform(const Command& cmd)
     {
+        bool changed = false;
         switch(cmd.getTransformMode())
         {
             case TransformMode::PushLocal:
                 _transforms.push(_transforms.top()*cmd.getTransform());
+                changed = true;
                 break;
             case TransformMode::PopLocal:
                 _transforms.pop();
+                changed = true;
                 break;
             case TransformMode::SetGlobal:
                 _transforms.push(cmd.getTransform());
-                break;
+                changed = true;
                 break;
             case TransformMode::PushCheckpoint:
                 _checkpoints.push(_transforms.size());
@@ -245,15 +253,20 @@ namespace gorn
                 while(_transforms.size() > size)
                 {
                     _transforms.pop();
+                    changed = true;
                 }
                 break;
             }
             default:
                 break;
         }
+        if(changed)
+        {
+            _frustum = _baseFrustum*getTransform();
+        }
     }
 
-    bool RenderQueueDrawState::checkBounding(const Command& cmd, const glm::mat4& viewProj)
+    bool RenderQueueDrawState::checkBounding(const Command& cmd)
     {
         auto bound = cmd.getBoundingMode();
         if(bound == BoundingMode::End)
@@ -269,10 +282,8 @@ namespace gorn
         {
             return true;
         }
-        auto rect = cmd.getBoundingBox()*(viewProj*getTransform());
-        rect.origin.z = 0.0f;
-        rect.size.z = 0.0f;
-        if(!_screenRect.overlaps(rect))
+
+        if(!_frustum.sees(cmd.getBoundingBox()))
         {
             if(bound == RenderCommand::BoundingMode::Start)
             {

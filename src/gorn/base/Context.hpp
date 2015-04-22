@@ -1,9 +1,9 @@
 #ifndef __gorn__Context__
 #define __gorn__Context__
 
-#include <gorn/render/MaterialManager.hpp>
-#include <gorn/render/TextureManager.hpp>
-#include <gorn/render/ProgramManager.hpp>
+#include <gorn/gl/MaterialManager.hpp>
+#include <gorn/gl/TextureManager.hpp>
+#include <gorn/gl/ProgramManager.hpp>
 #include <gorn/render/RenderQueue.hpp>
 #include <gorn/asset/FileManager.hpp>
 #include <gorn/asset/AssetManager.hpp>

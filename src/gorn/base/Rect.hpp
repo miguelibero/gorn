@@ -1,9 +1,8 @@
 #ifndef __gorn__Rect__
 #define __gorn__Rect__
 
-#include <array>
+#include <vector>
 #include <glm/glm.hpp>
-#include <gorn/render/VertexArray.hpp>
 
 class buffer;
 
@@ -17,13 +16,11 @@ namespace gorn
     };
 
     struct RectMatch;
-    struct RectVertices;
+    struct CubeShape;
 
     struct Rect
     {
-        typedef std::array<glm::vec3,8> Corners;
         typedef RectMatchType MatchType;
-        typedef gorn::DrawMode DrawMode;
         glm::vec3 origin;
         glm::vec3 size;
         
@@ -31,13 +28,12 @@ namespace gorn
             const glm::vec3& size=glm::vec3(0.0f));
         Rect(const glm::vec2& origin, const glm::vec2& size=glm::vec2(0.0f));
 
-        // Axis Aligned Bounding Box
         Rect operator*(const glm::mat4& transform) const;
         Rect& operator*=(const glm::mat4& transform);
 
         std::vector<Rect> divide(const glm::vec3& divisions) const;
 
-        Corners corners() const;
+        CubeShape shape() const;
         bool contains(const glm::vec3& point) const;
         bool contains(const glm::vec2& point) const;
         bool contains(const Rect& other) const;
@@ -50,9 +46,8 @@ namespace gorn
         bool flat() const;
         glm::vec3 min() const;
         glm::vec3 max() const;
+        glm::vec3 exterior(const glm::vec3& normal) const;
 
-        buffer getVertices(DrawMode mode=DrawMode::Triangles) const;
-        static size_t getVertexCount(DrawMode mode=DrawMode::Triangles);
     };
 
     struct RectMatch

@@ -52,7 +52,7 @@ void TeapotApplication::load()
     AssetManager<Mesh> meshes(_ctx.getFiles());
     meshes.makeDefaultDataLoader<ObjMeshLoader>();
 
-    _ctx.getQueue().setUniformValue(UniformKind::Projection,
+    _ctx.getQueue().setProjectionTransform(
         glm::perspective(
             glm::pi<float>()/6.0f,
             4.0f / 3.0f,
@@ -60,7 +60,7 @@ void TeapotApplication::load()
             400.0f
         ));
 
-    _ctx.getQueue().setUniformValue(UniformKind::View,  
+    _ctx.getQueue().setViewTransform(
         glm::lookAt(
             glm::vec3(0.0f, 200.0f, 300.0f),
             glm::vec3(0.0f, 50.0f, 0.0f),

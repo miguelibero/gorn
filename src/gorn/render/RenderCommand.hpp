@@ -3,8 +3,8 @@
 
 #include <buffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <gorn/render/VertexArray.hpp>
-#include <gorn/render/Material.hpp>
+#include <gorn/gl/VertexArray.hpp>
+#include <gorn/gl/Material.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 

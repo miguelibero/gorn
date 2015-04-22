@@ -1,5 +1,5 @@
 #include <gorn/asset/Mesh.hpp>
-#include <gorn/render/Kinds.hpp>
+#include <gorn/render/RenderKinds.hpp>
 #include <gorn/render/RenderCommand.hpp>
 #include <algorithm>
 #include <buffer_writer.hpp>
@@ -31,8 +31,14 @@ namespace gorn
         return !operator==(other);
     }
 
-	Mesh::Mesh() NOEXCEPT
+	Mesh::Mesh() NOEXCEPT:
+    _drawMode(DrawMode::Triangles)
     {
+    }
+
+    void Mesh::setDrawMode(DrawMode mode) NOEXCEPT
+    {
+        _drawMode = mode;
     }
 
     void Mesh::setPositions(const Positions& positions) NOEXCEPT
@@ -167,8 +173,9 @@ namespace gorn
         cmd.withAttribute(AttributeKind::TexCoords,
             std::move(texData), 2, BasicType::Float);
         cmd.withElements(_indices);
+        cmd.withDrawMode(_drawMode);
         return cmd;
-    }   
+    }
 
 }
 

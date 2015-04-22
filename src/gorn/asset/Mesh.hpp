@@ -4,6 +4,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <gorn/base/Config.hpp>
+#include <gorn/render/RenderEnums.hpp>
 
 namespace gorn
 {
@@ -39,6 +40,7 @@ namespace gorn
         TexCoords _texCoords;
         Elements _elements;
         Indices _indices;
+        DrawMode _drawMode;
 
 	public:
 		Mesh() NOEXCEPT;
@@ -51,6 +53,7 @@ namespace gorn
         void setTexCoords(TexCoords&& coords) NOEXCEPT;
         void setElements(const Elements& elms) NOEXCEPT;
         void setElements(Elements&& elms) NOEXCEPT;
+        void setDrawMode(DrawMode mode) NOEXCEPT;
 
         void addPosition(const glm::vec3& pos) NOEXCEPT;
         void addPosition(glm::vec3&& pos) NOEXCEPT;

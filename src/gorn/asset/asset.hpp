@@ -8,5 +8,6 @@
 #include <gorn/asset/ObjMeshLoader.hpp>
 #include <gorn/asset/Image.hpp>
 #include <gorn/asset/Mesh.hpp>
+#include <gorn/asset/ShapeMeshFactory.hpp>
 
 #endif
