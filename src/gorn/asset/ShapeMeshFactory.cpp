@@ -1,8 +1,8 @@
 #include <gorn/asset/ShapeMeshFactory.hpp>
-#include <gorn/asset/Mesh.hpp>
 #include <gorn/base/Shapes.hpp>
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Frustum.hpp>
+#include <gorn/render/RenderKinds.hpp>
 
 namespace gorn
 {
@@ -66,14 +66,14 @@ namespace gorn
         case DrawMode::Triangles:
         {
             return Mesh::Elements{
-                0, 1, 2, 2, 3, 0 
+                0, 1, 3, 3, 2, 0 
             };
             break;
         }
         case DrawMode::Lines:
         {
             return Mesh::Elements{
-                0, 1, 1, 2, 2, 3, 3, 0
+                0, 1, 1, 3, 3, 2, 2, 0
             };
             break;
         }
@@ -90,7 +90,7 @@ namespace gorn
         }
     }
 
-
+    template<>
     Mesh ShapeMeshFactory::create(const Rect& rect, DrawMode mode)
     {
         auto tmin = rect.min();
@@ -98,19 +98,19 @@ namespace gorn
         bool tflat = rect.flat();
         Mesh::Elements elements;
 
-        Mesh::Positions positions{
+        std::vector<glm::vec3> positions{
             glm::vec3(tmin.x, tmin.y, tmin.z),
             glm::vec3(tmax.x, tmin.y, tmin.z),
-            glm::vec3(tmax.x, tmax.y, tmin.z),
-            glm::vec3(tmin.x, tmax.y, tmin.z)
+            glm::vec3(tmin.x, tmax.y, tmin.z),
+            glm::vec3(tmax.x, tmax.y, tmin.z)
         };
-        Mesh::Normals normals{
+        std::vector<glm::vec3> normals{
             glm::vec3( 1.0f,  0.0f,  0.0f),
             glm::vec3(-1.0f,  0.0f,  0.0f),
             glm::vec3( 0.0f,  1.0f,  0.0f),
             glm::vec3( 0.0f, -1.0f,  0.0f),
             glm::vec3( 0.0f,  0.0f,  1.0f),
-            glm::vec3( 0.0f,  0.0f, -1.0f),
+            glm::vec3( 0.0f,  0.0f, -1.0f)
         };
         if(tflat)
         {
@@ -122,34 +122,37 @@ namespace gorn
             positions.insert(positions.end(), {
                 glm::vec3(tmin.x, tmin.y, tmax.z),
                 glm::vec3(tmax.x, tmin.y, tmax.z),
-                glm::vec3(tmax.x, tmax.y, tmax.z),
                 glm::vec3(tmin.x, tmax.y, tmax.z),
+                glm::vec3(tmax.x, tmax.y, tmax.z)
             });
         }
 
         Mesh mesh;
-        mesh.setNormals(std::move(normals));
-        mesh.setPositions(std::move(positions));
+        mesh.setVertices(AttributeKind::Normal, std::move(normals));
+        mesh.setVertices(AttributeKind::Position, std::move(positions));
         mesh.setElements(std::move(elements));
         mesh.setDrawMode(mode);
         return mesh;
     }
 
+    template<>
     Mesh ShapeMeshFactory::create(const Frustum& frustum, DrawMode mode)
     {
         return create(frustum.shape(), mode);
     }
 
-    Mesh ShapeMeshFactory::create(const PlaneShape& plane)
+    template<>
+    Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode)
     {
         Mesh mesh;
         return mesh;
     }
 
+    template<>
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode)
     {
         Mesh::Elements elements;
-        Mesh::Positions positions;
+        std::vector<glm::vec3> positions;
 
         auto cs = cube.corners();
         positions.resize(cs.size());
@@ -158,20 +161,21 @@ namespace gorn
         elements = getCubeElements(mode);
 
         Mesh mesh;
-        mesh.setPositions(std::move(positions));
+        mesh.setVertices(AttributeKind::Position, std::move(positions));
         mesh.setElements(std::move(elements));
         mesh.setDrawMode(mode);
         return mesh;
     }
 
-    Mesh ShapeMeshFactory::create(const SphereShape& sphere)
+    template<>
+    Mesh ShapeMeshFactory::create(const SphereShape& sphere, DrawMode mode)
     {
         float R = 1.f/(float)(sphere.rings-1);
         float S = 1.f/(float)(sphere.sectors-1);
         float texScale = 1.f;
         size_t n = sphere.rings * sphere.sectors;
-        Mesh::Positions positions;
-        Mesh::TexCoords texCoords;
+        std::vector<glm::vec3> positions;
+        std::vector<glm::vec2> texCoords;
         Mesh::Elements elements;
       
         {
@@ -216,9 +220,9 @@ namespace gorn
         }
         
         Mesh mesh;
-        mesh.setNormals(Mesh::Normals(positions));
-        mesh.setPositions(std::move(positions));
-        mesh.setTexCoords(std::move(texCoords));
+        mesh.setVertices(AttributeKind::Normal, positions);
+        mesh.setVertices(AttributeKind::Position, std::move(positions));
+        mesh.setVertices(AttributeKind::TexCoords, std::move(texCoords));
         mesh.setElements(std::move(elements));
         return std::move(mesh);
     } 
