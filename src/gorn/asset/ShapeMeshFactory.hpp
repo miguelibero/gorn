@@ -5,12 +5,11 @@
 #include <glm/glm.hpp>
 #include <gorn/base/Config.hpp>
 #include <gorn/render/RenderEnums.hpp>
+#include <gorn/asset/Mesh.hpp>
 
 namespace gorn
 {
-    class Rect;
     class Frustum;
-    class Mesh;
     class PlaneShape;
     class CubeShape;
     class SphereShape;
@@ -20,12 +19,31 @@ namespace gorn
 	public:
 		ShapeMeshFactory() = delete;
 
-        static Mesh create(const Rect& rect, DrawMode mode);
-        static Mesh create(const Frustum& frustum, DrawMode mode);
-        static Mesh create(const CubeShape& cube, DrawMode mode);
-        static Mesh create(const SphereShape& sphere);
-        static Mesh create(const PlaneShape& plane);
+        template<typename S>
+        static Mesh create(const S& shape, DrawMode mode);
+
+        template<typename S>
+        static Mesh create(const std::vector<S>& shapes, DrawMode mode)
+        {
+            Mesh mesh;
+            mesh.setDrawMode(mode);
+            for(auto& shape : shapes)
+            {
+                mesh += create(shape, mode);
+            }
+            return mesh;
+        }
+
 	};
+
+    template<>
+    Mesh ShapeMeshFactory::create(const Frustum& frustum, DrawMode mode);
+    template<>
+    Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode);
+    template<>
+    Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode);
+    template<>
+    Mesh ShapeMeshFactory::create(const SphereShape& sphere, DrawMode mode);
 }
 
 #endif

@@ -57,7 +57,7 @@ namespace gorn
                 {
                     throw Exception("Position should contain 3 floats");
                 }
-                mesh.addPosition(glm::vec3(
+                mesh.addVertex(AttributeKind::Position, glm::vec3(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2]),
                     String::convertTo<float>(parts[3])
@@ -69,7 +69,7 @@ namespace gorn
                 {
                     throw Exception("Normal should contain 3 floats");
                 }
-                mesh.addNormal(glm::vec3(
+                mesh.addVertex(AttributeKind::Normal, glm::vec3(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2]),
                     String::convertTo<float>(parts[3])
@@ -81,7 +81,7 @@ namespace gorn
                 {
                     throw Exception("Texture should contain 2 floats");
                 }
-                mesh.addTexCoord(glm::vec2(
+                mesh.addVertex(AttributeKind::TexCoords, glm::vec2(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2])
                 ));
@@ -92,25 +92,25 @@ namespace gorn
                 for(auto itr = parts.begin()+1; itr != parts.end(); ++itr)
                 {
                     auto fsparts = String::split(*itr, kFaceSeparator);
-                    std::vector<MeshElement::elm_t> fparts;
+                    std::vector<MeshElement::idx_t> fparts;
                     fparts.reserve(fsparts.size());
                     for(auto& part : fsparts)
                     {
                         fparts.push_back(
-                            String::convertTo<MeshElement::elm_t>(part)-1);
+                            String::convertTo<MeshElement::idx_t>(part)-1);
                     }
                     Mesh::Element elm;
                     if(fparts.size() > 0)
                     {
-                        elm.position = fparts[0];
+                        elm.set(AttributeKind::Position, fparts[0]);
                     }
                     if(fparts.size() > 1)
                     {
-                        elm.texCoord = fparts[1];
+                        elm.set(AttributeKind::TexCoords, fparts[1]);
                     }
                     if(fparts.size() > 2)
                     {
-                        elm.normal = fparts[2];
+                        elm.set(AttributeKind::Normal, fparts[2]);
                     }
                     elms.push_back(std::move(elm));
                 }
