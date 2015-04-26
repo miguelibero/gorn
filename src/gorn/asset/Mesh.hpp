@@ -18,14 +18,19 @@ namespace gorn
     {
     public:
         typedef size_t idx_t;
+        static const idx_t npos;
     private:
         std::map<std::string, idx_t> _indices;
         idx_t _defval;
     public:
-        MeshElement(idx_t defval=-1) NOEXCEPT;
+        MeshElement(idx_t defval = npos) NOEXCEPT;
         idx_t get(const std::string& name) const;
         void set(const std::string& name, idx_t idx) NOEXCEPT;
         bool has(const std::string& name) const NOEXCEPT;
+        idx_t getDefault() const NOEXCEPT;
+        bool hasDefault() const NOEXCEPT;
+        void setDefault(idx_t defval) NOEXCEPT;
+        void update(std::map<std::string, idx_t> indices);
         bool operator==(const MeshElement& other) const NOEXCEPT;
         bool operator!=(const MeshElement& other) const NOEXCEPT;
     };
@@ -111,7 +116,7 @@ namespace gorn
             itr != other._data.end(); ++itr)
         {
             auto& data = _data[itr->first];
-            data.resize(data.size()+itr->second.size());
+            data.reserve(data.size()+itr->second.size());
             data.insert(data.end(), itr->second.begin(), itr->second.end());
         }
         return *this;
@@ -155,7 +160,11 @@ namespace gorn
                     auto& p = v.at(elm.get(n));
                     out.write(&p, sizeof(V));
                 }
-
+                else if(elm.hasDefault())
+                {
+                    auto& p = v.at(elm.getDefault());
+                    out.write(&p, sizeof(V));
+                }
             }
             cmd.withAttribute(n, std::move(data),
                 sizeof(V)/sizeof(float), BasicType::Float);

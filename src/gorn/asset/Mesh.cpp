@@ -6,22 +6,31 @@
 
 namespace gorn
 {
+    const MeshElement::idx_t MeshElement::npos = -1;
+
     MeshElement::MeshElement(idx_t defval) NOEXCEPT:
     _defval(defval)
     {
     }
 
+    MeshElement::idx_t MeshElement::getDefault() const NOEXCEPT
+    {
+        return _defval;
+    }
+
+    bool MeshElement::hasDefault() const NOEXCEPT
+    {
+        return _defval != npos;
+    }
+
+    void MeshElement::setDefault(idx_t defval) NOEXCEPT
+    {
+        _defval = defval;
+    }
+
     MeshElement::idx_t MeshElement::get(const std::string& name) const
     {
-        auto itr = _indices.find(name);
-        if(itr == _indices.end())
-        {
-            return _defval;
-        }
-        else
-        {
-            return itr->second;
-        }
+        return _indices.at(name);
     }
 
     bool MeshElement::has(const std::string& name) const NOEXCEPT
@@ -38,6 +47,7 @@ namespace gorn
     bool MeshElement::operator==(const MeshElement& other) const NOEXCEPT
     {
         return _indices.size() == other._indices.size()
+            && _defval == other._defval
             && std::equal(_indices.begin(), _indices.end(),
                       other._indices.begin());
     }
@@ -45,6 +55,25 @@ namespace gorn
     bool MeshElement::operator!=(const MeshElement& other) const NOEXCEPT
     {
         return !(*this==other);
+    }
+
+    void MeshElement::update(std::map<std::string, idx_t> indices)
+    {
+        for(auto itr = indices.begin(); itr != indices.end(); ++itr)
+        {
+            auto& n = itr->first;
+            auto v = itr->second;
+            if(has(n))
+            {
+                v += get(n);
+            }
+            else if(hasDefault())
+            {
+                v += getDefault();
+            }
+            set(n, v);
+        }
+        setDefault(npos);
     }
 
 	Mesh::Mesh() NOEXCEPT:
@@ -146,22 +175,28 @@ namespace gorn
         _vertices2 += other._vertices2;
         _vertices3 += other._vertices3;
 
-        for(auto idx : other._indices)
+        std::map<std::string, size_t> newSizes;
+        _vertices1.sizes(newSizes);
+        _vertices2.sizes(newSizes);
+        _vertices3.sizes(newSizes);
+
+        for(auto itr = newSizes.begin(); itr != newSizes.end(); ++itr)
         {
-            auto elm = other._elements.at(idx);
-            for(auto itr = sizes.begin(); itr != sizes.end(); ++itr)
-            {
-                auto& n = itr->first;
-                if(elm.has(n))
-                {
-                    elm.set(n, elm.get(n)+itr->second);
-                }
-                else
-                {
-                    elm.set(n, itr->second);
-                }
-            }
-            addElement(elm);
+            // set missing attributes to zero
+            sizes[itr->first] = sizes[itr->first];
+        }
+
+        auto elmSize = _elements.size();
+        _elements.reserve(elmSize+other._elements.size());
+        for(auto elm : other._elements)
+        {
+            elm.update(sizes);
+            _elements.push_back(elm);
+        }
+        _indices.reserve(_indices.size()+other._indices.size());
+        for(auto& idx : other._indices)
+        {
+            _indices.push_back(idx+elmSize);
         }
 
         return *this;
