@@ -20,21 +20,25 @@ namespace gorn
 		ShapeMeshFactory() = delete;
 
         template<typename S>
-        static Mesh create(const S& shape, DrawMode mode);
+        static Mesh create(const S& shape, DrawMode mode=DrawMode::Triangles);
 
         template<typename S>
-        static Mesh create(const std::vector<S>& shapes, DrawMode mode)
-        {
-            Mesh mesh;
-            mesh.setDrawMode(mode);
-            for(auto& shape : shapes)
-            {
-                mesh += create(shape, mode);
-            }
-            return mesh;
-        }
+        static Mesh create(const std::vector<S>& shapes,
+            DrawMode mode=DrawMode::Triangles);
 
 	};
+
+    template<typename S>
+    Mesh ShapeMeshFactory::create(const std::vector<S>& shapes, DrawMode mode)
+    {
+        Mesh mesh;
+        mesh.setDrawMode(mode);
+        for(auto& shape : shapes)
+        {
+            mesh += create(shape, mode);
+        }
+        return mesh;
+    }
 
     template<>
     Mesh ShapeMeshFactory::create(const Frustum& frustum, DrawMode mode);
