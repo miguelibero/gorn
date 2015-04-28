@@ -29,8 +29,8 @@ namespace gorn
 	public:
         FileAssetLoader(FileManager& files) NOEXCEPT;
 
-        virtual bool validate(const std::string& name) const NOEXCEPT;
-        virtual T load(const std::string& name) const;
+        virtual bool validate(const std::string& name) const NOEXCEPT override;
+        virtual T load(const std::string& name) const override;
 
 	    void addDefaultLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
         void addLoader(const std::string& tag,

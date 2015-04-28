@@ -12,6 +12,8 @@ FILE_LIST := $(shell find $(BASE_PATH)/src -type f -iname \*.cpp $(PLATFORM_DIR_
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 FILE_LIST := $(shell find $(BASE_PATH)/lib/platform/android -type f -iname \*.cpp )
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
+FILE_LIST := $(shell find $(BASE_PATH)/src/gorn/platform -maxdepth 1 -type f -iname \*.cpp )
+LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 FILE_LIST := $(shell find $(BASE_PATH)/lib/buffer/src -type f -iname \*.cpp )
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 

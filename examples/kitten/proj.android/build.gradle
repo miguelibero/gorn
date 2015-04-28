@@ -53,7 +53,7 @@ task ndkBuild(type: Exec) {
     } else {
         cmd += 'ndk-build'
     }
-    environment env
+//    environment env
     commandLine cmd + params
 }
 

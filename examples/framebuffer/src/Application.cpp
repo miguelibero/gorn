@@ -43,14 +43,12 @@ void FramebufferApplication::load()
 #ifdef GORN_PLATFORM_LINUX
 	_ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
-	_ctx.getImages()
-        .makeDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
         .makeDefaultLoader<AssetFileLoader>("%s");
-	_ctx.getImages()
-        .makeDefaultDataLoader<GraphicsImageLoader>();
 #endif
+	_ctx.getImages()
+        .makeDefaultDataLoader<StbImageLoader>();
 
     _ctx.getMaterials().getDefinitions().get("kitten")
         .withProgram("sprite")

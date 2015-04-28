@@ -53,8 +53,6 @@ void KittenApplication::load()
         .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("tex", "../assets/%s.png");
-	_ctx.getImages()
-        .makeDefaultDataLoader<PngImageLoader>();
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
         .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
@@ -62,9 +60,10 @@ void KittenApplication::load()
         .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
 	_ctx.getFiles()
         .makeLoader<AssetFileLoader>("tex", "%s.png");
-	_ctx.getImages()
-        .makeDefaultDataLoader<GraphicsImageLoader>();
 #endif
+
+	_ctx.getImages()
+        .makeDefaultDataLoader<StbImageLoader>();
 
     _ctx.getPrograms().getDefinitions().get("shader")
         .withShaderFile(ShaderType::Vertex, "vsh:shader")

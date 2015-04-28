@@ -18,8 +18,8 @@ namespace gorn
         static JniObject& getJniObject();
     public:
         AssetFileLoader(const std::string& pathTemplate=kPlaceholder) NOEXCEPT;
-        bool validate(const std::string& name) const NOEXCEPT;
-        buffer load(const std::string& name) const;
+        bool validate(const std::string& name) const NOEXCEPT override;
+        buffer load(const std::string& name) const override;
     };
 }
 

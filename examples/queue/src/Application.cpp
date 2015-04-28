@@ -36,8 +36,6 @@ void QueueApplication::load()
         .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-	_ctx.getImages()
-        .makeDataLoader<PngImageLoader>("sprite");
 #elif GORN_PLATFORM_WINDOWS
 	_ctx.getFiles()
 		.makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
@@ -45,8 +43,6 @@ void QueueApplication::load()
 		.makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
 		.makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-	_ctx.getImages()
-		.makeDataLoader<SOILImageLoader>("sprite");
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
         .makeLoader<AssetFileLoader>("sprite", "%s.png");
@@ -54,8 +50,6 @@ void QueueApplication::load()
         .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
 	_ctx.getFiles()
         .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
-	_ctx.getImages()
-        .makeDataLoader<GraphicsImageLoader>("sprite");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
         .makeLoader<BundleFileLoader>("sprite", "%s.png");
@@ -63,9 +57,10 @@ void QueueApplication::load()
         .makeLoader<BundleFileLoader>("vsh", "%s.vsh");
     _ctx.getFiles()
         .makeLoader<BundleFileLoader>("fsh", "%s.fsh");
-    _ctx.getImages()
-        .makeDataLoader<UIImageLoader>("sprite");
 #endif
+
+	_ctx.getImages()
+        .makeDataLoader<StbImageLoader>("sprite");
 
     _ctx.getMaterials().getDefinitions()
         .set("sprite", [](const std::string& name){

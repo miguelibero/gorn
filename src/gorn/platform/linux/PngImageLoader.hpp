@@ -11,8 +11,8 @@ namespace gorn {
     class PngImageLoader : public DataAssetLoader<Image>
     {
     public:
-        bool validate(const buffer& input) const NOEXCEPT;
-        Image load(const buffer& input) const;
+        bool validate(const buffer& input) const NOEXCEPT override;
+        Image load(const buffer& input) const override;
     };
 }
 

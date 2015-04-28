@@ -14,8 +14,8 @@ namespace gorn {
         std::string getName(const std::string& name) const NOEXCEPT;
     public:
         BundleFileLoader(const std::string& nameTemplate=kPlaceholder) NOEXCEPT;
-        virtual bool validate(const std::string& name) const NOEXCEPT;
-        virtual buffer load(const std::string& name) const;
+        virtual bool validate(const std::string& name) const NOEXCEPT override;
+        virtual buffer load(const std::string& name) const override;
     };
 }
 

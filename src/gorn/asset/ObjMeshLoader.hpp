@@ -11,8 +11,8 @@ namespace gorn
 	{
     public:
         ObjMeshLoader() NOEXCEPT;
-        bool validate(const buffer& data) const NOEXCEPT;
-        Mesh load(const buffer& data) const;
+        bool validate(const buffer& data) const NOEXCEPT override;
+        Mesh load(const buffer& data) const override;
 	};
 }
 
