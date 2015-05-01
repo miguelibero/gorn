@@ -221,17 +221,22 @@ namespace gorn
         _vertices3 += std::move(other._vertices3);
         
         auto elmSize = _elements.size();
-        _elements.reserve(elmSize+other._elements.size());
-        for(auto elm : other._elements)
-        {
-            elm.update(sizes);
-            _elements.push_back(elm);
-        }
-        _indices.reserve(_indices.size()+other._indices.size());
         for(auto& idx : other._indices)
         {
-            _indices.push_back((idx_t)(idx+elmSize));
+            idx += elmSize;
         }
+        for(auto& elm : other._elements)
+        {
+            elm.update(sizes);
+        }
+        _elements.reserve(elmSize+other._elements.size());
+        _elements.insert(_elements.end(),
+            std::make_move_iterator(other._elements.begin()),
+            std::make_move_iterator(other._elements.end()));
+        _indices.reserve(_indices.size()+other._indices.size());
+        _indices.insert(_indices.end(),
+             std::make_move_iterator(other._indices.begin()),
+             std::make_move_iterator(other._indices.end()));
         return *this;
     }
     

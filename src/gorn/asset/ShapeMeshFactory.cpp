@@ -151,14 +151,12 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode)
     {
-        Mesh::Elements elements;
         std::vector<glm::vec3> positions;
-
         auto cs = cube.corners();
         positions.resize(cs.size());
         std::move(cs.begin(), cs.end(), positions.begin());
 
-        elements = getCubeElements(mode);
+        auto elements = getCubeElements(mode);
 
         Mesh mesh;
         mesh.setVertices(AttributeKind::Position, std::move(positions));
