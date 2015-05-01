@@ -119,7 +119,7 @@ namespace gorn
         {
             itr = _elements.insert(itr, elm);
         }
-        _indices.push_back(std::distance(_elements.begin(), itr));
+        _indices.push_back((idx_t)std::distance(_elements.begin(), itr));
     }
 
     template<>
@@ -196,7 +196,7 @@ namespace gorn
         _indices.reserve(_indices.size()+other._indices.size());
         for(auto& idx : other._indices)
         {
-            _indices.push_back(idx+elmSize);
+            _indices.push_back((idx_t)(idx+elmSize));
         }
 
         return *this;
