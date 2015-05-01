@@ -55,9 +55,12 @@ namespace gorn
         void add(const std::string& name, const V& vtx) NOEXCEPT;
 
         void sizes(std::map<std::string,size_t>& sizes) const NOEXCEPT;
+        void sizes(std::map<std::string,size_t>& sizes, size_t value) const NOEXCEPT;
 
         MeshVertices<V>& operator+=(const MeshVertices<V>& other) NOEXCEPT;
         MeshVertices<V> operator+(const MeshVertices<V>& other) const NOEXCEPT;
+        MeshVertices<V>& operator+=(MeshVertices<V>&& other) NOEXCEPT;
+        MeshVertices<V> operator+(MeshVertices<V>&& other) const NOEXCEPT;
         void clear() NOEXCEPT;
         bool empty() const NOEXCEPT;
 
@@ -109,6 +112,17 @@ namespace gorn
     }
 
     template<typename V>
+    void MeshVertices<V>::sizes(
+        std::map<std::string,size_t>& sizes, size_t value) const NOEXCEPT
+    {
+        for(auto itr = _data.begin();
+            itr != _data.end(); ++itr)
+        {
+            sizes[itr->first] = value;
+        }
+    }
+
+    template<typename V>
     MeshVertices<V>& MeshVertices<V>::operator+=(
         const MeshVertices<V>& other) NOEXCEPT
     {
@@ -128,6 +142,31 @@ namespace gorn
     {
         MeshVertices sum(*this);
         sum += other;
+        return sum;
+    }
+    
+    template<typename V>
+    MeshVertices<V>& MeshVertices<V>::operator+=(
+        MeshVertices<V>&& other) NOEXCEPT
+    {
+        for(auto itr = other._data.begin();
+            itr != other._data.end(); ++itr)
+        {
+            auto& data = _data[itr->first];
+            data.reserve(data.size()+itr->second.size());
+            data.insert(data.end(),
+                std::make_move_iterator(itr->second.begin()),
+                std::make_move_iterator(itr->second.end()));
+        }
+        return *this;
+    }
+    
+    template<typename V>
+    MeshVertices<V> MeshVertices<V>::operator+(
+        MeshVertices<V>&& other) const NOEXCEPT
+    {
+        MeshVertices sum(*this);
+        sum += std::move(other);
         return sum;
     }
 
@@ -150,6 +189,7 @@ namespace gorn
         for(auto itr = _data.begin(); itr != _data.end(); ++itr)
         {
             buffer data;
+            data.capacity(elms.size()*sizeof(V));
             buffer_writer out(data);
             auto& n = itr->first;
             auto& v = itr->second;
@@ -192,6 +232,8 @@ namespace gorn
 
         Mesh& operator+=(const Mesh& other);
         Mesh operator+(const Mesh& other) const;
+        Mesh& operator+=(Mesh&& other);
+        Mesh operator+(Mesh&& other) const;
         void clear() NOEXCEPT;
         bool empty() const NOEXCEPT;
 

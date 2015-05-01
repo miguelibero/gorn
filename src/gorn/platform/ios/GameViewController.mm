@@ -38,6 +38,8 @@
     
     _app = std::move(gorn::main());
     
+    self.preferredFramesPerSecond = _app->getPreferredFramesPerSecond();
+    
     [self setupGL];
 }
 
@@ -45,7 +47,8 @@
 {    
     [self tearDownGL];
     
-    if ([EAGLContext currentContext] == self.context) {
+    if ([EAGLContext currentContext] == self.context)
+    {
         [EAGLContext setCurrentContext:nil];
     }
 }
@@ -86,12 +89,14 @@
 {
     [super didReceiveMemoryWarning];
 
-    if ([self isViewLoaded] && ([[self view] window] == nil)) {
+    if ([self isViewLoaded] && ([[self view] window] == nil))
+    {
         self.view = nil;
         
         [self tearDownGL];
         
-        if ([EAGLContext currentContext] == self.context) {
+        if ([EAGLContext currentContext] == self.context)
+        {
             [EAGLContext setCurrentContext:nil];
         }
         self.context = nil;

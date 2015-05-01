@@ -14,7 +14,7 @@ namespace gorn
         glm::vec2 _size;
         std::string _name;
         double _drawInterval;
-        size_t _maxFramesPerSecond;
+        size_t _preferredFramesPerSecond;
         double _framesPerSecond;
         bool _loaded;
         bool _needsReload;
@@ -37,8 +37,8 @@ namespace gorn
         const glm::vec2& getSize();
         const std::string& getName();
 
-        void setMaxFramesPerSecond(size_t fps);
-        size_t getMaxFramesPerSecond() const;
+        void setPreferredFramesPerSecond(size_t fps);
+        size_t getPreferredFramesPerSecond() const;
         double getFramesPerSecond() const;
 
         void realLoad();

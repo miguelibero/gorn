@@ -167,6 +167,9 @@ namespace gorn
         }
 
         std::map<std::string, size_t> sizes;
+        other._vertices1.sizes(sizes, 0);
+        other._vertices2.sizes(sizes, 0);
+        other._vertices3.sizes(sizes, 0);
         _vertices1.sizes(sizes);
         _vertices2.sizes(sizes);
         _vertices3.sizes(sizes);
@@ -174,17 +177,6 @@ namespace gorn
         _vertices1 += other._vertices1;
         _vertices2 += other._vertices2;
         _vertices3 += other._vertices3;
-
-        std::map<std::string, size_t> newSizes;
-        _vertices1.sizes(newSizes);
-        _vertices2.sizes(newSizes);
-        _vertices3.sizes(newSizes);
-
-        for(auto itr = newSizes.begin(); itr != newSizes.end(); ++itr)
-        {
-            // set missing attributes to zero
-            sizes[itr->first] = sizes[itr->first];
-        }
 
         auto elmSize = _elements.size();
         _elements.reserve(elmSize+other._elements.size());
@@ -206,6 +198,47 @@ namespace gorn
     {
         Mesh sum(*this);
         sum += other;
+        return sum;
+    }
+    
+    Mesh& Mesh::operator+=(Mesh&& other)
+    {
+        if(getDrawMode() != other.getDrawMode())
+        {
+            throw Exception("Only meshes with the same draw mode can be added");
+        }
+        
+        std::map<std::string, size_t> sizes;
+        other._vertices1.sizes(sizes, 0);
+        other._vertices2.sizes(sizes, 0);
+        other._vertices3.sizes(sizes, 0);
+        _vertices1.sizes(sizes);
+        _vertices2.sizes(sizes);
+        _vertices3.sizes(sizes);
+        
+        _vertices1 += std::move(other._vertices1);
+        _vertices2 += std::move(other._vertices2);
+        _vertices3 += std::move(other._vertices3);
+        
+        auto elmSize = _elements.size();
+        _elements.reserve(elmSize+other._elements.size());
+        for(auto elm : other._elements)
+        {
+            elm.update(sizes);
+            _elements.push_back(elm);
+        }
+        _indices.reserve(_indices.size()+other._indices.size());
+        for(auto& idx : other._indices)
+        {
+            _indices.push_back((idx_t)(idx+elmSize));
+        }
+        return *this;
+    }
+    
+    Mesh Mesh::operator+(Mesh&& other) const
+    {
+        Mesh sum(*this);
+        sum += std::move(other);
         return sum;
     }
 

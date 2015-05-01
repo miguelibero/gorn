@@ -18,7 +18,7 @@ namespace gorn
         int width;
         int height;
         int comp;
-        auto result = stbi_info_from_memory(input.data(), input.size(),
+        auto result = stbi_info_from_memory(input.data(), (int)input.size(),
             &width, &height, &comp);
 		return result == 1;
     }
@@ -29,7 +29,7 @@ namespace gorn
         int height;
         int comp;
         auto ptr = stbi_load_from_memory(input.data(),
-            input.size(), &width, &height, &comp, 0);
+            (int)input.size(), &width, &height, &comp, 0);
 
         if(ptr == nullptr)
         {
