@@ -2,26 +2,27 @@
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Shapes.hpp>
 #include <buffer_writer.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
 namespace gorn
 {
     Frustum::Frustum(const glm::mat4& matrix):
     _matrix(matrix)
     {
-        calcPlanes(matrix);
+        init();
     }
 
     Frustum& Frustum::operator=(const glm::mat4& matrix)
     {
         _matrix = matrix;
-        calcPlanes(matrix);
+        init();
         return *this;
     }
 
     Frustum& Frustum::operator*=(const glm::mat4& transform)
     {
         _matrix *= transform;
-        calcPlanes(_matrix);
+        init();
         return *this;
     }
 
@@ -32,8 +33,10 @@ namespace gorn
         return result;
     }
 
-    void Frustum::calcPlanes(const glm::mat4& m)
+    void Frustum::init()
     {
+        auto& m = _matrix;
+        _inverse = glm::affineInverse(m);
         _planes[static_cast<size_t>(PlaneType::Right)] = glm::vec4(
                                     m[0][3] - m[0][0],
                                     m[1][3] - m[1][0],
@@ -106,6 +109,39 @@ namespace gorn
         return m == MatchType::Inside || m == MatchType::Partial;
     }
 
+    bool Frustum::sees(const glm::vec3& point) const
+    {
+        for(size_t i = 0; i < _planes.size(); ++i)
+        {
+            auto& plane = _planes[i];
+            auto pnorm = glm::vec3(plane);
+            float dext = glm::dot(point, pnorm) + plane.w;
+            if(dext < 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    glm::vec3 Frustum::getScreenToWorldPoint(const glm::vec3& p) const
+    {
+        glm::vec3 near(_inverse * glm::vec4(p.x, p.y, 0.0f, 1.0f));
+        glm::vec3 far(_inverse * glm::vec4(p.x, p.y, 1.0f, 1.0f));
+        auto dir = glm::normalize(far - near);
+        return near + dir*p.z;
+    }
+
+    const glm::mat4& Frustum::getMatrix() const
+    {
+        return _matrix;
+    }
+
+    const glm::mat4& Frustum::getInverse() const
+    {
+        return _inverse;
+    }
+
     CubeShape Frustum::shape() const
     {
         CubeShape::Corners corners{
@@ -119,10 +155,9 @@ namespace gorn
             glm::vec3( 1.0f,  1.0f, -1.0f)
         };
 
-        auto inverse = glm::inverse(_matrix);
         for(auto& c : corners)
         {
-            auto tc = inverse * glm::vec4(c, 1.0f);
+            auto tc = _inverse * glm::vec4(c, 1.0f);
             c = glm::vec3( tc / tc.w );
         }
         return CubeShape(corners);

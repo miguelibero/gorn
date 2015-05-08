@@ -13,7 +13,8 @@ namespace gorn
 {
     RenderQueue::RenderQueue(MaterialManager& materials):
     _materials(materials), _infoUpdateInterval(0.0),
-    _infoUpdatesPerSecond(10), _tempInfoAmount(0)
+    _infoUpdatesPerSecond(10), _tempInfoAmount(0),
+    _viewDirty(true), _projDirty(true)
     {
     }
 
@@ -77,16 +78,22 @@ namespace gorn
 
     void RenderQueue::setViewTransform(const glm::mat4& view)
     {
-        setUniformValue(UniformKind::View, view);
-        _viewTrans = view;
-        _frustum = _projTrans*_viewTrans;
+        if(_viewTrans != view)
+        {
+            _viewTrans = view;
+            _frustum = _projTrans*_viewTrans;
+            _viewDirty = false;
+        }
     }
 
     void RenderQueue::setProjectionTransform(const glm::mat4& proj)
     {
-        setUniformValue(UniformKind::Projection, proj);
-        _projTrans = proj;
-        _frustum = _projTrans*_viewTrans;
+        if(_projTrans != proj)
+        {
+            _projTrans = proj;
+            _frustum = _projTrans*_viewTrans;
+            _projDirty = false;
+        }
     }
 
     const Frustum& RenderQueue::getFrustum() const
@@ -109,6 +116,17 @@ namespace gorn
             }
         }
         _tempInfoAmount++;
+
+        if(_viewDirty)
+        {
+            setUniformValue(UniformKind::View, _viewTrans);
+            _viewDirty = false;
+        }
+        if(_projDirty)
+        {
+            setUniformValue(UniformKind::Projection, _projTrans);
+            _projDirty = false;
+        }
 
         DrawState state(_frustum);
         DrawBlock block;
