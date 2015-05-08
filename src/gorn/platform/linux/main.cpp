@@ -8,6 +8,7 @@
 #include <GL/glx.h>
 #include <GL/glew.h>
 #include <sys/time.h>
+#include <iostream>
 
 int main(void)
 {
@@ -65,6 +66,8 @@ int main(void)
 
     app->realLoad();
 
+    bool buttonPressed = false;
+
     while(!finished)
     {
         struct timeval lastTime(currTime);
@@ -83,6 +86,7 @@ int main(void)
         while(XPending(display))
         {
             XNextEvent(display, &xev);
+            glm::vec2 p;
             switch( xev.type )
             {
             case FocusIn:
@@ -98,11 +102,21 @@ int main(void)
                 }
                 break;
             case ButtonPress:
-                glm::vec2 p(xev.xbutton.x, xev.xbutton.y);
+                p = glm::vec2(xev.xbutton.x, xev.xbutton.y);
+                buttonPressed = true;
+                break;
+            case MotionNotify: 
+                p = glm::vec2(xev.xmotion.x, xev.xmotion.y);
+                break;
+            case ButtonRelease:
+                buttonPressed = false;
+                break;
+            }
+            if(buttonPressed)
+            {               
                 p.y = app->getSize().y - p.y;
                 p = (p/app->getSize())*2.0f-glm::vec2(1.0f);
                 app->realTouch(p);
-                break;
             }
         }
 
