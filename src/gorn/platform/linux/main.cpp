@@ -67,6 +67,7 @@ int main(void)
     app->realLoad();
 
     bool buttonPressed = false;
+    bool buttonPressEnded = false;
 
     while(!finished)
     {
@@ -109,14 +110,23 @@ int main(void)
                 p = glm::vec2(xev.xmotion.x, xev.xmotion.y);
                 break;
             case ButtonRelease:
-                buttonPressed = false;
+                buttonPressEnded = true;
                 break;
             }
             if(buttonPressed)
             {               
                 p.y = app->getSize().y - p.y;
                 p = (p/app->getSize())*2.0f-glm::vec2(1.0f);
-                app->realTouch(p);
+                if(buttonPressEnded)
+                {
+                    app->realTouchEnd(p);
+                    buttonPressed = false;
+                    buttonPressEnded = false;
+                }
+                else
+                {
+                    app->realTouch(p);
+                }
             }
         }
 

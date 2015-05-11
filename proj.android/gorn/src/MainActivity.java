@@ -74,10 +74,18 @@ public class MainActivity extends Activity
                 public boolean onTouch(View v, MotionEvent ev){
                     final float x = ev.getX() / (float) v.getWidth() * 2  - 1;
                     final float y = (1 - ev.getY() / (float) v.getHeight()) * 2 - 1;
+                    final boolean ended = ev.getAction() == MotionEvent.ACTION_UP;
                     glSurfaceView.queueEvent(new Runnable(){
                         public void run()
                         {
-                            MainActivity.this.nativeOnTouch(x, y);
+                            if(ended)
+                            {
+                                MainActivity.this.nativeOnTouchEnd(x, y);
+                            }
+                            else
+                            {
+                                MainActivity.this.nativeOnTouch(x, y);
+                            }
                         }
                     });
                     return true;
@@ -158,6 +166,7 @@ public class MainActivity extends Activity
     public static native void nativeOnSurfaceCreated();
     public static native void nativeOnSurfaceChanged(int width, int height);
     public static native void nativeOnTouch(float x, float y);
+    public static native void nativeOnTouchEnd(float x, float y);
     public static native void nativeOnDrawFrame(double dt);
     public static native void nativeOnDestroy();
 }

@@ -53,6 +53,14 @@ extern "C" {
             app->realTouch(glm::vec2(x, y));
         }
 	}
+
+	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnTouchEnd(JNIEnv* env, jclass cls, jfloat x, jfloat y)
+	{
+        if(app != nullptr)
+        {
+            app->realTouchEnd(glm::vec2(x, y));
+        }
+	}
 	 
 	JNIEXPORT void JNICALL Java_me_ibero_gorn_MainActivity_nativeOnDrawFrame(JNIEnv* env, jclass cls, jdouble dt)
 	{

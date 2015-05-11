@@ -27,6 +27,7 @@ namespace gorn
 	    virtual void update(double dt);
 	    virtual void draw();
         virtual void touch(const glm::vec2& p);
+        virtual void touchEnd(const glm::vec2& p);
 
         void setSize(const glm::vec2& size);
         void setName(const std::string& name);
@@ -47,6 +48,7 @@ namespace gorn
         void realBackground();
         void realUpdate(double dt);
         void realTouch(const glm::vec2& p);
+        void realTouchEnd(const glm::vec2& p);
 	};
 
     std::unique_ptr<Application> main();
