@@ -71,16 +71,45 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if(_app)
+    [self touches:touches withEnded:NO];
+}
+
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self touches:touches withEnded:NO];
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self touches:touches withEnded:YES];
+}
+
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self touches:touches withEnded:YES];
+}
+
+-(void)touches:(NSSet *)touches withEnded:(BOOL)ended
+{
+    if(_app == nullptr)
     {
-        for(UITouch* touch in touches)
+        return;
+    }
+    for(UITouch* touch in touches)
+    {
+        CGPoint p = [touch locationInView:self.view];
+        p.x = p.x / self.view.bounds.size.width;
+        p.y = p.y / self.view.bounds.size.height;
+        p.x = 2*p.x-1;
+        p.y = 1-2*p.y;
+        glm::vec2 gp(p.x, p.y);
+        if(ended)
         {
-            CGPoint p = [touch locationInView:self.view];
-            p.x = p.x / self.view.bounds.size.width;
-            p.y = p.y / self.view.bounds.size.height;
-            p.x = 2*p.x-1;
-            p.y = 1-2*p.y;
-            _app->realTouch(glm::vec2(p.x, p.y));
+            _app->realTouchEnd(gp);
+        }
+        else
+        {
+            _app->realTouch(gp);
         }
     }
 }

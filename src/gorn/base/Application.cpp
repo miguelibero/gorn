@@ -85,6 +85,10 @@ namespace gorn
     {
     }
 
+    void Application::touchEnd(const glm::vec2& p)
+    {
+    }
+
     void Application::realLoad()
     {
         if(_loaded)
@@ -169,5 +173,14 @@ namespace gorn
             return;
         }
         touch(p);
+    }
+
+    void Application::realTouchEnd(const glm::vec2& p)
+    {
+        if (!_loaded)
+        {
+            return;
+        }
+        touchEnd(p);
     }
 }
