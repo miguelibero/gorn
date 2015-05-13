@@ -36,7 +36,7 @@ namespace gorn
     void Frustum::init()
     {
         auto& m = _matrix;
-        _inverse = glm::affineInverse(m);
+        _inverse = glm::inverse(m);
         _planes[static_cast<size_t>(PlaneType::Right)] = glm::vec4(
                                     m[0][3] - m[0][0],
                                     m[1][3] - m[1][0],

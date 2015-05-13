@@ -28,9 +28,32 @@ namespace gorn
     glm::vec3 Rect::exterior(const glm::vec3& normal) const
     {
         int idx = 0;
-        if( normal.z >= 0 ) idx |= 4;
-        if( normal.y >= 0 ) idx |= 2;
-        if( normal.x >= 0 ) idx |= 1;
+        if( normal.y >= 0)
+        {
+            if( normal.x >= 0)
+            {
+                idx = 0;
+            }
+            else
+            {
+                idx = 1;
+            }
+        }
+        else
+        {
+            if( normal.x >= 0)
+            {
+                idx = 3;
+            }
+            else
+            {
+                idx = 2;
+            }
+        }
+        if( normal.z >= 0 )
+        {
+            idx += 4;
+        }
         return shape().corners()[idx];
     }
 
