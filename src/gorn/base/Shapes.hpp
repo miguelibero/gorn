@@ -10,16 +10,16 @@ namespace gorn
     {
         typedef std::array<glm::vec3,4> Corners;
 
+        glm::vec3 topright;
+        glm::vec3 topleft;
         glm::vec3 bottomleft;  
         glm::vec3 bottomright;
-        glm::vec3 topleft;
-        glm::vec3 topright;
 
         PlaneShape();
-        PlaneShape(const glm::vec3& bottomleft,  
-            const glm::vec3& bottomright,
-            const glm::vec3& topright,
-            const glm::vec3& topleft);
+        PlaneShape(const glm::vec3& topright,  
+            const glm::vec3& topleft,
+            const glm::vec3& bottomleft,
+            const glm::vec3& bottomright);
         PlaneShape(const Corners& corners);
 
         PlaneShape& withTopLeft(const glm::vec3& p);
