@@ -93,9 +93,7 @@ namespace gorn
         size_t _infoUpdatesPerSecond;
         size_t _tempInfoAmount;
         glm::mat4 _viewTrans;
-        bool _viewDirty;
         glm::mat4 _projTrans;
-        bool _projDirty;
         Frustum _frustum;
 
     public:

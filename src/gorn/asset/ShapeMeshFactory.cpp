@@ -13,36 +13,37 @@ namespace gorn
         case DrawMode::Quads:
         {
             return Mesh::Elements{
-                0, 3, 4, 7,
-                1, 2, 5, 6
+                0, 2, 1, 6, 5, 7, 
+                4, 3, 2, 7, 0, 5
             };
             break;
         }
         case DrawMode::Triangles:
         {
             return Mesh::Elements{
-                0, 1, 3, 3, 2, 0,
-                0, 2, 4, 4, 5, 0,
-                0, 5, 7, 7, 1, 0,
-                1, 7, 6, 6, 3, 1,
-                6, 4, 2, 2, 3, 6,
-                4, 6, 7, 7, 5, 4
+                0, 1, 2, 2, 3, 0,
+                1, 5, 6, 6, 2, 1,
+                5, 4, 7, 7, 6, 5,
+                4, 0, 3, 3, 7, 4,
+                2, 6, 7, 7, 3, 2,
+                0, 4, 5, 5, 1, 0
             };
             break;
         }
+
         case DrawMode::Lines:
         {
             return Mesh::Elements{
-                0, 1, 1, 3, 3, 2, 2, 0,
-                4, 5, 5, 7, 7, 6, 6, 4,
-                0, 4, 1, 5, 3, 7, 2, 6
+                0, 1, 1, 2, 2, 3, 3, 0,
+                4, 5, 5, 6, 6, 7, 7, 4,
+                0, 4, 1, 5, 2, 6, 3, 7
             };
             break;
         }
         case DrawMode::Points:
         {
             return Mesh::Elements{
-                0, 1, 3, 2, 4, 5, 7, 6
+                0, 1, 2, 3, 4, 5, 6, 7
             };
             break;
         }
@@ -66,14 +67,14 @@ namespace gorn
         case DrawMode::Triangles:
         {
             return Mesh::Elements{
-                0, 1, 3, 3, 2, 0 
+                0, 1, 2, 2, 3, 0 
             };
             break;
         }
         case DrawMode::Lines:
         {
             return Mesh::Elements{
-                0, 1, 1, 3, 3, 2, 2, 0
+                0, 1, 1, 2, 2, 3, 3, 0
             };
             break;
         }
