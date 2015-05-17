@@ -100,10 +100,10 @@ namespace gorn
         Mesh::Elements elements;
 
         std::vector<glm::vec3> positions{
-            glm::vec3(tmin.x, tmin.y, tmin.z),
-            glm::vec3(tmax.x, tmin.y, tmin.z),
+            glm::vec3(tmax.x, tmax.y, tmin.z),
             glm::vec3(tmin.x, tmax.y, tmin.z),
-            glm::vec3(tmax.x, tmax.y, tmin.z)
+            glm::vec3(tmin.x, tmin.y, tmin.z),
+            glm::vec3(tmax.x, tmin.y, tmin.z)
         };
         std::vector<glm::vec3> normals{
             glm::vec3( 1.0f,  0.0f,  0.0f),

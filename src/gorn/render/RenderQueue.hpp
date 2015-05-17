@@ -46,7 +46,8 @@ namespace gorn
         Checkpoints _checkpoints;
 
     public:
-        RenderQueueDrawState(const Frustum& frustum);
+        RenderQueueDrawState(const Frustum& frustum,
+            const glm::mat4& trans=glm::mat4());
         void updateTransform(const Command& cmd);
         bool checkBounding(const Command& cmd);
         const glm::mat4& getTransform() const;
@@ -94,6 +95,7 @@ namespace gorn
         size_t _tempInfoAmount;
         glm::mat4 _viewTrans;
         glm::mat4 _projTrans;
+        glm::mat4 _modelTrans;
         Frustum _frustum;
 
     public:
@@ -101,6 +103,7 @@ namespace gorn
 
         void setViewTransform(const glm::mat4& view);
         void setProjectionTransform(const glm::mat4& proj);
+        void setModelTransform(const glm::mat4& model);
         const Frustum& getFrustum() const;
 
         void setUniformValue(const std::string& name, const UniformValue& value);
