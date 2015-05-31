@@ -31,7 +31,7 @@ namespace gorn
         FileManager();
 
         bool validate(const std::string& name) const NOEXCEPT;
-	    std::future<buffer> load(const std::string& name, bool cache=false);
+	    std::future<buffer> load(const std::string& name, bool cache=false) NOEXCEPT;
         void preload(const std::string& name, buffer&& data) NOEXCEPT;
         bool unload(const std::string& name) NOEXCEPT;
         void unloadAll() NOEXCEPT;

@@ -75,7 +75,7 @@ namespace gorn
         return false;
     }
 
-	std::future<buffer> FileManager::load(const std::string& name, bool cache)
+	std::future<buffer> FileManager::load(const std::string& name, bool cache) NOEXCEPT
 	{
         auto itr = _files->find(name);
         if(itr != _files->end())
@@ -94,9 +94,12 @@ namespace gorn
                 return load(loader, parts.second, cache);
             }
         }
-       
-		throw Exception(std::string("Could not load file '")
-            +parts.second+"' with tag '"+parts.first+"'.");
+
+        std::promise<buffer> p;
+        p.set_exception(std::make_exception_ptr(
+            Exception(std::string("Could not load file '")
+            +parts.second+"' with tag '"+parts.first+"'.")));
+        return p.get_future();
 	}
 
     bool FileManager::unload(const std::string& name) NOEXCEPT
