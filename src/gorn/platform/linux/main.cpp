@@ -110,6 +110,7 @@ int main(void)
                 p = glm::vec2(xev.xmotion.x, xev.xmotion.y);
                 break;
             case ButtonRelease:
+                p = glm::vec2(xev.xmotion.x, xev.xmotion.y);
                 buttonPressEnded = true;
                 break;
             }
