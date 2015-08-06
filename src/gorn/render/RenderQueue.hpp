@@ -66,10 +66,7 @@ namespace gorn
         std::vector<unsigned> elements;
         DrawMode mode;
         glm::mat4 transform;
-
-        RenderQueueDrawBlock(
-            const std::shared_ptr<Material>& material=nullptr,
-            DrawMode mode=DrawMode::Triangles);
+        Stencil stencil;
 
         bool supports(const RenderCommand& cmd) const;
         void draw(const RenderQueue& queue, Info& info);

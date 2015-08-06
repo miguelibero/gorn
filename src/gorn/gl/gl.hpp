@@ -7,6 +7,7 @@
 #include <gorn/gl/UniformValue.hpp>
 #include <gorn/gl/FrameBuffer.hpp>
 #include <gorn/gl/RenderBuffer.hpp>
+#include <gorn/gl/Stencil.hpp>
 
 #endif
 

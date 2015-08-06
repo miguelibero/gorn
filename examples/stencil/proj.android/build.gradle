@@ -17,7 +17,7 @@ android {
     defaultConfig {
         minSdkVersion 12
         ndk {
-            moduleName "gorn_fbuffer"
+            moduleName "gorn_stencil"
             stl "c++_shared"
         }
     }

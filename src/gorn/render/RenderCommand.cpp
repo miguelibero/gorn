@@ -137,6 +137,13 @@ namespace gorn
         return *this;
     }
 
+
+    RenderCommand& RenderCommand::withStencil(const Stencil& stencil)
+    {
+        _stencil = stencil;
+        return *this;
+    }
+
     RenderCommand::Elements& RenderCommand::getElements()
     {
         return _elements;
@@ -195,6 +202,11 @@ namespace gorn
     RenderCommand::TransformMode RenderCommand::getTransformMode() const
     {
         return _transformMode;
+    }
+
+    const Stencil& RenderCommand::getStencil() const
+    {
+        return _stencil;
     }
 
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const

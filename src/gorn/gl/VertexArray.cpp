@@ -220,6 +220,11 @@ namespace gorn
         }
     }
 
+    void VertexArray::draw(size_t count, size_t offset)
+    {
+        draw(count, DrawMode::Triangles, offset);
+    }
+
     void VertexArray::draw(size_t count, DrawMode mode, size_t offset)
     {
         activate();

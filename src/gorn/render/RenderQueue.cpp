@@ -144,7 +144,10 @@ namespace gorn
             if(!block.supports(cmd))
             {
                 block.draw(*this, _tempInfo);
-                block = DrawBlock(cmd.getMaterial(), cmd.getDrawMode());
+                block = DrawBlock();
+                block.material = cmd.getMaterial();
+                block.mode = cmd.getDrawMode();
+                block.stencil = cmd.getStencil();
                 auto ditr = itr;
                 while(ditr != commands.end() && block.supports(*ditr))
                 {
@@ -163,16 +166,11 @@ namespace gorn
         block.draw(*this, _tempInfo);
     }
 
-    RenderQueueDrawBlock::RenderQueueDrawBlock(
-        const std::shared_ptr<Material>& material,
-        DrawMode mode):
-        material(material), mode(mode)
-    {
-    }
-
     bool RenderQueueDrawBlock::supports(const RenderCommand& cmd) const
     {
-        return cmd.getMaterial() == material && cmd.getDrawMode() == mode;
+        return cmd.getMaterial() == material
+            && cmd.getDrawMode() == mode
+            && cmd.getStencil() == stencil;
     }
 
     void RenderQueueDrawBlock::draw(const RenderQueue& queue,
@@ -200,6 +198,7 @@ namespace gorn
         vao.setUniformValues(queue.getUniformValues());
         vao.setUniformValue(UniformKind::Model, transform);
     
+        stencil.apply();
         vao.draw(elmsCount, mode);
         info.vertexCount += vertsCount;
         info.drawCalls++;

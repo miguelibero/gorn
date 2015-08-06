@@ -5,6 +5,7 @@
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/gl/VertexArray.hpp>
 #include <gorn/gl/Material.hpp>
+#include <gorn/gl/Stencil.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 
@@ -68,6 +69,7 @@ namespace gorn
         TransformMode _transformMode;
         BoundingMode _boundingMode;
         Rect _boundingBox;
+        Stencil _stencil;        
 
     public:
         RenderCommand();
@@ -86,6 +88,8 @@ namespace gorn
         RenderCommand& withBounding(const Rect& rect,
             BoundingMode mode=BoundingMode::Local);
         RenderCommand& withBoundingMode(BoundingMode mode);
+
+        RenderCommand& withStencil(const Stencil& stencil);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -110,6 +114,8 @@ namespace gorn
 
         BoundingMode getBoundingMode() const;
         const Rect& getBoundingBox() const;
+
+        const Stencil& getStencil() const;
 
     };
 }

@@ -13,8 +13,34 @@ namespace gorn
         Stencil
     };
 
+    enum class StencilFunction
+    {
+        Always,
+        Never,
+        Less,
+        LessEqual,
+        Greater,
+        GreaterEqual,
+        Equal,
+        NotEqual
+    };
+
+    enum class StencilAction
+    {
+        Keep,
+        Zero,
+        Replace,
+        Increment,
+        IncrementWrap,
+        Decrement,
+        DecrementWrap,
+        Invert
+    };
+
     GLenum getGlDrawMode(DrawMode mode);
     GLenum getGlBasicType(BasicType type);
+    GLenum getGlStencilFunction(StencilFunction func);
+    GLenum getGlStencilAction(StencilAction act);
 }
 
 #endif
