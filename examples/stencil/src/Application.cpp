@@ -154,6 +154,7 @@ void StencilApplication::load()
 
     _vao.addVertexData(vbo, vdef);
 
+    glClearStencil(0);
 }
 
 void StencilApplication::update(double dt)
@@ -181,12 +182,12 @@ void StencilApplication::draw()
         .withFunction(StencilFunction::Always)
         .withReferenceValue(1)
         .withFailAction(StencilAction::Keep)
-        .withPassAction(StencilAction::Keep)
+        .withPassAction(StencilAction::Replace)
         .withMask(0xFF);
 
     stencil.apply();
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glDepthMask(GL_FALSE);
-    glClear(GL_STENCIL_BUFFER_BIT);
 
 	_vao.draw(6, 36);
 
@@ -195,6 +196,7 @@ void StencilApplication::draw()
         .withMask(0x00);
 
     stencil.apply();
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDepthMask(GL_TRUE);
 
     _vao.getMaterial()->setUniformValue(

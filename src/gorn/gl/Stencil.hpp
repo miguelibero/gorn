@@ -29,7 +29,19 @@ namespace gorn
         bool operator!=(const Stencil& other) const;
 
         void apply();
+
+        static Stencil current();
         
+    };
+
+    class StencilGuard
+    {
+    public:
+        Stencil _old;
+        Stencil _new;
+    public:
+        StencilGuard(const Stencil& stencil);
+        ~StencilGuard();
     };
 }
 

@@ -6,6 +6,8 @@
 #include <gorn/gl/VertexArray.hpp>
 #include <gorn/gl/Material.hpp>
 #include <gorn/gl/Stencil.hpp>
+#include <gorn/gl/ClearAction.hpp>
+#include <gorn/gl/FeatureState.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 
@@ -60,6 +62,7 @@ namespace gorn
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef unsigned elm_t;
         typedef std::vector<elm_t> Elements;
+
     private:
         AttributeMap _attributes;
         Elements _elements;
@@ -69,7 +72,9 @@ namespace gorn
         TransformMode _transformMode;
         BoundingMode _boundingMode;
         Rect _boundingBox;
-        Stencil _stencil;        
+        Stencil _stencil;
+        ClearAction _clearAction;
+        FeatureState _featureState;
 
     public:
         RenderCommand();
@@ -90,6 +95,8 @@ namespace gorn
         RenderCommand& withBoundingMode(BoundingMode mode);
 
         RenderCommand& withStencil(const Stencil& stencil);
+        RenderCommand& withClear(const ClearAction& clear);
+        RenderCommand& withFeatures(const FeatureState& features);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -116,6 +123,8 @@ namespace gorn
         const Rect& getBoundingBox() const;
 
         const Stencil& getStencil() const;
+        const ClearAction& getClearAction() const;
+        const FeatureState& getFeatureState() const;
 
     };
 }

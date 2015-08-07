@@ -137,10 +137,21 @@ namespace gorn
         return *this;
     }
 
-
     RenderCommand& RenderCommand::withStencil(const Stencil& stencil)
     {
         _stencil = stencil;
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withClear(const ClearAction& clear)
+    {
+        _clearAction = clear;
+        return *this;
+    }
+
+    RenderCommand& RenderCommand::withFeatures(const FeatureState& features)
+    {
+        _featureState = features;
         return *this;
     }
 
@@ -207,6 +218,26 @@ namespace gorn
     const Stencil& RenderCommand::getStencil() const
     {
         return _stencil;
+    }
+
+    const ClearAction& RenderCommand::getClearAction() const
+    {
+        return _clearAction;
+    }
+
+    const FeatureState& RenderCommand::getFeatureState() const
+    {
+        return _featureState;
+    }
+
+    RenderCommand::BoundingMode RenderCommand::getBoundingMode() const
+    {
+        return _boundingMode;
+    }
+
+    const Rect& RenderCommand::getBoundingBox() const
+    {
+        return _boundingBox;
     }
 
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
@@ -296,16 +327,6 @@ namespace gorn
                 elms.push_back(s+i);
             }
         }
-    }
-
-    RenderCommand::BoundingMode RenderCommand::getBoundingMode() const
-    {
-        return _boundingMode;
-    }
-
-    const Rect& RenderCommand::getBoundingBox() const
-    {
-        return _boundingBox;
     }
 
 }

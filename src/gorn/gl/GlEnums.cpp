@@ -42,6 +42,46 @@ namespace gorn
         }
     }
 
+    StencilFunction getStencilFunctionFromGl(GLenum gl)
+    {
+        if(gl == GL_ALWAYS)
+        {
+            return StencilFunction::Always;
+        }
+        else if(gl == GL_NEVER)
+        {
+            return StencilFunction::Never;
+        }
+        else if(gl == GL_LESS)
+        {
+            return StencilFunction::Less;
+        }
+        else if(gl == GL_LEQUAL)
+        {
+            return StencilFunction::LessEqual;
+        }
+        else if(gl == GL_GREATER)
+        {
+            return StencilFunction::Greater;
+        }
+        else if(gl == GL_GEQUAL)
+        {
+            return StencilFunction::GreaterEqual;
+        }
+        else if(gl == GL_EQUAL)
+        {
+            return StencilFunction::Equal;
+        }
+        else if(gl == GL_NOTEQUAL)
+        {
+            return StencilFunction::NotEqual;
+        }
+        else
+        {
+            throw Exception("Invalid OpenGL stencil function.");
+        }
+    }
+
     GLenum getGlStencilFunction(StencilFunction func)
     {
         switch(func)
@@ -67,6 +107,46 @@ namespace gorn
         }
     }
 
+    StencilAction getStencilActionFromGl(GLenum gl)
+    {
+        if(gl == GL_KEEP)
+        {
+            return StencilAction::Keep;
+        }
+        else if(gl == GL_ZERO)
+        {
+            return StencilAction::Zero;
+        }
+        else if(gl == GL_REPLACE)
+        {
+            return StencilAction::Replace;
+        }
+        else if(gl == GL_INCR)
+        {
+            return StencilAction::Increment;
+        }
+        else if(gl == GL_INCR_WRAP)
+        {
+            return StencilAction::IncrementWrap;
+        }
+        else if(gl == GL_DECR)
+        {
+            return StencilAction::Decrement;
+        }
+        else if(gl == GL_DECR_WRAP)
+        {
+            return StencilAction::DecrementWrap;
+        }
+        else if(gl == GL_INVERT)
+        {
+            return StencilAction::Invert;
+        }
+        else
+        {
+            throw Exception("Invalid OpenGL stencil action.");
+        }
+    }
+
     GLenum getGlStencilAction(StencilAction act)
     {
         switch(act)
@@ -87,6 +167,34 @@ namespace gorn
                 return GL_DECR_WRAP;
             case StencilAction::Invert:
                 return GL_INVERT;
+            default:
+                return 0;
+        }
+    }
+
+    GLenum getGlClearBufferBit(ClearType type)
+    {
+        switch(type)
+        {
+            case ClearType::Color:
+                return GL_COLOR_BUFFER_BIT;
+            case ClearType::Stencil:
+                return GL_STENCIL_BUFFER_BIT;
+            case ClearType::Depth:
+                return GL_DEPTH_BUFFER_BIT;
+            default:
+                return 0;
+        }
+    }
+
+    GLenum getGlFeature(FeatureType type)
+    {
+        switch(type)
+        {
+            case FeatureType::StencilTest:
+                return GL_STENCIL_TEST;
+            case FeatureType::DepthTest:
+                return GL_DEPTH_TEST;
             default:
                 return 0;
         }

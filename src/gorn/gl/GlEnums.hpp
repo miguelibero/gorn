@@ -37,10 +37,34 @@ namespace gorn
         Invert
     };
 
+    enum class ClearType
+    {
+        Color,
+        Depth,
+        Stencil
+    };
+
+    enum class FeatureType
+    {
+        DepthTest,
+        StencilTest,
+        AlphaTest,
+        RedMask,
+        GreenMask,
+        BlueMask,
+        AlphaMask
+    };
+
     GLenum getGlDrawMode(DrawMode mode);
     GLenum getGlBasicType(BasicType type);
+
+    StencilFunction getStencilFunctionFromGl(GLenum gl);
     GLenum getGlStencilFunction(StencilFunction func);
+    StencilAction getStencilActionFromGl(GLenum gl);
     GLenum getGlStencilAction(StencilAction act);
+
+    GLbitfield getGlClearBufferBit(ClearType type);
+    GLenum getGlFeature(FeatureType type);
 }
 
 #endif

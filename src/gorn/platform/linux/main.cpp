@@ -13,7 +13,10 @@
 int main(void)
 {
     Window root;
-    GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+    GLint att[] = { GLX_RGBA,
+        GLX_DEPTH_SIZE, 24,
+        GLX_DOUBLEBUFFER, None,
+        GLX_STENCIL_SIZE, 8 };
     XVisualInfo *vi;
     Colormap cmap;
     XSetWindowAttributes swa;

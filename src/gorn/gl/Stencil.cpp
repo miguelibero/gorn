@@ -57,11 +57,43 @@ namespace gorn
         return !(*this == other);
     }
 
+    Stencil Stencil::current()
+    {
+        Stencil stencil;
+        GLint val;
+        glGetIntegerv(GL_STENCIL_FUNC, &val);
+        stencil.withFunction(getStencilFunctionFromGl(val));
+        glGetIntegerv(GL_STENCIL_WRITEMASK, &val);
+        stencil.withMask(val);
+        glGetIntegerv(GL_STENCIL_REF, &val);
+        stencil.withReferenceValue(val);
+        glGetIntegerv(GL_STENCIL_FAIL, &val);
+        stencil.withFailAction(getStencilActionFromGl(val));
+        glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &val);
+        stencil.withPassAction(getStencilActionFromGl(val));
+        return stencil;
+    }
+
     void Stencil::apply()
     {
         glStencilFunc(getGlStencilFunction(_function), _refValue, 0xFF);
+        checkGlError("setting stencil function");
         glStencilOp(getGlStencilAction(_failAction),
-            getGlStencilAction(_passAction), GL_REPLACE);
+            getGlStencilAction(_failAction), getGlStencilAction(_passAction));
+        checkGlError("setting stencil operation");
         glStencilMask(_mask);
+        checkGlError("setting stencil mask");
+    }
+
+    StencilGuard::StencilGuard(const Stencil& stencil) :
+    _old(Stencil::current()),
+    _new(stencil)
+    {
+        _new.apply();
+    }
+
+    StencilGuard::~StencilGuard()
+    {
+        _old.apply();
     }
 }
