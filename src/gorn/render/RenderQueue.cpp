@@ -117,8 +117,8 @@ namespace gorn
         }
         _tempInfoAmount++;
 
-        DrawState state(_frustum, _modelTrans);
-        DrawBlock block;
+        State state(_frustum, _modelTrans);
+        Block block;
 
         std::vector<Command> commands;
         {
@@ -131,25 +131,15 @@ namespace gorn
         {
             auto& cmd = *itr;
             state.updateTransform(cmd);
-            if(!cmd.getMaterial())
-            {
-                continue;
-            }
-            if(!state.checkBounding(cmd))
-            {
-                _tempInfo.drawCallsCulled++;
-                continue;
-            }
             auto& transform = state.getTransform();
             if(!block.supports(cmd))
             {
                 block.draw(*this, _tempInfo);
-                block = DrawBlock(cmd.getMaterial(), cmd.getDrawMode());
+                block = Block(cmd);
                 auto ditr = itr;
                 while(ditr != commands.end() && block.supports(*ditr))
                 {
-                    block.definition += cmd.getVertexDefinition(
-                        *block.material->getProgram());
+                    block.addDefinition(cmd);
                     ++ditr;
                 }
             }
@@ -157,50 +147,82 @@ namespace gorn
             {
                 _tempInfo.drawCallsBatched++;
             }
-            cmd.getVertexData(block.vertices, block.elements,
-                block.definition, transform);
+            if(!state.checkBounding(cmd))
+            {
+                _tempInfo.drawCallsCulled++;
+            }
+            else
+            {
+                block.addData(cmd, transform);
+            }
         }
         block.draw(*this, _tempInfo);
     }
 
-    RenderQueueDrawBlock::RenderQueueDrawBlock(
-        const std::shared_ptr<Material>& material,
-        DrawMode mode):
-        material(material), mode(mode)
+    RenderQueueBlock::RenderQueueBlock()
     {
     }
 
-    bool RenderQueueDrawBlock::supports(const RenderCommand& cmd) const
+    RenderQueueBlock::RenderQueueBlock(const RenderCommand& cmd):
+    _material(cmd.getMaterial()),
+    _mode(cmd.getDrawMode()),
+    _stencil(cmd.getStencil()),
+    _clearAction(cmd.getClearAction()),
+    _stateChange(cmd.getStateChange())
     {
-        return cmd.getMaterial() == material && cmd.getDrawMode() == mode;
     }
 
-    void RenderQueueDrawBlock::draw(const RenderQueue& queue,
+    void RenderQueueBlock::addDefinition(const RenderCommand& cmd)
+    {
+        _definition += cmd.getVertexDefinition(*_material->getProgram());
+    }
+
+    void RenderQueueBlock::addData(const RenderCommand& cmd,
+        const glm::mat4& trans)
+    {
+        cmd.getVertexData(_vertices, _elements, _definition, trans);
+    }
+
+    bool RenderQueueBlock::supports(const RenderCommand& cmd) const
+    {
+        return true
+            && cmd.getClearAction().empty()
+            && cmd.getMaterial() == _material
+            && cmd.getDrawMode() == _mode
+            && cmd.getStencil() == _stencil
+            && cmd.getStateChange() == _stateChange;
+    }
+
+    void RenderQueueBlock::draw(const RenderQueue& queue,
         Info& info)
     {
-        if(vertices.empty() || material == nullptr
-            || material->getProgram() == nullptr)
+        _stateChange.apply();
+        _stencil.apply();
+        _clearAction.apply();
+
+        if(_vertices.empty() || _material == nullptr
+            || _material->getProgram() == nullptr)
         {
             return;
         }
 
         VertexArray vao;
         auto usage = VertexBuffer::Usage::StaticDraw;
-        auto elmsCount = elements.size();
-        auto vertsCount = vertices.size()/definition.getElementSize();
-        vao.setMaterial(material);
+        auto elmsCount = _elements.size();
+        auto vertsCount = _vertices.size()/_definition.getElementSize();
+        vao.setMaterial(_material);
         vao.addVertexData(std::make_shared<VertexBuffer>(
-            std::move(vertices), usage,
+            std::move(_vertices), usage,
             VertexBuffer::Target::ArrayBuffer),
-            definition);
+            _definition);
         vao.setElementData(std::make_shared<VertexBuffer>(
-            std::move(elements), usage,
+            std::move(_elements), usage,
             VertexBuffer::Target::ElementArrayBuffer));
         
         vao.setUniformValues(queue.getUniformValues());
-        vao.setUniformValue(UniformKind::Model, transform);
-    
-        vao.draw(elmsCount, mode);
+        vao.setUniformValue(UniformKind::Model, _transform);
+
+        vao.draw(elmsCount, _mode);
         info.vertexCount += vertsCount;
         info.drawCalls++;
     }
@@ -226,16 +248,16 @@ namespace gorn
         return result;
     }
 
-    Rect RenderQueueDrawState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));
+    Rect RenderQueueState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));
 
-    RenderQueueDrawState::RenderQueueDrawState(
+    RenderQueueState::RenderQueueState(
         const Frustum& frustum, const glm::mat4& trans):
     _boundingEnds(0), _frustum(frustum), _baseFrustum(frustum)
     {
         _transforms.push(trans);
     }
 
-    void RenderQueueDrawState::updateTransform(const Command& cmd)
+    void RenderQueueState::updateTransform(const Command& cmd)
     {
         bool changed = false;
         switch(cmd.getTransformMode())
@@ -275,7 +297,7 @@ namespace gorn
         }
     }
 
-    bool RenderQueueDrawState::checkBounding(const Command& cmd)
+    bool RenderQueueState::checkBounding(const Command& cmd)
     {
         auto bound = cmd.getBoundingMode();
         if(bound == BoundingMode::End)
@@ -303,7 +325,7 @@ namespace gorn
         return true;
     }
 
-    const glm::mat4& RenderQueueDrawState::getTransform() const
+    const glm::mat4& RenderQueueState::getTransform() const
     {
         return _transforms.top();
     }

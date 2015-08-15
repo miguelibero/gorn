@@ -1,5 +1,5 @@
-#ifndef __gorn_GlBase__
-#define __gorn_GlBase__
+#ifndef __gorn__Base__
+#define __gorn__Base__
 
 #ifdef GORN_PLATFORM_IOS
 #import <OpenGLES/ES2/glext.h>

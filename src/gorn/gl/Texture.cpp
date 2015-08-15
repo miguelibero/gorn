@@ -1,5 +1,5 @@
 #include <gorn/gl/Texture.hpp>
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/asset/Image.hpp>
 
 namespace gorn

@@ -2,7 +2,7 @@
 #define __gorn__RenderQueue__
 
 #include <gorn/render/RenderCommand.hpp>
-#include <gorn/render/RenderEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/base/Frustum.hpp>
 #include <glm/glm.hpp>
 #include <stack>
@@ -30,7 +30,7 @@ namespace gorn
         RenderQueueInfo average(size_t amount) const;
     };
 
-    class RenderQueueDrawState
+    class RenderQueueState
     {
         typedef RenderCommand Command;
         typedef std::stack<glm::mat4> Transforms;
@@ -46,7 +46,7 @@ namespace gorn
         Checkpoints _checkpoints;
 
     public:
-        RenderQueueDrawState(const Frustum& frustum,
+        RenderQueueState(const Frustum& frustum,
             const glm::mat4& trans=glm::mat4());
         void updateTransform(const Command& cmd);
         bool checkBounding(const Command& cmd);
@@ -55,24 +55,29 @@ namespace gorn
 
     class RenderQueue;
 
-    struct RenderQueueDrawBlock
+    class RenderQueueBlock
     {
+    public:    
         typedef RenderQueueInfo Info;
-        typedef RenderQueueDrawState DrawState;
+        typedef RenderCommand::Elements Elements;
+    private:
+        std::shared_ptr<Material> _material;
+        VertexDefinition _definition;
+        buffer _vertices;
+        Elements _elements;
+        DrawMode _mode;
+        glm::mat4 _transform;
+        Stencil _stencil;
+        ClearAction _clearAction;
+        StateChange _stateChange;
 
-        std::shared_ptr<Material> material;
-        VertexDefinition definition;
-        buffer vertices;
-        std::vector<unsigned> elements;
-        DrawMode mode;
-        glm::mat4 transform;
-
-        RenderQueueDrawBlock(
-            const std::shared_ptr<Material>& material=nullptr,
-            DrawMode mode=DrawMode::Triangles);
-
+    public:
+        RenderQueueBlock();
+        RenderQueueBlock(const RenderCommand& cmd);
         bool supports(const RenderCommand& cmd) const;
         void draw(const RenderQueue& queue, Info& info);
+        void addDefinition(const RenderCommand& cmd);
+        void addData(const RenderCommand& cmd, const glm::mat4& trans);
     };
 
     class RenderQueue
@@ -80,8 +85,8 @@ namespace gorn
     public:
         typedef RenderCommand Command;
         typedef RenderQueueInfo Info;
-        typedef RenderQueueDrawBlock DrawBlock;
-        typedef RenderQueueDrawState DrawState;
+        typedef RenderQueueBlock Block;
+        typedef RenderQueueState State;
         typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
         MaterialManager& _materials;

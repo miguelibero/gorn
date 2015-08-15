@@ -7,7 +7,7 @@
 #include <buffer_writer.hpp>
 #include <glm/glm.hpp>
 #include <gorn/base/Config.hpp>
-#include <gorn/render/RenderEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/render/RenderCommand.hpp>
 
 namespace gorn

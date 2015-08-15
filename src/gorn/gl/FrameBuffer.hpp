@@ -1,10 +1,10 @@
 #ifndef __gorn__FrameBuffer__
 #define __gorn__FrameBuffer__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/gl/Texture.hpp>
 #include <gorn/gl/RenderBuffer.hpp>
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <memory>
 
 namespace gorn

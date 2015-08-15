@@ -77,8 +77,10 @@ void QueueApplication::load()
 
 void QueueApplication::draw()
 {
-    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    _ctx.getQueue().addCommand()
+        .withClear(ClearAction()
+            .withColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f))
+            .withType(ClearType::Color));
 
     _ctx.getQueue().addCommand("sprite:kitten")
         .withAttribute(AttributeKind::Position, {

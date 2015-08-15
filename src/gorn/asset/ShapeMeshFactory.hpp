@@ -4,7 +4,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <gorn/base/Config.hpp>
-#include <gorn/render/RenderEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/asset/Mesh.hpp>
 
 namespace gorn

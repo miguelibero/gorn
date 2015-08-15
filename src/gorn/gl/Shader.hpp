@@ -1,7 +1,7 @@
 #ifndef __gorn__Shader__
 #define __gorn__Shader__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 
 class buffer;
 

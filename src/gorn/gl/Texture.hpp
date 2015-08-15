@@ -1,7 +1,7 @@
 #ifndef __gorn__Texture__
 #define __gorn__Texture__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <glm/glm.hpp>
 #include <map>
 #include <vector>

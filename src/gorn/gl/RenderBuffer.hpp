@@ -1,8 +1,8 @@
 #ifndef __gorn__RenderBuffer__
 #define __gorn__RenderBuffer__
 
-#include <gorn/gl/GlBase.hpp>
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Base.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <glm/glm.hpp>
 
 namespace gorn

@@ -4,7 +4,7 @@
 #include <X11/Xlib.h>
 #include <gorn/base/Application.hpp>
 #include <gorn/base/Exception.hpp>
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <GL/glx.h>
 #include <GL/glew.h>
 #include <sys/time.h>
@@ -13,7 +13,11 @@
 int main(void)
 {
     Window root;
-    GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+    GLint att[] = { GLX_RGBA,
+        GLX_DEPTH_SIZE, 24,
+        GLX_DOUBLEBUFFER,
+        GLX_STENCIL_SIZE, 8,
+        None };
     XVisualInfo *vi;
     Colormap cmap;
     XSetWindowAttributes swa;

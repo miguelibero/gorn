@@ -1,8 +1,8 @@
 #ifndef __gorn__VertexArray__
 #define __gorn__VertexArray__
 
-#include <gorn/gl/GlEnums.hpp>
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Enums.hpp>
+#include <gorn/gl/Base.hpp>
 #include <vector>
 #include <map>
 #include <memory>
@@ -56,7 +56,8 @@ namespace gorn
 	    void setUniformValue(const GLint& location, const UniformValue& value);
         void setUniformValues(const UniformValueMap& values);
 
-        void draw(size_t count, DrawMode mode=DrawMode::Triangles, size_t offset=0);
+        void draw(size_t count, DrawMode mode, size_t offset=0);
+        void draw(size_t count, size_t offset=0);
     };
 }
 

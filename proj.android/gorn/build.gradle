@@ -4,31 +4,31 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.0'
+        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
     }
 }
 
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.model.library'
 
-android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
-
-    defaultConfig {
-        minSdkVersion 12
-        ndk {
-            moduleName "gorn"
-            stl "c++_shared"
-        }
+model {
+    android {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1.2"
     }
-
-    sourceSets {
+    android.ndk {
+        moduleName = "gorn"
+        toolchain = "clang"
+        stl = "c++_shared"
+    }
+    android.sources {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+            manifest.source.srcDirs = ['.']
+            java.source.srcDirs = ['src']
+            jni.source.srcDirs = []
+            res.source.srcDirs = ['res']
+            assets.source.srcDirs = ['assets']
         }
     }
 }
+
 

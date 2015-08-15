@@ -4,6 +4,6 @@ public class MainActivity extends me.ibero.gorn.MainActivity
 {
     static
     {
-		System.loadLibrary("gorn_kitten");
+		System.loadLibrary("gorn_fbuffer");
     }
 }

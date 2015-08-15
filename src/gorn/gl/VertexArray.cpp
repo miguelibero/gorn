@@ -3,7 +3,6 @@
 #include <gorn/gl/VertexBuffer.hpp>
 #include <gorn/gl/Program.hpp>
 #include <gorn/gl/Material.hpp>
-#include <gorn/gl/GlEnums.hpp>
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/base/Exception.hpp>
 #include <algorithm>
@@ -218,6 +217,11 @@ namespace gorn
         {
             setUniformValue(itr->first, itr->second);
         }
+    }
+
+    void VertexArray::draw(size_t count, size_t offset)
+    {
+        draw(count, DrawMode::Triangles, offset);
     }
 
     void VertexArray::draw(size_t count, DrawMode mode, size_t offset)

@@ -17,7 +17,7 @@ android {
     defaultConfig {
         minSdkVersion 12
         ndk {
-            moduleName "gorn_kitten"
+            moduleName "gorn_fbuffer"
             stl "c++_shared"
         }
     }

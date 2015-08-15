@@ -3,7 +3,7 @@
 
 #include <buffer.hpp>
 #include <gorn/base/Config.hpp>
-#include <gorn/render/RenderEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <glm/glm.hpp>
 
 namespace gorn

@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <gorn/render/Gl.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/base/Application.hpp>
 
 HDC hDC;

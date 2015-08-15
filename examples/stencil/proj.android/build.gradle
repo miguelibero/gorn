@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
+    }
+}
+
+apply plugin: 'com.android.model.application'
+
+model {
+    android {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1.2"
+    }
+    android.ndk {
+        moduleName = "gorn_stencil"
+        toolchain = "clang"
+        stl = "c++_shared"
+    }
+    android.sources {
+        main {
+            manifest.source.srcDirs = ['.']
+            java.source.srcDirs = ['src']
+            jni.source.srcDirs = []
+            res.source.srcDirs = ['res']
+            assets.source.srcDirs = ['../assets']
+        }
+    }
+}
+
+dependencies {
+    compile project(':gorn')
+}
+
+tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
+    pkgTask.jniFolders = new HashSet<File>()
+    pkgTask.jniFolders.add(new File(projectDir, 'libs'))
+}
+

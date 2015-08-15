@@ -3,8 +3,10 @@
 
 #include <buffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <gorn/gl/VertexArray.hpp>
 #include <gorn/gl/Material.hpp>
+#include <gorn/gl/Stencil.hpp>
+#include <gorn/gl/ClearAction.hpp>
+#include <gorn/gl/StateChange.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 
@@ -59,6 +61,7 @@ namespace gorn
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef unsigned elm_t;
         typedef std::vector<elm_t> Elements;
+
     private:
         AttributeMap _attributes;
         Elements _elements;
@@ -68,6 +71,9 @@ namespace gorn
         TransformMode _transformMode;
         BoundingMode _boundingMode;
         Rect _boundingBox;
+        Stencil _stencil;
+        ClearAction _clearAction;
+        StateChange _stateChange;
 
     public:
         RenderCommand();
@@ -86,6 +92,10 @@ namespace gorn
         RenderCommand& withBounding(const Rect& rect,
             BoundingMode mode=BoundingMode::Local);
         RenderCommand& withBoundingMode(BoundingMode mode);
+
+        RenderCommand& withStencil(const Stencil& stencil);
+        RenderCommand& withClearAction(const ClearAction& clear);
+        RenderCommand& withStateChange(const StateChange& change);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -110,6 +120,10 @@ namespace gorn
 
         BoundingMode getBoundingMode() const;
         const Rect& getBoundingBox() const;
+
+        const Stencil& getStencil() const;
+        const ClearAction& getClearAction() const;
+        const StateChange& getStateChange() const;
 
     };
 }
