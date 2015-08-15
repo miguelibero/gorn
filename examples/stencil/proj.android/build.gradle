@@ -4,61 +4,35 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.0'
+        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
     }
 }
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.model.application'
 
-android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
-
-    defaultConfig {
-        minSdkVersion 12
-        ndk {
-            moduleName "gorn_stencil"
-            stl "c++_shared"
-        }
+model {
+    android {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1.2"
     }
-
-    dependencies {
-        compile project(':gorn')
+    android.ndk {
+        moduleName = "gorn_stencil"
+        toolchain = "clang"
+        stl = "c++_shared"
     }
-
-    buildTypes {
-        debug {
-            jniDebuggable true
-        }
-    }
-
-    sourceSets {
+    android.sources {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['../assets']
+            manifest.source.srcDirs = ['.']
+            java.source.srcDirs = ['src']
+            jni.source.srcDirs = []
+            res.source.srcDirs = ['res']
+            assets.source.srcDirs = ['../assets']
         }
     }
 }
 
-import org.apache.tools.ant.taskdefs.condition.Os
-
-task ndkBuild(type: Exec) {
-    def params = ['-j']
-    def env = ['NDK_DEBUG': '1']
-    def cmd = [];
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        cmd += 'ndk-build.cmd'
-    } else {
-        cmd += 'ndk-build'
-    }
-    environment env
-    commandLine cmd + params
-}
-
-tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn ndkBuild
+dependencies {
+    compile project(':gorn')
 }
 
 tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->

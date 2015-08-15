@@ -164,8 +164,12 @@ void StencilApplication::update(double dt)
 
 void StencilApplication::draw()
 {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    ClearAction()
+        .withColor(glm::vec4(1.0f))
+        .withType(ClearType::Color)
+        .withType(ClearType::Depth)
+        .withType(ClearType::Stencil)
+        .apply();
 
     _vao.getMaterial()->setUniformValue(
         UniformKind::Color, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -178,25 +182,18 @@ void StencilApplication::draw()
 
     glEnable(GL_STENCIL_TEST);
 
-    auto stencil = Stencil()
-        .withFunction(StencilFunction::Always)
-        .withReferenceValue(1)
-        .withFailAction(StencilAction::Keep)
-        .withPassAction(StencilAction::Replace)
-        .withMask(0xFF);
-
-    stencil.apply();
-    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    // Draw floor
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF);
     glDepthMask(GL_FALSE);
+    glClear(GL_STENCIL_BUFFER_BIT);
 
 	_vao.draw(6, 36);
 
-    stencil
-        .withFunction(StencilFunction::Equal)
-        .withMask(0x00);
-
-    stencil.apply();
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    // Draw cube reflection
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilMask(0x00);
     glDepthMask(GL_TRUE);
 
     _vao.getMaterial()->setUniformValue(

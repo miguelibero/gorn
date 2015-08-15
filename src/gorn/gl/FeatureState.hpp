@@ -28,6 +28,17 @@ namespace gorn
 
         static FeatureState current();
     };
+
+
+    class FeatureStateGuard
+    {
+    public:
+        FeatureState _old;
+        FeatureState _new;
+    public:
+        FeatureStateGuard(const FeatureState& state);
+        ~FeatureStateGuard();
+    };
 }
 
 #endif

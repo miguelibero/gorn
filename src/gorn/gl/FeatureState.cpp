@@ -67,7 +67,18 @@ namespace gorn
                 glDisable(glf);
             }
         }
+    }
 
+    FeatureStateGuard::FeatureStateGuard(const FeatureState& state) :
+    _old(FeatureState::current()),
+    _new(state)
+    {
+        _new.apply();
+    }
+
+    FeatureStateGuard::~FeatureStateGuard()
+    {
+        _old.apply();
     }
 
 }
