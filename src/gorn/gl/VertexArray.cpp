@@ -3,7 +3,7 @@
 #include <gorn/gl/VertexBuffer.hpp>
 #include <gorn/gl/Program.hpp>
 #include <gorn/gl/Material.hpp>
-#include <gorn/render/VertexDefinition.hpp>
+#include <gorn/gl/VertexDefinition.hpp>
 #include <gorn/base/Exception.hpp>
 #include <algorithm>
 

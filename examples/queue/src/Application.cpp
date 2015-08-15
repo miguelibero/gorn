@@ -78,7 +78,7 @@ void QueueApplication::load()
 void QueueApplication::draw()
 {
     _ctx.getQueue().addCommand()
-        .withClear(ClearAction()
+        .withClearAction(ClearAction()
             .withColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f))
             .withType(ClearType::Color));
 

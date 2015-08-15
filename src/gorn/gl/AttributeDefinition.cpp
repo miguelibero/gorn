@@ -1,4 +1,4 @@
-#include <gorn/render/AttributeDefinition.hpp>
+#include <gorn/gl/AttributeDefinition.hpp>
 
 namespace gorn
 {

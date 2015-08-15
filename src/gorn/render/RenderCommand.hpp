@@ -2,7 +2,7 @@
 #define __gorn__RenderCommand__
 
 #include <buffer.hpp>
-#include <gorn/render/VertexDefinition.hpp>
+#include <gorn/gl/VertexDefinition.hpp>
 #include <gorn/gl/Material.hpp>
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>

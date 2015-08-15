@@ -1,7 +1,7 @@
 #ifndef __gorn__VertexDefinition__
 #define __gorn__VertexDefinition__
 
-#include <gorn/render/AttributeDefinition.hpp>
+#include <gorn/gl/AttributeDefinition.hpp>
 #include <map>
 
 namespace gorn

@@ -1,4 +1,4 @@
-#include <gorn/render/VertexDefinition.hpp>
+#include <gorn/gl/VertexDefinition.hpp>
 
 namespace gorn
 {
