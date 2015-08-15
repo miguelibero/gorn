@@ -1,7 +1,7 @@
 #ifndef __gorn__UniformValue__
 #define __gorn__UniformValue__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>

@@ -2,7 +2,7 @@
 #define __gorn__RenderQueue__
 
 #include <gorn/render/RenderCommand.hpp>
-#include <gorn/render/RenderEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/base/Frustum.hpp>
 #include <glm/glm.hpp>
 #include <stack>
@@ -69,7 +69,7 @@ namespace gorn
         glm::mat4 _transform;
         Stencil _stencil;
         ClearAction _clearAction;
-        FeatureState _featureState;
+        StateChange _stateChange;
 
     public:
         RenderQueueBlock();

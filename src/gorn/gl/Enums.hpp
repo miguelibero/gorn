@@ -1,8 +1,7 @@
-#ifndef __gorn__GlEnums__
-#define __gorn__GlEnums__
+#ifndef __gorn__Enums__
+#define __gorn__Enums__
 
-#include <gorn/render/RenderEnums.hpp>
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 
 namespace gorn
 {
@@ -44,16 +43,44 @@ namespace gorn
         Stencil
     };
 
-    enum class FeatureType
+    enum class TestType
     {
-        DepthTest,
-        StencilTest,
-        AlphaTest,
-        RedMask,
-        GreenMask,
-        BlueMask,
-        AlphaMask
+        Depth,
+        Stencil,
+        Alpha
     };
+
+    enum class MaskType
+    {
+        Stencil,
+        Depth,
+        Red,
+        Green,
+        Blue,
+        Alpha
+    };
+
+    enum class DrawMode
+    {
+        Quads,
+        Triangles,
+        Lines,
+        Points
+    };
+
+    enum class BasicType
+    {
+        None,
+        Float,
+        Integer,
+        UnsignedInteger,
+        Byte,
+        UnsignedByte,
+        Short,
+        UnsignedShort
+    };
+
+    size_t getBasicTypeSize(BasicType type);
 
     GLenum getGlDrawMode(DrawMode mode);
     GLenum getGlBasicType(BasicType type);
@@ -64,7 +91,7 @@ namespace gorn
     GLenum getGlStencilAction(StencilAction act);
 
     GLbitfield getGlClearBufferBit(ClearType type);
-    GLenum getGlFeature(FeatureType type);
+    GLenum getGlTest(TestType type);
 }
 
 #endif

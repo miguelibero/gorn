@@ -1,7 +1,7 @@
 #ifndef __gorn__ClearAction__
 #define __gorn__ClearAction__
 
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <glm/glm.hpp>
 #include <vector>
 

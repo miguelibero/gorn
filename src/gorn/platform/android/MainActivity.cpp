@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <gorn/base/Application.hpp>
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <JniObject.hpp>
 #include <memory>
 #include <glm/glm.hpp>

@@ -1,7 +1,7 @@
 #ifndef __gorn__VertexBuffer__
 #define __gorn__VertexBuffer__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <map>
 
 class buffer;

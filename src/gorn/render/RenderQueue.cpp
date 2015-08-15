@@ -168,7 +168,7 @@ namespace gorn
     _mode(cmd.getDrawMode()),
     _stencil(cmd.getStencil()),
     _clearAction(cmd.getClearAction()),
-    _featureState(cmd.getFeatureState())
+    _stateChange(cmd.getStateChange())
     {
     }
 
@@ -190,13 +190,13 @@ namespace gorn
             && cmd.getMaterial() == _material
             && cmd.getDrawMode() == _mode
             && cmd.getStencil() == _stencil
-            && cmd.getFeatureState() == _featureState;
+            && cmd.getStateChange() == _stateChange;
     }
 
     void RenderQueueBlock::draw(const RenderQueue& queue,
         Info& info)
     {
-        _featureState.apply();
+        _stateChange.apply();
         _stencil.apply();
         _clearAction.apply();
 

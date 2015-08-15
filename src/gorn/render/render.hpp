@@ -4,7 +4,6 @@
 #include <gorn/render/VertexDefinition.hpp>
 #include <gorn/render/AttributeDefinition.hpp>
 #include <gorn/render/RenderKinds.hpp>
-#include <gorn/render/RenderEnums.hpp>
 #include <gorn/render/RenderCommand.hpp>
 #include <gorn/render/RenderQueue.hpp>
 

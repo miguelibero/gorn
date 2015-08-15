@@ -1,4 +1,4 @@
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/base/Exception.hpp>
 #include <sstream>
 

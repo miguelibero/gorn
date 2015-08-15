@@ -9,7 +9,6 @@
 #include <gorn/gl/RenderBuffer.hpp>
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>
-#include <gorn/gl/FeatureState.hpp>
+#include <gorn/gl/StateChange.hpp>
 
 #endif
-

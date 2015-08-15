@@ -1,7 +1,7 @@
 #ifndef __gorn__Program__
 #define __gorn__Program__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/gl/Shader.hpp>
 #include <glm/glm.hpp>
 #include <memory>

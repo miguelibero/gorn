@@ -143,15 +143,15 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withClear(const ClearAction& clear)
+    RenderCommand& RenderCommand::withClearAction(const ClearAction& clear)
     {
         _clearAction = clear;
         return *this;
     }
 
-    RenderCommand& RenderCommand::withFeatures(const FeatureState& features)
+    RenderCommand& RenderCommand::withStateChange(const StateChange& change)
     {
-        _featureState = features;
+        _stateChange = change;
         return *this;
     }
 
@@ -225,9 +225,9 @@ namespace gorn
         return _clearAction;
     }
 
-    const FeatureState& RenderCommand::getFeatureState() const
+    const StateChange& RenderCommand::getStateChange() const
     {
-        return _featureState;
+        return _stateChange;
     }
 
     RenderCommand::BoundingMode RenderCommand::getBoundingMode() const

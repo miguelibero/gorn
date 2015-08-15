@@ -1,7 +1,7 @@
 #ifndef __gorn__MaterialDefinition__
 #define __gorn__MaterialDefinition__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/gl/UniformValue.hpp>
 #include <string>
 #include <map>

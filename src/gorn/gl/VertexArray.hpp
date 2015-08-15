@@ -1,8 +1,8 @@
 #ifndef __gorn__VertexArray__
 #define __gorn__VertexArray__
 
-#include <gorn/gl/GlEnums.hpp>
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Enums.hpp>
+#include <gorn/gl/Base.hpp>
 #include <vector>
 #include <map>
 #include <memory>

@@ -1,7 +1,7 @@
 #ifndef __gorn__ProgramDefinition__
 #define __gorn__ProgramDefinition__
 
-#include <gorn/gl/GlBase.hpp>
+#include <gorn/gl/Base.hpp>
 #include <gorn/gl/Shader.hpp>
 #include <gorn/gl/ProgramAttributeDefinition.hpp>
 #include <gorn/gl/ProgramUniformDefinition.hpp>

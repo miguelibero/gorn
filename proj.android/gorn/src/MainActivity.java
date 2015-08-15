@@ -37,13 +37,7 @@ public class MainActivity extends Activity
 	    if (supportsEs2)
         {
 	        glSurfaceView = new GLSurfaceView(this);
-	 
-	        if (isProbablyEmulator())
-            {
-	            // Avoids crashes on startup with some emulator images.
-	            glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-	        }
-	 
+            glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);	 
             glSurfaceView.setPreserveEGLContextOnPause(true);
 	        glSurfaceView.setEGLContextClientVersion(2);
 			glSurfaceView.setRenderer(new Renderer()

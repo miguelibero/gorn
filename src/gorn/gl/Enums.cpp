@@ -1,9 +1,32 @@
 
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 #include <gorn/base/Exception.hpp>
 
 namespace gorn
 {
+    size_t getBasicTypeSize(BasicType type)
+    {
+        switch(type)
+        {
+            case BasicType::Byte:
+                return 1;
+            case BasicType::UnsignedByte:
+                return 1;
+            case BasicType::Short:
+                return sizeof(short);
+            case BasicType::UnsignedShort:
+                return sizeof(unsigned short);
+            case BasicType::Integer:
+                return sizeof(int);
+            case BasicType::UnsignedInteger:
+                return sizeof(unsigned int);
+            case BasicType::Float:
+                return sizeof(float);
+            default:
+                return 0;               
+        }
+    }
+
     GLenum getGlDrawMode(DrawMode mode)
     {
         switch(mode)
@@ -172,7 +195,7 @@ namespace gorn
         }
     }
 
-    GLenum getGlClearBufferBit(ClearType type)
+    GLbitfield getGlClearBufferBit(ClearType type)
     {
         switch(type)
         {
@@ -187,14 +210,16 @@ namespace gorn
         }
     }
 
-    GLenum getGlFeature(FeatureType type)
+    GLenum getGlTest(TestType type)
     {
         switch(type)
         {
-            case FeatureType::StencilTest:
+            case TestType::Stencil:
                 return GL_STENCIL_TEST;
-            case FeatureType::DepthTest:
+            case TestType::Depth:
                 return GL_DEPTH_TEST;
+            case TestType::Alpha:
+                return GL_ALPHA_TEST;
             default:
                 return 0;
         }

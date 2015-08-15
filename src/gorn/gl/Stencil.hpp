@@ -1,7 +1,7 @@
 #ifndef __gorn__Stencil__
 #define __gorn__Stencil__
 
-#include <gorn/gl/GlEnums.hpp>
+#include <gorn/gl/Enums.hpp>
 
 namespace gorn
 {

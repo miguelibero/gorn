@@ -3,11 +3,10 @@
 
 #include <buffer.hpp>
 #include <gorn/render/VertexDefinition.hpp>
-#include <gorn/gl/VertexArray.hpp>
 #include <gorn/gl/Material.hpp>
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>
-#include <gorn/gl/FeatureState.hpp>
+#include <gorn/gl/StateChange.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
 
@@ -74,7 +73,7 @@ namespace gorn
         Rect _boundingBox;
         Stencil _stencil;
         ClearAction _clearAction;
-        FeatureState _featureState;
+        StateChange _stateChange;
 
     public:
         RenderCommand();
@@ -95,8 +94,8 @@ namespace gorn
         RenderCommand& withBoundingMode(BoundingMode mode);
 
         RenderCommand& withStencil(const Stencil& stencil);
-        RenderCommand& withClear(const ClearAction& clear);
-        RenderCommand& withFeatures(const FeatureState& features);
+        RenderCommand& withClearAction(const ClearAction& clear);
+        RenderCommand& withStateChange(const StateChange& change);
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -124,7 +123,7 @@ namespace gorn
 
         const Stencil& getStencil() const;
         const ClearAction& getClearAction() const;
-        const FeatureState& getFeatureState() const;
+        const StateChange& getStateChange() const;
 
     };
 }
