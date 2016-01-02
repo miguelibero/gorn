@@ -45,7 +45,6 @@ void TeapotApplication::load()
 	_ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
-
     _ctx.getMaterials().getDefinitions()
         .set("metal", MaterialDefinition()
             .withTexture(gorn::UniformKind::Texture0, "default.png")
@@ -83,4 +82,3 @@ void TeapotApplication::draw()
 
 	_ctx.getQueue().draw();
 }
-

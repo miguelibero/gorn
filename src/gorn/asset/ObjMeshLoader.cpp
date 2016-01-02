@@ -9,6 +9,7 @@
 #include <buffer_reader.hpp>
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 namespace gorn
 {
@@ -135,7 +136,7 @@ namespace gorn
                     throw Exception("Face should contain 3 or 4 elements");
                 }
             }
-        } 
+        }
         return mesh;
     }
 }

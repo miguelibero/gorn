@@ -122,7 +122,7 @@ namespace gorn
 
         std::vector<Command> commands;
         {
-            std::lock_guard<std::mutex> lock(_commandsMutex);  
+            std::lock_guard<std::mutex> lock(_commandsMutex);
             commands = std::move(_commands);
             _commands.clear();
         }
@@ -174,7 +174,10 @@ namespace gorn
 
     void RenderQueueBlock::addDefinition(const RenderCommand& cmd)
     {
-        _definition += cmd.getVertexDefinition(*_material->getProgram());
+        if(_material != nullptr && _material->getProgram() != nullptr)
+        {
+            _definition += cmd.getVertexDefinition(*_material->getProgram());
+        }
     }
 
     void RenderQueueBlock::addData(const RenderCommand& cmd,
@@ -187,7 +190,7 @@ namespace gorn
     {
         return true
             && cmd.getClearAction().empty()
-            && cmd.getMaterial() == _material
+            && (cmd.getMaterial() == _material || cmd.getMaterial() == nullptr)
             && cmd.getDrawMode() == _mode
             && cmd.getStencil() == _stencil
             && cmd.getStateChange() == _stateChange;
@@ -218,7 +221,7 @@ namespace gorn
         vao.setElementData(std::make_shared<VertexBuffer>(
             std::move(_elements), usage,
             VertexBuffer::Target::ElementArrayBuffer));
-        
+
         vao.setUniformValues(queue.getUniformValues());
         vao.setUniformValue(UniformKind::Model, _transform);
 
@@ -300,7 +303,7 @@ namespace gorn
     bool RenderQueueState::checkBounding(const Command& cmd)
     {
         auto bound = cmd.getBoundingMode();
-        if(bound == BoundingMode::End)
+        if(bound == BoundingMode::End && _boundingEnds > 0)
         {
             _boundingEnds--;
         }
@@ -330,4 +333,3 @@ namespace gorn
         return _transforms.top();
     }
 }
-

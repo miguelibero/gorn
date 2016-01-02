@@ -116,7 +116,7 @@ namespace gorn
         _transformMode = mode;
         return *this;
     }
-    
+
     RenderCommand& RenderCommand::withTransformMode(TransformMode mode)
     {
         _transformMode = mode;
@@ -286,16 +286,20 @@ namespace gorn
             for(auto itr = vdef.getAttributes().begin();
               itr != vdef.getAttributes().end(); ++itr)
             {
-                auto& block = getAttribute(itr->first);
                 auto& def = itr->second;
+                auto itr2 = _attributes.find(itr->first);
                 size_t writeSize = 0;
-                if(itr->second.getTransformable())
+                if(itr2 != _attributes.end())
                 {
-                    writeSize = block.write(out, def, n, transform);
-                }
-                else
-                {
-                    writeSize = block.write(out, def, n);
+                    auto& block = itr2->second;
+                    if(itr->second.getTransformable())
+                    {
+                        writeSize = block.write(out, def, n, transform);
+                    }
+                    else
+                    {
+                        writeSize = block.write(out, def, n);
+                    }
                 }
                 size_t elmSize = def.getElementSize();
                 out.fill(0, elmSize-writeSize);
@@ -330,4 +334,3 @@ namespace gorn
     }
 
 }
-
