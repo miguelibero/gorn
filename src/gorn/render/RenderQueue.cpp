@@ -7,6 +7,7 @@
 #include <gorn/asset/AssetManager.hpp>
 #include <algorithm>
 #include <cmath>
+#include <sstream>
 #include <glm/gtc/matrix_inverse.hpp>
 
 namespace gorn
@@ -249,6 +250,17 @@ namespace gorn
         result.drawCallsBatched /= amount;
         result.vertexCount /= amount;
         return result;
+    }
+
+    std::string RenderQueueInfo::str() const
+    {
+        std::stringstream ss;
+        ss << "fps: " << framesPerSecond << std::endl;
+        ss << "draws: " << drawCalls << "/";
+        ss << drawCallsBatched << "/";
+        ss << drawCallsCulled << std::endl;
+        ss << "verts: " << vertexCount;
+        return ss.str();
     }
 
     Rect RenderQueueState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));

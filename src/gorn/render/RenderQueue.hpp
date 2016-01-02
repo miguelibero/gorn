@@ -14,7 +14,7 @@ namespace gorn
 {
     class MaterialManager;
     class VertexDefinition;
-    
+
     template<typename A>
     class AssetManager;
 
@@ -28,6 +28,8 @@ namespace gorn
 
         RenderQueueInfo();
         RenderQueueInfo average(size_t amount) const;
+
+        std::string str() const;
     };
 
     class RenderQueueState
@@ -57,7 +59,7 @@ namespace gorn
 
     class RenderQueueBlock
     {
-    public:    
+    public:
         typedef RenderQueueInfo Info;
         typedef RenderCommand::Elements Elements;
     private:
