@@ -216,11 +216,11 @@ namespace gorn
         auto vertsCount = _vertices.size()/_definition.getElementSize();
         vao.setMaterial(_material);
         vao.addVertexData(std::make_shared<VertexBuffer>(
-            std::move(_vertices), usage,
+            buffer(std::move(_vertices)), usage,
             VertexBuffer::Target::ArrayBuffer),
             _definition);
         vao.setElementData(std::make_shared<VertexBuffer>(
-            std::move(_elements), usage,
+            buffer(std::move(_elements)), usage,
             VertexBuffer::Target::ElementArrayBuffer));
 
         vao.setUniformValues(queue.getUniformValues());
