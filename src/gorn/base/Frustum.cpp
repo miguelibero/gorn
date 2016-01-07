@@ -144,16 +144,16 @@ namespace gorn
 
     CubeShape Frustum::shape() const
     {
-        CubeShape::Corners corners{
+        CubeShape::Corners corners{{
             glm::vec3( 1.0f,  1.0f,  1.0f),
             glm::vec3(-1.0f,  1.0f,  1.0f),
             glm::vec3(-1.0f, -1.0f,  1.0f),
             glm::vec3( 1.0f, -1.0f,  1.0f),
             glm::vec3( 1.0f,  1.0f, -1.0f),
-            glm::vec3(-1.0f,  1.0f, -1.0f),            
+            glm::vec3(-1.0f,  1.0f, -1.0f),
             glm::vec3(-1.0f, -1.0f, -1.0f),
             glm::vec3( 1.0f, -1.0f, -1.0f)
-        };
+        }};
 
         for(auto& c : corners)
         {

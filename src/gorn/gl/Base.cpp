@@ -12,7 +12,7 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
 
 void gornInitGlExtensions() {
      glGenVertexArraysOESEXT = (PFNGLGENVERTEXARRAYSOESPROC)
-        eglGetProcAddress("glGenVertexArraysOES");
+        eglG1etProcAddress("glGenVertexArraysOES");
      glBindVertexArrayOESEXT = (PFNGLBINDVERTEXARRAYOESPROC)
         eglGetProcAddress("glBindVertexArrayOES");
      glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)

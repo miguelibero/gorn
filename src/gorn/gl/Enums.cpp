@@ -218,8 +218,6 @@ namespace gorn
                 return GL_STENCIL_TEST;
             case TestType::Depth:
                 return GL_DEPTH_TEST;
-            case TestType::Alpha:
-                return GL_ALPHA_TEST;
             default:
                 return 0;
         }

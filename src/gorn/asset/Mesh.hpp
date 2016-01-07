@@ -214,7 +214,7 @@ namespace gorn
 	class Mesh
 	{
     public:
-        typedef unsigned idx_t;
+        typedef size_t idx_t;
         typedef MeshElement Element;
         typedef std::vector<Element> Elements;
         typedef std::vector<idx_t> Indices;

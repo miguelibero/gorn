@@ -10,6 +10,8 @@
 #elif GORN_PLATFORM_IOS
 #include <gorn/platform/ios/BundleFileLoader.hpp>
 #include <gorn/platform/ios/UIImageLoader.hpp>
+#elif GORN_PLATFORM_MACOS
+#include <gorn/platform/macos/BundleFileLoader.hpp>
 #endif
 
 #include <gorn/platform/LocalFileLoader.hpp>

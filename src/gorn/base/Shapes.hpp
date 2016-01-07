@@ -6,17 +6,18 @@
 
 namespace gorn
 {
-    struct PlaneShape
+    class PlaneShape
     {
+    public:
         typedef std::array<glm::vec3,4> Corners;
 
         glm::vec3 topright;
         glm::vec3 topleft;
-        glm::vec3 bottomleft;  
+        glm::vec3 bottomleft;
         glm::vec3 bottomright;
 
         PlaneShape();
-        PlaneShape(const glm::vec3& topright,  
+        PlaneShape(const glm::vec3& topright,
             const glm::vec3& topleft,
             const glm::vec3& bottomleft,
             const glm::vec3& bottomright);
@@ -30,8 +31,9 @@ namespace gorn
         Corners corners() const;
     };
 
-    struct CubeShape
+    class CubeShape
     {
+    public:
         typedef std::array<glm::vec3,8> Corners;
         PlaneShape front;
         PlaneShape back;
@@ -39,15 +41,16 @@ namespace gorn
         CubeShape();
         CubeShape(const PlaneShape& front, const PlaneShape& back);
         CubeShape(const Corners& corners);
-        
+
         CubeShape& withFront(const PlaneShape& front);
         CubeShape& withBack(const PlaneShape& back);
 
         Corners corners() const;
     };
 
-    struct SphereShape
+    class SphereShape
     {
+    public:
         size_t rings;
         size_t sectors;
         glm::vec3 center;

@@ -59,7 +59,7 @@ namespace gorn
         typedef RenderCommandBoundingMode BoundingMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
-        typedef unsigned elm_t;
+        typedef size_t elm_t;
         typedef std::vector<elm_t> Elements;
 
     private:

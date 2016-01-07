@@ -2,6 +2,7 @@
 #define __gorn__Enums__
 
 #include <gorn/gl/Base.hpp>
+#include <cstddef>
 
 namespace gorn
 {
@@ -46,8 +47,7 @@ namespace gorn
     enum class TestType
     {
         Depth,
-        Stencil,
-        Alpha
+        Stencil
     };
 
     enum class MaskType
@@ -95,4 +95,3 @@ namespace gorn
 }
 
 #endif
-

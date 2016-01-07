@@ -15,15 +15,16 @@ namespace gorn
         Overlap
     };
 
-    struct RectMatch;
-    struct CubeShape;
+    class RectMatch;
+    class CubeShape;
 
-    struct Rect
+    class Rect
     {
+    public:
         typedef RectMatchType MatchType;
         glm::vec3 origin;
         glm::vec3 size;
-        
+
         Rect(const glm::vec3& origin=glm::vec3(0.0f),
             const glm::vec3& size=glm::vec3(0.0f));
         Rect(const glm::vec2& origin, const glm::vec2& size=glm::vec2(0.0f));
@@ -47,11 +48,11 @@ namespace gorn
         glm::vec3 min() const;
         glm::vec3 max() const;
         glm::vec3 exterior(const glm::vec3& normal) const;
-
     };
 
-    struct RectMatch
+    class RectMatch
     {
+    public:
         typedef RectMatchType Type;
         Rect rect;
         Type type;

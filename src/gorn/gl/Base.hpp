@@ -49,6 +49,18 @@ extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
 
 void gornInitGlExtensions();
 
+#elif GORN_PLATFORM_MACOS
+
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+
+#define	glClearDepth				glClearDepthf
+#define glDeleteVertexArrays		glDeleteVertexArraysAPPLE
+#define glGenVertexArrays			glGenVertexArraysAPPLE
+#define glBindVertexArray			glBindVertexArrayAPPLE
+#define glMapBuffer					glMapBufferAPPLE
+#define glUnmapBuffer				glUnmapBufferAPPLE
+
 #else
 
 #include <GL/glew.h>
