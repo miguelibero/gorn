@@ -243,8 +243,7 @@ namespace gorn
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
     {
         VertexDefinition vdef;
-        for(auto itr = _attributes.begin();
-          itr != _attributes.end(); ++itr)
+        for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
         {
             if(prog.hasAttribute(itr->first))
             {
