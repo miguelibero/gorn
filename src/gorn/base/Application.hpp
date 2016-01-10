@@ -46,7 +46,7 @@ namespace gorn
         void realUnload();
         void realForeground();
         void realBackground();
-        void realUpdate(double dt);
+        bool realUpdate(double dt);
         void realTouch(const glm::vec2& p);
         void realTouchEnd(const glm::vec2& p);
 	};

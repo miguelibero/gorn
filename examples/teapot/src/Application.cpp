@@ -31,7 +31,7 @@ TeapotApplication::TeapotApplication()
 
 void TeapotApplication::load()
 {
-#ifdef GORN_PLATFORM_LINUX
+#if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
 	_ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID

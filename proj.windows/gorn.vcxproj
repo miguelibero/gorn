@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -10,6 +10,110 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\lib\buffer\src\buffer.cpp" />
+    <ClCompile Include="..\lib\buffer\src\buffer_reader.cpp" />
+    <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp" />
+    <ClCompile Include="..\src\gorn\asset\FileLoader.cpp" />
+    <ClCompile Include="..\src\gorn\asset\FileManager.cpp" />
+    <ClCompile Include="..\src\gorn\asset\Image.cpp" />
+    <ClCompile Include="..\src\gorn\asset\Mesh.cpp" />
+    <ClCompile Include="..\src\gorn\asset\ObjMeshLoader.cpp" />
+    <ClCompile Include="..\src\gorn\asset\ShapeMeshFactory.cpp" />
+    <ClCompile Include="..\src\gorn\base\Application.cpp" />
+    <ClCompile Include="..\src\gorn\base\Context.cpp" />
+    <ClCompile Include="..\src\gorn\base\Frustum.cpp" />
+    <ClCompile Include="..\src\gorn\base\Rect.cpp" />
+    <ClCompile Include="..\src\gorn\base\Shapes.cpp" />
+    <ClCompile Include="..\src\gorn\base\String.cpp" />
+    <ClCompile Include="..\src\gorn\gl\AttributeDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Base.cpp" />
+    <ClCompile Include="..\src\gorn\gl\ClearAction.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Enums.cpp" />
+    <ClCompile Include="..\src\gorn\gl\FrameBuffer.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Material.cpp" />
+    <ClCompile Include="..\src\gorn\gl\MaterialDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\MaterialManager.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Program.cpp" />
+    <ClCompile Include="..\src\gorn\gl\ProgramAttributeDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\ProgramDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\ProgramManager.cpp" />
+    <ClCompile Include="..\src\gorn\gl\ProgramUniformDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\RenderBuffer.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Shader.cpp" />
+    <ClCompile Include="..\src\gorn\gl\StateChange.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Stencil.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Texture.cpp" />
+    <ClCompile Include="..\src\gorn\gl\TextureDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\TextureManager.cpp" />
+    <ClCompile Include="..\src\gorn\gl\UniformValue.cpp" />
+    <ClCompile Include="..\src\gorn\gl\VertexArray.cpp" />
+    <ClCompile Include="..\src\gorn\gl\VertexBuffer.cpp" />
+    <ClCompile Include="..\src\gorn\gl\VertexDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp" />
+    <ClCompile Include="..\src\gorn\platform\StbImageLoader.cpp" />
+    <ClCompile Include="..\src\gorn\render\RenderCommand.cpp" />
+    <ClCompile Include="..\src\gorn\render\RenderKinds.cpp" />
+    <ClCompile Include="..\src\gorn\render\RenderQueue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\lib\buffer\src\buffer.hpp" />
+    <ClInclude Include="..\lib\buffer\src\buffer_reader.hpp" />
+    <ClInclude Include="..\lib\buffer\src\buffer_writer.hpp" />
+    <ClInclude Include="..\src\gorn\asset\asset.hpp" />
+    <ClInclude Include="..\src\gorn\asset\AssetLoader.hpp" />
+    <ClInclude Include="..\src\gorn\asset\AssetManager.hpp" />
+    <ClInclude Include="..\src\gorn\asset\DataAssetLoader.hpp" />
+    <ClInclude Include="..\src\gorn\asset\FileAssetLoader.hpp" />
+    <ClInclude Include="..\src\gorn\asset\FileLoader.hpp" />
+    <ClInclude Include="..\src\gorn\asset\FileManager.hpp" />
+    <ClInclude Include="..\src\gorn\asset\Image.hpp" />
+    <ClInclude Include="..\src\gorn\asset\Mesh.hpp" />
+    <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp" />
+    <ClInclude Include="..\src\gorn\asset\ShapeMeshFactory.hpp" />
+    <ClInclude Include="..\src\gorn\base\Application.hpp" />
+    <ClInclude Include="..\src\gorn\base\base.hpp" />
+    <ClInclude Include="..\src\gorn\base\Config.hpp" />
+    <ClInclude Include="..\src\gorn\base\Context.hpp" />
+    <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp" />
+    <ClInclude Include="..\src\gorn\base\Exception.hpp" />
+    <ClInclude Include="..\src\gorn\base\Frustum.hpp" />
+    <ClInclude Include="..\src\gorn\base\Rect.hpp" />
+    <ClInclude Include="..\src\gorn\base\Shapes.hpp" />
+    <ClInclude Include="..\src\gorn\base\String.hpp" />
+    <ClInclude Include="..\src\gorn\gl\AttributeDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Base.hpp" />
+    <ClInclude Include="..\src\gorn\gl\ClearAction.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Enums.hpp" />
+    <ClInclude Include="..\src\gorn\gl\FrameBuffer.hpp" />
+    <ClInclude Include="..\src\gorn\gl\gl.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Material.hpp" />
+    <ClInclude Include="..\src\gorn\gl\MaterialDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\MaterialManager.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Program.hpp" />
+    <ClInclude Include="..\src\gorn\gl\ProgramAttributeDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\ProgramDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\ProgramManager.hpp" />
+    <ClInclude Include="..\src\gorn\gl\ProgramUniformDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\RenderBuffer.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Shader.hpp" />
+    <ClInclude Include="..\src\gorn\gl\StateChange.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Stencil.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Texture.hpp" />
+    <ClInclude Include="..\src\gorn\gl\TextureDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\TextureManager.hpp" />
+    <ClInclude Include="..\src\gorn\gl\UniformValue.hpp" />
+    <ClInclude Include="..\src\gorn\gl\VertexArray.hpp" />
+    <ClInclude Include="..\src\gorn\gl\VertexBuffer.hpp" />
+    <ClInclude Include="..\src\gorn\gl\VertexDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp" />
+    <ClInclude Include="..\src\gorn\platform\platform.hpp" />
+    <ClInclude Include="..\src\gorn\platform\StbImageLoader.hpp" />
+    <ClInclude Include="..\src\gorn\render\render.hpp" />
+    <ClInclude Include="..\src\gorn\render\RenderCommand.hpp" />
+    <ClInclude Include="..\src\gorn\render\RenderKinds.hpp" />
+    <ClInclude Include="..\src\gorn\render\RenderQueue.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{088DB418-4DE7-4FEB-9327-4C97704A9E93}</ProjectGuid>
     <RootNamespace>gorn</RootNamespace>
@@ -18,13 +122,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -40,8 +144,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..\lib;..\src;..\lib\platform\windows\glew\include;..\lib\soil2\src;..\lib\buffer\src;$(IncludePath)</IncludePath>
-    <LibraryPath>
-    </LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GORN_PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GORN_PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLM_FORCE_RADIANS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -71,89 +174,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\gorn\asset\asset.hpp" />
-    <ClInclude Include="..\src\gorn\asset\AssetLoader.hpp" />
-    <ClInclude Include="..\src\gorn\asset\AssetManager.hpp" />
-    <ClInclude Include="..\src\gorn\asset\FileLoader.hpp" />
-    <ClInclude Include="..\src\gorn\asset\FileManager.hpp" />
-    <ClInclude Include="..\src\gorn\asset\Image.hpp" />
-    <ClInclude Include="..\src\gorn\base\Application.hpp" />
-    <ClInclude Include="..\src\gorn\base\base.hpp" />
-    <ClInclude Include="..\src\gorn\base\Context.hpp" />
-    <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp" />
-    <ClInclude Include="..\src\gorn\base\Exception.hpp" />
-    <ClInclude Include="..\src\gorn\base\String.hpp" />
-    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp" />
-    <ClInclude Include="..\src\gorn\platform\platform.hpp" />
-    <ClInclude Include="..\src\gorn\platform\windows\SOILImageLoader.hpp" />
-    <ClInclude Include="..\src\gorn\render\AttributeDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\Enums.hpp" />
-    <ClInclude Include="..\src\gorn\render\Gl.hpp" />
-    <ClInclude Include="..\src\gorn\render\Kinds.hpp" />
-    <ClInclude Include="..\src\gorn\render\Material.hpp" />
-    <ClInclude Include="..\src\gorn\render\MaterialDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\MaterialManager.hpp" />
-    <ClInclude Include="..\src\gorn\render\Program.hpp" />
-    <ClInclude Include="..\src\gorn\render\ProgramAttributeDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\ProgramDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\ProgramManager.hpp" />
-    <ClInclude Include="..\src\gorn\render\ProgramUniformDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\render.hpp" />
-    <ClInclude Include="..\src\gorn\render\RenderCommand.hpp" />
-    <ClInclude Include="..\src\gorn\render\RenderQueue.hpp" />
-    <ClInclude Include="..\src\gorn\render\Shader.hpp" />
-    <ClInclude Include="..\src\gorn\render\Texture.hpp" />
-    <ClInclude Include="..\src\gorn\render\TextureDefinition.hpp" />
-    <ClInclude Include="..\src\gorn\render\TextureManager.hpp" />
-    <ClInclude Include="..\src\gorn\render\UniformValue.hpp" />
-    <ClInclude Include="..\src\gorn\render\VertexArray.hpp" />
-    <ClInclude Include="..\src\gorn\render\VertexBuffer.hpp" />
-    <ClInclude Include="..\src\gorn\render\VertexDefinition.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\lib\buffer\src\buffer.cpp" />
-    <ClCompile Include="..\lib\buffer\src\buffer_reader.cpp" />
-    <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\etc1_utils.c" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\image_DXT.c" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\image_helper.c" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\SOIL2.c" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image.c" />
-    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image_write.c" />
-    <ClCompile Include="..\src\gorn\asset\FileLoader.cpp" />
-    <ClCompile Include="..\src\gorn\asset\FileManager.cpp" />
-    <ClCompile Include="..\src\gorn\asset\Image.cpp" />
-    <ClCompile Include="..\src\gorn\base\Application.cpp" />
-    <ClCompile Include="..\src\gorn\base\Context.cpp" />
-    <ClCompile Include="..\src\gorn\base\String.cpp" />
-    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp" />
-    <ClCompile Include="..\src\gorn\platform\windows\Main.cpp" />
-    <ClCompile Include="..\src\gorn\platform\windows\SOILImageLoader.cpp" />
-    <ClCompile Include="..\src\gorn\render\AttributeDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\Enums.cpp" />
-    <ClCompile Include="..\src\gorn\render\Gl.cpp" />
-    <ClCompile Include="..\src\gorn\render\GlEnums.cpp" />
-    <ClCompile Include="..\src\gorn\render\Kinds.cpp" />
-    <ClCompile Include="..\src\gorn\render\Material.cpp" />
-    <ClCompile Include="..\src\gorn\render\MaterialDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\MaterialManager.cpp" />
-    <ClCompile Include="..\src\gorn\render\Program.cpp" />
-    <ClCompile Include="..\src\gorn\render\ProgramAttributeDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\ProgramDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\ProgramManager.cpp" />
-    <ClCompile Include="..\src\gorn\render\ProgramUniformDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\RenderCommand.cpp" />
-    <ClCompile Include="..\src\gorn\render\RenderQueue.cpp" />
-    <ClCompile Include="..\src\gorn\render\Shader.cpp" />
-    <ClCompile Include="..\src\gorn\render\Texture.cpp" />
-    <ClCompile Include="..\src\gorn\render\TextureDefinition.cpp" />
-    <ClCompile Include="..\src\gorn\render\TextureManager.cpp" />
-    <ClCompile Include="..\src\gorn\render\UniformValue.cpp" />
-    <ClCompile Include="..\src\gorn\render\VertexArray.cpp" />
-    <ClCompile Include="..\src\gorn\render\VertexBuffer.cpp" />
-    <ClCompile Include="..\src\gorn\render\VertexDefinition.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

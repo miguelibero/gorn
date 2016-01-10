@@ -10,7 +10,7 @@ Its main goals are:
 * simplicity
 * performance
 * reusability
-* support for Linux, Android, iOS and Windows (WIP)
+* support for Linux, Android, iOS and Windows (MacOS WIP)
 
 Some functionalities that the render queue supports:
 
@@ -59,7 +59,7 @@ auto vao = VertexArray()
 vao.setProgram(Program(vsh, fsh));
 
 auto vbo = VertexBuffer(buffer{
-    //  Position     Color 
+    //  Position     Color
         0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
@@ -69,7 +69,7 @@ vao.setAttribute(vbo, AttributeDefinition("position")
     .withType(BasicType::Float)
     .withCount(2)
     .withStride(5, BasicType::Float));
-            
+
 vao.setAttribute(vbo, AttributeDefinition("color")
     .withType(BasicType::Float)
     .withCount(3)
@@ -160,4 +160,3 @@ ctx.getQueue().addCommand("sprite:puppy")
 
 ctx.getQueue().draw();
 ```
-

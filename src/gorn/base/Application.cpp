@@ -132,11 +132,11 @@ namespace gorn
         background();
     }
 
-    void Application::realUpdate(double dt)
+    bool Application::realUpdate(double dt)
     {
         if (!_loaded)
         {
-            return;
+            return false;
         }
         if(_needsReload)
         {
@@ -148,6 +148,7 @@ namespace gorn
         {
             _framesPerSecond = 1.0/dt;
             draw();
+			return true;
         }
         else
         {
@@ -162,8 +163,10 @@ namespace gorn
                     _drawInterval -= frameDuration;
                 }
                 _framesPerSecond = 1.0/(oldDrawInterval-_drawInterval);
+				return true;
             }
         }
+		return false;
     }
 
     void Application::realTouch(const glm::vec2& p)

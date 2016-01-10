@@ -189,7 +189,7 @@ namespace gorn
     {
         auto fdivs = glm::round(glm::max(divs, glm::vec3(1.0f)));
         std::vector<Rect> parts;
-        parts.reserve(fdivs.x*fdivs.y*fdivs.z);
+        parts.reserve((size_t)(fdivs.x*fdivs.y*fdivs.z));
         auto tmin = min();
         auto tmax = max();
         auto tsize = size/fdivs;

@@ -107,7 +107,7 @@ namespace gorn
         auto infoDuration = 1.0/_infoUpdatesPerSecond;
         if(_infoUpdateInterval > infoDuration && _tempInfoAmount > 0)
         {
-            _tempInfo.framesPerSecond = 1.0 / _infoUpdateInterval;
+            _tempInfo.framesPerSecond = (float)(1.0 / _infoUpdateInterval);
             _info = _tempInfo.average(_tempInfoAmount);
             _tempInfoAmount = 0;
             _tempInfo = Info();

@@ -46,7 +46,7 @@ glm::mat4 KittenApplication::getTransform(float angle)
 void KittenApplication::load()
 {
 
-#ifdef GORN_PLATFORM_LINUX
+#if (GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS)
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 	_ctx.getFiles()
@@ -115,7 +115,7 @@ void KittenApplication::load()
 
 void KittenApplication::update(double dt)
 {
-    _time += dt;
+    _time += (float)dt;
 }
 
 void KittenApplication::draw()

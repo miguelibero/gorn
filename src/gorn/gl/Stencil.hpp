@@ -2,6 +2,7 @@
 #define __gorn__Stencil__
 
 #include <gorn/gl/Enums.hpp>
+#include <cstdint>
 
 namespace gorn
 {

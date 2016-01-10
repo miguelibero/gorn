@@ -18,27 +18,31 @@ load() {
 	}
 	else
 	{
+		QueryPerformanceFrequency((LARGE_INTEGER*)&timeStampFreq);
 		QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
-		QueryPerformanceFrequency((LARGE_INTEGER *)&timeStampFreq);
 		app->realLoad();
 	}
 }
 
 void unload()
 {
-	if (app) {
+	if (app)
+	{
 		app->realUnload();
+		app.reset();
 	}
 }
 
-void update()
+bool update()
 {
 	_int64 oldTimeStamp = timeStamp;
 	QueryPerformanceCounter((LARGE_INTEGER*)&timeStamp);
-	if (app) {
+	if (app)
+	{
 		double dt = (double)(timeStamp - oldTimeStamp)/timeStampFreq;
-		app->realUpdate(dt);
+		return app->realUpdate(dt);
 	}
+	return false;
 }
 
 void draw()
@@ -48,14 +52,16 @@ void draw()
 
 void foreground()
 {
-	if (app) {
+	if (app)
+	{
 		app->realForeground();
 	}
 }
 
 void background()
 {
-	if (app) {
+	if (app)
+	{
 		app->realBackground();
 	}
 }
@@ -77,15 +83,15 @@ setupPixelFormat(HDC hDC)
 		PFD_DRAW_TO_WINDOW |
 		PFD_DOUBLEBUFFER,               /* support double-buffering */
 		PFD_TYPE_RGBA,                  /* color type */
-		16,                             /* prefered color depth */
+		24,                             /* prefered color depth */
 		0, 0, 0, 0, 0, 0,               /* color bits (ignored) */
-		0,                              /* no alpha buffer */
+		0,                              /* alpha buffer */
 		0,                              /* alpha bits (ignored) */
-		0,                              /* no accumulation buffer */
+		0,                              /* accumulation buffer */
 		0, 0, 0, 0,                     /* accum bits (ignored) */
-		16,                             /* depth buffer */
-		0,                              /* no stencil buffer */
-		0,                              /* no auxiliary buffers */
+		24,                             /* depth buffer */
+		8,                              /* stencil buffer */
+		0,                              /* auxiliary buffers */
 		PFD_MAIN_PLANE,                 /* main layer */
 		0,                              /* reserved */
 		0, 0, 0,                        /* no layer, visible, damage masks */
@@ -93,13 +99,15 @@ setupPixelFormat(HDC hDC)
 	int pixelFormat;
 
 	pixelFormat = ChoosePixelFormat(hDC, &pfd);
-	if (pixelFormat == 0) {
+	if (pixelFormat == 0)
+	{
 		MessageBox(WindowFromDC(hDC), "ChoosePixelFormat failed.", "Error",
 			MB_ICONERROR | MB_OK);
 		exit(1);
 	}
 
-	if (SetPixelFormat(hDC, pixelFormat, &pfd) != TRUE) {
+	if (SetPixelFormat(hDC, pixelFormat, &pfd) != TRUE)
+	{
 		MessageBox(WindowFromDC(hDC), "SetPixelFormat failed.", "Error",
 			MB_ICONERROR | MB_OK);
 		exit(1);
@@ -116,10 +124,12 @@ setupPalette(HDC hDC)
 
 	DescribePixelFormat(hDC, pixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
-	if (pfd.dwFlags & PFD_NEED_PALETTE) {
+	if (pfd.dwFlags & PFD_NEED_PALETTE)
+	{
 		paletteSize = 1 << pfd.cColorBits;
 	}
-	else {
+	else
+	{
 		return;
 	}
 
@@ -135,7 +145,8 @@ setupPalette(HDC hDC)
 		int blueMask = (1 << pfd.cBlueBits) - 1;
 		int i;
 
-		for (i = 0; i<paletteSize; ++i) {
+		for (i = 0; i<paletteSize; ++i)
+		{
 			pPal->palPalEntry[i].peRed =
 				(((i >> pfd.cRedShift) & redMask) * 255) / redMask;
 			pPal->palPalEntry[i].peGreen =
@@ -149,7 +160,8 @@ setupPalette(HDC hDC)
 	hPalette = CreatePalette(pPal);
 	free(pPal);
 
-	if (hPalette) {
+	if (hPalette)
+	{
 		SelectPalette(hDC, hPalette, FALSE);
 		RealizePalette(hDC);
 	}
@@ -162,7 +174,8 @@ UINT message,
 WPARAM wParam,
 LPARAM lParam)
 {
-	switch (message) {
+	switch (message)
+	{
 	case WM_CREATE:
 		/* initialize OpenGL rendering */
 		hDC = GetDC(hWnd);
@@ -175,11 +188,13 @@ LPARAM lParam)
 	case WM_DESTROY:
 		unload();
 		/* finish OpenGL rendering */
-		if (hGLRC) {
+		if (hGLRC)
+		{
 			wglMakeCurrent(NULL, NULL);
 			wglDeleteContext(hGLRC);
 		}
-		if (hPalette) {
+		if (hPalette)
+		{
 			DeleteObject(hPalette);
 		}
 		ReleaseDC(hWnd, hDC);
@@ -187,13 +202,15 @@ LPARAM lParam)
 		return 0;
 	case WM_SIZE:
 		/* track window size changes */
-		if (hGLRC) {
+		if (hGLRC)
+		{
 			resize((int)LOWORD(lParam), (int)HIWORD(lParam));
 			return 0;
 		}
 	case WM_PALETTECHANGED:
 		/* realize palette if this is *not* the current window */
-		if (hGLRC && hPalette && (HWND)wParam != hWnd) {
+		if (hGLRC && hPalette && (HWND)wParam != hWnd)
+		{
 			UnrealizeObject(hPalette);
 			SelectPalette(hDC, hPalette, FALSE);
 			RealizePalette(hDC);
@@ -203,7 +220,8 @@ LPARAM lParam)
 		break;
 	case WM_QUERYNEWPALETTE:
 		/* realize palette if this is the current window */
-		if (hGLRC && hPalette) {
+		if (hGLRC && hPalette)
+		{
 			UnrealizeObject(hPalette);
 			SelectPalette(hDC, hPalette, FALSE);
 			RealizePalette(hDC);
@@ -215,7 +233,8 @@ LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		BeginPaint(hWnd, &ps);
-		if (hGLRC) {
+		if (hGLRC)
+		{
 			draw();
 		}
 		EndPaint(hWnd, &ps);
@@ -224,7 +243,8 @@ LPARAM lParam)
 	break;
 	case WM_CHAR:
 		/* handle keyboard input */
-		switch ((int)wParam) {
+		switch ((int)wParam)
+		{
 		case VK_ESCAPE:
 			DestroyWindow(hWnd);
 			return 0;
@@ -235,7 +255,6 @@ LPARAM lParam)
 	default:
 		break;
 	}
-	update();
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
@@ -268,17 +287,28 @@ int nCmdShow)
 	hWnd = CreateWindow(
 		app->getName().c_str(), app->getName().c_str(),
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		0, 0, app->getSize().x, app->getSize().y,
+		0, 0, (int)app->getSize().x, (int)app->getSize().y,
 		NULL, NULL, hCurrentInst, NULL);
 
 	/* display window */
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
-	/* process messages */
-	while (GetMessage(&msg, NULL, 0, 0) == TRUE) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	while (true)
+	{
+		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		if (msg.message == WM_QUIT)
+		{
+			break;
+		}
+		if (update())
+		{
+			draw();
+		}
 	}
 	return msg.wParam;
 }

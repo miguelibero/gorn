@@ -1,285 +1,334 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\asset">
-      <UniqueIdentifier>{6735834d-fa29-4a3b-84a5-6ed88c4ec8e0}</UniqueIdentifier>
+    <Filter Include="asset">
+      <UniqueIdentifier>{cbd732ee-edae-4091-b532-6657d8721e1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\asset">
-      <UniqueIdentifier>{bbf3a630-f505-481a-8d1f-5564c1d03659}</UniqueIdentifier>
+    <Filter Include="base">
+      <UniqueIdentifier>{64877d44-2deb-422d-8202-bacb3537b6e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\base">
-      <UniqueIdentifier>{0406365d-6826-4baf-8283-0ed16523fdd3}</UniqueIdentifier>
+    <Filter Include="gl">
+      <UniqueIdentifier>{7c4b7839-7aa4-4b49-83cc-ab6aa4137e50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\base">
-      <UniqueIdentifier>{18f9b098-ee32-495b-8e0e-0f0350bc27e2}</UniqueIdentifier>
+    <Filter Include="platform">
+      <UniqueIdentifier>{695254f3-021c-43ad-badf-b91cfa3e5f1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\render">
-      <UniqueIdentifier>{9f8a122b-3d54-475b-b37c-6b5552c40d4f}</UniqueIdentifier>
+    <Filter Include="render">
+      <UniqueIdentifier>{4d73aafc-a2cc-4384-b76d-461058861b3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\render">
-      <UniqueIdentifier>{329b2e8c-3d49-4ac6-a6f3-34232307dbe0}</UniqueIdentifier>
+    <Filter Include="lib">
+      <UniqueIdentifier>{407ada1c-dd97-4fd6-abc5-7a486c53f0f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\platform">
-      <UniqueIdentifier>{7f53f60c-1238-4c4f-9136-a85faef9a1e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\platform">
-      <UniqueIdentifier>{d4160315-5039-4141-920f-6dcdbf0535c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\platform\SOIL">
-      <UniqueIdentifier>{350975a3-02e7-42c3-8abf-686725e8c9f2}</UniqueIdentifier>
+    <Filter Include="lib\buffer">
+      <UniqueIdentifier>{0b0505b7-7f71-43ee-8db2-c5354c75929c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\gorn\asset\asset.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\asset\AssetLoader.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\asset\AssetManager.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\asset\FileLoader.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\asset\FileManager.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\asset\Image.hpp">
-      <Filter>Header Files\asset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\Application.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\base.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\Context.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\Exception.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\base\String.hpp">
-      <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\AttributeDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Gl.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Kinds.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Material.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\MaterialDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\MaterialManager.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Program.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\ProgramDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\ProgramManager.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\render.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\RenderCommand.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\RenderQueue.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Shader.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Texture.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\TextureDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\TextureManager.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\UniformValue.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\VertexArray.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\VertexBuffer.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\VertexDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\platform.hpp">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\Enums.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\platform\windows\SOILImageLoader.hpp">
-      <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\ProgramUniformDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\render\ProgramAttributeDefinition.hpp">
-      <Filter>Header Files\render</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="..\src\gorn\asset\ObjMeshLoader.cpp">
+      <Filter>asset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\asset\ShapeMeshFactory.cpp">
+      <Filter>asset</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\gorn\asset\FileLoader.cpp">
-      <Filter>Source Files\asset</Filter>
+      <Filter>asset</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\asset\FileManager.cpp">
-      <Filter>Source Files\asset</Filter>
+      <Filter>asset</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\asset\Image.cpp">
-      <Filter>Source Files\asset</Filter>
+      <Filter>asset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\asset\Mesh.cpp">
+      <Filter>asset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Rect.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Shapes.cpp">
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\base\String.cpp">
-      <Filter>Source Files\base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\base\Context.cpp">
-      <Filter>Source Files\base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\AttributeDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Gl.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Kinds.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Material.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\MaterialDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\MaterialManager.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Program.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\ProgramDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\ProgramManager.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\RenderCommand.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\RenderQueue.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Shader.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Texture.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\TextureDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\TextureManager.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\UniformValue.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\VertexArray.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\VertexBuffer.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\VertexDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\Enums.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\etc1_utils.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\image_DXT.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\image_helper.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\SOIL2.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\lib\soil2\src\SOIL2\stb_image_write.c">
-      <Filter>Source Files\platform\SOIL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\windows\Main.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp">
-      <Filter>Source Files\platform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\platform\windows\SOILImageLoader.cpp">
-      <Filter>Source Files\platform</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\base\Application.cpp">
-      <Filter>Source Files\base</Filter>
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Context.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Frustum.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\VertexBuffer.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\VertexDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\AttributeDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Base.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\ClearAction.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Enums.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\FrameBuffer.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Material.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\MaterialDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\MaterialManager.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Program.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\ProgramAttributeDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\ProgramDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\ProgramManager.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\ProgramUniformDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\RenderBuffer.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Shader.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\StateChange.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Stencil.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Texture.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\TextureDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\TextureManager.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\UniformValue.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\VertexArray.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\platform\StbImageLoader.cpp">
+      <Filter>platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\platform\LocalFileLoader.cpp">
+      <Filter>platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderQueue.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderCommand.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderKinds.cpp">
+      <Filter>render</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\buffer\src\buffer.cpp">
-      <Filter>Source Files\base</Filter>
+      <Filter>lib\buffer</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\buffer\src\buffer_reader.cpp">
-      <Filter>Source Files\base</Filter>
+      <Filter>lib\buffer</Filter>
     </ClCompile>
     <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp">
-      <Filter>Source Files\base</Filter>
+      <Filter>lib\buffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\render\GlEnums.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\ProgramUniformDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gorn\render\ProgramAttributeDefinition.cpp">
-      <Filter>Source Files\render</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\ShapeMeshFactory.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\asset.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\AssetLoader.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\AssetManager.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\DataAssetLoader.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\FileAssetLoader.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\FileLoader.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\FileManager.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\Image.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\asset\Mesh.hpp">
+      <Filter>asset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Frustum.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Rect.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Shapes.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\String.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Application.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\base.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Config.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Context.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\DefinitionManager.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Exception.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\VertexBuffer.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\VertexDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\AttributeDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Base.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\ClearAction.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Enums.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\FrameBuffer.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\gl.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Material.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\MaterialDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\MaterialManager.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Program.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\ProgramAttributeDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\ProgramDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\ProgramManager.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\ProgramUniformDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\RenderBuffer.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Shader.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\StateChange.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Stencil.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Texture.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\TextureDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\TextureManager.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\UniformValue.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\VertexArray.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\LocalFileLoader.hpp">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\platform.hpp">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\platform\StbImageLoader.hpp">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderKinds.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderQueue.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\render.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderCommand.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\buffer\src\buffer_reader.hpp">
+      <Filter>lib\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\buffer\src\buffer.hpp">
+      <Filter>lib\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\buffer\src\buffer_writer.hpp">
+      <Filter>lib\buffer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

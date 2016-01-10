@@ -55,7 +55,7 @@ namespace gorn
 
     void Image::flipDataVertically()
     {
-        size_t h = _size.y;
+        size_t h = (size_t)_size.y;
         size_t c = _data.size()/h;
         for(size_t y=0; y<h/2; y++)
         {

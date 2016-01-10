@@ -5,7 +5,7 @@
 namespace gorn
 {
     std::map<GLenum, GLuint> Texture::s_currentIds;
-    std::map<size_t, GLuint> Texture::s_activeIds;
+	std::map<size_t, GLuint> Texture::s_activeIds;
 
 	Texture::Texture(GLenum target):
 	_id(0), _target(target)
@@ -18,12 +18,15 @@ namespace gorn
         cleanup();
 	}
 
-    void Texture::cleanup()
-    {
-        if(s_currentIds[_target] == _id)
-        {
-            s_currentIds.erase(_target);
-        }
+	void Texture::cleanup()
+	{
+		{
+			auto itr = s_currentIds.find(_target);
+			if(itr != s_currentIds.end() && itr->second == _id)
+			{
+				s_currentIds.erase(_target);
+			}
+		}
         for(auto itr = s_activeIds.begin(); itr != s_activeIds.end();)
         {
             if(itr->second == _id)
@@ -90,11 +93,7 @@ namespace gorn
 
     GLint getGlInternalFormat(ImageFormat f)
     {
-        switch(f)
-        {
-        default:
-            return 0;
-        }
+		return 0;
     }
 
     void Texture::setImage(const Image& img, GLint lodLevel)

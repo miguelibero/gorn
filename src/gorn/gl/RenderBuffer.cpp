@@ -81,9 +81,10 @@ namespace gorn
             auto oldId = s_currentId;
             bindId(_id);
             glRenderbufferStorage(GL_RENDERBUFFER,
-                getTypeFormat(_type), _size.x, _size.y);
+                getTypeFormat(_type), (GLsizei)_size.x, (GLsizei)_size.y);
 
-            int w=_size.x, h=_size.y;
+			int w = (int)_size.x;
+			int h = (int)_size.y;
             glGetRenderbufferParameteriv(GL_RENDERBUFFER,
                 GL_RENDERBUFFER_WIDTH, &w);
             glGetRenderbufferParameteriv(GL_RENDERBUFFER,

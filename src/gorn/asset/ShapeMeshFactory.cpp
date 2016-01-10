@@ -1,3 +1,6 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include <gorn/asset/ShapeMeshFactory.hpp>
 #include <gorn/base/Shapes.hpp>
 #include <gorn/base/Rect.hpp>

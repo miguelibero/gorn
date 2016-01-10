@@ -19,3 +19,4 @@ Debug/
 Release/
 *vcxproj.user
 *.xcworkspace/
+*.VC.opendb

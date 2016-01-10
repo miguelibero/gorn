@@ -29,20 +29,13 @@ QueueApplication::QueueApplication()
 
 void QueueApplication::load()
 {
-#ifdef GORN_PLATFORM_LINUX
+#if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
 	_ctx.getFiles()
         .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-#elif GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
-		.makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
-	_ctx.getFiles()
-		.makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-	_ctx.getFiles()
-		.makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 #elif GORN_PLATFORM_ANDROID
 	_ctx.getFiles()
         .makeLoader<AssetFileLoader>("sprite", "%s.png");
@@ -83,14 +76,14 @@ void QueueApplication::draw()
             .withType(ClearType::Color));
 
     _ctx.getQueue().addCommand("sprite:kitten")
-        .withAttribute(AttributeKind::Position, {
+        .withAttribute(AttributeKind::Position, buffer{
             -0.75f,  0.75f,
              0.25f,  0.75f,
              0.25f, -0.25f,
             -0.75f, -0.25f,
              0.66f
         }, 2, BasicType::Float)
-        .withAttribute(AttributeKind::TexCoords, {
+        .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
@@ -102,13 +95,13 @@ void QueueApplication::draw()
         });
 
     _ctx.getQueue().addCommand("sprite:kitten")
-        .withAttribute(AttributeKind::Position, {
+        .withAttribute(AttributeKind::Position, buffer{
              0.25f,  0.75f,
              0.75f,  0.75f,
              0.75f, -0.25f,
              0.25f, -0.25f
         }, 2, BasicType::Float)
-        .withAttribute(AttributeKind::TexCoords, {
+        .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
@@ -120,13 +113,13 @@ void QueueApplication::draw()
         });
 
     _ctx.getQueue().addCommand("sprite:puppy")
-        .withAttribute(AttributeKind::Position, {
+        .withAttribute(AttributeKind::Position, buffer{
             -0.25f,  0.25f,
              0.75f,  0.25f,
              0.75f, -0.75f,
             -0.25f, -0.75f
         }, 2, BasicType::Float)
-        .withAttribute(AttributeKind::TexCoords, {
+        .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
