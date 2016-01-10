@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <windowsx.h>
 #include <gorn/gl/Base.hpp>
 #include <gorn/base/Application.hpp>
 
@@ -8,6 +9,7 @@ HPALETTE hPalette;
 std::unique_ptr<gorn::Application> app;
 _int64 timeStamp;
 _int64 timeStampFreq;
+bool mouseButtonDown;
 
 void
 load() {
@@ -71,6 +73,10 @@ resize(int width, int height)
 {
 	/* set viewport to cover the window */
 	glViewport(0, 0, width, height);
+	if (app)
+	{
+		app->setSize(glm::vec2(width, height));
+	}
 }
 
 void
@@ -167,6 +173,17 @@ setupPalette(HDC hDC)
 	}
 }
 
+glm::vec2 getMousePosition(LPARAM lParam)
+{
+	auto p = glm::vec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+	if (app)
+	{
+		p.y = app->getSize().y - p.y;
+		p = (p / app->getSize())*2.0f - glm::vec2(1.0f);
+	}
+	return p;
+}
+
 LRESULT APIENTRY
 WndProc(
 HWND hWnd,
@@ -239,8 +256,8 @@ LPARAM lParam)
 		}
 		EndPaint(hWnd, &ps);
 		return 0;
+		break;
 	}
-	break;
 	case WM_CHAR:
 		/* handle keyboard input */
 		switch ((int)wParam)
@@ -250,6 +267,26 @@ LPARAM lParam)
 			return 0;
 		default:
 			break;
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		if (app)
+		{
+			app->realTouch(getMousePosition(lParam));
+		}
+		mouseButtonDown = true;
+		break;
+	case WM_MOUSEMOVE:
+		if (app && mouseButtonDown)
+		{
+			app->realTouch(getMousePosition(lParam));
+		}
+		break;
+	case WM_LBUTTONUP:
+		mouseButtonDown = false;
+		if (app)
+		{
+			app->realTouchEnd(getMousePosition(lParam));
 		}
 		break;
 	default:

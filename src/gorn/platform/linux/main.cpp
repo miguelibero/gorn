@@ -33,7 +33,7 @@ int main(void)
     {
         throw gorn::Exception("cannot connect to X server");
     }
-    
+
     root = DefaultRootWindow(display);
     vi = glXChooseVisual(display, 0, att);
 
@@ -106,11 +106,15 @@ int main(void)
                     finished = true;
                 }
                 break;
+            case ConfigureNotify:
+                XConfigureEvent xce = e.xconfigure;
+                app->setSize(glm::vec2(xce.width, xce.height))
+                break;
             case ButtonPress:
                 p = glm::vec2(xev.xbutton.x, xev.xbutton.y);
                 buttonPressed = true;
                 break;
-            case MotionNotify: 
+            case MotionNotify:
                 p = glm::vec2(xev.xmotion.x, xev.xmotion.y);
                 break;
             case ButtonRelease:
@@ -120,7 +124,7 @@ int main(void)
                 break;
             }
             if(buttonPressed)
-            {               
+            {
                 p.y = app->getSize().y - p.y;
                 p = (p/app->getSize())*2.0f-glm::vec2(1.0f);
                 if(buttonPressEnded)

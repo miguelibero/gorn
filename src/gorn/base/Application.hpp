@@ -29,13 +29,13 @@ namespace gorn
         virtual void touch(const glm::vec2& p);
         virtual void touchEnd(const glm::vec2& p);
 
-        void setSize(const glm::vec2& size);
         void setName(const std::string& name);
 	public:
 	    Application();
         virtual ~Application();
        
-        const glm::vec2& getSize();
+		void setSize(const glm::vec2& size);
+		const glm::vec2& getSize();
         const std::string& getName();
 
         void setPreferredFramesPerSecond(size_t fps);
