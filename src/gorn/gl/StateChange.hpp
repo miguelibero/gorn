@@ -7,16 +7,16 @@
 
 namespace gorn
 {
-	class StateChange
-	{
+    class StateChange
+    {
     public:
         typedef std::map<TestType,bool> TestChanges;
         typedef std::map<MaskType,bool> MaskChanges;
     private:
         TestChanges _tests;
         MaskChanges _masks;
-	public:
-		StateChange();
+    public:
+        StateChange();
 
         StateChange& withEnable(TestType type);
         StateChange& withDisable(TestType type);
@@ -26,7 +26,7 @@ namespace gorn
 
         bool operator==(const StateChange& other) const;
         bool operator!=(const StateChange& other) const;
-		
+        
         void apply();
 
         static StateChange current();

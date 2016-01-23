@@ -9,25 +9,25 @@
 
 namespace gorn
 {
-	class Exception: public std::exception
-	{
-	private:
-		std::string _msg;
-	public:
-		Exception(const std::string& msg):
-		_msg(msg)
-		{
+    class Exception: public std::exception
+    {
+    private:
+        std::string _msg;
+    public:
+        Exception(const std::string& msg):
+        _msg(msg)
+        {
 #ifdef GORN_PLATFORM_ANDROID
             __android_log_print(ANDROID_LOG_ERROR, "gorn",
                 "exception: %s", msg.c_str());
 #endif
-		}
+        }
 
-		virtual const char* what() const throw()
-		{
-			return _msg.c_str();
-		}
-	};
+        virtual const char* what() const throw()
+        {
+            return _msg.c_str();
+        }
+    };
 }
 
 #endif /* defined(__gorn__Exception__) */

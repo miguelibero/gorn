@@ -7,13 +7,13 @@ namespace gorn
 {
     class Mesh;
 
-	class ObjMeshLoader : public DataAssetLoader<Mesh>
-	{
+    class ObjMeshLoader : public DataAssetLoader<Mesh>
+    {
     public:
         ObjMeshLoader() NOEXCEPT;
         bool validate(const buffer& data) const NOEXCEPT override;
         Mesh load(const buffer& data) const override;
-	};
+    };
 }
 
 #endif

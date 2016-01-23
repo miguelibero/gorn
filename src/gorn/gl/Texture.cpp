@@ -5,28 +5,28 @@
 namespace gorn
 {
     std::map<GLenum, GLuint> Texture::s_currentIds;
-	std::map<size_t, GLuint> Texture::s_activeIds;
+    std::map<size_t, GLuint> Texture::s_activeIds;
 
-	Texture::Texture(GLenum target):
-	_id(0), _target(target)
-	{
-		glGenTextures(1, &_id);
-	}
+    Texture::Texture(GLenum target):
+    _id(0), _target(target)
+    {
+        glGenTextures(1, &_id);
+    }
 
-	Texture::~Texture()
-	{
+    Texture::~Texture()
+    {
         cleanup();
-	}
+    }
 
-	void Texture::cleanup()
-	{
-		{
-			auto itr = s_currentIds.find(_target);
-			if(itr != s_currentIds.end() && itr->second == _id)
-			{
-				s_currentIds.erase(_target);
-			}
-		}
+    void Texture::cleanup()
+    {
+        {
+            auto itr = s_currentIds.find(_target);
+            if(itr != s_currentIds.end() && itr->second == _id)
+            {
+                s_currentIds.erase(_target);
+            }
+        }
         for(auto itr = s_activeIds.begin(); itr != s_activeIds.end();)
         {
             if(itr->second == _id)
@@ -38,11 +38,11 @@ namespace gorn
                 ++itr;
             }
         }
-		if(_id != 0 && glIsTexture(_id) == GL_TRUE)
-		{
-			glDeleteTextures(1, &_id);
+        if(_id != 0 && glIsTexture(_id) == GL_TRUE)
+        {
+            glDeleteTextures(1, &_id);
             checkGlError("deleting texture");
-		}
+        }
     }
 
     Texture::Texture(Texture&& other):
@@ -93,7 +93,7 @@ namespace gorn
 
     GLint getGlInternalFormat(ImageFormat f)
     {
-		return 0;
+        return 0;
     }
 
     void Texture::setImage(const Image& img, GLint lodLevel)
@@ -116,10 +116,10 @@ namespace gorn
         checkGlError("setting texture image");
     }
 
-	GLuint Texture::getId() const
-	{
-		return _id;
-	}
+    GLuint Texture::getId() const
+    {
+        return _id;
+    }
 
     const glm::vec2& Texture::getSize() const
     {

@@ -82,14 +82,22 @@ namespace gorn
     {
         setUniformValue(UniformKind::View, view);
         _viewTrans = view;
-        _frustum = _projTrans*_viewTrans;
+        updateCamera();
     }
 
     void RenderQueue::setProjectionTransform(const glm::mat4& proj)
     {
         setUniformValue(UniformKind::Projection, proj);
         _projTrans = proj;
-        _frustum = _projTrans*_viewTrans;
+        updateCamera();
+    }
+
+    void RenderQueue::updateCamera()
+    {
+        _camera = _projTrans*_viewTrans;
+        auto pos = glm::vec3(_viewTrans*glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        setUniformValue(UniformKind::CameraPosition, pos);
+        setUniformValue(UniformKind::Camera, _camera.getMatrix());
     }
 
     void RenderQueue::setModelTransform(const glm::mat4& model)
@@ -99,7 +107,7 @@ namespace gorn
 
     const Frustum& RenderQueue::getFrustum() const
     {
-        return _frustum;
+        return _camera;
     }
 
     void RenderQueue::draw()
@@ -118,7 +126,7 @@ namespace gorn
         }
         _tempInfoAmount++;
 
-        State state(_frustum, _modelTrans);
+        State state(_camera, _modelTrans);
         Block block;
 
         std::vector<Command> commands;

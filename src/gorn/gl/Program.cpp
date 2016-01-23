@@ -9,11 +9,11 @@ namespace gorn
 {
     GLuint Program::s_currentId = 0;
 
-	Program::Program(const std::shared_ptr<Shader>& vertexShader,
+    Program::Program(const std::shared_ptr<Shader>& vertexShader,
         const std::shared_ptr<Shader>& fragmentShader):
-	_id(0), _vertexShader(vertexShader), _fragmentShader(fragmentShader)
-	{
-		_id = glCreateProgram();
+    _id(0), _vertexShader(vertexShader), _fragmentShader(fragmentShader)
+    {
+        _id = glCreateProgram();
         if(_id == 0)
         {
             throw Exception("Could not create program.");
@@ -24,7 +24,7 @@ namespace gorn
         checkGlError("attaching vertex shader");
         glLinkProgram(_id);
         checkGlError("linking a program");
-	}
+    }
 
     void Program::cleanup()
     {
@@ -63,25 +63,25 @@ namespace gorn
         return *this;
     }
 
-	Program::~Program()
-	{
+    Program::~Program()
+    {
        cleanup();
-	}
+    }
 
-	GLuint Program::getId() const
-	{
-		return _id;
-	}
+    GLuint Program::getId() const
+    {
+        return _id;
+    }
 
-	const Shader& Program::getFragmentShader() const
-	{
-		return *_fragmentShader;
-	}
+    const Shader& Program::getFragmentShader() const
+    {
+        return *_fragmentShader;
+    }
 
-	const Shader& Program::getVertexShader() const
-	{
-		return *_vertexShader;
-	}
+    const Shader& Program::getVertexShader() const
+    {
+        return *_vertexShader;
+    }
 
     void Program::use() const
     {
@@ -125,16 +125,16 @@ namespace gorn
         return itr->second;
     }
 
-	GLint Program::getUniform(const std::string& name) const
-	{
+    GLint Program::getUniform(const std::string& name) const
+    {
         auto itr = _uniforms.find(name);
         if(itr == _uniforms.end())
         {
-		    GLint id = glGetUniformLocation(getId(), name.c_str());
+            GLint id = glGetUniformLocation(getId(), name.c_str());
             itr = _uniforms.insert(itr, {name, id});
         }
         return itr->second;
-	}
+    }
 
     bool Program::hasTransformableAttribute(const std::string& name) const
     {
@@ -166,14 +166,14 @@ namespace gorn
         setUniformValue(getUniform(name), value);
     }
 
-	void Program::setUniformValue(const GLint& location,
+    void Program::setUniformValue(const GLint& location,
         const UniformValue& value)
-	{
+    {
         if(location >= 0)
         {
             use();
             value.set(location);
         }
-	}
+    }
 
 }

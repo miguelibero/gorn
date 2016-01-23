@@ -7,7 +7,7 @@
 
 class TriangleApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     gorn::VertexArray _vao;
     double _time;
 
@@ -37,10 +37,10 @@ _time(0.0f)
 void TriangleApplication::load()
 {
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<gorn::LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<gorn::AssetFileLoader>("%s");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
@@ -91,6 +91,6 @@ void TriangleApplication::draw()
     glClear(GL_COLOR_BUFFER_BIT);
 
     _vao.getProgram()->setUniformValue("timeSin", (float)sin(_time));
-	_vao.draw(3);
+    _vao.draw(3);
 }
 

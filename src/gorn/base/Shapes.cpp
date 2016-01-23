@@ -1,5 +1,6 @@
 
 #include <gorn/base/Shapes.hpp>
+#include <gorn/base/Exception.hpp>
 
 namespace gorn
 {
@@ -7,52 +8,51 @@ namespace gorn
     {
     }
 
-    PlaneShape::PlaneShape(const glm::vec3& tr,  
-        const glm::vec3& tl,
-        const glm::vec3& bl,
-        const glm::vec3& br):
-    topright(tr), topleft(tl), bottomleft(bl), bottomright(br)
+    PlaneShape::PlaneShape(const glm::vec3& x, 
+        const glm::vec3& y,
+        const glm::vec3& c):
+    xaxis(x), yaxis(y), center(c)
     {
     }
 
-    PlaneShape::PlaneShape(const Corners& corners):
-    topright(corners[0]), topleft(corners[1]),
-    bottomleft(corners[2]), bottomright(corners[3])
+    PlaneShape::PlaneShape(const Corners& cs)
     {
+        xaxis = cs[0] - cs[1];
+        yaxis = cs[0] - cs[3];
+        center = cs[2] + 0.5f*xaxis + 0.5f*yaxis;
     }
 
-    PlaneShape& PlaneShape::withTopLeft(const glm::vec3& p)
+    PlaneShape& PlaneShape::withXAxis(const glm::vec3& x)
     {
-        topleft = p;
+        xaxis = x;
         return *this;
     }
 
-    PlaneShape& PlaneShape::withTopRight(const glm::vec3& p)
+    PlaneShape& PlaneShape::withYAxis(const glm::vec3& y)
     {
-        topright = p;
+        yaxis = y;
         return *this;
     }
 
-    PlaneShape& PlaneShape::withBottomLeft(const glm::vec3& p)
+    PlaneShape& PlaneShape::withCenter(const glm::vec3& c)
     {
-        bottomleft = p;
-        return *this;
-    }
-
-    PlaneShape& PlaneShape::withBottomRight(const glm::vec3& p)
-    {
-        bottomright = p;
+        center = c;
         return *this;
     }
 
     PlaneShape::Corners PlaneShape::corners() const
     {
         return Corners{
-            topright,
-            topleft,
-            bottomleft,
-            bottomright,
+            center + 0.5f*xaxis + 0.5f*yaxis,
+            center - 0.5f*xaxis + 0.5f*yaxis,
+            center - 0.5f*xaxis - 0.5f*yaxis,
+            center + 0.5f*xaxis - 0.5f*yaxis
         };  
+    }
+
+    glm::vec3 PlaneShape::normal() const
+    {
+        return glm::cross(xaxis, yaxis);
     }
 
     CubeShape::CubeShape()
@@ -64,9 +64,9 @@ namespace gorn
     {
     }
 
-    CubeShape::CubeShape(const Corners& cs):
-    front(cs[0], cs[1], cs[2], cs[3]),
-    back(cs[4], cs[5], cs[6], cs[7])
+    CubeShape::CubeShape(const Corners& cs) :
+        front({ cs[0], cs[1], cs[2], cs[3] }),
+        back({ cs[4], cs[5], cs[6], cs[7] })
     {
     }
 
@@ -90,6 +90,14 @@ namespace gorn
         std::move(bcorners.begin(), bcorners.end(), corners.begin()+fcorners.size());
         std::move(fcorners.begin(), fcorners.end(), corners.begin());
         return corners;
+    }
+
+    CubeShape::Normals CubeShape::normals() const
+    {
+        Normals normals;
+        front.normal();
+        back.normal();
+        return normals;
     }
 
     SphereShape::SphereShape():

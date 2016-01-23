@@ -7,7 +7,7 @@ using namespace gorn;
 
 class StencilApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     gorn::VertexArray _vao;
     float _time;
 
@@ -48,13 +48,13 @@ void StencilApplication::load()
     glEnable(GL_DEPTH_TEST);
 
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<AssetFileLoader>("%s");
 #endif
-	_ctx.getImages()
+    _ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
     auto view = glm::lookAt(
@@ -178,7 +178,7 @@ void StencilApplication::draw()
 
     _vao.getMaterial()->setUniformValue(
         UniformKind::Model, model);
-	_vao.draw(36);
+    _vao.draw(36);
 
     StateChange()
         .withEnable(TestType::Stencil)
@@ -197,7 +197,7 @@ void StencilApplication::draw()
         .withType(ClearType::Stencil)
         .apply();
 
-	_vao.draw(6, 36);
+    _vao.draw(6, 36);
 
     Stencil()
         .withFunction(StencilFunction::Equal)
@@ -218,7 +218,7 @@ void StencilApplication::draw()
     _vao.getMaterial()->setUniformValue(
         UniformKind::Model, model);
 
-	_vao.draw(36);
+    _vao.draw(36);
 
     StateChange()
         .withDisable(TestType::Stencil)

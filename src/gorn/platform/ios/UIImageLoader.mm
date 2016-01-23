@@ -38,6 +38,6 @@ namespace gorn
         
         return Image(std::move(raw), Image::DataOrigin::TopLeft,
             glm::vec2(width, height), true, BasicType::UnsignedByte);
-	}
+    }
 
 }

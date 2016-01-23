@@ -13,17 +13,17 @@ namespace gorn
     {
     }
 
-	bool StbImageLoader::validate(const buffer& input) const NOEXCEPT
+    bool StbImageLoader::validate(const buffer& input) const NOEXCEPT
     {
         int width;
         int height;
         int comp;
         auto result = stbi_info_from_memory(input.data(), (int)input.size(),
             &width, &height, &comp);
-		return result == 1;
+        return result == 1;
     }
 
-	Image StbImageLoader::load(const buffer& input) const
+    Image StbImageLoader::load(const buffer& input) const
     {
         int width;
         int height;

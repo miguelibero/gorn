@@ -8,25 +8,25 @@
 
 namespace gorn
 {
-	class Material
-	{
-	private:
-		std::shared_ptr<Program> _program;
-		std::map<GLint, std::shared_ptr<Texture>> _textures;
+    class Material
+    {
+    private:
+        std::shared_ptr<Program> _program;
+        std::map<GLint, std::shared_ptr<Texture>> _textures;
         std::map<GLint, UniformValue> _uniformValues;
 
-	public:
-		Material(const std::shared_ptr<Program>& program);
+    public:
+        Material(const std::shared_ptr<Program>& program);
 
-		void setTexture(const std::string& name,
+        void setTexture(const std::string& name,
             const std::shared_ptr<Texture>& texture);
-		void setUniformValue(const std::string& name,
+        void setUniformValue(const std::string& name,
             const UniformValue& value);
 
         const glm::vec2& getSize() const;
-		const std::shared_ptr<Program>& getProgram() const;
+        const std::shared_ptr<Program>& getProgram() const;
         void activate();
-	};
+    };
 
 }
 

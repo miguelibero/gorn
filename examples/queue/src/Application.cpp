@@ -5,7 +5,7 @@ using namespace gorn;
 
 class QueueApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
 
 public:
 
@@ -30,18 +30,18 @@ QueueApplication::QueueApplication()
 void QueueApplication::load()
 {
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("sprite", "../assets/%s.png");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("sprite", "%s.png");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
@@ -52,7 +52,7 @@ void QueueApplication::load()
         .makeLoader<BundleFileLoader>("fsh", "%s.fsh");
 #endif
 
-	_ctx.getImages()
+    _ctx.getImages()
         .makeDataLoader<StbImageLoader>("sprite");
 
     _ctx.getMaterials().getDefinitions()
@@ -130,5 +130,5 @@ void QueueApplication::draw()
             2, 3, 0
         });
 
-	_ctx.getQueue().draw();
+    _ctx.getQueue().draw();
 }

@@ -8,11 +8,11 @@
 
 namespace gorn
 {
-	class Image;
+    class Image;
 
-	class TextureDefinition
-	{
-	private:
+    class TextureDefinition
+    {
+    private:
         std::string _imageName;
         GLenum _target;
         GLint _lod;
@@ -20,8 +20,8 @@ namespace gorn
         std::map<GLenum, GLfloat> _floatParams;
         std::map<GLenum, std::vector<GLint>> _intVecParams;
         std::map<GLenum, std::vector<GLfloat>> _floatVecParams;
-	public:
-		TextureDefinition();
+    public:
+        TextureDefinition();
         TextureDefinition& withImage(const std::string& image);
         TextureDefinition& withTarget(GLenum target);
         TextureDefinition& withLevelOfDetail(GLint lod);
@@ -38,7 +38,7 @@ namespace gorn
         const std::map<GLenum, std::vector<GLint>>& getIntPointerParameters() const;
         const std::map<GLenum, std::vector<GLfloat>>& getFloatPointerParameters() const;
 
-	};
+    };
 }
 
 #endif

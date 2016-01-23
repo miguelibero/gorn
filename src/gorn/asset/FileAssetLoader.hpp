@@ -15,24 +15,24 @@
 namespace gorn
 {
     template<typename T>
-	class FileAssetLoader : public AssetLoader<T>
-	{
+    class FileAssetLoader : public AssetLoader<T>
+    {
     public:
         typedef DataAssetLoader<T> Loader;
         typedef std::vector<std::shared_ptr<Loader>> Loaders;
-	private:
+    private:
         FileManager& _files;
-		std::map<std::string, Loaders> _loaders;
+        std::map<std::string, Loaders> _loaders;
 
         Loaders getLoaders(const std::string& name) const NOEXCEPT;
 
-	public:
+    public:
         FileAssetLoader(FileManager& files) NOEXCEPT;
 
         virtual bool validate(const std::string& name) const NOEXCEPT override;
         virtual T load(const std::string& name) const override;
 
-	    void addDefaultLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
+        void addDefaultLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
         void addLoader(const std::string& tag,
             std::unique_ptr<Loader>&& loader) NOEXCEPT;
 
@@ -40,16 +40,16 @@ namespace gorn
         void makeDefaultLoader(Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
         void makeLoader(const std::string& tag, Args&&... args) NOEXCEPT;
-	};
+    };
 
     template<typename T>
-	FileAssetLoader<T>::FileAssetLoader(FileManager& files) NOEXCEPT:
+    FileAssetLoader<T>::FileAssetLoader(FileManager& files) NOEXCEPT:
     _files(files)
     {
     }
 
     template<typename T>
-	void FileAssetLoader<T>::addDefaultLoader(
+    void FileAssetLoader<T>::addDefaultLoader(
         std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
         addLoader(String::kDefaultTag, std::move(loader));
@@ -58,13 +58,13 @@ namespace gorn
     template<typename T>
     void FileAssetLoader<T>::addLoader(const std::string& tag,
         std::unique_ptr<Loader>&& loader) NOEXCEPT
-	{
+    {
         if(loader == nullptr)
         {
             throw Exception("Cannot add an empty loader");
         }
-		_loaders[tag].push_back(std::move(loader));
-	}
+        _loaders[tag].push_back(std::move(loader));
+    }
 
     template<typename T>
     template<typename L, typename... Args>
@@ -119,12 +119,12 @@ namespace gorn
         {
             auto data = _files.load(name, true).get();
             for(auto& loader : loaders)
-	        {
-		        if(loader->validate(data))
-		        {
-			        return true;
-		        }
-	        }
+            {
+                if(loader->validate(data))
+                {
+                    return true;
+                }
+            }
         }
         catch(const Exception&)
         {
@@ -138,19 +138,19 @@ namespace gorn
         auto loaders = getLoaders(name);
         auto data = _files.load(name, true).get();
         for(auto& loader : loaders)
-	    {
-		    if(loader->validate(data))
-		    {
+        {
+            if(loader->validate(data))
+            {
                 try
                 {
-			        return loader->load(data);
+                    return loader->load(data);
                 }
                 catch(const Exception&)
                 {
                 }
-		    }
-	    }
-		throw Exception("Could not load asset.");
+            }
+        }
+        throw Exception("Could not load asset.");
     }
 
 }

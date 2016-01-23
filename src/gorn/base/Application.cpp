@@ -40,7 +40,11 @@ namespace gorn
 
     void Application::setSize(const glm::vec2& size)
     {
-        _size = size;
+        if(_size != size)
+        {
+            _size = size;
+            resize();
+        }
     }
 
     void Application::setName(const std::string& name)
@@ -78,6 +82,10 @@ namespace gorn
     }
 
     void Application::draw()
+    {
+    }
+
+    void Application::resize()
     {
     }
 
@@ -148,7 +156,7 @@ namespace gorn
         {
             _framesPerSecond = 1.0/dt;
             draw();
-			return true;
+            return true;
         }
         else
         {
@@ -163,10 +171,10 @@ namespace gorn
                     _drawInterval -= frameDuration;
                 }
                 _framesPerSecond = 1.0/(oldDrawInterval-_drawInterval);
-				return true;
+                return true;
             }
         }
-		return false;
+        return false;
     }
 
     void Application::realTouch(const glm::vec2& p)

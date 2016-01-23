@@ -5,10 +5,10 @@ namespace gorn
 {
     GLuint FrameBuffer::s_currentId = 0;
 
-	FrameBuffer::FrameBuffer():
-	_id(0)
-	{
-	}
+    FrameBuffer::FrameBuffer():
+    _id(0)
+    {
+    }
 
     void FrameBuffer::cleanup()
     {
@@ -44,10 +44,10 @@ namespace gorn
         return *this;
     }
 
-	FrameBuffer::~FrameBuffer()
-	{
+    FrameBuffer::~FrameBuffer()
+    {
        cleanup();
-	}
+    }
 
     void FrameBuffer::attach(
         const std::shared_ptr<Texture>& texture, AttachType type)
@@ -62,8 +62,8 @@ namespace gorn
         _renderBuffers[type].push_back(buffer);
     }
 
-	GLuint FrameBuffer::getId() const
-	{
+    GLuint FrameBuffer::getId() const
+    {
         if(_id == 0)
         {
             glGenFramebuffers(1, &_id);
@@ -72,8 +72,8 @@ namespace gorn
         {
             throw Exception("Could not create frame buffer.");
         }
-		return _id;
-	}
+        return _id;
+    }
 
     void FrameBuffer::bindId(GLuint id)
     {

@@ -7,11 +7,11 @@
 
 namespace gorn
 {
-	JniObject& AssetFileLoader::getJniObject()
-	{
-		static JniObject obj = JniObject::findSingleton("me.ibero.gorn.NativeBridge");
-		return obj;
-	}
+    JniObject& AssetFileLoader::getJniObject()
+    {
+        static JniObject obj = JniObject::findSingleton("me.ibero.gorn.NativeBridge");
+        return obj;
+    }
 
     const char* AssetFileLoader::kPlaceholder = "%s";
 
@@ -29,28 +29,28 @@ namespace gorn
 
     bool AssetFileLoader::validate(const std::string& name) const NOEXCEPT
     {
-		try
-		{
+        try
+        {
             auto path = getPath(name);
-			return getJniObject().call("validateFile", false, path);
-		}
-		catch(const JniException& e)
-		{
+            return getJniObject().call("validateFile", false, path);
+        }
+        catch(const JniException& e)
+        {
             return false;
-		}
+        }
     }
 
     buffer AssetFileLoader::load(const std::string& name) const
     {
-		try
-		{
+        try
+        {
             auto path = getPath(name);
-			return buffer(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
-		}
-		catch(const JniException& e)
-		{
-			throw Exception(std::string("JNI Error loading file '")+name+"': "+e.what());
-		}
+            return buffer(getJniObject().call("loadFile", std::vector<uint8_t>(), path));
+        }
+        catch(const JniException& e)
+        {
+            throw Exception(std::string("JNI Error loading file '")+name+"': "+e.what());
+        }
     }
 
 

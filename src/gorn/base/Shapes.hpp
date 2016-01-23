@@ -9,43 +9,43 @@ namespace gorn
     class PlaneShape
     {
     public:
-        typedef std::array<glm::vec3,4> Corners;
+        typedef std::array<glm::vec3, 4> Corners;
 
-        glm::vec3 topright;
-        glm::vec3 topleft;
-        glm::vec3 bottomleft;
-        glm::vec3 bottomright;
+        glm::vec3 xaxis;
+        glm::vec3 yaxis;
+        glm::vec3 center;
 
         PlaneShape();
-        PlaneShape(const glm::vec3& topright,
-            const glm::vec3& topleft,
-            const glm::vec3& bottomleft,
-            const glm::vec3& bottomright);
-        PlaneShape(const Corners& corners);
+        PlaneShape(const glm::vec3& x,
+            const glm::vec3& y,
+            const glm::vec3& center);
+        PlaneShape(const Corners& cs);
 
-        PlaneShape& withTopLeft(const glm::vec3& p);
-        PlaneShape& withTopRight(const glm::vec3& p);
-        PlaneShape& withBottomLeft(const glm::vec3& p);
-        PlaneShape& withBottomRight(const glm::vec3& p);
+        PlaneShape& withXAxis(const glm::vec3& x);
+        PlaneShape& withYAxis(const glm::vec3& y);
+        PlaneShape& withCenter(const glm::vec3& center);
 
         Corners corners() const;
+        glm::vec3 normal() const;
     };
 
     class CubeShape
     {
     public:
-        typedef std::array<glm::vec3,8> Corners;
+        typedef std::array<glm::vec3, 8> Corners;
+        typedef std::array<glm::vec3, 6> Normals;
         PlaneShape front;
         PlaneShape back;
 
         CubeShape();
         CubeShape(const PlaneShape& front, const PlaneShape& back);
-        CubeShape(const Corners& corners);
+        CubeShape(const Corners& cs);
 
         CubeShape& withFront(const PlaneShape& front);
         CubeShape& withBack(const PlaneShape& back);
 
         Corners corners() const;
+        Normals normals() const;
     };
 
     class SphereShape

@@ -33,14 +33,14 @@ namespace gorn {
         auto path = getPath(name);
         FILE *fh = nullptr;
 #ifdef GORN_PLATFORM_WINDOWS
-		if(fopen_s(&fh, path.c_str(), "rb") != 0)
-		{
-			fh = nullptr;
-		}
+        if(fopen_s(&fh, path.c_str(), "rb") != 0)
+        {
+            fh = nullptr;
+        }
 #else
         fh = fopen(path.c_str(), "rb");
 #endif
-		if (fh == nullptr)
+        if (fh == nullptr)
         { 
             throw Exception("Could not open file.");
         } 

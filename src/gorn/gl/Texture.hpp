@@ -8,20 +8,20 @@
 
 namespace gorn
 {
-	class Image;
+    class Image;
 
-	class Texture
-	{
-	private:
+    class Texture
+    {
+    private:
         static std::map<GLenum, GLuint> s_currentIds;
         static std::map<size_t, GLuint> s_activeIds;
-		GLuint _id;
+        GLuint _id;
         GLenum _target;
         glm::vec2 _size;
         void cleanup();
-	public:
-		Texture(GLenum target=GL_TEXTURE_2D);
-		~Texture();
+    public:
+        Texture(GLenum target=GL_TEXTURE_2D);
+        ~Texture();
 
         Texture(const Texture& other) = delete;
         Texture& operator=(const Texture& other) = delete;
@@ -29,7 +29,7 @@ namespace gorn
         Texture(Texture&& other);
         Texture& operator=(Texture&& other);
 
-		GLuint getId() const;
+        GLuint getId() const;
         void setImage(const Image& img, GLint lodLevel=0);
         void setParameter(GLenum name, GLint value);
         void setParameter(GLenum name, GLfloat value);
@@ -39,7 +39,7 @@ namespace gorn
         void attachToFrameBuffer(GLenum type);
         void activate(size_t pos);
         const glm::vec2& getSize() const;
-	};
+    };
 }
 
 #endif

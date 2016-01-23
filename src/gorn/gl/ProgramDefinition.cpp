@@ -5,7 +5,7 @@
 namespace gorn
 {
 
-	ProgramDefinition::ProgramDefinition()
+    ProgramDefinition::ProgramDefinition()
     {
     }
 
@@ -37,7 +37,7 @@ namespace gorn
         return *this;
     }
 
-	ProgramDefinition& ProgramDefinition::withAttribute(
+    ProgramDefinition& ProgramDefinition::withAttribute(
         const std::string& alias,
         const Attribute& attribute)
     {
@@ -66,20 +66,20 @@ namespace gorn
         return itr != _shaderFiles.end();
     }
 
-	const std::string& ProgramDefinition::getShaderFile(ShaderType type) const
+    const std::string& ProgramDefinition::getShaderFile(ShaderType type) const
     {
         return _shaderFiles.at(type);
     }
 
-	const ProgramDefinition::Uniforms& ProgramDefinition::getUniforms() const
-	{
-		return _uniforms;
-	}
+    const ProgramDefinition::Uniforms& ProgramDefinition::getUniforms() const
+    {
+        return _uniforms;
+    }
 
-	const ProgramDefinition::Attributes& ProgramDefinition::
+    const ProgramDefinition::Attributes& ProgramDefinition::
         getAttributes() const
-	{
-		return _attributes;
-	}
+    {
+        return _attributes;
+    }
 
 }

@@ -6,12 +6,12 @@
 
 namespace gorn
 {
-	class VertexDefinition
-	{
+    class VertexDefinition
+    {
     private:
         std::map<std::string, AttributeDefinition> _attributes;
 
-	public:
+    public:
 
         VertexDefinition();
 
@@ -25,7 +25,7 @@ namespace gorn
         std::map<std::string, AttributeDefinition>& getAttributes();
 
         size_t getElementSize() const;
-	};
+    };
 }
 
 #endif

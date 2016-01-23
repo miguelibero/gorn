@@ -103,7 +103,9 @@ namespace gorn
         glm::mat4 _viewTrans;
         glm::mat4 _projTrans;
         glm::mat4 _modelTrans;
-        Frustum _frustum;
+        Frustum _camera;
+
+        void updateCamera();
 
     public:
         RenderQueue(MaterialManager& materials);

@@ -42,7 +42,6 @@ namespace gorn
         Frustum(const glm::mat4& matrix=glm::mat4());
         Frustum& operator=(const glm::mat4& matrix);
 
-        const glm::vec4& getPlane(PlaneType type) const;
         CubeShape shape() const;
 
         const glm::mat4& getMatrix() const;

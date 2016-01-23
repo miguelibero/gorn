@@ -133,18 +133,18 @@ namespace gorn
     CubeShape Rect::shape() const
     {
         return CubeShape(
-            PlaneShape(
-                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z),
-                glm::vec3(origin.x,        origin.y+size.y, origin.z),
+            PlaneShape({
+                glm::vec3(origin.x + size.x, origin.y + size.y, origin.z),
+                glm::vec3(origin.x,        origin.y + size.y, origin.z),
                 glm::vec3(origin.x,        origin.y,        origin.z),
-                glm::vec3(origin.x+size.x, origin.y,        origin.z)
-            ),
-            PlaneShape(
-                glm::vec3(origin.x+size.x, origin.y+size.y, origin.z+size.z),
-                glm::vec3(origin.x,        origin.y+size.y, origin.z+size.z),
-                glm::vec3(origin.x,        origin.y,        origin.z+size.z),
-                glm::vec3(origin.x+size.x, origin.y,        origin.z+size.z)
-            )
+                glm::vec3(origin.x + size.x, origin.y,        origin.z)
+            }),
+            PlaneShape({
+                glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
+                glm::vec3(origin.x,        origin.y + size.y, origin.z + size.z),
+                glm::vec3(origin.x,        origin.y,        origin.z + size.z),
+                glm::vec3(origin.x + size.x, origin.y,        origin.z + size.z)
+            })
         );
     }
 

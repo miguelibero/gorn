@@ -6,7 +6,7 @@ using namespace gorn;
 
 class FrustumApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     gorn::Mesh _sphereMesh;
     gorn::Mesh _frustumMesh;
     Frustum _frustum;
@@ -34,10 +34,10 @@ FrustumApplication::FrustumApplication()
 void FrustumApplication::load()
 {
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<AssetFileLoader>("%s");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
@@ -120,5 +120,5 @@ void FrustumApplication::draw()
         }
     }
 
-	_ctx.getQueue().draw();
+    _ctx.getQueue().draw();
 }

@@ -8,31 +8,31 @@
 
 namespace gorn
 {
-	class MaterialDefinition
-	{
+    class MaterialDefinition
+    {
     public:
         typedef std::map<std::string, std::string> Textures;
         typedef std::map<std::string, UniformValue> UniformValues;
-	private:
-		std::string _program;
-		Textures _textures;
-		UniformValues _uniformValues;
+    private:
+        std::string _program;
+        Textures _textures;
+        UniformValues _uniformValues;
 
-	public:
-		MaterialDefinition();
+    public:
+        MaterialDefinition();
         MaterialDefinition& withProgram(
             const std::string& program);
-		MaterialDefinition& withTexture(
+        MaterialDefinition& withTexture(
             const std::string& name, const std::string& value);
-		MaterialDefinition& withTexture(
+        MaterialDefinition& withTexture(
             const std::string& name);        
-		MaterialDefinition& withUniformValue(
+        MaterialDefinition& withUniformValue(
             const std::string& name, const UniformValue& value);
 
-		const std::string& getProgram() const;
-		const Textures& getTextures() const;
-		const UniformValues& getUniformValues() const;
-	};
+        const std::string& getProgram() const;
+        const Textures& getTextures() const;
+        const UniformValues& getUniformValues() const;
+    };
 
 }
 

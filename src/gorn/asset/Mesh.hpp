@@ -36,8 +36,8 @@ namespace gorn
     };
 
     template<typename V>
-	class MeshVertices
-	{
+    class MeshVertices
+    {
     public:
         typedef MeshElement Element;
         typedef std::vector<Element> Elements;
@@ -200,7 +200,7 @@ namespace gorn
                     auto& p = v.at(elm.get(n));
                     out.write(&p, sizeof(V));
                 }
-                else if(elm.hasDefault())
+                else if(elm.hasDefault() && v.size() > elm.getDefault())
                 {
                     auto& p = v.at(elm.getDefault());
                     out.write(&p, sizeof(V));
@@ -211,15 +211,15 @@ namespace gorn
         }
     }
 
-	class Mesh
-	{
+    class Mesh
+    {
     public:
         typedef size_t idx_t;
         typedef MeshElement Element;
         typedef std::vector<Element> Elements;
         typedef std::vector<idx_t> Indices;
         template<typename V> using Vertices = MeshVertices<V>;
-	private:
+    private:
         Vertices<glm::vec3> _vertices3;
         Vertices<glm::vec2> _vertices2;
         Vertices<float> _vertices1;
@@ -227,8 +227,8 @@ namespace gorn
         Indices _indices;
         DrawMode _drawMode;
 
-	public:
-		Mesh() NOEXCEPT;
+    public:
+        Mesh() NOEXCEPT;
 
         Mesh& operator+=(const Mesh& other);
         Mesh operator+(const Mesh& other) const;
@@ -264,8 +264,8 @@ namespace gorn
         void setDrawMode(DrawMode mode) NOEXCEPT;
         DrawMode getDrawMode() const NOEXCEPT;
 
-	    RenderCommand render() const NOEXCEPT;
-	};
+        RenderCommand render() const NOEXCEPT;
+    };
 
     template<>
     const Mesh::Vertices<float>& Mesh::getVertices() const NOEXCEPT;

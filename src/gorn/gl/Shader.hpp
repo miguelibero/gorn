@@ -13,17 +13,17 @@ namespace gorn
         Fragment
     };
 
-	class Shader
-	{
-	private:
-		GLuint _id;
-	public:
+    class Shader
+    {
+    private:
+        GLuint _id;
+    public:
         typedef ShaderType Type;
 
-		Shader(const buffer& source, ShaderType type);
-		~Shader();
-		GLuint getId() const;
-	};
+        Shader(const buffer& source, ShaderType type);
+        ~Shader();
+        GLuint getId() const;
+    };
 }
 
 #endif

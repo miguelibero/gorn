@@ -7,22 +7,22 @@
 
 namespace gorn
 {
-	class ClearAction
-	{
+    class ClearAction
+    {
     public:
         typedef ClearType Type;
         typedef std::vector<Type> Types;
     private:
         glm::vec4 _color;
         Types _types;
-	public:
-		ClearAction();
+    public:
+        ClearAction();
 
         ClearAction& withColor(const glm::vec4& color);
         ClearAction& withType(Type type);
 
         bool empty() const;
-		
+        
         void apply();
 
     };

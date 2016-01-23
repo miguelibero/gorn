@@ -76,7 +76,7 @@ namespace gorn
         setDefault(npos);
     }
 
-	Mesh::Mesh() NOEXCEPT:
+    Mesh::Mesh() NOEXCEPT:
     _drawMode(DrawMode::Triangles)
     {
     }

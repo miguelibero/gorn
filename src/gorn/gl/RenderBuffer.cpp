@@ -5,10 +5,10 @@ namespace gorn
 {
     GLuint RenderBuffer::s_currentId = 0;
 
-	RenderBuffer::RenderBuffer(const glm::vec2& size, Type type):
-	_id(0), _size(size), _type(type)
-	{
-	}
+    RenderBuffer::RenderBuffer(const glm::vec2& size, Type type):
+    _id(0), _size(size), _type(type)
+    {
+    }
 
     RenderBuffer::Type RenderBuffer::getType() const
     {
@@ -64,13 +64,13 @@ namespace gorn
         return *this;
     }
 
-	RenderBuffer::~RenderBuffer()
-	{
+    RenderBuffer::~RenderBuffer()
+    {
        cleanup();
-	}
+    }
 
-	GLuint RenderBuffer::getId() const
-	{
+    GLuint RenderBuffer::getId() const
+    {
         if(_id == 0)
         {
             glGenRenderbuffers(1, &_id);
@@ -83,8 +83,8 @@ namespace gorn
             glRenderbufferStorage(GL_RENDERBUFFER,
                 getTypeFormat(_type), (GLsizei)_size.x, (GLsizei)_size.y);
 
-			int w = (int)_size.x;
-			int h = (int)_size.y;
+            int w = (int)_size.x;
+            int h = (int)_size.y;
             glGetRenderbufferParameteriv(GL_RENDERBUFFER,
                 GL_RENDERBUFFER_WIDTH, &w);
             glGetRenderbufferParameteriv(GL_RENDERBUFFER,
@@ -92,8 +92,8 @@ namespace gorn
 
             bindId(oldId);
         }
-		return _id;
-	}
+        return _id;
+    }
 
     void RenderBuffer::bind() const
     {

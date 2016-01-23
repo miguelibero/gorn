@@ -9,24 +9,24 @@
 
 namespace gorn
 {
-	class FrameBuffer
-	{
+    class FrameBuffer
+    {
     public:
         typedef FrameBufferAttachType AttachType;
     private:
         typedef std::vector<std::shared_ptr<Texture>> Textures;
         typedef std::vector<std::shared_ptr<RenderBuffer>> RenderBuffers;
-		static GLuint s_currentId;
-		mutable GLuint _id;
+        static GLuint s_currentId;
+        mutable GLuint _id;
         std::map<AttachType,Textures> _textures;
         std::map<AttachType,RenderBuffers> _renderBuffers;
 
         void cleanup();
         static void bindId(GLuint id);
         static GLenum getAttachTypeEnum(AttachType type);
-	public:
-		FrameBuffer();
-		~FrameBuffer();
+    public:
+        FrameBuffer();
+        ~FrameBuffer();
 
         FrameBuffer(const FrameBuffer& other) = delete;
         FrameBuffer& operator=(const FrameBuffer& other) = delete;
@@ -41,7 +41,7 @@ namespace gorn
         void bind() const;
         static void unbind();
         void activate();
-		GLuint getId() const;
+        GLuint getId() const;
     };
 }
 

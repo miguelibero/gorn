@@ -9,6 +9,14 @@
 
 namespace gorn
 {
+    template<typename T, size_t N>
+    std::vector<T> arrayToVector(const std::array<T, N>& arr)
+    {
+        std::vector<T> vec(arr.size());
+        std::move(arr.begin(), arr.end(), vec.begin());
+        return vec;
+    }
+
     Mesh::Elements getCubeElements(DrawMode mode)
     {
         switch(mode)
@@ -132,8 +140,8 @@ namespace gorn
         }
 
         Mesh mesh;
-        mesh.setVertices(AttributeKind::Normal, std::move(normals));
         mesh.setVertices(AttributeKind::Position, std::move(positions));
+        mesh.setVertices(AttributeKind::Normal, std::move(normals));
         mesh.setElements(std::move(elements));
         mesh.setDrawMode(mode);
         return mesh;
@@ -148,22 +156,29 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode)
     {
+        auto positions = arrayToVector(plane.corners());
+        auto n = plane.normal();
+        std::vector<glm::vec3> normals{ n, n, n, n };
+        auto elements = getPlaneElements(mode);
+
         Mesh mesh;
+        mesh.setVertices(AttributeKind::Position, std::move(positions));
+        mesh.setVertices(AttributeKind::Normal, std::move(normals));
+        mesh.setElements(std::move(elements));
+        mesh.setDrawMode(mode);
         return mesh;
     }
 
     template<>
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode)
     {
-        std::vector<glm::vec3> positions;
-        auto cs = cube.corners();
-        positions.resize(cs.size());
-        std::move(cs.begin(), cs.end(), positions.begin());
-
+        auto positions = arrayToVector(cube.corners());
+        auto normals = arrayToVector(cube.normals());
         auto elements = getCubeElements(mode);
 
         Mesh mesh;
         mesh.setVertices(AttributeKind::Position, std::move(positions));
+        mesh.setVertices(AttributeKind::Normal, std::move(normals));
         mesh.setElements(std::move(elements));
         mesh.setDrawMode(mode);
         return mesh;
@@ -183,13 +198,13 @@ namespace gorn
         {
             positions.reserve(n);
             texCoords.reserve(n);
-		    for (int r = 0; r < (int)sphere.rings; r++)
+            for (int r = 0; r < (int)sphere.rings; r++)
             {
                 for (int s = 0; s < (int)sphere.sectors; s++)
                 {
                     float u = (float)s*S;
                     float v = (float)r*R;
-				    float theta = u * 2.0f * (float)M_PI;
+                    float theta = u * 2.0f * (float)M_PI;
                     float rho = v * (float)M_PI;
                     positions.push_back(sphere.center +
                         glm::vec3(
@@ -207,9 +222,9 @@ namespace gorn
         
         {
             elements.reserve(n * 6);
-		    for (int r = 0; r < (int)sphere.rings - 1; r++)
+            for (int r = 0; r < (int)sphere.rings - 1; r++)
             {
-			    for (int s = 0; s < (int)sphere.sectors - 1; s++)
+                for (int s = 0; s < (int)sphere.sectors - 1; s++)
                 {
                     elements.push_back(r * sphere.sectors + s);
                     elements.push_back(r * sphere.sectors + (s+1));

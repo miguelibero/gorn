@@ -7,10 +7,10 @@
 namespace gorn
 {
     template<typename T>
-	class AssetLoader
-	{
+    class AssetLoader
+    {
     public:
-		virtual ~AssetLoader(){};
+        virtual ~AssetLoader(){};
 
         /**
          * @return true if the asset can be loaded
@@ -24,7 +24,7 @@ namespace gorn
          * @return the loaded asset
          */
         virtual T load(const std::string& name) const = 0;
-	};
+    };
 }
 
 #endif

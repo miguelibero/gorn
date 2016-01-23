@@ -7,7 +7,7 @@ using namespace gorn;
 
 class KittenApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     gorn::VertexArray _vao;
     float _time;
 
@@ -47,22 +47,22 @@ void KittenApplication::load()
 {
 
 #if (GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS)
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("fsh", "../assets/%s.fsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("vsh", "../assets/%s.vsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<LocalFileLoader>("tex", "../assets/%s.png");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("fsh", "%s.fsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("vsh", "%s.vsh");
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeLoader<AssetFileLoader>("tex", "%s.png");
 #endif
 
-	_ctx.getImages()
+    _ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
     _ctx.getPrograms().getDefinitions().get("shader")
@@ -125,6 +125,6 @@ void KittenApplication::draw()
 
     _vao.getMaterial()->setUniformValue(
         UniformKind::Model, getTransform(_time));
-	_vao.draw(6);
+    _vao.draw(6);
 }
 

@@ -13,14 +13,14 @@ namespace gorn
     {
     }
 
-	void FileManager::addLoader(const std::string& tag,
+    void FileManager::addLoader(const std::string& tag,
         std::unique_ptr<Loader>&& loader) NOEXCEPT
-	{
+    {
         if(loader != nullptr)
         {
-    		_loaders[tag].push_back(std::move(loader));
+            _loaders[tag].push_back(std::move(loader));
         }
-	}
+    }
 
     void FileManager::addLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
@@ -75,8 +75,8 @@ namespace gorn
         return false;
     }
 
-	std::future<buffer> FileManager::load(const std::string& name, bool cache) NOEXCEPT
-	{
+    std::future<buffer> FileManager::load(const std::string& name, bool cache) NOEXCEPT
+    {
         auto itr = _files->find(name);
         if(itr != _files->end())
         {
@@ -100,7 +100,7 @@ namespace gorn
             Exception(std::string("Could not load file '")
             +parts.second+"' with tag '"+parts.first+"'.")));
         return p.get_future();
-	}
+    }
 
     bool FileManager::unload(const std::string& name) NOEXCEPT
     {

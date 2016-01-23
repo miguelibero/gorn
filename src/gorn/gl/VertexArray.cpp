@@ -15,8 +15,8 @@ namespace gorn
     _id(0), _elementType(BasicType::None)
     {   
     }
-	
-	VertexArray::~VertexArray()
+    
+    VertexArray::~VertexArray()
     {
         cleanup();
     }
@@ -71,10 +71,10 @@ namespace gorn
         if(_id == 0)
         {
             glGenVertexArrays(1, &_id);
-			checkGlError("generating a vertex array");
+            checkGlError("generating a vertex array");
         }
         return _id;
-	};
+    };
 
     void VertexArray::setProgram(const std::shared_ptr<Program>& program)
     {
@@ -119,19 +119,19 @@ namespace gorn
     {
         if(s_currentId != id)
         {
-		    glBindVertexArray(id);
+            glBindVertexArray(id);
             s_currentId = id;
         }
     }
 
     void VertexArray::bind() const
     {
-	    bindId(getId());
+        bindId(getId());
     }
 
     void VertexArray::unbind()
     {
-	    bindId(0);
+        bindId(0);
     }
 
     void VertexArray::activate() const
@@ -161,7 +161,7 @@ namespace gorn
 
         bind();
         vbo->bind();
-		glEnableVertexAttribArray(id);
+        glEnableVertexAttribArray(id);
  
         auto stride = def.getStride();
         if(def.getStrideType() != BasicType::None)
@@ -173,7 +173,7 @@ namespace gorn
         {
             offset *= getBasicTypeSize(def.getOffsetType());
         }
-		glVertexAttribPointer(id, (GLint)def.getCount(),
+        glVertexAttribPointer(id, (GLint)def.getCount(),
             getGlBasicType(def.getType()),
             def.getNormalized(), (GLsizei)stride, (GLvoid*)offset);
 
@@ -230,12 +230,12 @@ namespace gorn
         GLenum glMode = getGlDrawMode(mode);
         if(_elementVbo && _elementType != BasicType::None)
         {
-    		glDrawElements(glMode, (GLsizei)count, getGlBasicType(_elementType),
+            glDrawElements(glMode, (GLsizei)count, getGlBasicType(_elementType),
                 reinterpret_cast<const GLvoid*>(offset));
         }
         else
         {
-		    glDrawArrays(glMode, (GLint)offset, (GLsizei)count);
+            glDrawArrays(glMode, (GLint)offset, (GLsizei)count);
         }
 
         checkGlError("drawing a vertex array");

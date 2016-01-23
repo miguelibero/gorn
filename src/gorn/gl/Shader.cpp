@@ -4,9 +4,9 @@
 
 namespace gorn
 {
-	Shader::Shader(const buffer& source, ShaderType type):
-	_id(0)
-	{
+    Shader::Shader(const buffer& source, ShaderType type):
+    _id(0)
+    {
         GLenum glType = 0;
         if(type == ShaderType::Vertex)
         {
@@ -16,13 +16,13 @@ namespace gorn
         {
             glType = GL_FRAGMENT_SHADER;
         }
-		_id = glCreateShader(glType);
+        _id = glCreateShader(glType);
         if(_id == 0)
         {
             throw Exception("Could not create shader.");
         }
-		auto ptr = (const GLchar*)source.data();
-		auto size = (const GLint)source.size();
+        auto ptr = (const GLchar*)source.data();
+        auto size = (const GLint)source.size();
         glShaderSource(_id, 1, &ptr, &size);
         glCompileShader(_id);
         GLint status;
@@ -37,19 +37,19 @@ namespace gorn
             }
             throw Exception(buffer);
         }
-	}
+    }
 
-	Shader::~Shader()
-	{
+    Shader::~Shader()
+    {
         if(glIsShader(_id) == GL_TRUE)
         {
             glDeleteShader(_id);
             checkGlError("deleting shader");
         }
-	}
+    }
 
-	GLuint Shader::getId() const
-	{
-		return _id;
-	}
+    GLuint Shader::getId() const
+    {
+        return _id;
+    }
 }

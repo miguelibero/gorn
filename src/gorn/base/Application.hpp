@@ -8,8 +8,8 @@
 
 namespace gorn
 {
-	class Application
-	{
+    class Application
+    {
     private:
         glm::vec2 _size;
         std::string _name;
@@ -19,23 +19,24 @@ namespace gorn
         bool _loaded;
         bool _needsReload;
     protected:
-	    virtual void load();
-	    virtual void reload();
-	    virtual void unload();
-	    virtual void background();
-	    virtual void foreground();
-	    virtual void update(double dt);
-	    virtual void draw();
+        virtual void load();
+        virtual void reload();
+        virtual void unload();
+        virtual void background();
+        virtual void foreground();
+        virtual void update(double dt);
+        virtual void draw();
+        virtual void resize();
         virtual void touch(const glm::vec2& p);
         virtual void touchEnd(const glm::vec2& p);
 
         void setName(const std::string& name);
-	public:
-	    Application();
+    public:
+        Application();
         virtual ~Application();
        
-		void setSize(const glm::vec2& size);
-		const glm::vec2& getSize();
+        void setSize(const glm::vec2& size);
+        const glm::vec2& getSize();
         const std::string& getName();
 
         void setPreferredFramesPerSecond(size_t fps);
@@ -49,7 +50,7 @@ namespace gorn
         bool realUpdate(double dt);
         void realTouch(const glm::vec2& p);
         void realTouchEnd(const glm::vec2& p);
-	};
+    };
 
     std::unique_ptr<Application> main();
 }

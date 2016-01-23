@@ -52,6 +52,10 @@
     <IncludePath>..\..\..\src;..\..\..\lib;..\..\..\lib\platform\windows\glew\include;..\..\..\lib\buffer\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\lib\platform\windows\glew\lib;$(VC_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\..\..\src;..\..\..\lib;..\..\..\lib\platform\windows\glew\include;..\..\..\lib\buffer\src;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\lib\platform\windows\glew\lib;$(VC_LibraryPath_x86);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -73,11 +77,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GORN_PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS;GLM_FORCE_RADIANS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

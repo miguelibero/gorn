@@ -3,7 +3,7 @@
 
 namespace gorn
 {
-	TextureDefinition::TextureDefinition():
+    TextureDefinition::TextureDefinition():
     _target(GL_TEXTURE_2D), _lod(0)
     {
         withParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

@@ -7,7 +7,7 @@ using namespace gorn;
 
 class FramebufferApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     gorn::VertexArray _vao1;
     gorn::FrameBuffer _fbo;
     gorn::VertexArray _vao2;
@@ -41,13 +41,13 @@ void FramebufferApplication::load()
 {
 
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<AssetFileLoader>("%s");
 #endif
-	_ctx.getImages()
+    _ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
     _ctx.getMaterials().getDefinitions().get("kitten")
@@ -119,7 +119,7 @@ void FramebufferApplication::draw()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-	_vao1.draw(6);
+    _vao1.draw(6);
     _fbo.unbind();
 
     _vao2.getProgram()->setUniformValue("time", _time);

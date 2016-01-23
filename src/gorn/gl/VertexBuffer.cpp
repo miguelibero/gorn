@@ -4,29 +4,29 @@
 
 namespace gorn
 {
-	GLenum getGlTarget(VertexBufferTarget target)
-	{
-		switch (target)
-		{
-		case VertexBufferTarget::ElementArrayBuffer:
-			return GL_ELEMENT_ARRAY_BUFFER;
-		default:
-			return GL_ARRAY_BUFFER;
-		}
-	}
+    GLenum getGlTarget(VertexBufferTarget target)
+    {
+        switch (target)
+        {
+        case VertexBufferTarget::ElementArrayBuffer:
+            return GL_ELEMENT_ARRAY_BUFFER;
+        default:
+            return GL_ARRAY_BUFFER;
+        }
+    }
 
-	GLenum getGlUsage(VertexBufferUsage usage)
-	{
-		switch (usage)
-		{
-		case VertexBufferUsage::StreamDraw:
-			return GL_STREAM_DRAW;
-		case VertexBufferUsage::StaticDraw:
-			return GL_STATIC_DRAW;
-		default:
-			return GL_DYNAMIC_DRAW;
-		}
-	}
+    GLenum getGlUsage(VertexBufferUsage usage)
+    {
+        switch (usage)
+        {
+        case VertexBufferUsage::StreamDraw:
+            return GL_STREAM_DRAW;
+        case VertexBufferUsage::StaticDraw:
+            return GL_STATIC_DRAW;
+        default:
+            return GL_DYNAMIC_DRAW;
+        }
+    }
 
 
     VertexBuffer::VertexBuffer(const buffer& data, Usage usage, Target target):
@@ -39,8 +39,8 @@ namespace gorn
     _id(0), _target(target), _size(0)
     {
     }
-	
-	VertexBuffer::~VertexBuffer()
+    
+    VertexBuffer::~VertexBuffer()
     {
         cleanup();
     }
@@ -71,7 +71,7 @@ namespace gorn
             {
                 cleanup();
             }
-		    _id = other._id;
+            _id = other._id;
             _target = other._target;
             _size = other._size;
             other._size = 0;
@@ -85,10 +85,10 @@ namespace gorn
         if(_id == 0)
         {
             glGenBuffers(1, &_id);
-			checkGlError("generating a vertex buffer");
+            checkGlError("generating a vertex buffer");
         }
         return _id;
-	};
+    };
 
     void VertexBuffer::bindId(GLuint id, GLenum target)
     {
@@ -109,7 +109,7 @@ namespace gorn
     {
         bind();
         _size = data.size();
-		glBufferData(getGlTarget(_target), data.size(),
+        glBufferData(getGlTarget(_target), data.size(),
             data.data(), getGlUsage(usage));
 
         checkGlError("setting the data of a vertex buffer");
@@ -118,7 +118,7 @@ namespace gorn
     void VertexBuffer::setSubData(const buffer& data, size_t offset)
     {
         bind();
-		glBufferSubData(getGlTarget(_target), offset,
+        glBufferSubData(getGlTarget(_target), offset,
             data.size(), data.data());
 
         checkGlError("setting the a part of the data of a vertex buffer");

@@ -6,15 +6,15 @@
 
 namespace gorn
 {
-	class String
-	{
-	public:
+    class String
+    {
+    public:
         static const char* kWhitespaceChars;
         static const char* kTagSeparator;
         static const char* kDefaultTag;
         static const size_t npos;
 
-   		String() = delete;
+           String() = delete;
 
         static size_t replaceAll(std::string& str,
             const std::string& from, const std::string& to);
@@ -35,7 +35,7 @@ namespace gorn
 
         static std::pair<std::string,std::string> splitTag(const std::string& str);
         static bool addTag(std::string& str, const std::string& tag);
-	};
+    };
 
     template<typename V>
     std::vector<V> String::splitConvert(const std::string& str,

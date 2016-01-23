@@ -8,10 +8,10 @@ class buffer;
 namespace gorn
 {
     template<typename T>
-	class DataAssetLoader
-	{
+    class DataAssetLoader
+    {
     public:
-		virtual ~DataAssetLoader(){};
+        virtual ~DataAssetLoader(){};
 
         /**
          * @return true if the asset can be loaded
@@ -25,7 +25,7 @@ namespace gorn
          * @return the loaded asset
          */
         virtual T load(const buffer& data) const = 0;
-	};
+    };
 }
 
 #endif

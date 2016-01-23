@@ -8,10 +8,10 @@ class buffer;
 
 namespace gorn
 {
-	class FileLoader
-	{
+    class FileLoader
+    {
     public:
-		virtual ~FileLoader();
+        virtual ~FileLoader();
 
         /**
          * @return true if the file can be loaded
@@ -22,7 +22,7 @@ namespace gorn
          * @return the new file data
          */
         virtual buffer load(const std::string& name) const = 0;
-	};
+    };
 
 }
 

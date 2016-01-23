@@ -14,10 +14,10 @@ namespace gorn
     class CubeShape;
     class SphereShape;
 
-	class ShapeMeshFactory
-	{
-	public:
-		ShapeMeshFactory() = delete;
+    class ShapeMeshFactory
+    {
+    public:
+        ShapeMeshFactory() = delete;
 
         template<typename S>
         static Mesh create(const S& shape, DrawMode mode=DrawMode::Triangles);
@@ -26,7 +26,7 @@ namespace gorn
         static Mesh create(const std::vector<S>& shapes,
             DrawMode mode=DrawMode::Triangles);
 
-	};
+    };
 
     template<typename S>
     Mesh ShapeMeshFactory::create(const std::vector<S>& shapes, DrawMode mode)

@@ -32,6 +32,8 @@ namespace gorn
         static const char* Model;
         static const char* View;
         static const char* Projection;
+        static const char* Camera;
+        static const char* CameraPosition;
     };
 }
 

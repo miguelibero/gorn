@@ -24,5 +24,6 @@ namespace gorn
     const char* UniformKind::Model = "model";
     const char* UniformKind::View = "view";
     const char* UniformKind::Projection = "proj";
-	
+    const char* UniformKind::Camera = "cam";
+    const char* UniformKind::CameraPosition = "campos";
 }

@@ -41,54 +41,54 @@ namespace gorn
     }
 
 
-	UniformValue::UniformValue():
+    UniformValue::UniformValue():
     _type(Type::Empty)
     {
     }
 
-	UniformValue::UniformValue(GLfloat f):
+    UniformValue::UniformValue(GLfloat f):
     _type(Type::Float)
     {
-		_float.push_back(f);
+        _float.push_back(f);
     }
 
-	UniformValue::UniformValue(GLint i):
+    UniformValue::UniformValue(GLint i):
     _type(Type::Int)
     {
-		_int.push_back(i);
+        _int.push_back(i);
     }
 
-	UniformValue::UniformValue(const glm::vec2& v):
+    UniformValue::UniformValue(const glm::vec2& v):
     _type(Type::Vector2)
     {
         addGlmObject(v);
     }
 
-	UniformValue::UniformValue(const glm::vec3& v):
+    UniformValue::UniformValue(const glm::vec3& v):
     _type(Type::Vector3)
     {
         addGlmObject(v);
     }
 
-	UniformValue::UniformValue(const glm::vec4& v):
+    UniformValue::UniformValue(const glm::vec4& v):
     _type(Type::Vector4)
     {
         addGlmObject(v);
     }
 
-	UniformValue::UniformValue(const glm::mat2& m):
+    UniformValue::UniformValue(const glm::mat2& m):
     _type(Type::Matrix2)
     {
         addGlmObject(m);
     }
 
-	UniformValue::UniformValue(const glm::mat3& m):
+    UniformValue::UniformValue(const glm::mat3& m):
     _type(Type::Matrix3)
     {
         addGlmObject(m);
     }
 
-	UniformValue::UniformValue(const glm::mat4& m):
+    UniformValue::UniformValue(const glm::mat4& m):
     _type(Type::Matrix4)
     {
         addGlmObject(m);
@@ -99,12 +99,12 @@ namespace gorn
     {
     }
 
-	UniformValue::UniformValue(std::initializer_list<GLint> is):
+    UniformValue::UniformValue(std::initializer_list<GLint> is):
     _int(is), _type(Type::Int)
     {
     }
 
-	UniformValue::UniformValue(std::initializer_list<glm::mat2> ms):
+    UniformValue::UniformValue(std::initializer_list<glm::mat2> ms):
     _type(Type::Matrix2)
     {
         for(auto& m : ms)
@@ -113,7 +113,7 @@ namespace gorn
         }
     }
 
-	UniformValue::UniformValue(std::initializer_list<glm::mat3> ms):
+    UniformValue::UniformValue(std::initializer_list<glm::mat3> ms):
     _type(Type::Matrix3)
     {
         for(auto& m : ms)
@@ -122,7 +122,7 @@ namespace gorn
         }
     }
 
-	UniformValue::UniformValue(std::initializer_list<glm::mat4> ms):
+    UniformValue::UniformValue(std::initializer_list<glm::mat4> ms):
     _type(Type::Matrix4)
     {
         for(auto& m : ms)
@@ -131,21 +131,21 @@ namespace gorn
         }
     }
 
-	UniformValue& UniformValue::operator=(GLfloat f)
+    UniformValue& UniformValue::operator=(GLfloat f)
     {
         _float = {f};
         _type = Type::Float;
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(GLint i)
+    UniformValue& UniformValue::operator=(GLint i)
     {
         _int = {i};
         _type = Type::Int;
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(const glm::vec2& v)
+    UniformValue& UniformValue::operator=(const glm::vec2& v)
     {
         _float.clear();
         addGlmObject(v);
@@ -153,7 +153,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(const glm::vec3& v)
+    UniformValue& UniformValue::operator=(const glm::vec3& v)
     {
         _float.clear();
         addGlmObject(v);
@@ -161,7 +161,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(const glm::vec4& v)
+    UniformValue& UniformValue::operator=(const glm::vec4& v)
     {
         _float.clear();
         addGlmObject(v);
@@ -170,7 +170,7 @@ namespace gorn
     }
 
 
-	UniformValue& UniformValue::operator=(const glm::mat2& m)
+    UniformValue& UniformValue::operator=(const glm::mat2& m)
     {
         _float.clear();
         addGlmObject(m);
@@ -178,7 +178,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(const glm::mat3& m)
+    UniformValue& UniformValue::operator=(const glm::mat3& m)
     {
         _float.clear();
         addGlmObject(m);
@@ -186,7 +186,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(const glm::mat4& m)
+    UniformValue& UniformValue::operator=(const glm::mat4& m)
     {
         _float.clear();
         addGlmObject(m);
@@ -194,21 +194,21 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<GLfloat> fs)
+    UniformValue& UniformValue::operator=(std::initializer_list<GLfloat> fs)
     {
         _float = fs;
         _type = Type::Float;
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<GLint> is)
+    UniformValue& UniformValue::operator=(std::initializer_list<GLint> is)
     {
         _int = is;
         _type = Type::Int;
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<glm::mat2> ms)
+    UniformValue& UniformValue::operator=(std::initializer_list<glm::mat2> ms)
     {
         _float.clear();
         for(auto& m : ms)
@@ -219,7 +219,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<glm::mat3> ms)
+    UniformValue& UniformValue::operator=(std::initializer_list<glm::mat3> ms)
     {
         _float.clear();
         for(auto& m : ms)
@@ -230,7 +230,7 @@ namespace gorn
         return *this;
     }
 
-	UniformValue& UniformValue::operator=(std::initializer_list<glm::mat4> ms)
+    UniformValue& UniformValue::operator=(std::initializer_list<glm::mat4> ms)
     {
         _float.clear();
         for(auto& m : ms)

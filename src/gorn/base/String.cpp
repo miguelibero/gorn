@@ -27,7 +27,7 @@ namespace gorn
             found++;
         }
         return found;
-	};
+    };
 
     std::vector<std::string> String::split(const std::string& str,
         const std::string& sep, size_t max)
@@ -119,7 +119,7 @@ namespace gorn
     {
         float f;
 #ifdef GORN_PLATFORM_WINDOWS
-		sscanf_s(value.c_str(), "%f", &f);
+        sscanf_s(value.c_str(), "%f", &f);
 #else
         sscanf(value.c_str(), "%f", &f);
 #endif

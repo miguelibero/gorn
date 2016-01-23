@@ -6,7 +6,7 @@ using namespace gorn;
 
 class TeapotApplication : public gorn::Application
 {
-	gorn::Context _ctx;
+    gorn::Context _ctx;
     std::shared_ptr<Mesh> _mesh;
 
 public:
@@ -32,17 +32,17 @@ TeapotApplication::TeapotApplication()
 void TeapotApplication::load()
 {
 #if GORN_PLATFORM_LINUX || GORN_PLATFORM_WINDOWS
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<LocalFileLoader>("../assets/%s");
 #elif GORN_PLATFORM_ANDROID
-	_ctx.getFiles()
+    _ctx.getFiles()
         .makeDefaultLoader<AssetFileLoader>("%s");
 #elif GORN_PLATFORM_IOS
     _ctx.getFiles()
     .makeDefaultLoader<BundleFileLoader>("%s");
 #endif
 
-	_ctx.getImages()
+    _ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
     _ctx.getMaterials().getDefinitions()
@@ -80,5 +80,5 @@ void TeapotApplication::draw()
     cmd.withMaterial(_ctx.getMaterials().load("metal"));
     _ctx.getQueue().addCommand(std::move(cmd));
 
-	_ctx.getQueue().draw();
+    _ctx.getQueue().draw();
 }

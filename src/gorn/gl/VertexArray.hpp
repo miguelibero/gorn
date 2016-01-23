@@ -53,7 +53,7 @@ namespace gorn
         const std::shared_ptr<Program>& getProgram() const;
         const std::shared_ptr<Material>& getMaterial() const;
         void setUniformValue(const std::string& name, const UniformValue& value);
-	    void setUniformValue(const GLint& location, const UniformValue& value);
+        void setUniformValue(const GLint& location, const UniformValue& value);
         void setUniformValues(const UniformValueMap& values);
 
         void draw(size_t count, DrawMode mode, size_t offset=0);

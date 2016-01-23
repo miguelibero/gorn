@@ -3,16 +3,16 @@
 
 namespace gorn
 {
-	Image::Image(buffer&& data, const glm::vec2& size,
+    Image::Image(buffer&& data, const glm::vec2& size,
         bool hasAlpha, BasicType type, Format format) NOEXCEPT:
-	_data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
+    _data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
     _type(type), _format(format)
-	{
-	}
+    {
+    }
 
     Image::Image(buffer&& data, DataOrigin origin, const glm::vec2& size,
     bool hasAlpha, BasicType type, Format format) NOEXCEPT:
-	_data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
+    _data(std::move(data)), _size(size), _hasAlpha(hasAlpha),
     _type(type), _format(format)
     {
         if(origin == DataOrigin::TopLeft)
@@ -23,24 +23,24 @@ namespace gorn
 
     Image::Image(const glm::vec2& size, bool hasAlpha,
             BasicType type) NOEXCEPT:
-	_size(size), _hasAlpha(hasAlpha),
+    _size(size), _hasAlpha(hasAlpha),
     _type(type), _format(Format::Uncompressed)
-	{
-	}
+    {
+    }
 
     const glm::vec2& Image::getSize() const NOEXCEPT
     {
-    	return _size;
+        return _size;
     }
 
     Image::Format Image::getFormat() const NOEXCEPT
     {
-    	return _format;
+        return _format;
     }
 
     BasicType Image::getType() const NOEXCEPT
     {
-    	return _type;
+        return _type;
     }
 
     bool Image::hasAlpha() const NOEXCEPT
@@ -50,7 +50,7 @@ namespace gorn
 
     const buffer& Image::getData() const NOEXCEPT
     {
-    	return _data;
+        return _data;
     }
 
     void Image::flipDataVertically()

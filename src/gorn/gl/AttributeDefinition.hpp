@@ -10,8 +10,8 @@ namespace gorn
     class VertexBuffer;
     class Program;
 
-	class AttributeDefinition
-	{
+    class AttributeDefinition
+    {
     private:
         std::string _name;
         bool _normalized;
@@ -22,7 +22,7 @@ namespace gorn
         size_t _offset;
         BasicType _offsetType;
         bool _transformable;
-	public:
+    public:
 
         AttributeDefinition(const std::string& name="");
 
@@ -46,7 +46,7 @@ namespace gorn
         BasicType getOffsetType() const;
         size_t getElementSize() const;
         bool getTransformable() const;
-	};
+    };
 }
 
 #endif

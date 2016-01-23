@@ -7,13 +7,13 @@
 
 namespace gorn
 {
-	class RenderBuffer
-	{
+    class RenderBuffer
+    {
     public:
         typedef FrameBufferAttachType Type;
     private:
-		static GLuint s_currentId;
-		mutable GLuint _id;
+        static GLuint s_currentId;
+        mutable GLuint _id;
         glm::vec2 _size;
         GLenum _format;
         Type _type;
@@ -21,9 +21,9 @@ namespace gorn
         void cleanup();
         static void bindId(GLuint id);
         static GLenum getTypeFormat(Type type);
-	public:
-		RenderBuffer(const glm::vec2& size, Type type=Type::Depth);
-		~RenderBuffer();
+    public:
+        RenderBuffer(const glm::vec2& size, Type type=Type::Depth);
+        ~RenderBuffer();
 
         RenderBuffer(const RenderBuffer& other) = delete;
         RenderBuffer& operator=(const RenderBuffer& other) = delete;
@@ -33,7 +33,7 @@ namespace gorn
 
         void bind() const;
         static void unbind();
-		GLuint getId() const;
+        GLuint getId() const;
         Type getType() const;
 
         void setParameter(GLenum param, int value);

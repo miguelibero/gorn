@@ -107,8 +107,8 @@ int main(void)
                 }
                 break;
             case ConfigureNotify:
-                XConfigureEvent xce = e.xconfigure;
-                app->setSize(glm::vec2(xce.width, xce.height))
+                app->setSize(glm::vec2(
+                    xev.xconfigure.width, xev.xconfigure.height));
                 break;
             case ButtonPress:
                 p = glm::vec2(xev.xbutton.x, xev.xbutton.y);
