@@ -66,7 +66,11 @@ namespace gorn
     std::shared_ptr<Texture> TextureManager::doLoad(const std::string& name)
     {
         auto& def = getDefinitions().get(name);
-        auto img = _images.load(def.getImageName()).get();
+		auto img = def.getImage();
+		if(!img)
+		{
+			img = _images.load(def.getImageName()).get();
+		}
         auto tex = std::make_shared<Texture>(def.getTarget());
         for(auto itr = def.getIntParameters().begin();
             itr != def.getIntParameters().end(); ++itr)
@@ -91,6 +95,11 @@ namespace gorn
         tex->setImage(*img, def.getLevelOfDetail());
         return tex;
     }
+
+	void TextureManager::load(const std::string& name, const std::shared_ptr<Texture>& tex)
+	{
+		_textures[name] = tex;
+	}
 
     void TextureManager::reload()
     {

@@ -37,6 +37,11 @@ namespace gorn
         return *this;
     }
 
+	ProgramDefinition& ProgramDefinition::withUniform(const Uniform& uniform)
+	{
+		return withUniform(uniform.name, uniform);
+	}
+
     ProgramDefinition& ProgramDefinition::withAttribute(
         const std::string& alias,
         const Attribute& attribute)

@@ -8,5 +8,6 @@
 #include <gorn/base/Context.hpp>
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Shapes.hpp>
+#include <gorn/base/Math.hpp>
 
 #endif

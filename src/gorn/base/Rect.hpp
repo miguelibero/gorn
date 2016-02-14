@@ -44,6 +44,7 @@ namespace gorn
         bool matches(const RectMatch& match) const;
         float area() const;
 
+		bool empty() const;
         bool flat() const;
         glm::vec3 min() const;
         glm::vec3 max() const;

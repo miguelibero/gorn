@@ -160,6 +160,9 @@
     <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp">
       <Filter>lib\buffer</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Math.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp">
@@ -329,6 +332,9 @@
     </ClInclude>
     <ClInclude Include="..\lib\buffer\src\buffer_writer.hpp">
       <Filter>lib\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Math.hpp">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

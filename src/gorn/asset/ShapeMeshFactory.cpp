@@ -9,61 +9,6 @@
 
 namespace gorn
 {
-    template<typename T, size_t N>
-    std::vector<T> arrayToVector(const std::array<T, N>& arr)
-    {
-        std::vector<T> vec(arr.size());
-        std::move(arr.begin(), arr.end(), vec.begin());
-        return vec;
-    }
-
-    Mesh::Elements getCubeElements(DrawMode mode)
-    {
-        switch(mode)
-        {
-        case DrawMode::Quads:
-        {
-            return Mesh::Elements{
-                0, 2, 1, 6, 5, 7, 
-                4, 3, 2, 7, 0, 5
-            };
-            break;
-        }
-        case DrawMode::Triangles:
-        {
-            return Mesh::Elements{
-                0, 1, 2, 2, 3, 0,
-                1, 5, 6, 6, 2, 1,
-                5, 4, 7, 7, 6, 5,
-                4, 0, 3, 3, 7, 4,
-                2, 6, 7, 7, 3, 2,
-                0, 4, 5, 5, 1, 0
-            };
-            break;
-        }
-
-        case DrawMode::Lines:
-        {
-            return Mesh::Elements{
-                0, 1, 1, 2, 2, 3, 3, 0,
-                4, 5, 5, 6, 6, 7, 7, 4,
-                0, 4, 1, 5, 2, 6, 3, 7
-            };
-            break;
-        }
-        case DrawMode::Points:
-        {
-            return Mesh::Elements{
-                0, 1, 2, 3, 4, 5, 6, 7
-            };
-            break;
-        }
-        default:
-            return Mesh::Elements{};
-            break;
-        }
-    }
-
     Mesh::Elements getPlaneElements(DrawMode mode)
     {
         switch(mode)
@@ -105,46 +50,7 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const Rect& rect, DrawMode mode)
     {
-        auto tmin = rect.min();
-        auto tmax = rect.max();
-        bool tflat = rect.flat();
-        Mesh::Elements elements;
-
-        std::vector<glm::vec3> positions{
-            glm::vec3(tmax.x, tmax.y, tmin.z),
-            glm::vec3(tmin.x, tmax.y, tmin.z),
-            glm::vec3(tmin.x, tmin.y, tmin.z),
-            glm::vec3(tmax.x, tmin.y, tmin.z)
-        };
-        std::vector<glm::vec3> normals{
-            glm::vec3( 1.0f,  0.0f,  0.0f),
-            glm::vec3(-1.0f,  0.0f,  0.0f),
-            glm::vec3( 0.0f,  1.0f,  0.0f),
-            glm::vec3( 0.0f, -1.0f,  0.0f),
-            glm::vec3( 0.0f,  0.0f,  1.0f),
-            glm::vec3( 0.0f,  0.0f, -1.0f)
-        };
-        if(tflat)
-        {
-            elements = getPlaneElements(mode);
-        }
-        else
-        {
-            elements = getCubeElements(mode);
-            positions.insert(positions.end(), {
-                glm::vec3(tmin.x, tmin.y, tmax.z),
-                glm::vec3(tmax.x, tmin.y, tmax.z),
-                glm::vec3(tmin.x, tmax.y, tmax.z),
-                glm::vec3(tmax.x, tmax.y, tmax.z)
-            });
-        }
-
-        Mesh mesh;
-        mesh.setVertices(AttributeKind::Position, std::move(positions));
-        mesh.setVertices(AttributeKind::Normal, std::move(normals));
-        mesh.setElements(std::move(elements));
-        mesh.setDrawMode(mode);
-        return mesh;
+		return create(rect.shape(), mode);
     }
 
     template<>
@@ -156,15 +62,24 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode)
     {
-        auto positions = arrayToVector(plane.corners());
-        auto n = plane.normal();
-        std::vector<glm::vec3> normals{ n, n, n, n };
-        auto elements = getPlaneElements(mode);
+		auto cs = plane.corners();
+		auto n = plane.normal();
+		std::vector<glm::vec3> pos(cs.size());
+		std::move(cs.begin(), cs.end(), pos.begin());
+		std::vector<glm::vec3> norm{
+			n, n, n, n
+		};
+		std::vector<glm::vec2> tex{
+			glm::vec2(1, 1), glm::vec2(0, 1),
+			glm::vec2(0, 0), glm::vec2(1, 0),
+		};
+        auto elms = getPlaneElements(mode);
 
         Mesh mesh;
-        mesh.setVertices(AttributeKind::Position, std::move(positions));
-        mesh.setVertices(AttributeKind::Normal, std::move(normals));
-        mesh.setElements(std::move(elements));
+        mesh.setVertices(AttributeKind::Position, std::move(pos));
+        mesh.setVertices(AttributeKind::Normal, std::move(norm));
+		mesh.setVertices(AttributeKind::TexCoords, std::move(tex));
+        mesh.setElements(std::move(elms));
         mesh.setDrawMode(mode);
         return mesh;
     }
@@ -172,15 +87,12 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode)
     {
-        auto positions = arrayToVector(cube.corners());
-        auto normals = arrayToVector(cube.normals());
-        auto elements = getCubeElements(mode);
-
-        Mesh mesh;
-        mesh.setVertices(AttributeKind::Position, std::move(positions));
-        mesh.setVertices(AttributeKind::Normal, std::move(normals));
-        mesh.setElements(std::move(elements));
-        mesh.setDrawMode(mode);
+		Mesh mesh;
+		mesh.setDrawMode(mode);
+		for(auto& side : cube.sides())
+		{
+			mesh += create(side, mode);
+		}
         return mesh;
     }
 

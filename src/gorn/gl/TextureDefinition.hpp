@@ -2,9 +2,11 @@
 #define __gorn__TextureDefinition__
 
 #include <gorn/gl/Base.hpp>
+#include <gorn/asset/Image.hpp>
 #include <map>
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace gorn
 {
@@ -14,6 +16,7 @@ namespace gorn
     {
     private:
         std::string _imageName;
+		std::shared_ptr<Image> _image;
         GLenum _target;
         GLint _lod;
         std::map<GLenum, GLint> _intParams;
@@ -23,6 +26,8 @@ namespace gorn
     public:
         TextureDefinition();
         TextureDefinition& withImage(const std::string& image);
+		TextureDefinition& withImage(Image&& image);
+		TextureDefinition& withImage(const std::shared_ptr<Image>& image);
         TextureDefinition& withTarget(GLenum target);
         TextureDefinition& withLevelOfDetail(GLint lod);
         TextureDefinition& withParameter(GLenum name, GLint value);
@@ -31,6 +36,7 @@ namespace gorn
         TextureDefinition& withParameter(GLenum name, const std::vector<GLfloat>& value);
 
         const std::string& getImageName() const;
+		std::shared_ptr<Image> getImage() const;
         GLenum getTarget() const;
         GLint getLevelOfDetail() const;
         const std::map<GLenum, GLint>& getIntParameters() const;

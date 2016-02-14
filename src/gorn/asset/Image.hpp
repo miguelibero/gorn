@@ -48,6 +48,8 @@ namespace gorn
         BasicType getType() const NOEXCEPT;
         Format getFormat() const NOEXCEPT;
         const buffer& getData() const NOEXCEPT;
+
+		static Image createWithColor(const glm::vec4& color);
     };
 }
 

@@ -18,6 +18,17 @@ namespace gorn
         return *this;
     }
 
+	TextureDefinition& TextureDefinition::withImage(Image&& image)
+	{
+		return withImage(std::make_shared<Image>(std::move(image)));
+	}
+
+	TextureDefinition& TextureDefinition::withImage(const std::shared_ptr<Image>& image)
+	{
+		_image = image;
+		return *this;
+	}
+
     TextureDefinition& TextureDefinition::withTarget(GLenum target)
     {
         _target = target;
@@ -58,6 +69,11 @@ namespace gorn
     {
         return _imageName;
     }
+
+	std::shared_ptr<Image> TextureDefinition::getImage() const
+	{
+		return _image;
+	}
 
     GLenum TextureDefinition::getTarget() const
     {

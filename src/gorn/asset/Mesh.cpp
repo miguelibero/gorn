@@ -76,6 +76,40 @@ namespace gorn
         setDefault(npos);
     }
 
+	MeshElement& MeshElement::operator+=(idx_t idx)
+	{
+		for(auto itr = _indices.begin(); itr != _indices.end(); ++itr)
+		{
+			itr->second += idx;
+		}
+		_defval += idx;
+		return *this;
+	}
+
+	MeshElement MeshElement::operator+(idx_t idx) const
+	{
+		auto elm = MeshElement(*this);
+		elm += idx;
+		return elm;
+	}
+
+	MeshElement& MeshElement::operator-=(idx_t idx)
+	{
+		for (auto itr = _indices.begin(); itr != _indices.end(); ++itr)
+		{
+			itr->second -= idx;
+		}
+		_defval -= idx;
+		return *this;
+	}
+
+	MeshElement MeshElement::operator-(idx_t idx) const
+	{
+		auto elm = MeshElement(*this);
+		elm -= idx;
+		return elm;
+	}
+
     Mesh::Mesh() NOEXCEPT:
     _drawMode(DrawMode::Triangles)
     {

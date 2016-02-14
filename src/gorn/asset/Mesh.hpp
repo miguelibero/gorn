@@ -33,6 +33,11 @@ namespace gorn
         void update(std::map<std::string, idx_t> indices);
         bool operator==(const MeshElement& other) const NOEXCEPT;
         bool operator!=(const MeshElement& other) const NOEXCEPT;
+
+		MeshElement& operator+=(idx_t idx);
+		MeshElement operator+(idx_t idx) const;
+		MeshElement& operator-=(idx_t idx);
+		MeshElement operator-(idx_t idx) const;
     };
 
     template<typename V>

@@ -69,4 +69,16 @@ namespace gorn
             }
         }
     }
+
+	Image Image::createWithColor(const glm::vec4& color)
+	{
+		return Image(buffer({
+			(uint8_t)(0xFF*color.r),
+			(uint8_t)(0xFF*color.g),
+			(uint8_t)(0xFF*color.b),
+			(uint8_t)(0xFF*color.a)}),
+			glm::vec2(1), true,
+			gorn::BasicType::UnsignedByte,
+			gorn::ImageFormat::Uncompressed);
+	}
 }

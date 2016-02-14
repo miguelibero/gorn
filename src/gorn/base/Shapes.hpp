@@ -6,6 +6,8 @@
 
 namespace gorn
 {
+	class Rect;
+
     class PlaneShape
     {
     public:
@@ -32,8 +34,8 @@ namespace gorn
     class CubeShape
     {
     public:
-        typedef std::array<glm::vec3, 8> Corners;
-        typedef std::array<glm::vec3, 6> Normals;
+		typedef std::array<glm::vec3, 8> Corners;
+		typedef std::array<PlaneShape, 6> Sides;
         PlaneShape front;
         PlaneShape back;
 
@@ -44,8 +46,8 @@ namespace gorn
         CubeShape& withFront(const PlaneShape& front);
         CubeShape& withBack(const PlaneShape& back);
 
-        Corners corners() const;
-        Normals normals() const;
+		Sides sides() const;
+		Corners corners() const;
     };
 
     class SphereShape

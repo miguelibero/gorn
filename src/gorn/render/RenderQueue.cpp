@@ -16,8 +16,7 @@ namespace gorn
     _materials(materials), _infoUpdateInterval(0.0),
     _infoUpdatesPerSecond(10), _tempInfoAmount(0)
     {
-        setUniformValue(UniformKind::View, _viewTrans);
-        setUniformValue(UniformKind::Projection, _projTrans);
+		updateCamera();
     }
 
     void RenderQueue::setInfoUpdatesPerSecond(size_t ups)

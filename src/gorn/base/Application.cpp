@@ -166,7 +166,7 @@ namespace gorn
             {
                 draw();
                 auto oldDrawInterval = _drawInterval;
-                while(_drawInterval > frameDuration)
+                while(frameDuration > 0.0 && _drawInterval > frameDuration)
                 {
                     _drawInterval -= frameDuration;
                 }

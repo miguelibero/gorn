@@ -1,5 +1,6 @@
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Shapes.hpp>
+#include <gorn/base/Math.hpp>
 #include <buffer.hpp>
 #include <limits>
 
@@ -57,9 +58,14 @@ namespace gorn
         return shape().corners()[idx];
     }
 
+	bool Rect::empty() const
+	{
+		return Math::isZero(size);
+	}
+
     bool Rect::flat() const
     {
-        return origin.z == 0.0f && size.z == 0.0f;
+        return Math::isZero(origin.z) && Math::isZero(size.z);
     }
 
     bool Rect::contains(const glm::vec2& point) const
@@ -135,15 +141,15 @@ namespace gorn
         return CubeShape(
             PlaneShape({
                 glm::vec3(origin.x + size.x, origin.y + size.y, origin.z),
-                glm::vec3(origin.x,        origin.y + size.y, origin.z),
-                glm::vec3(origin.x,        origin.y,        origin.z),
-                glm::vec3(origin.x + size.x, origin.y,        origin.z)
+                glm::vec3(origin.x,          origin.y + size.y, origin.z),
+                glm::vec3(origin.x,          origin.y,          origin.z),
+                glm::vec3(origin.x + size.x, origin.y,          origin.z)
             }),
             PlaneShape({
                 glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
-                glm::vec3(origin.x,        origin.y + size.y, origin.z + size.z),
-                glm::vec3(origin.x,        origin.y,        origin.z + size.z),
-                glm::vec3(origin.x + size.x, origin.y,        origin.z + size.z)
+                glm::vec3(origin.x,          origin.y + size.y, origin.z + size.z),
+                glm::vec3(origin.x,          origin.y,          origin.z + size.z),
+                glm::vec3(origin.x + size.x, origin.y,          origin.z + size.z)
             })
         );
     }

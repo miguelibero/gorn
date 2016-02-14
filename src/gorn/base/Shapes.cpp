@@ -52,7 +52,7 @@ namespace gorn
 
     glm::vec3 PlaneShape::normal() const
     {
-        return glm::cross(xaxis, yaxis);
+        return glm::normalize(glm::cross(xaxis, yaxis));
     }
 
     CubeShape::CubeShape()
@@ -82,23 +82,29 @@ namespace gorn
         return *this;
     }
 
-    CubeShape::Corners CubeShape::corners() const
-    {
-        Corners corners;
-        auto fcorners = front.corners();
-        auto bcorners = back.corners();
-        std::move(bcorners.begin(), bcorners.end(), corners.begin()+fcorners.size());
-        std::move(fcorners.begin(), fcorners.end(), corners.begin());
-        return corners;
-    }
+	CubeShape::Sides CubeShape::sides() const
+	{
+		Sides sides;
+		auto fc = front.corners();
+		auto bc = back.corners();
+		sides[0] = front;
+		sides[1] = back;
+		sides[2] = PlaneShape({ bc[0], fc[0], fc[3], bc[3] });
+		sides[3] = PlaneShape({ bc[1], fc[1], fc[0], bc[0] });
+		sides[4] = PlaneShape({ fc[1], bc[1], bc[2], fc[2] });
+		sides[5] = PlaneShape({ fc[2], bc[2], bc[3], fc[3] });
+		return sides;
+	}
 
-    CubeShape::Normals CubeShape::normals() const
-    {
-        Normals normals;
-        front.normal();
-        back.normal();
-        return normals;
-    }
+	CubeShape::Corners CubeShape::corners() const
+	{
+		Corners corners;
+		auto fcorners = front.corners();
+		auto bcorners = back.corners();
+		std::move(bcorners.begin(), bcorners.end(), corners.begin() + fcorners.size());
+		std::move(fcorners.begin(), fcorners.end(), corners.begin());
+		return corners;
+	}
 
     SphereShape::SphereShape():
     rings(10), sectors(10)
