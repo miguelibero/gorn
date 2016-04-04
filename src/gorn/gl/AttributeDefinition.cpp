@@ -1,4 +1,5 @@
 #include <gorn/gl/AttributeDefinition.hpp>
+#include <buffer.hpp>
 
 namespace gorn
 {
@@ -10,8 +11,7 @@ namespace gorn
     _stride(0),
     _strideType(BasicType::None),
     _offset(0),
-    _offsetType(BasicType::None),
-    _transformable(false)
+    _offsetType(BasicType::None)
     {
     }
 
@@ -69,9 +69,9 @@ namespace gorn
         return *this;
     }
 
-    AttributeDefinition& AttributeDefinition::withTransformable(bool enabled)
+    AttributeDefinition& AttributeDefinition::withTransformation(const Transformation& trans)
     {
-        _transformable = enabled;
+        _transformation = trans;
         return *this;
     }
 
@@ -115,14 +115,21 @@ namespace gorn
         return _offsetType;
     }
 
-    bool AttributeDefinition::getTransformable() const
-    {
-        return _transformable;
-    }
-
     size_t AttributeDefinition::getElementSize() const
     {
         return getCount() * getBasicTypeSize(getType());
     }
 
+	bool AttributeDefinition::isTransformed() const
+	{
+		return _transformation != nullptr;
+	}
+
+	void AttributeDefinition::transform(buffer& elms, const glm::mat4& trans) const
+	{
+		if(_transformation != nullptr)
+		{
+			_transformation(*this, elms, trans);
+		}
+	}
 }

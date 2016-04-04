@@ -2,7 +2,11 @@
 #define __gorn__AttributeDefinition__
 
 #include <gorn/gl/Enums.hpp>
+#include <gorn/gl/AttributeTransformation.hpp>
 #include <string>
+#include <glm/glm.hpp>
+
+class buffer;
 
 namespace gorn
 {
@@ -12,6 +16,8 @@ namespace gorn
 
     class AttributeDefinition
     {
+	public:
+		typedef AttributeTransformation::Function Transformation;
     private:
         std::string _name;
         bool _normalized;
@@ -21,7 +27,7 @@ namespace gorn
         BasicType _strideType;
         size_t _offset;
         BasicType _offsetType;
-        bool _transformable;
+		Transformation _transformation;
     public:
 
         AttributeDefinition(const std::string& name="");
@@ -34,7 +40,7 @@ namespace gorn
         AttributeDefinition& withOffset(size_t offset);
         AttributeDefinition& withStride(size_t stride, BasicType type);
         AttributeDefinition& withOffset(size_t offset, BasicType type);
-        AttributeDefinition& withTransformable(bool enabled);
+        AttributeDefinition& withTransformation(const Transformation& trans);
     
         const std::string& getName() const;
         BasicType getType() const;
@@ -45,7 +51,8 @@ namespace gorn
         BasicType getStrideType() const;
         BasicType getOffsetType() const;
         size_t getElementSize() const;
-        bool getTransformable() const;
+		bool isTransformed() const;
+		void transform(buffer& elms, const glm::mat4& transform) const;
     };
 }
 

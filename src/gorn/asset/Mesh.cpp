@@ -174,7 +174,6 @@ namespace gorn
         return _vertices3;
     }
 
-
     template<>
     Mesh::Vertices<float>& Mesh::getVertices() NOEXCEPT
     {
@@ -305,6 +304,36 @@ namespace gorn
         cmd.withDrawMode(_drawMode);
         return cmd;
     }
+
+	Mesh Mesh::getNormalsMesh() const NOEXCEPT
+	{
+		Mesh mesh;
+		if(!getVertices<glm::vec3>().has(AttributeKind::Normal))
+		{
+			return mesh;
+		}
+		auto& positions = getVertices<glm::vec3>().get(AttributeKind::Position);
+		auto& normals = getVertices<glm::vec3>().get(AttributeKind::Normal);
+		Mesh::Elements elements;
+		std::vector<glm::vec3> npositions;
+		npositions.reserve(2 * positions.size());
+		elements.reserve(npositions.size());
+		for(size_t i = 0; i < positions.size() && i < normals.size();i++)
+		{
+			auto& p = positions[i];
+			auto& n = normals[i];
+			npositions.push_back(p);
+			npositions.push_back(p+n);
+		}
+		for(size_t i = 0; i < npositions.size(); i++)
+		{
+			elements.push_back(i);
+		}
+		mesh.setVertices(AttributeKind::Position, std::move(npositions));
+		mesh.setDrawMode(DrawMode::Lines);
+		mesh.setElements(std::move(elements));
+		return mesh;
+	}
 
 }
 

@@ -20,6 +20,7 @@ namespace gorn
 
         void setTexture(const std::string& name,
             const std::shared_ptr<Texture>& texture);
+		void setUniformValues(const UniformValueMap& values);
         void setUniformValue(const std::string& name,
             const UniformValue& value);
 

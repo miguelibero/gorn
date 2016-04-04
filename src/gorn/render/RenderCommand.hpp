@@ -7,8 +7,10 @@
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>
 #include <gorn/gl/StateChange.hpp>
+#include <gorn/gl/BlendMode.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
+#include <functional>
 
 
 class buffer_writer;
@@ -28,10 +30,6 @@ namespace gorn
         RenderCommandAttribute();
         RenderCommandAttribute(buffer&& data, size_t count, BasicType type);
         RenderCommandAttribute(const buffer& data, size_t count, BasicType type);
-
-        size_t write(buffer_writer& out, const Definition& def, size_t pos) const;
-        size_t write(buffer_writer& out, const Definition& def, size_t pos,
-            const glm::mat4& transform) const;
     };
 
     enum class RenderCommandTransformMode
@@ -52,17 +50,27 @@ namespace gorn
         End
     };
 
+	enum class RenderCommandLayersMode
+	{
+		None,
+		Start,
+		End
+	};
+
     class RenderCommand
     {
     public:
         typedef RenderCommandTransformMode TransformMode;
         typedef RenderCommandBoundingMode BoundingMode;
+		typedef RenderCommandLayersMode LayersMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef size_t elm_t;
         typedef std::vector<elm_t> Elements;
+		typedef std::vector<int> Layers;
 
     private:
+		UniformValueMap _uniforms;
         AttributeMap _attributes;
         Elements _elements;
         std::shared_ptr<Material> _material;
@@ -74,9 +82,13 @@ namespace gorn
         Stencil _stencil;
         ClearAction _clearAction;
         StateChange _stateChange;
-
+		BlendMode _blendMode;
+		bool _blendModeSet;
+		Layers _layers;
+		LayersMode _layersMode;
     public:
         RenderCommand();
+		RenderCommand& withUniformValue(const std::string& name, const UniformValue& value);
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
             buffer&& data, size_t count, BasicType type=BasicType::Float);
@@ -96,6 +108,14 @@ namespace gorn
         RenderCommand& withStencil(const Stencil& stencil);
         RenderCommand& withClearAction(const ClearAction& clear);
         RenderCommand& withStateChange(const StateChange& change);
+		RenderCommand& withBlendMode(const BlendMode& mode);
+
+		RenderCommand& withLayer(int layer);
+		RenderCommand& withLayers(const Layers& layers);
+		RenderCommand& withLayersMode(LayersMode mode);
+
+		UniformValueMap& getUniformValues();
+		const UniformValueMap& getUniformValues() const;
 
         Elements& getElements();
         const Elements& getElements() const;
@@ -124,6 +144,11 @@ namespace gorn
         const Stencil& getStencil() const;
         const ClearAction& getClearAction() const;
         const StateChange& getStateChange() const;
+		const BlendMode& getBlendMode() const;
+		bool getBlendModeSet() const;
+
+		const Layers& getLayers() const;
+		LayersMode getLayersMode() const;
 
     };
 }

@@ -13,8 +13,6 @@ namespace gorn
         static const char* Normal;
         static const char* Color;
         static const char* TexCoords;
-
-        static bool isTransformable(const std::string& name);
     };
 
     class UniformKind
@@ -30,6 +28,7 @@ namespace gorn
         static const char* Texture6;
         static const char* Color;
         static const char* Model;
+		static const char* NormalMatrix;
         static const char* View;
         static const char* Projection;
         static const char* Camera;

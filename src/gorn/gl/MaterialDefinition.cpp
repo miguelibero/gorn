@@ -45,7 +45,7 @@ namespace gorn
         return _textures;
     }
 
-    const MaterialDefinition::UniformValues&
+    const UniformValueMap&
         MaterialDefinition::getUniformValues() const
     {
         return _uniformValues;

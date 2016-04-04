@@ -270,6 +270,7 @@ namespace gorn
         DrawMode getDrawMode() const NOEXCEPT;
 
         RenderCommand render() const NOEXCEPT;
+		Mesh getNormalsMesh() const NOEXCEPT;
     };
 
     template<>

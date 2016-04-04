@@ -1,5 +1,6 @@
 
 #include <gorn/gorn.hpp>
+#include <glm/gtx/transform.hpp>
 
 using namespace gorn;
 
@@ -51,6 +52,8 @@ void QueueApplication::load()
     _ctx.getFiles()
         .makeLoader<BundleFileLoader>("fsh", "%s.fsh");
 #endif
+
+	_ctx.getQueue().addCamera();
 
     _ctx.getImages()
         .makeDataLoader<StbImageLoader>("sprite");

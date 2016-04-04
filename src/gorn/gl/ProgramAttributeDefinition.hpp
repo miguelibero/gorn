@@ -2,18 +2,26 @@
 #define __gorn__ProgramAttributeDefinition__
 
 #include <string>
+#include <gorn/gl/AttributeTransformation.hpp>
 
 namespace gorn
 {
-    struct ProgramAttributeDefinition
+    class ProgramAttributeDefinition
     {
-        std::string name;
-        bool transformable;
+	public:
+		typedef AttributeTransformation::Function Transformation;
+	private:
+        std::string _name;
+		Transformation _transformation;
 
+	public:
         ProgramAttributeDefinition(const char* name);
-        ProgramAttributeDefinition(const std::string& name="",
-            bool transformable=false);
-        ProgramAttributeDefinition& withTransformable(bool enabled);
+        ProgramAttributeDefinition(const std::string& name = "",
+            const Transformation& trans=nullptr);
+        ProgramAttributeDefinition& withTransformation(const Transformation& trans);
+
+		const std::string& getName() const;
+		const Transformation& getTransformation() const;
     };
 }
 

@@ -3,6 +3,7 @@
 
 #include <gorn/gl/Base.hpp>
 #include <gorn/gl/Shader.hpp>
+#include <gorn/gl/AttributeTransformation.hpp>
 #include <glm/glm.hpp>
 #include <memory>
 #include <map>
@@ -12,11 +13,13 @@ namespace gorn
 {
     class UniformValue;
     class ProgramDefinition;
+	class AttributeDefinition;
 
     class Program
     {
     public:
         typedef ProgramDefinition Definition;
+		typedef AttributeTransformation::Function AttributeTransform;
     private:
         static GLuint s_currentId;
         GLuint _id;
@@ -24,7 +27,7 @@ namespace gorn
         std::shared_ptr<Shader> _fragmentShader;
         mutable std::map<std::string, GLint> _uniforms;
         mutable std::map<std::string, GLint> _attributes;
-        std::map<std::string, bool> _transformableAttributes;
+        std::map<std::string, AttributeTransform> _attributeTransforms;
 
         void cleanup();
     public:
@@ -47,9 +50,9 @@ namespace gorn
 
         GLint getAttribute(const std::string& name) const;
         GLint getUniform(const std::string& name) const;
+		AttributeTransform getAttributeTransformation(const std::string& name) const;
 
         bool hasAttribute(const std::string& name) const;
-        bool hasTransformableAttribute(const std::string& name) const;
         bool hasUniform(const std::string& name) const;
 
         void setUniformValue(const std::string& name,

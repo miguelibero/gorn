@@ -83,8 +83,6 @@ void TriangleApplication::update(double dt)
     _time += dt;
 }
 
-#include <Windows.h>
-
 void TriangleApplication::draw()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

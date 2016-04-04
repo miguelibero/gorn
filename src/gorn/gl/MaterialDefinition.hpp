@@ -12,11 +12,10 @@ namespace gorn
     {
     public:
         typedef std::map<std::string, std::string> Textures;
-        typedef std::map<std::string, UniformValue> UniformValues;
     private:
         std::string _program;
         Textures _textures;
-        UniformValues _uniformValues;
+        UniformValueMap _uniformValues;
 
     public:
         MaterialDefinition();
@@ -31,7 +30,7 @@ namespace gorn
 
         const std::string& getProgram() const;
         const Textures& getTextures() const;
-        const UniformValues& getUniformValues() const;
+        const UniformValueMap& getUniformValues() const;
     };
 
 }

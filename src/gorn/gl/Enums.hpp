@@ -80,6 +80,26 @@ namespace gorn
         UnsignedShort
     };
 
+	enum class BlendFactor
+	{
+		None,
+		Zero,
+		One,
+		SrcColor,
+		OneMinusSrcColor,
+		DstColor,
+		OneMinusDstColor,
+		SrcAlpha,
+		OneMinusSrcAlpha,
+		DstAlpha,
+		OneMinusDstAlpha,
+		ConstantColor,
+		OneMinusConstantColor,
+		ConstantAlpha,
+		OneMinusConstantAlpha,
+		SrcAlphaSaturate
+	};
+
     size_t getBasicTypeSize(BasicType type);
 
     GLenum getGlDrawMode(DrawMode mode);
@@ -92,6 +112,8 @@ namespace gorn
 
     GLbitfield getGlClearBufferBit(ClearType type);
     GLenum getGlTest(TestType type);
+
+	GLenum getGlBlendFactor(BlendFactor factor);
 }
 
 #endif

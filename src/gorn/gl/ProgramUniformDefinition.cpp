@@ -5,21 +5,31 @@ namespace gorn
 {
     ProgramUniformDefinition::ProgramUniformDefinition(
         const char* name):
-    name(name)
+	_name(name)
     {
     }
 
     ProgramUniformDefinition::ProgramUniformDefinition(
         const std::string& name, const Value& value):
-    name(name), value(value)
+	_name(name), _value(value)
     {
     }
 
     ProgramUniformDefinition& ProgramUniformDefinition::withValue(
         const Value& v)
     {
-        value = v;
+		_value = v;
         return *this;
     }
+
+	const std::string& ProgramUniformDefinition::getName() const
+	{
+		return _name;
+	}
+
+	const ProgramUniformDefinition::Value& ProgramUniformDefinition::getValue() const
+	{
+		return _value;
+	}
 }
 

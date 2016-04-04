@@ -1,50 +1,71 @@
 
 #include <gorn/render/RenderQueue.hpp>
-#include <gorn/gl/VertexArray.hpp>
-#include <gorn/gl/VertexBuffer.hpp>
+#include <gorn/render/RenderCommand.hpp>
+#include <gorn/render/RenderQueueState.hpp>
+#include <gorn/render/RenderQueueBlock.hpp>
 #include <gorn/gl/MaterialManager.hpp>
-#include <gorn/render/RenderKinds.hpp>
-#include <gorn/asset/AssetManager.hpp>
 #include <algorithm>
-#include <cmath>
-#include <sstream>
-#include <glm/gtc/matrix_inverse.hpp>
 
 namespace gorn
 {
     RenderQueue::RenderQueue(MaterialManager& materials):
     _materials(materials), _infoUpdateInterval(0.0),
-    _infoUpdatesPerSecond(10), _tempInfoAmount(0)
+    _infoUpdatesPerSecond(10), _tempInfoAmount(0),
+	_batching(true)
     {
-		updateCamera();
     }
+
+	void RenderQueue::setBatching(bool enabled)
+	{
+		_batching = enabled;
+	}
 
     void RenderQueue::setInfoUpdatesPerSecond(size_t ups)
     {
         _infoUpdatesPerSecond = ups;
     }
 
-    void RenderQueue::setUniformValue(const std::string& name,
-        const UniformValue& value)
-    {
-        _uniforms[name] = value;
-    }
+	UniformValueMap& RenderQueue::getUniformValues()
+	{
+		return _uniformValues;
+	}
 
-    bool RenderQueue::removeUniformValue(const std::string& name)
-    {
-        auto itr = _uniforms.find(name);
-        if(itr != _uniforms.end())
-        {
-            _uniforms.erase(itr);
-            return true;
-        }
-        return false;
-    }
+	const UniformValueMap& RenderQueue::getUniformValues() const
+	{
+		return _uniformValues;
+	}
 
-    const RenderQueue::UniformValueMap& RenderQueue::getUniformValues() const
-    {
-        return _uniforms;
-    }
+	RenderQueue::Camera& RenderQueue::addCamera(const std::shared_ptr<Camera>& cam)
+	{
+		_cameras.push_back(cam);
+		return *cam;
+	}
+
+	RenderQueue::Camera& RenderQueue::addCamera()
+	{
+		return addCamera(std::make_shared<Camera>());
+	}
+
+	bool RenderQueue::removeCamera(const std::shared_ptr<Camera>& cam)
+	{
+		auto itr = std::remove(_cameras.begin(), _cameras.end(), cam);
+		if (itr == _cameras.end())
+		{
+			return false;
+		}
+		_cameras.erase(itr, _cameras.end());
+		return true;
+	}
+
+	RenderQueue::Cameras& RenderQueue::getCameras()
+	{
+		return _cameras;
+	}
+
+	const RenderQueue::Cameras& RenderQueue::getCameras() const
+	{
+		return _cameras;
+	}
 
     RenderCommand& RenderQueue::addCommand(RenderCommand&& cmd)
     {
@@ -77,278 +98,73 @@ namespace gorn
         return _info;
     }
 
-    void RenderQueue::setViewTransform(const glm::mat4& view)
-    {
-        setUniformValue(UniformKind::View, view);
-        _viewTrans = view;
-        updateCamera();
-    }
+	void RenderQueue::draw()
+	{
+		auto infoDuration = 1.0 / _infoUpdatesPerSecond;
+		if (_infoUpdateInterval > infoDuration && _tempInfoAmount > 0)
+		{
+			_tempInfo.framesPerSecond = (float)(1.0 / _infoUpdateInterval);
+			_info = _tempInfo.average(_tempInfoAmount);
+			_tempInfoAmount = 0;
+			_tempInfo = Info();
+			while (_infoUpdateInterval > infoDuration)
+			{
+				_infoUpdateInterval -= infoDuration;
+			}
+		}
+		_tempInfoAmount++;
+		std::vector<Command> cmds;
+		{
+			std::lock_guard<std::mutex> lock(_commandsMutex);
+			cmds = std::move(_commands);
+			_commands.clear();
+		}
+		for(auto& cam : _cameras)
+		{
+			cam->update();
+			draw(*cam, cmds);
+		}
+	}
 
-    void RenderQueue::setProjectionTransform(const glm::mat4& proj)
-    {
-        setUniformValue(UniformKind::Projection, proj);
-        _projTrans = proj;
-        updateCamera();
-    }
+	void RenderQueue::draw(const Camera& cam, const std::vector<Command>& cmds)
+	{
+        State state(cam);
+		Block block;
 
-    void RenderQueue::updateCamera()
-    {
-        _camera = _projTrans*_viewTrans;
-        auto pos = glm::vec3(_viewTrans*glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-        setUniformValue(UniformKind::CameraPosition, pos);
-        setUniformValue(UniformKind::Camera, _camera.getMatrix());
-    }
-
-    void RenderQueue::setModelTransform(const glm::mat4& model)
-    {
-        _modelTrans = model;
-    }
-
-    const Frustum& RenderQueue::getFrustum() const
-    {
-        return _camera;
-    }
-
-    void RenderQueue::draw()
-    {
-        auto infoDuration = 1.0/_infoUpdatesPerSecond;
-        if(_infoUpdateInterval > infoDuration && _tempInfoAmount > 0)
-        {
-            _tempInfo.framesPerSecond = (float)(1.0 / _infoUpdateInterval);
-            _info = _tempInfo.average(_tempInfoAmount);
-            _tempInfoAmount = 0;
-            _tempInfo = Info();
-            while(_infoUpdateInterval > infoDuration)
-            {
-                _infoUpdateInterval -= infoDuration;
-            }
-        }
-        _tempInfoAmount++;
-
-        State state(_camera, _modelTrans);
-        Block block;
-
-        std::vector<Command> commands;
-        {
-            std::lock_guard<std::mutex> lock(_commandsMutex);
-            commands = std::move(_commands);
-            _commands.clear();
-        }
-
-        for(auto itr = commands.begin(); itr != commands.end(); ++itr)
+        for(auto itr = cmds.begin(); itr != cmds.end(); ++itr)
         {
             auto& cmd = *itr;
-            state.updateTransform(cmd);
+			state.updateLayers(cmd);
+			if(!cam.matchesLayers(state.getLayers()))
+			{
+				continue;
+			}
+			state.updateTransform(cmd);
             auto& transform = state.getTransform();
-            if(!block.supports(cmd))
-            {
-                block.draw(*this, _tempInfo);
-                block = Block(cmd);
-                auto ditr = itr;
-                while(ditr != commands.end() && block.supports(*ditr))
-                {
-                    block.addDefinition(cmd);
-                    ++ditr;
-                }
-            }
-            else
-            {
-                _tempInfo.drawCallsBatched++;
-            }
             if(!state.checkBounding(cmd))
             {
                 _tempInfo.drawCallsCulled++;
             }
             else
             {
+				if (!_batching || !block.supports(cmd))
+				{
+					block.draw(_tempInfo);
+					block = Block(cmd, cam, transform, _uniformValues);
+					auto ditr = itr;
+					while (ditr != cmds.end() && block.supports(*ditr))
+					{
+						block.addDefinition(cmd);
+						++ditr;
+					}
+				}
+				else
+				{
+					_tempInfo.drawCallsBatched++;
+				}
                 block.addData(cmd, transform);
             }
         }
-        block.draw(*this, _tempInfo);
-    }
-
-    RenderQueueBlock::RenderQueueBlock()
-    {
-    }
-
-    RenderQueueBlock::RenderQueueBlock(const RenderCommand& cmd):
-    _material(cmd.getMaterial()),
-    _mode(cmd.getDrawMode()),
-    _stencil(cmd.getStencil()),
-    _clearAction(cmd.getClearAction()),
-    _stateChange(cmd.getStateChange())
-    {
-    }
-
-    void RenderQueueBlock::addDefinition(const RenderCommand& cmd)
-    {
-        if(_material != nullptr && _material->getProgram() != nullptr)
-        {
-            _definition += cmd.getVertexDefinition(*_material->getProgram());
-        }
-    }
-
-    void RenderQueueBlock::addData(const RenderCommand& cmd,
-        const glm::mat4& trans)
-    {
-        cmd.getVertexData(_vertices, _elements, _definition, trans);
-    }
-
-    bool RenderQueueBlock::supports(const RenderCommand& cmd) const
-    {
-        return true
-            && cmd.getClearAction().empty()
-            && (cmd.getMaterial() == _material || cmd.getMaterial() == nullptr)
-            && cmd.getDrawMode() == _mode
-            && cmd.getStencil() == _stencil
-            && cmd.getStateChange() == _stateChange;
-    }
-
-    void RenderQueueBlock::draw(const RenderQueue& queue,
-        Info& info)
-    {
-        _stateChange.apply();
-        _stencil.apply();
-        _clearAction.apply();
-
-        if(_vertices.empty() || _material == nullptr
-            || _material->getProgram() == nullptr)
-        {
-            return;
-        }
-
-        VertexArray vao;
-        auto usage = VertexBuffer::Usage::StaticDraw;
-        auto elmsCount = _elements.size();
-        auto vertsCount = _vertices.size()/_definition.getElementSize();
-        vao.setMaterial(_material);
-        vao.addVertexData(std::make_shared<VertexBuffer>(
-            buffer(std::move(_vertices)), usage,
-            VertexBuffer::Target::ArrayBuffer),
-            _definition);
-        vao.setElementData(std::make_shared<VertexBuffer>(
-            buffer(std::move(_elements)), usage,
-            VertexBuffer::Target::ElementArrayBuffer));
-
-        vao.setUniformValues(queue.getUniformValues());
-        vao.setUniformValue(UniformKind::Model, _transform);
-
-        vao.draw(elmsCount, _mode);
-        info.vertexCount += vertsCount;
-        info.drawCalls++;
-    }
-
-    RenderQueueInfo::RenderQueueInfo():
-    framesPerSecond(0.0), drawCalls(0),
-    drawCallsBatched(0), drawCallsCulled(0),
-    vertexCount(0)
-    {
-    }
-
-    RenderQueueInfo RenderQueueInfo::average(size_t amount) const
-    {
-        if(amount == 0)
-        {
-            return RenderQueueInfo();
-        }
-        RenderQueueInfo result(*this);
-        result.framesPerSecond *= amount;
-        result.drawCalls /= amount;
-        result.drawCallsBatched /= amount;
-        result.vertexCount /= amount;
-        return result;
-    }
-
-    std::string RenderQueueInfo::str() const
-    {
-        std::stringstream ss;
-        ss << "fps: " << framesPerSecond << std::endl;
-        ss << "draws: " << drawCalls << "/";
-        ss << drawCallsBatched << "/";
-        ss << drawCallsCulled << std::endl;
-        ss << "verts: " << vertexCount;
-        return ss.str();
-    }
-
-    Rect RenderQueueState::_screenRect(glm::vec2(-1.0f), glm::vec2(2.0f));
-
-    RenderQueueState::RenderQueueState(
-        const Frustum& frustum, const glm::mat4& trans):
-    _boundingEnds(0), _frustum(frustum), _baseFrustum(frustum)
-    {
-        _transforms.push(trans);
-    }
-
-    void RenderQueueState::updateTransform(const Command& cmd)
-    {
-        bool changed = false;
-        switch(cmd.getTransformMode())
-        {
-            case TransformMode::PushLocal:
-                _transforms.push(_transforms.top()*cmd.getTransform());
-                changed = true;
-                break;
-            case TransformMode::PopLocal:
-                _transforms.pop();
-                changed = true;
-                break;
-            case TransformMode::SetGlobal:
-                _transforms.push(cmd.getTransform());
-                changed = true;
-                break;
-            case TransformMode::PushCheckpoint:
-                _checkpoints.push(_transforms.size());
-                break;
-            case TransformMode::PopCheckpoint:
-            {
-                size_t size = _checkpoints.top();
-                _checkpoints.pop();
-                while(_transforms.size() > size)
-                {
-                    _transforms.pop();
-                    changed = true;
-                }
-                break;
-            }
-            default:
-                break;
-        }
-        if(changed)
-        {
-            _frustum = _baseFrustum*getTransform();
-        }
-    }
-
-    bool RenderQueueState::checkBounding(const Command& cmd)
-    {
-        auto bound = cmd.getBoundingMode();
-        if(bound == BoundingMode::End && _boundingEnds > 0)
-        {
-            _boundingEnds--;
-        }
-        if(_boundingEnds > 0)
-        {
-            return false;
-        }
-        if(bound != BoundingMode::Start &&
-            bound != BoundingMode::Local)
-        {
-            return true;
-        }
-
-        if(!_frustum.sees(cmd.getBoundingBox()))
-        {
-            if(bound == RenderCommand::BoundingMode::Start)
-            {
-                _boundingEnds++;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    const glm::mat4& RenderQueueState::getTransform() const
-    {
-        return _transforms.top();
+		block.draw(_tempInfo);
     }
 }

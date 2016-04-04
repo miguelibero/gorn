@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn", "..\..\..\proj.windows\gorn.vcxproj", "{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn_kitten", "gorn_kitten.vcxproj", "{1B0AB4F6-8DC3-4385-AC9F-17C125142CBE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3} = {9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

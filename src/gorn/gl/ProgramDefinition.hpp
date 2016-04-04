@@ -44,6 +44,7 @@ namespace gorn
         bool hasShaderFile(ShaderType type) const;
         const std::string& getShaderFile(ShaderType type) const;
         const Uniforms& getUniforms() const;
+		UniformValueMap getUniformValues() const;
         const Attributes& getAttributes() const;
     };
 

@@ -23,25 +23,13 @@ namespace gorn
         StateChange& withEnable(MaskType type);
         StateChange& withDisable(MaskType type);
 
-
         bool operator==(const StateChange& other) const;
         bool operator!=(const StateChange& other) const;
         
         void apply();
-
-        static StateChange current();
+		void apply(const StateChange& old);
     };
 
-
-    class StateChangeGuard
-    {
-    public:
-        StateChange _old;
-        StateChange _new;
-    public:
-        StateChangeGuard(const StateChange& change);
-        ~StateChangeGuard();
-    };
 }
 
 #endif
