@@ -47,7 +47,9 @@ namespace gorn
         const glm::mat4& getMatrix() const;
         const glm::mat4& getInverse() const;
 
-        glm::vec3 getScreenToWorldPoint(const glm::vec3& p) const;
+        glm::vec3 getScreenToWorldPoint(const glm::vec2& p) const;
+		glm::vec3 getScreenToWorldPoint(const glm::vec3& p) const;
+		glm::vec2 getWorldToScreenPoint(const glm::vec3& p) const;
 
         Frustum& operator*=(const glm::mat4& transform);
         Frustum operator*(const glm::mat4& transform) const;

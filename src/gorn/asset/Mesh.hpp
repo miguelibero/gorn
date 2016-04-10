@@ -17,10 +17,11 @@ namespace gorn
     class MeshElement
     {
     public:
-        typedef size_t idx_t;
+        typedef RenderCommand::elm_t idx_t;
+        typedef std::map<std::string, idx_t> IndicesMap;
         static const idx_t npos;
     private:
-        std::map<std::string, idx_t> _indices;
+        IndicesMap _indices;
         idx_t _defval;
     public:
         MeshElement(idx_t defval = npos) NOEXCEPT;
@@ -30,7 +31,7 @@ namespace gorn
         idx_t getDefault() const NOEXCEPT;
         bool hasDefault() const NOEXCEPT;
         void setDefault(idx_t defval) NOEXCEPT;
-        void update(std::map<std::string, idx_t> indices);
+        void update(const IndicesMap& indices);
         bool operator==(const MeshElement& other) const NOEXCEPT;
         bool operator!=(const MeshElement& other) const NOEXCEPT;
 
@@ -46,6 +47,8 @@ namespace gorn
     public:
         typedef MeshElement Element;
         typedef std::vector<Element> Elements;
+        typedef MeshElement::IndicesMap IndicesMap;
+        typedef MeshElement::idx_t idx_t;
     private:
         std::map<std::string, std::vector<V>> _data;
     public:
@@ -59,8 +62,8 @@ namespace gorn
         bool has(const std::string& name) const NOEXCEPT;
         void add(const std::string& name, const V& vtx) NOEXCEPT;
 
-        void sizes(std::map<std::string,size_t>& sizes) const NOEXCEPT;
-        void sizes(std::map<std::string,size_t>& sizes, size_t value) const NOEXCEPT;
+        void sizes(IndicesMap& sizes) const NOEXCEPT;
+        void sizes(IndicesMap& sizes, idx_t value) const NOEXCEPT;
 
         MeshVertices<V>& operator+=(const MeshVertices<V>& other) NOEXCEPT;
         MeshVertices<V> operator+(const MeshVertices<V>& other) const NOEXCEPT;
@@ -71,7 +74,7 @@ namespace gorn
 
         void render(RenderCommand& cmd, const Elements& elms) const NOEXCEPT;
     };
-    
+
     template<typename V>
     void MeshVertices<V>::set(const std::string& name,
         const std::vector<V>& vtx) NOEXCEPT
@@ -107,7 +110,7 @@ namespace gorn
 
     template<typename V>
     void MeshVertices<V>::sizes(
-        std::map<std::string,size_t>& sizes) const NOEXCEPT
+        IndicesMap& sizes) const NOEXCEPT
     {
         for(auto itr = _data.begin();
             itr != _data.end(); ++itr)
@@ -118,7 +121,7 @@ namespace gorn
 
     template<typename V>
     void MeshVertices<V>::sizes(
-        std::map<std::string,size_t>& sizes, size_t value) const NOEXCEPT
+        IndicesMap& sizes, idx_t value) const NOEXCEPT
     {
         for(auto itr = _data.begin();
             itr != _data.end(); ++itr)
@@ -149,7 +152,7 @@ namespace gorn
         sum += other;
         return sum;
     }
-    
+
     template<typename V>
     MeshVertices<V>& MeshVertices<V>::operator+=(
         MeshVertices<V>&& other) NOEXCEPT
@@ -165,7 +168,7 @@ namespace gorn
         }
         return *this;
     }
-    
+
     template<typename V>
     MeshVertices<V> MeshVertices<V>::operator+(
         MeshVertices<V>&& other) const NOEXCEPT
@@ -181,7 +184,7 @@ namespace gorn
         _data.clear();
     }
 
-    template<typename V>    
+    template<typename V>
     bool MeshVertices<V>::empty() const NOEXCEPT
     {
         return _data.empty();
@@ -219,8 +222,9 @@ namespace gorn
     class Mesh
     {
     public:
-        typedef size_t idx_t;
+        typedef MeshElement::idx_t idx_t;
         typedef MeshElement Element;
+        typedef MeshElement::IndicesMap IndicesMap;
         typedef std::vector<Element> Elements;
         typedef std::vector<idx_t> Indices;
         template<typename V> using Vertices = MeshVertices<V>;
@@ -270,6 +274,7 @@ namespace gorn
         DrawMode getDrawMode() const NOEXCEPT;
 
         RenderCommand render() const NOEXCEPT;
+		Mesh getNormalsMesh() const NOEXCEPT;
     };
 
     template<>

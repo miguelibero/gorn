@@ -241,6 +241,36 @@ namespace gorn
         return *this;
     }
 
+	bool UniformValue::operator==(const UniformValue& other) const
+	{
+		if (_type != other._type)
+		{
+			return false;
+		}
+		switch (_type)
+		{
+		case Type::Vector2:
+		case Type::Vector3:
+		case Type::Vector4:
+		case Type::Float:
+		case Type::Matrix2:
+		case Type::Matrix3:
+		case Type::Matrix4:
+			return _float == other._float;
+		case Type::Int:
+			return _int == other._int;
+		case Type::Empty:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	bool UniformValue::operator!=(const UniformValue& other) const
+	{
+		return !(*this == other);
+	}
+
     UniformValue::Type UniformValue::getType() const
     {
         return _type;
@@ -292,5 +322,96 @@ namespace gorn
     {
         return _type == Type::Empty;
     }
+
+	UniformValueMap::UniformValueMap()
+	{
+	}
+
+	UniformValueMap::UniformValueMap(const UniformValueMap& other):
+	_values(other._values)
+	{
+	}
+
+	UniformValueMap::UniformValueMap(std::initializer_list<Container::value_type> values):
+	_values(values)
+	{
+	}
+
+	void UniformValueMap::set(const std::string& k, const UniformValue& v)
+	{
+		_values[k] = v;
+	}
+
+	bool UniformValueMap::remove(const std::string& k)
+	{
+		auto itr = _values.find(k);
+		if(itr != _values.end())
+		{
+			_values.erase(itr);
+			return true;
+		}
+		return false;
+	}
+
+	bool UniformValueMap::has(const std::string& k) const
+	{
+		return _values.find(k) != _values.end();
+	}
+
+	UniformValueMap::iterator UniformValueMap::begin()
+	{
+		return _values.begin();
+	}
+
+	UniformValueMap::iterator UniformValueMap::end()
+	{
+		return _values.end();
+	}
+
+	UniformValueMap::const_iterator UniformValueMap::begin() const
+	{
+		return _values.begin();
+	}
+
+	UniformValueMap::const_iterator UniformValueMap::end() const
+	{
+		return _values.end();
+	}
+
+	UniformValue& UniformValueMap::operator[](const std::string& k)
+	{
+		return _values[k];
+	}
+
+	UniformValueMap UniformValueMap::operator+(const UniformValueMap& other) const
+	{
+		UniformValueMap map(*this);
+		map += other;
+		return map;
+	}
+
+	UniformValueMap& UniformValueMap::operator+=(const UniformValueMap& other)
+	{
+		for(auto itr = other.begin(); itr != other.end(); ++itr)
+		{
+			set(itr->first, itr->second);
+		}
+		return *this;
+	}
+	UniformValueMap UniformValueMap::operator-(const UniformValueMap& other) const
+	{
+		UniformValueMap map(*this);
+		map -= other;
+		return map;
+	}
+
+	UniformValueMap& UniformValueMap::operator-=(const UniformValueMap& other)
+	{
+		for (auto itr = other.begin(); itr != other.end(); ++itr)
+		{
+			remove(itr->first);
+		}
+		return *this;
+	}
 }
 

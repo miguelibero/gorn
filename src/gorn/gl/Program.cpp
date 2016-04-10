@@ -97,19 +97,19 @@ namespace gorn
         for(auto itr = def.getAttributes().begin();
             itr != def.getAttributes().end(); ++itr)
         {
-            auto id = getAttribute(itr->second.name);
+            auto id = getAttribute(itr->second.getName());
             _attributes[itr->first] = id;
-            _transformableAttributes[itr->first]
-                 = itr->second.transformable;
+            _attributeTransforms[itr->first]
+                 = itr->second.getTransformation();
         }
         for(auto itr = def.getUniforms().begin();
             itr != def.getUniforms().end(); ++itr)
         {
-            auto id = getUniform(itr->second.name);
+            auto id = getUniform(itr->second.getName());
             _uniforms[itr->first] = id;
-            if(!itr->second.value.empty())
+            if(!itr->second.getValue().empty())
             {
-                setUniformValue(id, itr->second.value);
+                setUniformValue(id, itr->second.getValue());
             }
         }
     }
@@ -136,19 +136,15 @@ namespace gorn
         return itr->second;
     }
 
-    bool Program::hasTransformableAttribute(const std::string& name) const
-    {
-        auto itr = _transformableAttributes.find(name);
-        if(itr != _transformableAttributes.end())
-        {
-            return itr->second;
-        }
-        if(AttributeKind::isTransformable(name) && hasAttribute(name))
-        {
-            return true;
-        }
-        return false;
-    }
+	Program::AttributeTransform Program::getAttributeTransformation(const std::string& name) const
+	{
+		auto itr = _attributeTransforms.find(name);
+		if (itr != _attributeTransforms.end())
+		{
+			return itr->second;
+		}
+		return gorn::AttributeTransformation::create(name);
+	}
 
     bool Program::hasAttribute(const std::string& name) const
     {

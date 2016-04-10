@@ -163,6 +163,24 @@
     <ClCompile Include="..\src\gorn\base\Math.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderQueueBlock.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderQueueInfo.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderQueueState.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\render\RenderCamera.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\BlendMode.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\AttributeTransformation.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp">
@@ -335,6 +353,24 @@
     </ClInclude>
     <ClInclude Include="..\src\gorn\base\Math.hpp">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderQueueBlock.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderQueueInfo.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderQueueState.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\render\RenderCamera.hpp">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\BlendMode.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\AttributeTransformation.hpp">
+      <Filter>gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 
 #include <gorn/gl/Enums.hpp>
 #include <gorn/gl/Base.hpp>
+#include <gorn/gl/UniformValue.hpp>
 #include <vector>
 #include <map>
 #include <memory>
@@ -14,12 +15,9 @@ namespace gorn
     class AttributeDefinition;
     class Material;
     class Program;
-    class UniformValue;
 
     class VertexArray
     {
-    public:
-        typedef std::map<std::string, UniformValue> UniformValueMap;
     private:
         static GLuint s_currentId;
         mutable GLuint _id;

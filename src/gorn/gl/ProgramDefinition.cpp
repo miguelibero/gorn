@@ -39,7 +39,7 @@ namespace gorn
 
 	ProgramDefinition& ProgramDefinition::withUniform(const Uniform& uniform)
 	{
-		return withUniform(uniform.name, uniform);
+		return withUniform(uniform.getName(), uniform);
 	}
 
     ProgramDefinition& ProgramDefinition::withAttribute(
@@ -47,10 +47,19 @@ namespace gorn
         const Attribute& attribute)
     {
         _attributes[alias] = attribute;
-        if(AttributeKind::isTransformable(alias))
-        {
-            _attributes[alias].transformable = true;
-        }
+		auto itr = _attributes.find(alias);
+		if(itr == _attributes.end())
+		{
+			itr = _attributes.insert(itr, { alias, attribute });
+		}
+		else
+		{
+			itr->second = attribute;
+		}
+		if(itr->second.getTransformation() == nullptr)
+		{
+			itr->second.withTransformation(AttributeTransformation::create(alias));
+		}
         return *this;
     }
 
@@ -80,6 +89,16 @@ namespace gorn
     {
         return _uniforms;
     }
+
+	UniformValueMap ProgramDefinition::getUniformValues() const
+	{
+		UniformValueMap values;
+		for (auto itr = _uniforms.begin(); itr != _uniforms.end(); ++itr)
+		{
+			values[itr->first] = itr->second.getValue();
+		}
+		return values;
+	}
 
     const ProgramDefinition::Attributes& ProgramDefinition::
         getAttributes() const

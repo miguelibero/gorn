@@ -45,11 +45,11 @@ namespace gorn
         return !(*this == other);
     }
 
-    StateChange StateChange::current()
-    {
-        StateChange change;
-        return change;
-    }
+	void StateChange::apply(const StateChange& old)
+	{
+		// TODO: just apply differences
+		apply();
+	}
 
     void StateChange::apply()
     {
@@ -98,17 +98,4 @@ namespace gorn
             glColorMask(colors[0], colors[1], colors[2], colors[3]);
         }
     }
-
-    StateChangeGuard::StateChangeGuard(const StateChange& change) :
-    _old(StateChange::current()),
-    _new(change)
-    {
-        _new.apply();
-    }
-
-    StateChangeGuard::~StateChangeGuard()
-    {
-        _old.apply();
-    }
-
 }

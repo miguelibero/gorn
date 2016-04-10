@@ -33,22 +33,22 @@ namespace gorn
         {
             if( normal.x >= 0)
             {
-                idx = 0;
+                idx = 1;
             }
             else
             {
-                idx = 1;
+                idx = 0;
             }
         }
         else
         {
             if( normal.x >= 0)
             {
-                idx = 3;
+                idx = 2;
             }
             else
             {
-                idx = 2;
+                idx = 3;
             }
         }
         if( normal.z >= 0 )
@@ -146,10 +146,10 @@ namespace gorn
                 glm::vec3(origin.x + size.x, origin.y,          origin.z)
             }),
             PlaneShape({
-                glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
-                glm::vec3(origin.x,          origin.y + size.y, origin.z + size.z),
-                glm::vec3(origin.x,          origin.y,          origin.z + size.z),
-                glm::vec3(origin.x + size.x, origin.y,          origin.z + size.z)
+				glm::vec3(origin.x,          origin.y + size.y, origin.z + size.z),
+				glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
+				glm::vec3(origin.x + size.x, origin.y,          origin.z + size.z),
+                glm::vec3(origin.x,          origin.y,          origin.z + size.z)
             })
         );
     }

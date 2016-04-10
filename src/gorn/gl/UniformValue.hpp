@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <map>
 #include <initializer_list>
 
 namespace gorn
@@ -74,11 +75,43 @@ namespace gorn
         UniformValue& operator=(std::initializer_list<glm::mat3> ms);
         UniformValue& operator=(std::initializer_list<glm::mat4> ms);
 
+		bool operator==(const UniformValue& other) const;
+		bool operator!=(const UniformValue& other) const;
+
         Type getType() const;
 
         void set(GLint location) const;
         bool empty() const;
     };
+
+	class UniformValueMap
+	{
+	private:
+		typedef std::map<std::string, UniformValue> Container;
+	public:
+		typedef Container::iterator iterator;
+		typedef Container::const_iterator const_iterator;
+	private:
+		Container _values;
+	public:
+		UniformValueMap();
+		UniformValueMap(const UniformValueMap& other);
+		UniformValueMap(std::initializer_list<Container::value_type> values);
+		void set(const std::string& k, const UniformValue& v);
+		bool remove(const std::string& k);
+		bool has(const std::string& k) const;
+
+		iterator begin();
+		iterator end();
+		const_iterator begin() const;
+		const_iterator end() const;
+
+		UniformValue& operator[](const std::string& k);
+		UniformValueMap operator+(const UniformValueMap& other) const;
+		UniformValueMap& operator+=(const UniformValueMap& other);
+		UniformValueMap operator-(const UniformValueMap& other) const;
+		UniformValueMap& operator-=(const UniformValueMap& other);
+	};
 
 }
 

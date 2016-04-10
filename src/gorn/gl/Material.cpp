@@ -14,6 +14,17 @@ namespace gorn
         _textures[_program->getUniform(name)] = texture;
     }
 
+	void Material::setUniformValues(const UniformValueMap& values)
+	{
+		for (auto itr = values.begin(); itr != values.end(); ++itr)
+		{
+			if(!itr->second.empty())
+			{
+				setUniformValue(itr->first, itr->second);
+			}
+		}
+	}
+
     void Material::setUniformValue(const std::string& name,
         const UniformValue& value)
     {

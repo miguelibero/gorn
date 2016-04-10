@@ -14,7 +14,7 @@ namespace gorn
         static const char* kDefaultTag;
         static const size_t npos;
 
-           String() = delete;
+        String() = delete;
 
         static size_t replaceAll(std::string& str,
             const std::string& from, const std::string& to);

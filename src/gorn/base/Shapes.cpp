@@ -47,12 +47,12 @@ namespace gorn
             center - 0.5f*xaxis + 0.5f*yaxis,
             center - 0.5f*xaxis - 0.5f*yaxis,
             center + 0.5f*xaxis - 0.5f*yaxis
-        };  
+        };
     }
 
     glm::vec3 PlaneShape::normal() const
     {
-        return glm::normalize(glm::cross(xaxis, yaxis));
+        return glm::normalize(glm::cross(yaxis, xaxis));
     }
 
     CubeShape::CubeShape()
@@ -89,10 +89,10 @@ namespace gorn
 		auto bc = back.corners();
 		sides[0] = front;
 		sides[1] = back;
-		sides[2] = PlaneShape({ bc[0], fc[0], fc[3], bc[3] });
-		sides[3] = PlaneShape({ bc[1], fc[1], fc[0], bc[0] });
-		sides[4] = PlaneShape({ fc[1], bc[1], bc[2], fc[2] });
-		sides[5] = PlaneShape({ fc[2], bc[2], bc[3], fc[3] });
+		sides[2] = PlaneShape({ bc[1], fc[0], fc[3], bc[2] });
+		sides[3] = PlaneShape({ bc[0], fc[1], fc[0], bc[1] });
+		sides[4] = PlaneShape({ fc[1], bc[0], bc[3], fc[2] });
+		sides[5] = PlaneShape({ fc[2], bc[3], bc[2], fc[3] });
 		return sides;
 	}
 

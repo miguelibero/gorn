@@ -13,9 +13,9 @@ namespace gorn
 
     VertexArray::VertexArray():
     _id(0), _elementType(BasicType::None)
-    {   
+    {
     }
-    
+
     VertexArray::~VertexArray()
     {
         cleanup();
@@ -157,12 +157,12 @@ namespace gorn
             itr = _vertexVbos.insert(itr, vbo);
         }
         auto program = getProgram();
-        GLint id = program->getAttribute(def.getName());        
+        GLint id = program->getAttribute(def.getName());
 
         bind();
         vbo->bind();
         glEnableVertexAttribArray(id);
- 
+
         auto stride = def.getStride();
         if(def.getStrideType() != BasicType::None)
         {
@@ -242,4 +242,3 @@ namespace gorn
         unbind();
     }
 }
-

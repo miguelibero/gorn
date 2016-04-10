@@ -8,14 +8,21 @@ namespace gorn
 {
     struct ProgramUniformDefinition
     {
+	public:
         typedef UniformValue Value;
-        std::string name;
-        Value value;
+	private:
+        std::string _name;
+        Value _value;
 
+	public:
         ProgramUniformDefinition(const char* name);
-        ProgramUniformDefinition(const std::string& name="",
+        ProgramUniformDefinition(const std::string& name = "",
             const Value& value=Value());
+
         ProgramUniformDefinition& withValue(const Value& value);
+
+		const std::string& getName() const;
+		const Value& getValue() const;
     };
 }
 

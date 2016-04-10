@@ -3,9 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn", "..\..\..\proj.windows\gorn.vcxproj", "{088DB418-4DE7-4FEB-9327-4C97704A9E93}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn", "..\..\..\proj.windows\gorn.vcxproj", "{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gorn_queue", "gorn_queue.vcxproj", "{1B0AB4F6-8DC3-4385-AC9F-17C125142CBE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3} = {9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +16,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Debug|x86.ActiveCfg = Debug|Win32
-		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Debug|x86.Build.0 = Debug|Win32
-		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Release|x86.ActiveCfg = Release|Win32
-		{088DB418-4DE7-4FEB-9327-4C97704A9E93}.Release|x86.Build.0 = Release|Win32
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}.Debug|x86.ActiveCfg = Debug|Win32
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}.Debug|x86.Build.0 = Debug|Win32
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}.Release|x86.ActiveCfg = Release|Win32
+		{9FBF1B7E-1AEA-4D29-9961-B4FEC0A64CA3}.Release|x86.Build.0 = Release|Win32
 		{1B0AB4F6-8DC3-4385-AC9F-17C125142CBE}.Debug|x86.ActiveCfg = Debug|Win32
 		{1B0AB4F6-8DC3-4385-AC9F-17C125142CBE}.Debug|x86.Build.0 = Debug|Win32
 		{1B0AB4F6-8DC3-4385-AC9F-17C125142CBE}.Release|x86.ActiveCfg = Release|Win32

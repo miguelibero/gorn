@@ -88,19 +88,8 @@ namespace gorn
             material->setTexture(itr->first, _textures.load(itr->second));
         }
         auto& pdef = _programs.getDefinitions().get(pname);
-        for(auto itr = pdef.getUniforms().begin();
-            itr != pdef.getUniforms().end(); ++itr)
-        {
-            if(!itr->second.value.empty())
-            {
-                material->setUniformValue(itr->first, itr->second.value);
-            }
-        }
-        for(auto itr = def.getUniformValues().begin();
-            itr != def.getUniformValues().end(); ++itr)
-        {
-            material->setUniformValue(itr->first, itr->second);
-        }
+		material->setUniformValues(pdef.getUniformValues());
+		material->setUniformValues(def.getUniformValues());
         _materials.insert(itr, {name, material});
         return material;
     }

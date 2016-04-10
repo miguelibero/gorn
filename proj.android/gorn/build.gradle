@@ -4,11 +4,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
+        classpath 'com.android.tools.build:gradle:0.14.0'
     }
 }
 
-apply plugin: 'com.android.model.library'
+apply plugin: 'com.android.library'
 
 model {
     android {
@@ -17,12 +17,11 @@ model {
     }
     android.ndk {
         moduleName = "gorn"
-        toolchain = "clang"
         stl = "c++_shared"
     }
     android.sources {
         main {
-            manifest.source.srcDirs = ['.']
+            manifest.srcFile 'AndroidManifest.xml'
             java.source.srcDirs = ['src']
             jni.source.srcDirs = []
             res.source.srcDirs = ['res']
@@ -30,5 +29,3 @@ model {
         }
     }
 }
-
-

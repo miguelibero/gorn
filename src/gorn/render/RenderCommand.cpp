@@ -25,50 +25,21 @@ namespace gorn
     {
     }
 
-    size_t RenderCommandAttribute::write(buffer_writer& out,
-        const Definition& def, size_t pos) const
-    {
-        size_t elmSize = def.getElementSize();
-        return out.write(data, elmSize, pos*elmSize);
-    }
-
-    size_t RenderCommandAttribute::write(buffer_writer& out,
-        const Definition& def, size_t pos, const glm::mat4& t) const
-    {
-        if(def.getType() != BasicType::Float)
-        {
-            throw Exception("Only transformable floats supported.");
-        }
-        auto count = def.getCount();
-        size_t elmSize = def.getElementSize();
-        if(elmSize*pos >= data.size())
-        {
-            return 0;
-        }
-        if(count == 3)
-        {
-            auto vecs = reinterpret_cast<const glm::vec3*>(data.data());
-            auto vec = glm::vec3(t*glm::vec4(vecs[pos], 1.0f));
-            return out.write(glm::value_ptr(vec), elmSize);
-        }
-        else if(count == 2)
-        {
-            auto vecs = reinterpret_cast<const glm::vec2*>(data.data());
-            auto vec = glm::vec2(t*glm::vec4(vecs[pos], 0.0f, 1.0f));
-            return out.write(glm::value_ptr(vec), elmSize);
-        }
-        else
-        {
-            throw Exception("Only transformable vec2 or vec3 supported.");
-        }
-    }
-
     RenderCommand::RenderCommand():
     _drawMode(DrawMode::Triangles),
     _transformMode(TransformMode::NoChange),
-    _boundingMode(BoundingMode::None)
+    _boundingMode(BoundingMode::None),
+    _blendModeSet(false),
+	_layersMode(LayersMode::None)
     {
     }
+
+	RenderCommand& RenderCommand::withUniformValue(const std::string& name,
+		const UniformValue& value)
+	{
+		_uniforms[name] = value;
+		return *this;
+	}
 
     RenderCommand& RenderCommand::withMaterial(
         const std::shared_ptr<Material>& material)
@@ -155,6 +126,33 @@ namespace gorn
         return *this;
     }
 
+	RenderCommand& RenderCommand::withBlendMode(const BlendMode& mode)
+	{
+		_blendMode = mode;
+		_blendModeSet = true;
+		return *this;
+	}
+
+	RenderCommand& RenderCommand::withLayer(int layer)
+	{
+		_layers.push_back(layer);
+		_layersMode = LayersMode::Start;
+		return *this;
+	}
+
+	RenderCommand& RenderCommand::withLayers(const Layers& layers)
+	{
+		_layers.insert(_layers.end(), layers.begin(), layers.end());
+		_layersMode = LayersMode::Start;
+		return *this;
+	}
+
+	RenderCommand& RenderCommand::withLayersMode(LayersMode mode)
+	{
+		_layersMode = mode;
+		return *this;
+	}
+
     RenderCommand::Elements& RenderCommand::getElements()
     {
         return _elements;
@@ -195,6 +193,16 @@ namespace gorn
         return _attributes;
     }
 
+	UniformValueMap& RenderCommand::getUniformValues()
+	{
+		return _uniforms;
+	}
+
+	const UniformValueMap& RenderCommand::getUniformValues() const
+	{
+		return _uniforms;
+	}
+
     const std::shared_ptr<Material>& RenderCommand::getMaterial() const
     {
         return _material;
@@ -230,6 +238,16 @@ namespace gorn
         return _stateChange;
     }
 
+	const BlendMode& RenderCommand::getBlendMode() const
+	{
+		return _blendMode;
+	}
+
+	bool RenderCommand::getBlendModeSet() const
+	{
+		return _blendModeSet;
+	}
+
     RenderCommand::BoundingMode RenderCommand::getBoundingMode() const
     {
         return _boundingMode;
@@ -240,6 +258,16 @@ namespace gorn
         return _boundingBox;
     }
 
+	const RenderCommand::Layers& RenderCommand::getLayers() const
+	{
+		return _layers;
+	}
+
+	RenderCommand::LayersMode RenderCommand::getLayersMode() const
+	{
+		return _layersMode;
+	}
+
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const
     {
         VertexDefinition vdef;
@@ -248,12 +276,12 @@ namespace gorn
             if(prog.hasAttribute(itr->first))
             {
                 auto offset = vdef.getElementSize();
-                auto trans = prog.hasTransformableAttribute(itr->first);
+                auto trans = prog.getAttributeTransformation(itr->first);
                 vdef.setAttribute(itr->first)
                     .withType(itr->second.type)
                     .withCount(itr->second.count)
                     .withOffset(offset)
-                    .withTransformable(trans);
+                    .withTransformation(trans);
             }
         }
         size_t stride = vdef.getElementSize();
@@ -279,31 +307,42 @@ namespace gorn
         elm_t n = 0;
 
         bool finished = false;
+		std::map<std::string, buffer> transAttrs;
+		std::vector<std::pair<const buffer*,size_t>> attrsData;
+		// transform attributes
+		for(auto itr = vdef.getAttributes().begin(); itr != vdef.getAttributes().end(); ++itr)
+		{
+			auto& def = itr->second;
+			auto itr2 = _attributes.find(itr->first);
+			if(itr2 != _attributes.end())
+			{
+				auto& block = itr2->second;
+				const buffer* attrBuffer = &block.data;
+				if(def.isTransformed())
+				{
+					buffer data(block.data);
+					def.transform(data, transform);
+					auto itr3 = transAttrs.insert(transAttrs.end(), { itr->first, std::move(data) });
+					attrBuffer = &itr3->second;
+				}
+				attrsData.push_back(std::make_pair(
+					attrBuffer,
+					def.getElementSize()
+					));
+			}
+		}
         while(!finished)
         {
             finished = true;
-            for(auto itr = vdef.getAttributes().begin();
-              itr != vdef.getAttributes().end(); ++itr)
+            for(auto itr = attrsData.begin();
+              itr != attrsData.end(); ++itr)
             {
-                auto& def = itr->second;
-                auto itr2 = _attributes.find(itr->first);
-                size_t writeSize = 0;
-                if(itr2 != _attributes.end())
-                {
-                    auto& block = itr2->second;
-                    if(itr->second.getTransformable())
-                    {
-                        writeSize = block.write(out, def, n, transform);
-                    }
-                    else
-                    {
-                        writeSize = block.write(out, def, n);
-                    }
-                }
-                size_t elmSize = def.getElementSize();
-                out.fill(0, elmSize-writeSize);
+				auto& data = itr->first;
+				auto elmSize = itr->second;
+                auto writeSize = out.write(*data, elmSize, elmSize*n);
                 if(writeSize != 0)
                 {
+                    out.fill(0, elmSize - writeSize);
                     finished = false;
                 }
             }
@@ -312,7 +351,6 @@ namespace gorn
                 n++;
             }
         }
-
         if(hasElements())
         {
             const Elements& nelms = getElements();

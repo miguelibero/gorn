@@ -85,20 +85,21 @@ namespace gorn
         MatchType mtype = MatchType::Inside;
         for(size_t i = 0; i < _planes.size(); ++i)
         {
+			glm::vec3 p;
             auto& plane = _planes[i];
             auto pnorm = glm::vec3(plane);
-            auto p = rect.exterior(pnorm);
-            float dext = glm::dot(p, pnorm) + plane.w;
-            if(dext < 0)
-            {
-                return MatchType::Outside;
-            }
-            p = rect.exterior(-pnorm);
-            float dint = glm::dot(p, pnorm) + plane.w;
-            if(dint < 0)
-            {
-                mtype = MatchType::Partial;
-            }
+			p = rect.exterior(pnorm);
+			float dext = glm::dot(p, pnorm) + plane.w;
+			if (dext < 0)
+			{
+				return MatchType::Outside;
+			}
+			p = rect.exterior(-pnorm);
+			float dint = glm::dot(p, pnorm) + plane.w;
+			if (dint < 0)
+			{
+				mtype = MatchType::Partial;
+			}
         }
         return mtype;
     }
@@ -131,6 +132,17 @@ namespace gorn
         auto dir = glm::normalize(far - near);
         return near + dir*p.z;
     }
+
+	glm::vec3 Frustum::getScreenToWorldPoint(const glm::vec2& p) const
+	{
+		glm::vec3 near(_inverse * glm::vec4(p.x, p.y, 0.0f, 1.0f));
+		return near;
+	}
+
+	glm::vec2 Frustum::getWorldToScreenPoint(const glm::vec3& p) const
+	{
+		return glm::vec2(_matrix * glm::vec4(p, 1.0f));
+	}
 
     const glm::mat4& Frustum::getMatrix() const
     {

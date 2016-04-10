@@ -1,24 +1,35 @@
 #include <gorn/gl/ProgramAttributeDefinition.hpp>
+#include <gorn/gl/AttributeTransformation.hpp>
 
 namespace gorn
 {
     ProgramAttributeDefinition::ProgramAttributeDefinition(
         const char* name):
-        name(name), transformable(false)
+        _name(name), _transformation(AttributeTransformation::create(name))
     {
     }
 
     ProgramAttributeDefinition::ProgramAttributeDefinition(
-        const std::string& name, bool transformable):
-        name(name), transformable(transformable)
+        const std::string& name, const Transformation& trans):
+		_name(name), _transformation(trans)
     {
     }
 
     ProgramAttributeDefinition&
-        ProgramAttributeDefinition::withTransformable(bool enabled)
+        ProgramAttributeDefinition::withTransformation(const Transformation& trans)
     {
-        transformable = enabled;
+        _transformation = trans;
         return *this;
     }
+
+	const std::string& ProgramAttributeDefinition::getName() const
+	{
+		return _name;
+	}
+
+	const ProgramAttributeDefinition::Transformation& ProgramAttributeDefinition::getTransformation() const
+	{
+		return _transformation;
+	}
 }
 

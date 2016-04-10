@@ -57,7 +57,7 @@ namespace gorn
         return !(*this==other);
     }
 
-    void MeshElement::update(std::map<std::string, idx_t> indices)
+    void MeshElement::update(const IndicesMap& indices)
     {
         for(auto itr = indices.begin(); itr != indices.end(); ++itr)
         {
@@ -174,7 +174,6 @@ namespace gorn
         return _vertices3;
     }
 
-
     template<>
     Mesh::Vertices<float>& Mesh::getVertices() NOEXCEPT
     {
@@ -200,10 +199,10 @@ namespace gorn
             throw Exception("Only meshes with the same draw mode can be added");
         }
 
-        std::map<std::string, size_t> sizes;
-        other._vertices1.sizes(sizes, 0);
-        other._vertices2.sizes(sizes, 0);
-        other._vertices3.sizes(sizes, 0);
+        IndicesMap sizes;
+        other._vertices1.sizes(sizes, (idx_t)0);
+        other._vertices2.sizes(sizes, (idx_t)0);
+        other._vertices3.sizes(sizes, (idx_t)0);
         _vertices1.sizes(sizes);
         _vertices2.sizes(sizes);
         _vertices3.sizes(sizes);
@@ -234,26 +233,26 @@ namespace gorn
         sum += other;
         return sum;
     }
-    
+
     Mesh& Mesh::operator+=(Mesh&& other)
     {
         if(getDrawMode() != other.getDrawMode())
         {
             throw Exception("Only meshes with the same draw mode can be added");
         }
-        
-        std::map<std::string, size_t> sizes;
-        other._vertices1.sizes(sizes, 0);
-        other._vertices2.sizes(sizes, 0);
-        other._vertices3.sizes(sizes, 0);
+
+        IndicesMap sizes;
+        other._vertices1.sizes(sizes, (idx_t)0);
+        other._vertices2.sizes(sizes, (idx_t)0);
+        other._vertices3.sizes(sizes, (idx_t)0);
         _vertices1.sizes(sizes);
         _vertices2.sizes(sizes);
         _vertices3.sizes(sizes);
-        
+
         _vertices1 += std::move(other._vertices1);
         _vertices2 += std::move(other._vertices2);
         _vertices3 += std::move(other._vertices3);
-        
+
         auto elmSize = _elements.size();
         for(auto& idx : other._indices)
         {
@@ -273,7 +272,7 @@ namespace gorn
              std::make_move_iterator(other._indices.end()));
         return *this;
     }
-    
+
     Mesh Mesh::operator+(Mesh&& other) const
     {
         Mesh sum(*this);
@@ -306,5 +305,34 @@ namespace gorn
         return cmd;
     }
 
-}
+	Mesh Mesh::getNormalsMesh() const NOEXCEPT
+	{
+		Mesh mesh;
+		if(!getVertices<glm::vec3>().has(AttributeKind::Normal))
+		{
+			return mesh;
+		}
+		auto& positions = getVertices<glm::vec3>().get(AttributeKind::Position);
+		auto& normals = getVertices<glm::vec3>().get(AttributeKind::Normal);
+		Mesh::Elements elements;
+		std::vector<glm::vec3> npositions;
+		npositions.reserve(2 * positions.size());
+		elements.reserve(npositions.size());
+		for(size_t i = 0; i < positions.size() && i < normals.size();i++)
+		{
+			auto& p = positions[i];
+			auto& n = normals[i];
+			npositions.push_back(p);
+			npositions.push_back(p+n);
+		}
+		for(size_t i = 0; i < npositions.size(); i++)
+		{
+			elements.push_back(i);
+		}
+		mesh.setVertices(AttributeKind::Position, std::move(npositions));
+		mesh.setDrawMode(DrawMode::Lines);
+		mesh.setElements(std::move(elements));
+		return mesh;
+	}
 
+}
