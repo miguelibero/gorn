@@ -65,7 +65,7 @@ namespace gorn
 		typedef RenderCommandLayersMode LayersMode;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
-        typedef size_t elm_t;
+        typedef unsigned int elm_t;
         typedef std::vector<elm_t> Elements;
 		typedef std::vector<int> Layers;
 
@@ -132,7 +132,7 @@ namespace gorn
 
         VertexDefinition getVertexDefinition(const Program& prog) const;
         void getVertexData(buffer& data, Elements& elms,
-            const VertexDefinition& vdef,            
+            const VertexDefinition& vdef,
             const glm::mat4& transform=glm::mat4(1.0f)) const;
 
         const glm::mat4& getTransform() const;

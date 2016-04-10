@@ -83,8 +83,7 @@ void QueueApplication::draw()
             -0.75f,  0.75f,
              0.25f,  0.75f,
              0.25f, -0.25f,
-            -0.75f, -0.25f,
-             0.66f
+            -0.75f, -0.25f
         }, 2, BasicType::Float)
         .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,

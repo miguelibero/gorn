@@ -340,9 +340,9 @@ namespace gorn
 				auto& data = itr->first;
 				auto elmSize = itr->second;
                 auto writeSize = out.write(*data, elmSize, elmSize*n);
-				out.fill(0, elmSize - writeSize);
                 if(writeSize != 0)
                 {
+                    out.fill(0, elmSize - writeSize);
                     finished = false;
                 }
             }
