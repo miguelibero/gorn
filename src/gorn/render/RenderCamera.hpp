@@ -18,9 +18,9 @@ namespace gorn
 		glm::mat4 _proj;
 		glm::vec3 _position;
 		Frustum _frustum;
+		bool _dirty;
 		BlendMode _blendMode;
 		UniformValueMap _uniformValues;
-		bool _dirty;
 		Layers _layers;
 	public:
 		RenderCamera();
