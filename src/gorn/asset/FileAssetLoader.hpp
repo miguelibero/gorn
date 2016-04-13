@@ -22,7 +22,9 @@ namespace gorn
         typedef std::vector<std::shared_ptr<Loader>> Loaders;
     private:
         FileManager& _files;
+        Loaders _defaultLoaders;
         std::map<std::string, Loaders> _loaders;
+        std::map<std::string, Loaders> _customLoaders;
 
         Loaders getLoaders(const std::string& name) const NOEXCEPT;
 
@@ -35,11 +37,15 @@ namespace gorn
         void addDefaultLoader(std::unique_ptr<Loader>&& loader) NOEXCEPT;
         void addLoader(const std::string& tag,
             std::unique_ptr<Loader>&& loader) NOEXCEPT;
+        void addCustomLoader(const std::string& name,
+            std::unique_ptr<Loader>&& loader) NOEXCEPT;
 
         template<typename L, typename... Args>
         void makeDefaultLoader(Args&&... args) NOEXCEPT;
         template<typename L, typename... Args>
         void makeLoader(const std::string& tag, Args&&... args) NOEXCEPT;
+        template<typename L, typename... Args>
+        void makeCustomLoader(const std::string& name, Args&&... args) NOEXCEPT;
     };
 
     template<typename T>
@@ -52,7 +58,11 @@ namespace gorn
     void FileAssetLoader<T>::addDefaultLoader(
         std::unique_ptr<Loader>&& loader) NOEXCEPT
     {
-        addLoader(String::kDefaultTag, std::move(loader));
+        if(loader == nullptr)
+        {
+            throw Exception("Cannot add an empty loader");
+        }
+        _defaultLoaders.push_back(std::move(loader));
     }
 
     template<typename T>
@@ -64,6 +74,17 @@ namespace gorn
             throw Exception("Cannot add an empty loader");
         }
         _loaders[tag].push_back(std::move(loader));
+    }
+
+    template<typename T>
+    void FileAssetLoader<T>::addCustomLoader(const std::string& name,
+        std::unique_ptr<Loader>&& loader) NOEXCEPT
+    {
+        if(loader == nullptr)
+        {
+            throw Exception("Cannot add an empty loader");
+        }
+        _customLoaders[name].push_back(std::move(loader));
     }
 
     template<typename T>
@@ -84,12 +105,29 @@ namespace gorn
     }
 
     template<typename T>
+    template<typename L, typename... Args>
+    void FileAssetLoader<T>::makeCustomLoader(const std::string& name,
+        Args&&... args) NOEXCEPT
+    {
+        addLoader(name, std::unique_ptr<Loader>(
+            new L(std::forward<Args>(args)...)));
+    }
+
+    template<typename T>
     typename FileAssetLoader<T>::Loaders FileAssetLoader<T>::getLoaders(
         const std::string& name) const NOEXCEPT
     {
-        auto parts = String::splitTag(name);
-        auto itr = _loaders.find(parts.first);
         Loaders loaders;
+        auto itr = _customLoaders.find(name);
+        if(itr != _customLoaders.end())
+        {
+            for(auto& loader : itr->second)
+            {
+                loaders.push_back(loader);
+            }
+        }
+        auto parts = String::splitTag(name);
+        itr = _loaders.find(parts.first);
         if(itr != _loaders.end())
         {
             for(auto& loader : itr->second)
@@ -97,17 +135,8 @@ namespace gorn
                 loaders.push_back(loader);
             }
         }
-        if(parts.first != String::kDefaultTag)
-        {
-            itr = _loaders.find(String::kDefaultTag);
-            if(itr != _loaders.end())
-            {
-                for(auto& loader : itr->second)
-                {
-                    loaders.push_back(loader);
-                }
-            }
-        }
+        loaders.insert(loaders.end(),
+            _defaultLoaders.begin(), _defaultLoaders.end());
         return loaders;
     }
 

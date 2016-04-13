@@ -24,7 +24,9 @@ namespace gorn
         MaterialDefinition& withTexture(
             const std::string& name, const std::string& value);
         MaterialDefinition& withTexture(
-            const std::string& name);        
+            const std::string& value);
+		MaterialDefinition& withTexture(
+			unsigned int pos, const std::string& value);
         MaterialDefinition& withUniformValue(
             const std::string& name, const UniformValue& value);
 

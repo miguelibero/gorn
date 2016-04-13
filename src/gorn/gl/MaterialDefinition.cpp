@@ -1,5 +1,6 @@
 #include <gorn/gl/MaterialDefinition.hpp>
-
+#include <gorn/render/RenderKinds.hpp>
+#include <gorn/base/Exception.hpp>
 namespace gorn
 {
 
@@ -22,10 +23,43 @@ namespace gorn
     }
 
     MaterialDefinition& MaterialDefinition::withTexture(
-        const std::string& name)
+        const std::string& value)
     {
-        return withTexture(name, name);
+        return withTexture(UniformKind::Texture0, value);
     }
+
+	MaterialDefinition& MaterialDefinition::withTexture(
+		unsigned int pos, const std::string& value)
+	{
+		std::string name;
+		switch(pos)
+		{
+		case 0:
+			name = UniformKind::Texture0;
+			break;
+		case 1:
+			name = UniformKind::Texture1;
+			break;
+		case 2:
+			name = UniformKind::Texture2;
+			break;
+		case 3:
+			name = UniformKind::Texture3;
+			break;
+		case 4:
+			name = UniformKind::Texture4;
+			break;
+		case 5:
+			name = UniformKind::Texture5;
+			break;
+		case 6:
+			name = UniformKind::Texture6;
+			break;
+		default:
+			throw Exception("Texture position not supported.");
+		}
+		return withTexture(name, value);
+	}
 
     MaterialDefinition& MaterialDefinition::withUniformValue(
         const std::string& name, const UniformValue& value)
