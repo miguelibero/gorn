@@ -24,6 +24,7 @@
     <ClCompile Include="..\src\gorn\base\Context.cpp" />
     <ClCompile Include="..\src\gorn\base\Frustum.cpp" />
     <ClCompile Include="..\src\gorn\base\Math.cpp" />
+    <ClCompile Include="..\src\gorn\base\Ray.cpp" />
     <ClCompile Include="..\src\gorn\base\Rect.cpp" />
     <ClCompile Include="..\src\gorn\base\Shapes.cpp" />
     <ClCompile Include="..\src\gorn\base\String.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="..\src\gorn\base\Exception.hpp" />
     <ClInclude Include="..\src\gorn\base\Frustum.hpp" />
     <ClInclude Include="..\src\gorn\base\Math.hpp" />
+    <ClInclude Include="..\src\gorn\base\Ray.hpp" />
     <ClInclude Include="..\src\gorn\base\Rect.hpp" />
     <ClInclude Include="..\src\gorn\base\Shapes.hpp" />
     <ClInclude Include="..\src\gorn\base\String.hpp" />

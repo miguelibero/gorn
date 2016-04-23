@@ -181,6 +181,9 @@
     <ClCompile Include="..\src\gorn\gl\AttributeTransformation.cpp">
       <Filter>gl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Ray.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp">
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="..\src\gorn\gl\AttributeTransformation.hpp">
       <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Ray.hpp">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

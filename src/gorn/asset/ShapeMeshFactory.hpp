@@ -13,6 +13,7 @@ namespace gorn
     class PlaneShape;
     class CubeShape;
     class SphereShape;
+	class Ray;
 
     class ShapeMeshFactory
     {
@@ -48,6 +49,8 @@ namespace gorn
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode);
     template<>
     Mesh ShapeMeshFactory::create(const SphereShape& sphere, DrawMode mode);
+	template<>
+	Mesh ShapeMeshFactory::create(const Ray& ray, DrawMode mode);
 }
 
 #endif

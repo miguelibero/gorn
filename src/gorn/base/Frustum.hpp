@@ -24,12 +24,12 @@ namespace gorn
     };
 
     class Rect;
+	class Ray;
     class CubeShape;
 
     class Frustum
     {
     private:
-        static const float kDotProductMargin;
         typedef FrustumPlaneType PlaneType;
         typedef FrustumMatchType MatchType;
         typedef std::array<glm::vec4,6> Planes;
@@ -47,9 +47,8 @@ namespace gorn
         const glm::mat4& getMatrix() const;
         const glm::mat4& getInverse() const;
 
-        glm::vec3 getScreenToWorldPoint(const glm::vec2& p) const;
-		glm::vec3 getScreenToWorldPoint(const glm::vec3& p) const;
-		glm::vec2 getWorldToScreenPoint(const glm::vec3& p) const;
+        Ray getPointRay(const glm::vec2& p) const;
+		glm::vec2 getRayPoint(const Ray& r) const;
 
         Frustum& operator*=(const glm::mat4& transform);
         Frustum operator*(const glm::mat4& transform) const;

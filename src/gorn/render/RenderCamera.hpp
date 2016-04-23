@@ -39,8 +39,8 @@ namespace gorn
 		const Layers& getLayers() const;
 
 		bool matchesLayers(const Layers& layers) const;
-		glm::vec3 getScreenToWorldPoint(const glm::vec2& p) const;
-		glm::vec2 getWorldToScreenPoint(const glm::vec3& p) const;
+		Ray getScreenPointRay(const glm::vec2& p) const;
+		glm::vec2 getRayScreenPoint(const Ray& p) const;
 	};
 
 }

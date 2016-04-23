@@ -5,6 +5,7 @@
 #include <gorn/base/Shapes.hpp>
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Frustum.hpp>
+#include <gorn/base/Ray.hpp>
 #include <gorn/render/RenderKinds.hpp>
 
 namespace gorn
@@ -156,5 +157,17 @@ namespace gorn
         return std::move(mesh);
     } 
 
+	template<>
+	Mesh ShapeMeshFactory::create(const Ray& ray, DrawMode mode)
+	{
+		std::vector<glm::vec3> pos{
+			ray.origin, ray.origin + ray.direction
+		};
+		Mesh mesh;
+		mesh.setVertices(AttributeKind::Position, std::move(pos));
+		mesh.setElements({ 0, 1 });
+		mesh.setDrawMode(mode);
+		return mesh;
+	}
 }
 

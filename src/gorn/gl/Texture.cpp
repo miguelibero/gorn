@@ -108,7 +108,6 @@ namespace gorn
         {
             internalFormat = format;
         }
-
         glTexImage2D(_target, lodLevel, internalFormat,
             (GLsizei)_size.x, (GLsizei)_size.y, 0,
             format, type, img.getData().data());

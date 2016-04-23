@@ -1,5 +1,6 @@
 #include <gorn/base/Frustum.hpp>
 #include <gorn/base/Rect.hpp>
+#include <gorn/base/Ray.hpp>
 #include <gorn/base/Shapes.hpp>
 #include <buffer_writer.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
@@ -78,8 +79,6 @@ namespace gorn
         }
     }
 
-    const float Frustum::kDotProductMargin = 0.02f;
-
     Frustum::MatchType Frustum::matches(const Rect& rect) const
     {
         MatchType mtype = MatchType::Inside;
@@ -125,23 +124,18 @@ namespace gorn
         return true;
     }
 
-    glm::vec3 Frustum::getScreenToWorldPoint(const glm::vec3& p) const
-    {
-        glm::vec3 near(_inverse * glm::vec4(p.x, p.y, 0.0f, 1.0f));
-        glm::vec3 far(_inverse * glm::vec4(p.x, p.y, 1.0f, 1.0f));
-        auto dir = glm::normalize(far - near);
-        return near + dir*p.z;
-    }
-
-	glm::vec3 Frustum::getScreenToWorldPoint(const glm::vec2& p) const
+	Ray Frustum::getPointRay(const glm::vec2& p) const
 	{
-		glm::vec3 near(_inverse * glm::vec4(p.x, p.y, 0.0f, 1.0f));
-		return near;
+		glm::vec4 near4(_inverse * glm::vec4(p.x, p.y, 1.0f, 1.0f));
+		glm::vec4 far4(_inverse * glm::vec4(p.x, p.y, -1.0f, 1.0f));
+		glm::vec3 near(near4 / near4.w);
+		glm::vec3 far(far4 / far4.w);
+		return Ray(near, far - near);
 	}
 
-	glm::vec2 Frustum::getWorldToScreenPoint(const glm::vec3& p) const
+	glm::vec2 Frustum::getRayPoint(const Ray& r) const
 	{
-		return glm::vec2(_matrix * glm::vec4(p, 1.0f));
+		return glm::vec2(_matrix * glm::vec4(r.origin, 1.0f));
 	}
 
     const glm::mat4& Frustum::getMatrix() const

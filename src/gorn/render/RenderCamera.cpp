@@ -1,6 +1,7 @@
 
 #include <gorn/render/RenderCamera.hpp>
 #include <gorn/render/RenderKinds.hpp>
+#include <gorn/base/Ray.hpp>
 #include <glm/gtx/transform.hpp>
 #include <algorithm>
 
@@ -114,13 +115,13 @@ namespace gorn
 		return false;
 	}
 
-	glm::vec3 RenderCamera::getScreenToWorldPoint(const glm::vec2& p) const
+	Ray RenderCamera::getScreenPointRay(const glm::vec2& p) const
 	{
-		return _frustum.getScreenToWorldPoint(p);
+		return _frustum.getPointRay(p);
 	}
 
-	glm::vec2 RenderCamera::getWorldToScreenPoint(const glm::vec3& p) const
+	glm::vec2 RenderCamera::getRayScreenPoint(const Ray& r) const
 	{
-		return _frustum.getWorldToScreenPoint(p);
+		return _frustum.getRayPoint(r);
 	}
 }
