@@ -123,13 +123,13 @@ Support for render commands that are executed afterwards.
 ```c++
 Context ctx;
 ctx.getQueue().addCommand("sprite:kitten")
-    .withAttribute(AttributeKind::Position, {
+    .withAttribute(AttributeKind::Position, buffer{
         -0.75f,  0.75f,
          0.25f,  0.75f,
          0.25f, -0.25f,
         -0.75f, -0.25f
     }, 2, BasicType::Float)
-    .withAttribute(AttributeKind::TexCoords, {
+    .withAttribute(AttributeKind::TexCoords, buffer{
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
@@ -141,13 +141,13 @@ ctx.getQueue().addCommand("sprite:kitten")
     });
 
 ctx.getQueue().addCommand("sprite:puppy")
-    .withAttribute(AttributeKind::Position, {
+    .withAttribute(AttributeKind::Position, buffer{
         -0.25f,  0.25f,
          0.75f,  0.25f,
          0.75f, -0.75f,
         -0.25f, -0.75f
     }, 2, BasicType::Float)
-    .withAttribute(AttributeKind::TexCoords, {
+    .withAttribute(AttributeKind::TexCoords, buffer{
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
