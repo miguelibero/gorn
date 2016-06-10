@@ -12,6 +12,7 @@ namespace gorn
 {
 	class RenderQueueInfo;
 	class RenderCamera;
+	class RenderQueueState;
 
     class RenderQueueBlock
     {
@@ -34,8 +35,9 @@ namespace gorn
 
     public:
         RenderQueueBlock();
-        RenderQueueBlock(const RenderCommand& cmd, const RenderCamera& cam, const glm::mat4& transform, const UniformValueMap& uniforms);
+        RenderQueueBlock(const RenderCommand& cmd, const RenderCamera& cam, const RenderQueueState& state, const UniformValueMap& uniforms);
         bool supports(const RenderCommand& cmd) const;
+		bool supports(const RenderQueueState& cmd) const;
         void draw(Info& info);
         void addDefinition(const RenderCommand& cmd);
         void addData(const RenderCommand& cmd, const glm::mat4& trans);

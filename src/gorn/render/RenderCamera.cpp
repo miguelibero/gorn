@@ -8,7 +8,7 @@
 namespace gorn
 {
 	RenderCamera::RenderCamera():
-	_dirty(true), _blendMode(BlendFactor::SrcAlpha, BlendFactor::OneMinusSrcAlpha)
+	_dirty(true)
 	{
 	}
 
@@ -28,12 +28,6 @@ namespace gorn
 			_proj = proj;
 			_dirty = true;
 		}
-		return *this;
-	}
-
-	RenderCamera& RenderCamera::withBlendMode(const BlendMode& blend)
-	{
-		_blendMode = blend;
 		return *this;
 	}
 
@@ -82,11 +76,6 @@ namespace gorn
 	const Frustum& RenderCamera::getFrustum() const
 	{
 		return _frustum;
-	}
-
-	const BlendMode& RenderCamera::getBlendMode() const
-	{
-		return _blendMode;
 	}
 
 	const UniformValueMap& RenderCamera::getUniformValues() const

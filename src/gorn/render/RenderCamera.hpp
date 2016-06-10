@@ -19,14 +19,12 @@ namespace gorn
 		glm::vec3 _position;
 		Frustum _frustum;
 		bool _dirty;
-		BlendMode _blendMode;
 		UniformValueMap _uniformValues;
 		Layers _layers;
 	public:
 		RenderCamera();
 		RenderCamera& withView(const glm::mat4& view);
 		RenderCamera& withProjection(const glm::mat4& proj);
-		RenderCamera& withBlendMode(const BlendMode& blend);
 		RenderCamera& withUniformValue(const std::string& name, const UniformValue& value);
 		RenderCamera& withUniformValues(const UniformValueMap& values);
 		RenderCamera& withLayer(int layer);
@@ -35,7 +33,6 @@ namespace gorn
 		void update();
 		const UniformValueMap& getUniformValues() const;
 		const Frustum& getFrustum() const;
-		const BlendMode& getBlendMode() const;
 		const Layers& getLayers() const;
 
 		bool matchesLayers(const Layers& layers) const;

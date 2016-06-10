@@ -3,7 +3,7 @@
 namespace gorn
 {
 	BlendMode::BlendMode() :
-	_src(BlendFactor::None), _dst(BlendFactor::None)
+	_src(BlendFactor::SrcAlpha), _dst(BlendFactor::OneMinusSrcAlpha)
 	{
 	}
 

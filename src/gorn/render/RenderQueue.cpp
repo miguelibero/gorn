@@ -140,17 +140,17 @@ namespace gorn
 				continue;
 			}
 			state.updateTransform(cmd);
-            auto& transform = state.getTransform();
             if(!state.checkBounding(cmd))
             {
                 _tempInfo.drawCallsCulled++;
             }
             else
             {
-				if (!_batching || !block.supports(cmd))
+				state.updateBlendMode(cmd);
+				if (!_batching || !block.supports(state) || !block.supports(cmd))
 				{
 					block.draw(_tempInfo);
-					block = Block(cmd, cam, transform, _uniformValues);
+					block = Block(cmd, cam, state, _uniformValues);
 					auto ditr = itr;
 					while (ditr != cmds.end() && block.supports(*ditr))
 					{
@@ -162,7 +162,7 @@ namespace gorn
 				{
 					_tempInfo.drawCallsBatched++;
 				}
-                block.addData(cmd, transform);
+                block.addData(cmd, state.getTransform());
             }
         }
 		block.draw(_tempInfo);

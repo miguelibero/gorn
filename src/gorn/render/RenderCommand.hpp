@@ -32,9 +32,9 @@ namespace gorn
         RenderCommandAttribute(const buffer& data, size_t count, BasicType type);
     };
 
-    enum class RenderCommandTransformMode
+    enum class RenderTransformStackAction
     {
-        NoChange,
+        None,
         PushLocal,
         PopLocal,
         SetGlobal,
@@ -42,27 +42,18 @@ namespace gorn
         PopCheckpoint
     };
 
-    enum class RenderCommandBoundingMode
+    enum class RenderStackAction
     {
         None,
-        Start,
-        Local,
-        End
+        Push,
+        Pop
     };
-
-	enum class RenderCommandLayersMode
-	{
-		None,
-		Start,
-		End
-	};
 
     class RenderCommand
     {
     public:
-        typedef RenderCommandTransformMode TransformMode;
-        typedef RenderCommandBoundingMode BoundingMode;
-		typedef RenderCommandLayersMode LayersMode;
+        typedef RenderTransformStackAction TransformStackAction;
+        typedef RenderStackAction StackAction;
         typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef unsigned int elm_t;
@@ -76,16 +67,16 @@ namespace gorn
         std::shared_ptr<Material> _material;
         DrawMode _drawMode;
         glm::mat4 _transform;
-        TransformMode _transformMode;
-        BoundingMode _boundingMode;
+        TransformStackAction _transformMode;
         Rect _boundingBox;
         Stencil _stencil;
         ClearAction _clearAction;
         StateChange _stateChange;
 		BlendMode _blendMode;
-		bool _blendModeSet;
 		Layers _layers;
-		LayersMode _layersMode;
+		StackAction _boundingStackAction;
+		StackAction _layersStackAction;
+		StackAction _blendStackAction;
     public:
         RenderCommand();
 		RenderCommand& withUniformValue(const std::string& name, const UniformValue& value);
@@ -98,21 +89,22 @@ namespace gorn
         RenderCommand& withElements(const Elements& elms);
         RenderCommand& withDrawMode(DrawMode mode);
         RenderCommand& withTransform(const glm::mat4& trans,
-            TransformMode mode=TransformMode::PushLocal);
-        RenderCommand& withTransformMode(TransformMode mode);
+            TransformStackAction action=TransformStackAction::PushLocal);
+        RenderCommand& withTransformAction(TransformStackAction mode);
 
-        RenderCommand& withBounding(const Rect& rect,
-            BoundingMode mode=BoundingMode::Local);
-        RenderCommand& withBoundingMode(BoundingMode mode);
+        RenderCommand& withBounding(const Rect& rect);
+        RenderCommand& withBoundingAction(StackAction action);
 
         RenderCommand& withStencil(const Stencil& stencil);
         RenderCommand& withClearAction(const ClearAction& clear);
         RenderCommand& withStateChange(const StateChange& change);
+
 		RenderCommand& withBlendMode(const BlendMode& mode);
+		RenderCommand& withBlendModeAction(StackAction action);
 
 		RenderCommand& withLayer(int layer);
 		RenderCommand& withLayers(const Layers& layers);
-		RenderCommand& withLayersMode(LayersMode mode);
+		RenderCommand& withLayersAction(StackAction action);
 
 		UniformValueMap& getUniformValues();
 		const UniformValueMap& getUniformValues() const;
@@ -136,19 +128,19 @@ namespace gorn
             const glm::mat4& transform=glm::mat4(1.0f)) const;
 
         const glm::mat4& getTransform() const;
-        TransformMode getTransformMode() const;
+        TransformStackAction getTransformMode() const;
 
-        BoundingMode getBoundingMode() const;
+        StackAction getBoundingStackAction() const;
         const Rect& getBoundingBox() const;
 
         const Stencil& getStencil() const;
         const ClearAction& getClearAction() const;
         const StateChange& getStateChange() const;
 		const BlendMode& getBlendMode() const;
-		bool getBlendModeSet() const;
+		StackAction getBlendStackAction() const;
 
 		const Layers& getLayers() const;
-		LayersMode getLayersMode() const;
+		StackAction getLayersStackAction() const;
 
     };
 }

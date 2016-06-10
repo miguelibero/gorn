@@ -27,10 +27,10 @@ namespace gorn
 
     RenderCommand::RenderCommand():
     _drawMode(DrawMode::Triangles),
-    _transformMode(TransformMode::NoChange),
-    _boundingMode(BoundingMode::None),
-    _blendModeSet(false),
-	_layersMode(LayersMode::None)
+    _transformMode(TransformStackAction::None),
+	_boundingStackAction(StackAction::None),
+	_layersStackAction(StackAction::None),
+	_blendStackAction(StackAction::None)
     {
     }
 
@@ -81,30 +81,29 @@ namespace gorn
     }
 
     RenderCommand& RenderCommand::withTransform(const glm::mat4& trans,
-        TransformMode mode)
+        TransformStackAction mode)
     {
         _transform = trans;
         _transformMode = mode;
         return *this;
     }
 
-    RenderCommand& RenderCommand::withTransformMode(TransformMode mode)
+    RenderCommand& RenderCommand::withTransformAction(TransformStackAction mode)
     {
         _transformMode = mode;
         return *this;
     }
 
-    RenderCommand& RenderCommand::withBounding(const Rect& bb,
-        BoundingMode mode)
+    RenderCommand& RenderCommand::withBounding(const Rect& bb)
     {
         _boundingBox = bb;
-        _boundingMode = mode;
+        _boundingStackAction = StackAction::Push;
         return *this;
     }
 
-    RenderCommand& RenderCommand::withBoundingMode(BoundingMode mode)
+    RenderCommand& RenderCommand::withBoundingAction(StackAction action)
     {
-        _boundingMode = mode;
+        _boundingStackAction = action;
         return *this;
     }
 
@@ -129,27 +128,33 @@ namespace gorn
 	RenderCommand& RenderCommand::withBlendMode(const BlendMode& mode)
 	{
 		_blendMode = mode;
-		_blendModeSet = true;
+		_blendStackAction = StackAction::Push;
+		return *this;
+	}
+
+	RenderCommand& RenderCommand::withBlendModeAction(StackAction action)
+	{
+		_blendStackAction = action;
 		return *this;
 	}
 
 	RenderCommand& RenderCommand::withLayer(int layer)
 	{
 		_layers.push_back(layer);
-		_layersMode = LayersMode::Start;
+		_layersStackAction = StackAction::Push;
 		return *this;
 	}
 
 	RenderCommand& RenderCommand::withLayers(const Layers& layers)
 	{
 		_layers.insert(_layers.end(), layers.begin(), layers.end());
-		_layersMode = LayersMode::Start;
+		_layersStackAction = StackAction::Push;
 		return *this;
 	}
 
-	RenderCommand& RenderCommand::withLayersMode(LayersMode mode)
+	RenderCommand& RenderCommand::withLayersAction(StackAction action)
 	{
-		_layersMode = mode;
+		_layersStackAction = action;
 		return *this;
 	}
 
@@ -218,7 +223,7 @@ namespace gorn
         return _transform;
     }
 
-    RenderCommand::TransformMode RenderCommand::getTransformMode() const
+    RenderCommand::TransformStackAction RenderCommand::getTransformMode() const
     {
         return _transformMode;
     }
@@ -243,14 +248,14 @@ namespace gorn
 		return _blendMode;
 	}
 
-	bool RenderCommand::getBlendModeSet() const
+	RenderCommand::StackAction RenderCommand::getBlendStackAction() const
 	{
-		return _blendModeSet;
+		return _blendStackAction;
 	}
 
-    RenderCommand::BoundingMode RenderCommand::getBoundingMode() const
+    RenderCommand::StackAction RenderCommand::getBoundingStackAction() const
     {
-        return _boundingMode;
+        return _boundingStackAction;
     }
 
     const Rect& RenderCommand::getBoundingBox() const
@@ -263,9 +268,9 @@ namespace gorn
 		return _layers;
 	}
 
-	RenderCommand::LayersMode RenderCommand::getLayersMode() const
+	RenderCommand::StackAction RenderCommand::getLayersStackAction() const
 	{
-		return _layersMode;
+		return _layersStackAction;
 	}
 
     VertexDefinition RenderCommand::getVertexDefinition(const Program& prog) const

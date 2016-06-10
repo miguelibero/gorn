@@ -1,6 +1,7 @@
 
 #include <gorn/render/RenderQueueBlock.hpp>
 #include <gorn/render/RenderQueueInfo.hpp>
+#include <gorn/render/RenderQueueState.hpp>
 #include <gorn/render/RenderQueue.hpp>
 #include <gorn/gl/VertexBuffer.hpp>
 #include <gorn/gl/VertexArray.hpp>
@@ -12,18 +13,18 @@ namespace gorn
     {
     }
 
-    RenderQueueBlock::RenderQueueBlock(const RenderCommand& cmd, const RenderCamera& cam, const glm::mat4& transform, const UniformValueMap& uniforms):
+    RenderQueueBlock::RenderQueueBlock(const RenderCommand& cmd, const RenderCamera& cam, const RenderQueueState& state, const UniformValueMap& uniforms):
     _material(cmd.getMaterial()),
     _uniforms(uniforms),
     _mode(cmd.getDrawMode()),
     _stencil(cmd.getStencil()),
     _clearAction(cmd.getClearAction()),
     _stateChange(cmd.getStateChange()),
-	_transform(transform),
-	_inverse(glm::inverse(transform)),
-    _blendMode(cam.getBlendMode())
+	_transform(state.getTransform()),
+	_inverse(glm::inverse(_transform)),
+    _blendMode(state.getBlendMode())
     {
-		if(cmd.getBlendModeSet())
+		if(cmd.getBlendStackAction() == RenderStackAction::Push)
 		{
 			_blendMode = cmd.getBlendMode();
 		}
@@ -46,15 +47,20 @@ namespace gorn
         cmd.getVertexData(_vertices, _elements, _definition, rtrans);
     }
 
+	bool RenderQueueBlock::supports(const RenderQueueState& state) const
+	{
+		return true
+			&& state.getBlendMode() == _blendMode;
+	}
+
     bool RenderQueueBlock::supports(const RenderCommand& cmd) const
     {
-        return true
-            && cmd.getClearAction().empty()
-            && (cmd.getMaterial() == _material || cmd.getMaterial() == nullptr)
-            && cmd.getDrawMode() == _mode
-            && cmd.getStencil() == _stencil
-            && cmd.getStateChange() == _stateChange
-			&& !cmd.getBlendModeSet();
+		return true
+			&& cmd.getClearAction().empty()
+			&& (cmd.getMaterial() == _material || cmd.getMaterial() == nullptr)
+			&& cmd.getDrawMode() == _mode
+			&& cmd.getStencil() == _stencil
+			&& cmd.getStateChange() == _stateChange;
     }
 
     void RenderQueueBlock::draw(Info& info)

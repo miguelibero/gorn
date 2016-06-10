@@ -11,13 +11,14 @@ namespace gorn
         _transforms.push(glm::mat4());
 		_layers.push(Layers());
 		_checkpoints.push(0);
+		_blendModes.push(BlendMode());
     }
 
 	void RenderQueueState::updateLayers(const Command& cmd)
 	{
-		switch(cmd.getLayersMode())
+		switch(cmd.getLayersStackAction())
 		{
-		case RenderCommand::LayersMode::Start:
+		case RenderStackAction::Push:
 		{
 			auto layers = cmd.getLayers();
 			auto& oldLayers = _layers.top();
@@ -25,11 +26,28 @@ namespace gorn
 			_layers.push(std::move(layers));
 			break;
 		}
-		case RenderCommand::LayersMode::End:
+		case RenderStackAction::Pop:
 			_layers.pop();
 			break;
         default:
             break;
+		}
+	}
+
+	void RenderQueueState::updateBlendMode(const Command& cmd)
+	{
+		switch (cmd.getBlendStackAction())
+		{
+		case RenderStackAction::Push:
+		{
+			_blendModes.push(cmd.getBlendMode());
+			break;
+		}
+		case RenderStackAction::Pop:
+			_blendModes.pop();
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -38,22 +56,22 @@ namespace gorn
         bool changed = false;
         switch(cmd.getTransformMode())
         {
-			case RenderCommand::TransformMode::PushLocal:
+			case RenderTransformStackAction::PushLocal:
                 _transforms.push(_transforms.top()*cmd.getTransform());
                 changed = true;
                 break;
-            case RenderCommand::TransformMode::PopLocal:
+            case RenderTransformStackAction::PopLocal:
                 _transforms.pop();
                 changed = true;
                 break;
-            case RenderCommand::TransformMode::SetGlobal:
+            case RenderTransformStackAction::SetGlobal:
                 _transforms.push(cmd.getTransform());
                 changed = true;
                 break;
-            case RenderCommand::TransformMode::PushCheckpoint:
+            case RenderTransformStackAction::PushCheckpoint:
                 _checkpoints.push(_transforms.size());
                 break;
-            case RenderCommand::TransformMode::PopCheckpoint:
+            case RenderTransformStackAction::PopCheckpoint:
             {
                 size_t size = _checkpoints.top();
                 _checkpoints.pop();
@@ -75,8 +93,8 @@ namespace gorn
 
     bool RenderQueueState::checkBounding(const Command& cmd)
     {
-        auto bound = cmd.getBoundingMode();
-        if(bound == RenderCommand::BoundingMode::End && _boundingEnds > 0)
+        auto bound = cmd.getBoundingStackAction();
+        if(bound == RenderStackAction::Pop && _boundingEnds > 0)
         {
             _boundingEnds--;
         }
@@ -84,15 +102,14 @@ namespace gorn
         {
             return false;
         }
-        if(bound != RenderCommand::BoundingMode::Start &&
-            bound != RenderCommand::BoundingMode::Local)
+        if(bound != RenderStackAction::Push)
         {
             return true;
         }
 
         if(!_frustum.sees(cmd.getBoundingBox()))
         {
-            if(bound == RenderCommand::BoundingMode::Start)
+            if(bound == RenderStackAction::Push)
             {
                 _boundingEnds++;
             }
@@ -110,4 +127,9 @@ namespace gorn
     {
         return _transforms.top();
     }
+
+	const BlendMode& RenderQueueState::getBlendMode() const
+	{
+		return _blendModes.top();
+	}
 }
