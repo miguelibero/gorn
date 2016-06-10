@@ -2,6 +2,7 @@
 #include <gorn/base/Math.hpp>
 #include <limits>
 #include <algorithm>
+#include <random>
 
 namespace gorn
 {
@@ -38,6 +39,29 @@ namespace gorn
 	bool Math::isZero(const double& v)
 	{
 		return areEqual(v, 0.0);
+	}
+
+	static std::random_device randomDevice;
+
+	double Math::random(double from, double to)
+	{
+		std::mt19937 randomEngine(randomDevice());
+		std::uniform_real_distribution<double> dis(from, to);
+		return dis(randomEngine);
+	}
+
+	float Math::random(float from, float to)
+	{
+		std::mt19937 randomEngine(randomDevice());
+		std::uniform_real_distribution<float> dis(from, to);
+		return dis(randomEngine);
+	}
+
+	int Math::random(int from, int to)
+	{
+		std::mt19937 randomEngine(randomDevice());
+		std::uniform_int_distribution<int> dis(from, to);
+		return dis(randomEngine);
 	}
 }
 
