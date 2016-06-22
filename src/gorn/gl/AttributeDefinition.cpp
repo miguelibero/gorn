@@ -75,6 +75,12 @@ namespace gorn
         return *this;
     }
 
+	AttributeDefinition& AttributeDefinition::withDefaultValue(const buffer& data)
+	{
+		_defaultValue = data;
+		return *this;
+	}
+
     const std::string& AttributeDefinition::getName() const
     {
         return _name;
@@ -117,8 +123,18 @@ namespace gorn
 
     size_t AttributeDefinition::getElementSize() const
     {
-        return getCount() * getBasicTypeSize(getType());
+        return getCount() * getTypeSize();
     }
+
+	size_t AttributeDefinition::getTypeSize() const
+	{
+		return getBasicTypeSize(getType());
+	}
+
+	const buffer& AttributeDefinition::getDefaultValue() const
+	{
+		return _defaultValue;
+	}
 
 	bool AttributeDefinition::isTransformed() const
 	{

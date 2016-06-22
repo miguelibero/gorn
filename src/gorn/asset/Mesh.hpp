@@ -214,8 +214,7 @@ namespace gorn
                     out.write(&p, sizeof(V));
                 }
             }
-            cmd.withAttribute(n, std::move(data),
-                sizeof(V)/sizeof(float), BasicType::Float);
+            cmd.withAttribute(n, std::move(data), sizeof(V) / sizeof(float));
         }
     }
 

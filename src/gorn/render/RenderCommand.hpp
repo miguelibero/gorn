@@ -20,18 +20,6 @@ namespace gorn
     class VertexDefinition;
     class Program;
 
-    struct RenderCommandAttribute
-    {
-        typedef AttributeDefinition Definition;
-        buffer data;
-        size_t count;
-        BasicType type;
-
-        RenderCommandAttribute();
-        RenderCommandAttribute(buffer&& data, size_t count, BasicType type);
-        RenderCommandAttribute(const buffer& data, size_t count, BasicType type);
-    };
-
     enum class RenderTransformStackAction
     {
         None,
@@ -49,12 +37,18 @@ namespace gorn
         Pop
     };
 
+	struct RenderCommandAttribute
+	{
+		buffer data;
+		size_t count;
+	};
+
     class RenderCommand
     {
     public:
+		typedef RenderCommandAttribute Attribute;
         typedef RenderTransformStackAction TransformStackAction;
         typedef RenderStackAction StackAction;
-        typedef RenderCommandAttribute Attribute;
         typedef std::map<std::string, Attribute> AttributeMap;
         typedef unsigned int elm_t;
         typedef std::vector<elm_t> Elements;
@@ -82,9 +76,9 @@ namespace gorn
 		RenderCommand& withUniformValue(const std::string& name, const UniformValue& value);
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
         RenderCommand& withAttribute(const std::string& name,
-            buffer&& data, size_t count, BasicType type=BasicType::Float);
+            buffer&& data, size_t count = 0);
         RenderCommand& withAttribute(const std::string& name,
-            const buffer& data, size_t count, BasicType type=BasicType::Float);
+            const buffer& data, size_t count = 0);
         RenderCommand& withElements(Elements&& elms);
         RenderCommand& withElements(const Elements& elms);
         RenderCommand& withDrawMode(DrawMode mode);
@@ -113,16 +107,13 @@ namespace gorn
         const Elements& getElements() const;
         bool hasElements() const;
 
-        Attribute& getAttribute(const std::string& name);
         const Attribute& getAttribute(const std::string& name) const;
         bool hasAttribute(const std::string& name) const;
-        AttributeMap& getAttributes();
         const AttributeMap& getAttributes() const;
 
         const std::shared_ptr<Material>& getMaterial() const;
         DrawMode getDrawMode() const;
 
-        VertexDefinition getVertexDefinition(const Program& prog) const;
         void getVertexData(buffer& data, Elements& elms,
             const VertexDefinition& vdef,
             const glm::mat4& transform=glm::mat4(1.0f)) const;

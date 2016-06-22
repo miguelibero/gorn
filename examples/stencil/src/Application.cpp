@@ -9,7 +9,7 @@ class StencilApplication : public gorn::Application
 {
     gorn::Context _ctx;
     gorn::VertexArray _vao;
-    float _time;
+    double _time;
 
     glm::mat4 getTransform(float angle);
 
@@ -174,7 +174,7 @@ void StencilApplication::draw()
     _vao.getMaterial()->setUniformValue(
         UniformKind::Color, glm::vec3(1.0f, 1.0f, 1.0f));
 
-    auto model = getTransform(_time);
+    auto model = getTransform((float)_time);
 
     _vao.getMaterial()->setUniformValue(
         UniformKind::Model, model);

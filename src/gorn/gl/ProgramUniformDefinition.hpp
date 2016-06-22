@@ -19,10 +19,10 @@ namespace gorn
         ProgramUniformDefinition(const std::string& name = "",
             const Value& value=Value());
 
-        ProgramUniformDefinition& withValue(const Value& value);
+        ProgramUniformDefinition& withDefaultValue(const Value& value);
 
 		const std::string& getName() const;
-		const Value& getValue() const;
+		const Value& getDefaultValue() const;
     };
 }
 

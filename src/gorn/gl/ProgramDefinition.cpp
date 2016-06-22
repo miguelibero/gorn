@@ -1,5 +1,6 @@
 #include <gorn/gl/ProgramDefinition.hpp>
 #include <gorn/render/RenderKinds.hpp>
+#include <gorn/gl/VertexDefinition.hpp>
 #include <buffer.hpp>
 
 namespace gorn
@@ -95,7 +96,7 @@ namespace gorn
 		UniformValueMap values;
 		for (auto itr = _uniforms.begin(); itr != _uniforms.end(); ++itr)
 		{
-			values[itr->first] = itr->second.getValue();
+			values[itr->first] = itr->second.getDefaultValue();
 		}
 		return values;
 	}
@@ -105,5 +106,29 @@ namespace gorn
     {
         return _attributes;
     }
+
+	VertexDefinition ProgramDefinition::getVertexDefinition() const
+	{
+		VertexDefinition vdef;
+		for (auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
+		{
+			auto offset = vdef.getElementSize();
+			auto& adef = itr->second;
+			vdef.setAttribute(itr->first)
+				.withType(adef.getType())
+				.withCount(adef.getCount())
+				.withOffset(offset)
+				.withDefaultValue(adef.getDefaultValue())
+				.withTransformation(adef.getTransformation());
+		}
+
+		size_t stride = vdef.getElementSize();
+		for (auto itr = vdef.getAttributes().begin();
+			itr != vdef.getAttributes().end(); ++itr)
+		{
+			itr->second.withStride(stride);
+		}
+		return vdef;
+	}
 
 }

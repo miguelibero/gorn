@@ -35,7 +35,7 @@ namespace gorn
     {
         if(_material != nullptr && _material->getProgram() != nullptr)
         {
-            _definition += cmd.getVertexDefinition(*_material->getProgram());
+			_definition += _material->getProgram()->getVertexDefinition();
         }
     }
 

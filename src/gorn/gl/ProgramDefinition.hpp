@@ -12,6 +12,7 @@ class buffer;
 
 namespace gorn
 {
+	class VertexDefinition;
 
     class ProgramDefinition
     {
@@ -46,6 +47,7 @@ namespace gorn
         const Uniforms& getUniforms() const;
 		UniformValueMap getUniformValues() const;
         const Attributes& getAttributes() const;
+		VertexDefinition getVertexDefinition() const;
     };
 
 }

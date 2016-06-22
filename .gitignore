@@ -20,3 +20,4 @@ Release/
 *vcxproj.user
 *.xcworkspace/
 *.VC.opendb
+*.VC.db

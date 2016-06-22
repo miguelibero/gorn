@@ -15,7 +15,7 @@ namespace gorn
     {
     }
 
-    ProgramUniformDefinition& ProgramUniformDefinition::withValue(
+    ProgramUniformDefinition& ProgramUniformDefinition::withDefaultValue(
         const Value& v)
     {
 		_value = v;
@@ -27,7 +27,7 @@ namespace gorn
 		return _name;
 	}
 
-	const ProgramUniformDefinition::Value& ProgramUniformDefinition::getValue() const
+	const ProgramUniformDefinition::Value& ProgramUniformDefinition::getDefaultValue() const
 	{
 		return _value;
 	}

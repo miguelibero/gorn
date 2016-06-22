@@ -97,30 +97,28 @@ namespace gorn
         for(auto itr = def.getAttributes().begin();
             itr != def.getAttributes().end(); ++itr)
         {
-            auto id = getAttribute(itr->second.getName());
-            _attributes[itr->first] = id;
-            _attributeTransforms[itr->first]
-                 = itr->second.getTransformation();
+            getAttribute(itr->second.getName());
         }
         for(auto itr = def.getUniforms().begin();
             itr != def.getUniforms().end(); ++itr)
         {
             auto id = getUniform(itr->second.getName());
             _uniforms[itr->first] = id;
-            if(!itr->second.getValue().empty())
+            if(!itr->second.getDefaultValue().empty())
             {
-                setUniformValue(id, itr->second.getValue());
+                setUniformValue(id, itr->second.getDefaultValue());
             }
         }
+		_vertexDefinition = def.getVertexDefinition();
     }
 
-    GLint Program::getAttribute(const std::string& name) const
+	GLint Program::getAttribute(const std::string& name) const
     {
         auto itr = _attributes.find(name);
         if(itr == _attributes.end())
         {
             GLint id = glGetAttribLocation(getId(), name.c_str());
-            itr = _attributes.insert(itr, {name, id});
+			itr = _attributes.insert(itr, { name, id });
         }
         return itr->second;
     }
@@ -136,14 +134,14 @@ namespace gorn
         return itr->second;
     }
 
-	Program::AttributeTransform Program::getAttributeTransformation(const std::string& name) const
+	const Program::AttributeMap& Program::getAttributes() const
 	{
-		auto itr = _attributeTransforms.find(name);
-		if (itr != _attributeTransforms.end())
-		{
-			return itr->second;
-		}
-		return gorn::AttributeTransformation::create(name);
+		return _attributes;
+	}
+
+	const Program::UniformMap& Program::getUniforms() const
+	{
+		return _uniforms;
 	}
 
     bool Program::hasAttribute(const std::string& name) const
@@ -171,5 +169,10 @@ namespace gorn
             value.set(location);
         }
     }
+
+	const VertexDefinition& Program::getVertexDefinition() const
+	{
+		return _vertexDefinition;
+	}
 
 }

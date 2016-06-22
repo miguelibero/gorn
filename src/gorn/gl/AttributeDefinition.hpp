@@ -4,6 +4,7 @@
 #include <gorn/gl/Enums.hpp>
 #include <gorn/gl/AttributeTransformation.hpp>
 #include <string>
+#include <buffer.hpp>
 #include <glm/glm.hpp>
 
 class buffer;
@@ -28,6 +29,7 @@ namespace gorn
         size_t _offset;
         BasicType _offsetType;
 		Transformation _transformation;
+		buffer _defaultValue;
     public:
 
         AttributeDefinition(const std::string& name="");
@@ -41,6 +43,7 @@ namespace gorn
         AttributeDefinition& withStride(size_t stride, BasicType type);
         AttributeDefinition& withOffset(size_t offset, BasicType type);
         AttributeDefinition& withTransformation(const Transformation& trans);
+		AttributeDefinition& withDefaultValue(const buffer& data);
     
         const std::string& getName() const;
         BasicType getType() const;
@@ -51,6 +54,8 @@ namespace gorn
         BasicType getStrideType() const;
         BasicType getOffsetType() const;
         size_t getElementSize() const;
+		size_t getTypeSize() const;
+		const buffer& getDefaultValue() const;
 		bool isTransformed() const;
 		void transform(buffer& elms, const glm::mat4& transform) const;
     };

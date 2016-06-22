@@ -68,7 +68,15 @@ void QueueApplication::load()
     _ctx.getPrograms().getDefinitions().get("sprite")
         .withUniform("texture", UniformKind::Texture0)
         .withShaderFile(ShaderType::Vertex, "vsh:shader")
-        .withShaderFile(ShaderType::Fragment, "fsh:shader");
+        .withShaderFile(ShaderType::Fragment, "fsh:shader")
+		.withAttribute(AttributeKind::Position,
+			ProgramAttributeDefinition()
+				.withCount(2)
+			.withType(BasicType::Float))
+		.withAttribute(AttributeKind::TexCoords,
+			ProgramAttributeDefinition()
+			.withCount(2)
+			.withType(BasicType::Float));
 }
 
 void QueueApplication::draw()
@@ -84,13 +92,13 @@ void QueueApplication::draw()
              0.25f,  0.75f,
              0.25f, -0.25f,
             -0.75f, -0.25f
-        }, 2, BasicType::Float)
+        })
         .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
             0.0f, 0.0f
-        }, 2, BasicType::Float)
+        })
         .withElements({
             0, 1, 2,
             2, 3, 0
@@ -102,13 +110,13 @@ void QueueApplication::draw()
              0.75f,  0.75f,
              0.75f, -0.25f,
              0.25f, -0.25f
-        }, 2, BasicType::Float)
+        })
         .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
             0.0f, 0.0f
-        }, 2, BasicType::Float)
+        })
         .withElements({
             0, 1, 2,
             2, 3, 0
@@ -120,13 +128,13 @@ void QueueApplication::draw()
              0.75f,  0.25f,
              0.75f, -0.75f,
             -0.25f, -0.75f
-        }, 2, BasicType::Float)
+        })
         .withAttribute(AttributeKind::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
             0.0f, 0.0f
-        }, 2, BasicType::Float)
+        })
         .withElements({
             0, 1, 2,
             2, 3, 0

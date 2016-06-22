@@ -36,7 +36,7 @@ namespace gorn
 
 	bool AttributeTransformation::normal(const Definition& def, buffer& elms, const glm::mat4& trans)
 	{
-		auto n = elms.size() / def.getElementSize();;
+		auto n = elms.size() / def.getElementSize();
 		if (def.getType() == BasicType::Float)
 		{
 			if (def.getCount() == 3)

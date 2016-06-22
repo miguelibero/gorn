@@ -3,8 +3,9 @@
 
 #include <gorn/gl/Base.hpp>
 #include <gorn/gl/Shader.hpp>
-#include <gorn/gl/AttributeTransformation.hpp>
+#include <gorn/gl/VertexDefinition.hpp>
 #include <glm/glm.hpp>
+#include <buffer.hpp>
 #include <memory>
 #include <map>
 #include <vector>
@@ -13,22 +14,21 @@ namespace gorn
 {
     class UniformValue;
     class ProgramDefinition;
-	class AttributeDefinition;
 
     class Program
     {
     public:
         typedef ProgramDefinition Definition;
-		typedef AttributeTransformation::Function AttributeTransform;
+		typedef std::map<std::string, GLint> UniformMap;
+		typedef std::map<std::string, GLint> AttributeMap;
     private:
         static GLuint s_currentId;
         GLuint _id;
         std::shared_ptr<Shader> _vertexShader;
         std::shared_ptr<Shader> _fragmentShader;
-        mutable std::map<std::string, GLint> _uniforms;
-        mutable std::map<std::string, GLint> _attributes;
-        std::map<std::string, AttributeTransform> _attributeTransforms;
-
+		VertexDefinition _vertexDefinition;
+        mutable UniformMap _uniforms;
+        mutable AttributeMap _attributes;
         void cleanup();
     public:
         Program(const std::shared_ptr<Shader>& vertexShader,
@@ -48,9 +48,11 @@ namespace gorn
 
         void loadDefinition(const Definition& def);
 
-        GLint getAttribute(const std::string& name) const;
+		GLint getAttribute(const std::string& name) const;
         GLint getUniform(const std::string& name) const;
-		AttributeTransform getAttributeTransformation(const std::string& name) const;
+
+		const AttributeMap& getAttributes() const;
+		const UniformMap& getUniforms() const;
 
         bool hasAttribute(const std::string& name) const;
         bool hasUniform(const std::string& name) const;
@@ -59,6 +61,8 @@ namespace gorn
             const UniformValue& value);
         void setUniformValue(const GLint& location,
             const UniformValue& value);
+
+		const VertexDefinition& getVertexDefinition() const;
 
     };
 }
