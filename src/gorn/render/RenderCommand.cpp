@@ -34,16 +34,30 @@ namespace gorn
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
         buffer&& data, size_t count)
     {
-		_attributes[name] = Attribute{ std::move(data), count };
+		_attributes[name] = Attribute{ std::move(data), count, false };
         return *this;
     }
 
     RenderCommand& RenderCommand::withAttribute(const std::string& name,
         const buffer& data, size_t count)
     {
-        _attributes[name] = Attribute{ data, count };
+        _attributes[name] = Attribute{ data, count, false };
         return *this;
     }
+
+	RenderCommand& RenderCommand::withRepeatAttribute(const std::string& name,
+		buffer&& data)
+	{
+		_attributes[name] = Attribute{ std::move(data), 0, true };
+		return *this;
+	}
+
+	RenderCommand& RenderCommand::withRepeatAttribute(const std::string& name,
+		const buffer& data)
+	{
+		_attributes[name] = Attribute{ data, 0, true };
+		return *this;
+	}
 
     RenderCommand& RenderCommand::withElements(Elements&& elms)
     {
@@ -252,6 +266,24 @@ namespace gorn
 		size_t dataElmSize;
 		size_t elmSize;
 		bool repeat;
+
+		size_t getDataElmSize() const
+		{
+			if(dataElmSize != 0 && dataElmSize < elmSize)
+			{
+				return dataElmSize;
+			}
+			return elmSize;
+		}
+
+		size_t getDataElementCount() const
+		{
+			if(data == nullptr)
+			{
+				return 0;
+			}
+			return data->size() / getDataElmSize();
+		}
 	};
 
     void RenderCommand::getVertexData(buffer& data, Elements& elms,
@@ -270,6 +302,8 @@ namespace gorn
         bool finished = false;
 		std::map<std::string, buffer> transAttrs;
 		std::vector<RenderCommandAttributeVertexData> attrsData;
+		attrsData.reserve(vdef.getAttributes().size());
+		size_t tcount = 0;
 		for(auto itr = vdef.getAttributes().begin(); itr != vdef.getAttributes().end(); ++itr)
 		{
 			auto& def = itr->second;
@@ -283,11 +317,17 @@ namespace gorn
 			{
 				attrData.data = &itr2->second.data;
 				attrData.dataElmSize = itr2->second.count * def.getTypeSize();
+				attrData.repeat = itr2->second.repeat;
 			}
 			else
 			{
 				attrData.data = &def.getDefaultValue();
 				attrData.repeat = true;
+			}
+			auto ecount = attrData.getDataElementCount();
+			if(ecount > tcount)
+			{
+				tcount = ecount;
 			}
 			if(def.isTransformed())
 			{
@@ -302,8 +342,12 @@ namespace gorn
 				auto itr3 = transAttrs.insert(transAttrs.end(), { itr->first, std::move(data) });
 				attrData.data = &itr3->second;
 			}
-
 			attrsData.push_back(attrData);
+		}
+		auto cap = data.size() + tcount * vdef.getElementSize();
+		if(data.capacity() < cap)
+		{
+			data.capacity(cap);
 		}
         while(!finished)
         {
@@ -311,13 +355,9 @@ namespace gorn
             for(auto itr = attrsData.begin();
               itr != attrsData.end(); ++itr)
             {
-				auto elmSize = itr->dataElmSize;
-				if(elmSize == 0 || elmSize > itr->elmSize)
-				{
-					elmSize = itr->elmSize;
-				}
-                auto writeSize = out.write(*itr->data, elmSize,
-					itr->repeat ? 0 : elmSize*n);
+				auto dataElmSize = itr->getDataElmSize();
+                auto writeSize = out.write(*itr->data, dataElmSize,
+					itr->repeat ? 0 : dataElmSize*n);
 				out.fill(0, itr->elmSize - writeSize);
 				if(!itr->repeat && writeSize != 0)
                 {

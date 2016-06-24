@@ -41,6 +41,7 @@ namespace gorn
 	{
 		buffer data;
 		size_t count;
+		bool repeat;
 	};
 
     class RenderCommand
@@ -79,6 +80,11 @@ namespace gorn
             buffer&& data, size_t count = 0);
         RenderCommand& withAttribute(const std::string& name,
             const buffer& data, size_t count = 0);
+		RenderCommand& withRepeatAttribute(const std::string& name,
+			buffer&& data);
+		RenderCommand& withRepeatAttribute(const std::string& name,
+			const buffer& data);
+
         RenderCommand& withElements(Elements&& elms);
         RenderCommand& withElements(const Elements& elms);
         RenderCommand& withDrawMode(DrawMode mode);
