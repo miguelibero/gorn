@@ -36,7 +36,7 @@ namespace gorn
 			{
 				return max;
 			}
-			return x;
+			return val;
 		}
 
 		template<typename T>

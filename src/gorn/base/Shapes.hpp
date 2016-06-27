@@ -53,13 +53,14 @@ namespace gorn
     class SphereShape
     {
     public:
-        size_t rings;
-        size_t sectors;
+        typedef unsigned int idx_t;
+        idx_t rings;
+        idx_t sectors;
         glm::vec3 center;
 
         SphereShape();
-        SphereShape& withRings(size_t rings);
-        SphereShape& withSectors(size_t sectors);
+        SphereShape& withRings(idx_t rings);
+        SphereShape& withSectors(idx_t sectors);
         SphereShape& withCenter(const glm::vec3& center);
     };
 

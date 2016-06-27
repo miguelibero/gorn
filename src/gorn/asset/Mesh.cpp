@@ -325,7 +325,7 @@ namespace gorn
 			npositions.push_back(p);
 			npositions.push_back(p+n);
 		}
-		for(size_t i = 0; i < npositions.size(); i++)
+		for(idx_t i = 0; i < (idx_t)npositions.size(); i++)
 		{
 			elements.push_back(i);
 		}

@@ -16,8 +16,8 @@ namespace gorn
 		typedef std::function<void(const AttributeDefinition& def, buffer& elms, const glm::mat4& transform)> Function;
 
 		AttributeTransformation() = delete;
-		static bool position(const Definition& def, buffer& elms, const glm::mat4& trans);
-		static bool normal(const Definition& def, buffer& elms, const glm::mat4& trans);
+		static void position(const Definition& def, buffer& elms, const glm::mat4& trans);
+		static void normal(const Definition& def, buffer& elms, const glm::mat4& trans);
 		static Function create(const std::string& name);
 	};
 }

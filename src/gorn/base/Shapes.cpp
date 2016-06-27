@@ -111,13 +111,13 @@ namespace gorn
     {
     }
 
-    SphereShape& SphereShape::withRings(size_t val)
+    SphereShape& SphereShape::withRings(idx_t val)
     {
         rings = val;
         return *this;
     }
 
-    SphereShape& SphereShape::withSectors(size_t val)
+    SphereShape& SphereShape::withSectors(idx_t val)
     {
         sectors = val;
         return *this;

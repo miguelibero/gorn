@@ -289,7 +289,7 @@ namespace gorn
     void RenderCommand::getVertexData(buffer& data, Elements& elms,
         const VertexDefinition& vdef, const glm::mat4& transform) const
     {
-        elm_t e = vdef.getElementSize();
+        auto e = (elm_t)vdef.getElementSize();
         if(e == 0)
         {
             return;

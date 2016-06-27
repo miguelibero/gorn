@@ -135,9 +135,9 @@ namespace gorn
         
         {
             elements.reserve(n * 6);
-            for (int r = 0; r < (int)sphere.rings - 1; r++)
+            for (Mesh::idx_t r = 0; r < (Mesh::idx_t)sphere.rings - 1; r++)
             {
-                for (int s = 0; s < (int)sphere.sectors - 1; s++)
+                for (Mesh::idx_t s = 0; s < (Mesh::idx_t)sphere.sectors - 1; s++)
                 {
                     elements.push_back(r * sphere.sectors + s);
                     elements.push_back(r * sphere.sectors + (s+1));

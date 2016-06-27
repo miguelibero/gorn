@@ -115,7 +115,7 @@ namespace gorn
         for(auto itr = _data.begin();
             itr != _data.end(); ++itr)
         {
-            sizes[itr->first] = itr->second.size();
+            sizes[itr->first] = (idx_t)itr->second.size();
         }
     }
 
