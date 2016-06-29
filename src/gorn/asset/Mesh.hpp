@@ -73,6 +73,7 @@ namespace gorn
         bool empty() const NOEXCEPT;
 
         void render(RenderCommand& cmd, const Elements& elms) const NOEXCEPT;
+		void reserve(const std::string& name, size_t size);
     };
 
     template<typename V>
@@ -107,6 +108,12 @@ namespace gorn
     {
         _data[name].push_back(vtx);
     }
+
+	template<typename V>
+	void MeshVertices<V>::reserve(const std::string& name, size_t size)
+	{
+		_data[name].reserve(size);
+	}
 
     template<typename V>
     void MeshVertices<V>::sizes(
@@ -249,6 +256,7 @@ namespace gorn
         void setElements(const Elements& elms) NOEXCEPT;
         void setElements(Elements&& elms) NOEXCEPT;
         void addElement(const Element& elm) NOEXCEPT;
+		void reserveElements(size_t size) NOEXCEPT;
 
         template<typename V>
         const Mesh::Vertices<V>& getVertices() const NOEXCEPT;
@@ -266,6 +274,8 @@ namespace gorn
             const std::string& name) const;
         template<typename V>
         bool hasVertices(const std::string& name) const NOEXCEPT;
+		template<typename V>
+		void reserveVertices(const std::string& name, size_t size) NOEXCEPT;
         template<typename V>
         void addVertex(const std::string& name, const V& vtx) NOEXCEPT;
 
@@ -315,6 +325,12 @@ namespace gorn
     {
         return getVertices<V>().has(name);
     }
+
+	template<typename V>
+	void Mesh::reserveVertices(const std::string& name, size_t size) NOEXCEPT
+	{
+		getVertices<V>().reserve(name, size);
+	}
 
     template<typename V>
     void Mesh::addVertex(const std::string& name, const V& vtx) NOEXCEPT

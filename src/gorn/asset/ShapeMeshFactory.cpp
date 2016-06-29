@@ -48,6 +48,36 @@ namespace gorn
         }
     }
 
+	size_t getPlaneElementsSize(DrawMode mode)
+	{
+		switch (mode)
+		{
+		case DrawMode::Quads:
+		{
+			return 2;
+			break;
+		}
+		case DrawMode::Triangles:
+		{
+			return 6;
+			break;
+		}
+		case DrawMode::Lines:
+		{
+			return 8;
+			break;
+		}
+		case DrawMode::Points:
+		{
+			return 4;
+			break;
+		}
+		default:
+			return 0;
+			break;
+		}
+	}
+
     template<>
     Mesh ShapeMeshFactory::create(const Rect& rect, DrawMode mode)
     {
@@ -168,6 +198,66 @@ namespace gorn
 		mesh.setElements({ 0, 1 });
 		mesh.setDrawMode(mode);
 		return mesh;
+	}
+
+	void reserveCubesMesh(Mesh& mesh, size_t size, DrawMode mode)
+	{
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
+		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Rect>& shapes, DrawMode mode)
+	{
+		reserveCubesMesh(mesh, shapes.size(), mode);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Frustum>& shapes, DrawMode mode)
+	{
+		reserveCubesMesh(mesh, shapes.size(), mode);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<PlaneShape>& shapes, DrawMode mode)
+	{
+		auto size = shapes.size();
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 4 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 4 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 4 * size);
+		mesh.reserveElements(getPlaneElementsSize(mode) * size);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<CubeShape>& shapes, DrawMode mode)
+	{
+		reserveCubesMesh(mesh, shapes.size(), mode);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<SphereShape>& shapes, DrawMode mode)
+	{
+		size_t vc = 0;
+		size_t ec = 0;
+		for(auto& shape : shapes)
+		{
+			vc += shape.rings*shape.sectors;
+			ec += (shape.rings-1)*(shape.sectors-1)*6;
+		}
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, vc);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, vc);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::TexCoords, vc);
+		mesh.reserveElements(ec);
+	}
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Ray>& shapes, DrawMode mode)
+	{
+		auto size = shapes.size();
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 2*size);
+		mesh.reserveElements(2*size);
 	}
 }
 

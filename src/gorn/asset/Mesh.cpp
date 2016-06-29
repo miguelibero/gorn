@@ -156,6 +156,12 @@ namespace gorn
         _indices.push_back((idx_t)std::distance(_elements.begin(), itr));
     }
 
+	void Mesh::reserveElements(size_t size) NOEXCEPT
+	{
+		_elements.reserve(size);
+		_indices.reserve(size);
+	}
+
     template<>
     const Mesh::Vertices<float>& Mesh::getVertices() const NOEXCEPT
     {

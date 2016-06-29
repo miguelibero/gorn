@@ -27,6 +27,8 @@ namespace gorn
         static Mesh create(const std::vector<S>& shapes,
             DrawMode mode=DrawMode::Triangles);
 
+		template<typename S>
+		static void reserve(Mesh& mesh, const std::vector<S>& shapes, DrawMode mode);
     };
 
     template<typename S>
@@ -34,6 +36,7 @@ namespace gorn
     {
         Mesh mesh;
         mesh.setDrawMode(mode);
+		reserve(mesh, shapes, mode);
         for(auto& shape : shapes)
         {
             mesh += create(shape, mode);
@@ -41,6 +44,8 @@ namespace gorn
         return mesh;
     }
 
+	template<>
+	Mesh ShapeMeshFactory::create(const Rect& rect, DrawMode mode);
     template<>
     Mesh ShapeMeshFactory::create(const Frustum& frustum, DrawMode mode);
     template<>
@@ -51,6 +56,19 @@ namespace gorn
     Mesh ShapeMeshFactory::create(const SphereShape& sphere, DrawMode mode);
 	template<>
 	Mesh ShapeMeshFactory::create(const Ray& ray, DrawMode mode);
+
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Rect>& shapes, DrawMode mode);
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Frustum>& shapes, DrawMode mode);
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<PlaneShape>& shapes, DrawMode mode);
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<CubeShape>& shapes, DrawMode mode);
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<SphereShape>& shapes, DrawMode mode);
+	template<>
+	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Ray>& shapes, DrawMode mode);
 }
 
 #endif
