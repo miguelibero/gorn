@@ -8,6 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		068C755E1A7627700017E482 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 068C751F1A7627700017E482 /* AppDelegate.m */; };
+		069FAD561CBBB8C700889EC0 /* AttributeTransformation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD521CBBB8C700889EC0 /* AttributeTransformation.hpp */; };
+		069FAD571CBBB8C700889EC0 /* AttributeTransformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD531CBBB8C700889EC0 /* AttributeTransformation.cpp */; };
+		069FAD581CBBB8C700889EC0 /* AttributeTransformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD531CBBB8C700889EC0 /* AttributeTransformation.cpp */; };
+		069FAD591CBBB8C700889EC0 /* BlendMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD541CBBB8C700889EC0 /* BlendMode.cpp */; };
+		069FAD5A1CBBB8C700889EC0 /* BlendMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD541CBBB8C700889EC0 /* BlendMode.cpp */; };
+		069FAD5B1CBBB8C700889EC0 /* BlendMode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD551CBBB8C700889EC0 /* BlendMode.hpp */; };
+		069FAD5E1CBBC6B600889EC0 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD5C1CBBC6B600889EC0 /* Math.cpp */; };
+		069FAD5F1CBBC6B600889EC0 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD5C1CBBC6B600889EC0 /* Math.cpp */; };
+		069FAD601CBBC6B600889EC0 /* Math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD5D1CBBC6B600889EC0 /* Math.hpp */; };
+		069FAD691CBBC6C600889EC0 /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD611CBBC6C600889EC0 /* RenderCamera.cpp */; };
+		069FAD6A1CBBC6C600889EC0 /* RenderCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD611CBBC6C600889EC0 /* RenderCamera.cpp */; };
+		069FAD6B1CBBC6C600889EC0 /* RenderCamera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD621CBBC6C600889EC0 /* RenderCamera.hpp */; };
+		069FAD6C1CBBC6C600889EC0 /* RenderQueueBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD631CBBC6C600889EC0 /* RenderQueueBlock.cpp */; };
+		069FAD6D1CBBC6C600889EC0 /* RenderQueueBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD631CBBC6C600889EC0 /* RenderQueueBlock.cpp */; };
+		069FAD6E1CBBC6C600889EC0 /* RenderQueueBlock.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD641CBBC6C600889EC0 /* RenderQueueBlock.hpp */; };
+		069FAD6F1CBBC6C600889EC0 /* RenderQueueInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD651CBBC6C600889EC0 /* RenderQueueInfo.cpp */; };
+		069FAD701CBBC6C600889EC0 /* RenderQueueInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD651CBBC6C600889EC0 /* RenderQueueInfo.cpp */; };
+		069FAD711CBBC6C600889EC0 /* RenderQueueInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD661CBBC6C600889EC0 /* RenderQueueInfo.hpp */; };
+		069FAD721CBBC6C600889EC0 /* RenderQueueState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD671CBBC6C600889EC0 /* RenderQueueState.cpp */; };
+		069FAD731CBBC6C600889EC0 /* RenderQueueState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 069FAD671CBBC6C600889EC0 /* RenderQueueState.cpp */; };
+		069FAD741CBBC6C600889EC0 /* RenderQueueState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 069FAD681CBBC6C600889EC0 /* RenderQueueState.hpp */; };
 		06A9B8A81ACEE48400A78C64 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A21ACEE48400A78C64 /* buffer.cpp */; };
 		06A9B8A91ACEE48400A78C64 /* buffer_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A41ACEE48400A78C64 /* buffer_reader.cpp */; };
 		06A9B8AA1ACEE48400A78C64 /* buffer_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06A9B8A61ACEE48400A78C64 /* buffer_writer.cpp */; };
@@ -107,6 +128,9 @@
 		06BECAC11AF3123200192357 /* RenderQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06BECA9A1AF3123200192357 /* RenderQueue.cpp */; };
 		06BECAC81AF3131200192357 /* LocalFileLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06BECAC41AF3131200192357 /* LocalFileLoader.cpp */; };
 		06BECAC91AF3131200192357 /* StbImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06BECAC61AF3131200192357 /* StbImageLoader.cpp */; };
+		06F2D3EB1D219556008794C5 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06F2D3E91D219556008794C5 /* Ray.cpp */; };
+		06F2D3EC1D219556008794C5 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06F2D3E91D219556008794C5 /* Ray.cpp */; };
+		06F2D3ED1D219556008794C5 /* Ray.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 06F2D3EA1D219556008794C5 /* Ray.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -382,6 +406,20 @@
 		068C75801A7629BE0017E482 /* BundleFileLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BundleFileLoader.hpp; sourceTree = "<group>"; };
 		068C75821A762B370017E482 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		068C75961A76A0DA0017E482 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		069FAD521CBBB8C700889EC0 /* AttributeTransformation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AttributeTransformation.hpp; sourceTree = "<group>"; };
+		069FAD531CBBB8C700889EC0 /* AttributeTransformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttributeTransformation.cpp; sourceTree = "<group>"; };
+		069FAD541CBBB8C700889EC0 /* BlendMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlendMode.cpp; sourceTree = "<group>"; };
+		069FAD551CBBB8C700889EC0 /* BlendMode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlendMode.hpp; sourceTree = "<group>"; };
+		069FAD5C1CBBC6B600889EC0 /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Math.cpp; sourceTree = "<group>"; };
+		069FAD5D1CBBC6B600889EC0 /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Math.hpp; sourceTree = "<group>"; };
+		069FAD611CBBC6C600889EC0 /* RenderCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderCamera.cpp; sourceTree = "<group>"; };
+		069FAD621CBBC6C600889EC0 /* RenderCamera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RenderCamera.hpp; sourceTree = "<group>"; };
+		069FAD631CBBC6C600889EC0 /* RenderQueueBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderQueueBlock.cpp; sourceTree = "<group>"; };
+		069FAD641CBBC6C600889EC0 /* RenderQueueBlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RenderQueueBlock.hpp; sourceTree = "<group>"; };
+		069FAD651CBBC6C600889EC0 /* RenderQueueInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderQueueInfo.cpp; sourceTree = "<group>"; };
+		069FAD661CBBC6C600889EC0 /* RenderQueueInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RenderQueueInfo.hpp; sourceTree = "<group>"; };
+		069FAD671CBBC6C600889EC0 /* RenderQueueState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderQueueState.cpp; sourceTree = "<group>"; };
+		069FAD681CBBC6C600889EC0 /* RenderQueueState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RenderQueueState.hpp; sourceTree = "<group>"; };
 		06A9B8A21ACEE48400A78C64 /* buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer.cpp; sourceTree = "<group>"; };
 		06A9B8A31ACEE48400A78C64 /* buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = buffer.hpp; sourceTree = "<group>"; };
 		06A9B8A41ACEE48400A78C64 /* buffer_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buffer_reader.cpp; sourceTree = "<group>"; };
@@ -492,6 +530,8 @@
 		06BECAC51AF3131200192357 /* LocalFileLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocalFileLoader.hpp; sourceTree = "<group>"; };
 		06BECAC61AF3131200192357 /* StbImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StbImageLoader.cpp; sourceTree = "<group>"; };
 		06BECAC71AF3131200192357 /* StbImageLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StbImageLoader.hpp; sourceTree = "<group>"; };
+		06F2D3E91D219556008794C5 /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
+		06F2D3EA1D219556008794C5 /* Ray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ray.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -949,6 +989,10 @@
 		06BECA561AF3123200192357 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				06F2D3E91D219556008794C5 /* Ray.cpp */,
+				06F2D3EA1D219556008794C5 /* Ray.hpp */,
+				069FAD5C1CBBC6B600889EC0 /* Math.cpp */,
+				069FAD5D1CBBC6B600889EC0 /* Math.hpp */,
 				06BECA571AF3123200192357 /* Application.cpp */,
 				06BECA581AF3123200192357 /* Application.hpp */,
 				06BECA591AF3123200192357 /* base.hpp */,
@@ -972,6 +1016,10 @@
 		06BECA671AF3123200192357 /* gl */ = {
 			isa = PBXGroup;
 			children = (
+				069FAD521CBBB8C700889EC0 /* AttributeTransformation.hpp */,
+				069FAD531CBBB8C700889EC0 /* AttributeTransformation.cpp */,
+				069FAD541CBBB8C700889EC0 /* BlendMode.cpp */,
+				069FAD551CBBB8C700889EC0 /* BlendMode.hpp */,
 				06AC8FF91C3A939800E5A473 /* AttributeDefinition.cpp */,
 				06AC8FFA1C3A939800E5A473 /* AttributeDefinition.hpp */,
 				06AC8FFB1C3A939800E5A473 /* Base.cpp */,
@@ -1028,6 +1076,14 @@
 		06BECA901AF3123200192357 /* render */ = {
 			isa = PBXGroup;
 			children = (
+				069FAD611CBBC6C600889EC0 /* RenderCamera.cpp */,
+				069FAD621CBBC6C600889EC0 /* RenderCamera.hpp */,
+				069FAD631CBBC6C600889EC0 /* RenderQueueBlock.cpp */,
+				069FAD641CBBC6C600889EC0 /* RenderQueueBlock.hpp */,
+				069FAD651CBBC6C600889EC0 /* RenderQueueInfo.cpp */,
+				069FAD661CBBC6C600889EC0 /* RenderQueueInfo.hpp */,
+				069FAD671CBBC6C600889EC0 /* RenderQueueState.cpp */,
+				069FAD681CBBC6C600889EC0 /* RenderQueueState.hpp */,
 				06BECA931AF3123200192357 /* render.hpp */,
 				06BECA941AF3123200192357 /* RenderCommand.cpp */,
 				06BECA951AF3123200192357 /* RenderCommand.hpp */,
@@ -1046,8 +1102,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				069FAD741CBBC6C600889EC0 /* RenderQueueState.hpp in Headers */,
 				06AC91B71C3AA23F00E5A473 /* GameView.h in Headers */,
+				069FAD5B1CBBB8C700889EC0 /* BlendMode.hpp in Headers */,
+				069FAD711CBBC6C600889EC0 /* RenderQueueInfo.hpp in Headers */,
+				069FAD6E1CBBC6C600889EC0 /* RenderQueueBlock.hpp in Headers */,
+				069FAD561CBBB8C700889EC0 /* AttributeTransformation.hpp in Headers */,
 				06AC92721C3AB3F600E5A473 /* BundleFileLoader.hpp in Headers */,
+				06F2D3ED1D219556008794C5 /* Ray.hpp in Headers */,
+				069FAD601CBBC6B600889EC0 /* Math.hpp in Headers */,
+				069FAD6B1CBBC6C600889EC0 /* RenderCamera.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1094,7 +1158,7 @@
 		066B385D19EDB8E900A11F1A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Miguel Ibero";
 				TargetAttributes = {
 					068C746E1A7627290017E482 = {
@@ -1132,8 +1196,12 @@
 				06AC90071C3A939800E5A473 /* AttributeDefinition.cpp in Sources */,
 				068C755E1A7627700017E482 /* AppDelegate.m in Sources */,
 				06BECAC11AF3123200192357 /* RenderQueue.cpp in Sources */,
+				069FAD6C1CBBC6C600889EC0 /* RenderQueueBlock.cpp in Sources */,
+				06F2D3EB1D219556008794C5 /* Ray.cpp in Sources */,
 				06BECAB11AF3123200192357 /* ProgramAttributeDefinition.cpp in Sources */,
+				069FAD591CBBB8C700889EC0 /* BlendMode.cpp in Sources */,
 				06A9B8AA1ACEE48400A78C64 /* buffer_writer.cpp in Sources */,
+				069FAD6F1CBBC6C600889EC0 /* RenderQueueInfo.cpp in Sources */,
 				06BECAA61AF3123200192357 /* Frustum.cpp in Sources */,
 				06A9B8A91ACEE48400A78C64 /* buffer_reader.cpp in Sources */,
 				06AC91981C3A965E00E5A473 /* GameViewController.mm in Sources */,
@@ -1143,16 +1211,19 @@
 				06AC90081C3A939800E5A473 /* Base.cpp in Sources */,
 				06AC91991C3A965E00E5A473 /* BundleFileLoader.mm in Sources */,
 				06AC90091C3A939800E5A473 /* ClearAction.cpp in Sources */,
+				069FAD571CBBB8C700889EC0 /* AttributeTransformation.cpp in Sources */,
 				06BECAAA1AF3123200192357 /* FrameBuffer.cpp in Sources */,
 				06BECABB1AF3123200192357 /* VertexArray.cpp in Sources */,
 				06BECA9F1AF3123200192357 /* FileManager.cpp in Sources */,
 				06BECAC91AF3131200192357 /* StbImageLoader.cpp in Sources */,
 				06AC91971C3A965E00E5A473 /* UIImageLoader.mm in Sources */,
 				06AC900D1C3A939800E5A473 /* VertexDefinition.cpp in Sources */,
+				069FAD721CBBC6C600889EC0 /* RenderQueueState.cpp in Sources */,
 				06AC900A1C3A939800E5A473 /* Enums.cpp in Sources */,
 				06BECAA31AF3123200192357 /* ShapeMeshFactory.cpp in Sources */,
 				06BECAA41AF3123200192357 /* Application.cpp in Sources */,
 				06AC900C1C3A939800E5A473 /* Stencil.cpp in Sources */,
+				069FAD691CBBC6C600889EC0 /* RenderCamera.cpp in Sources */,
 				06BECAB81AF3123200192357 /* TextureDefinition.cpp in Sources */,
 				06A9B8A81ACEE48400A78C64 /* buffer.cpp in Sources */,
 				06BECA9E1AF3123200192357 /* FileLoader.cpp in Sources */,
@@ -1175,6 +1246,7 @@
 				06BECAC81AF3131200192357 /* LocalFileLoader.cpp in Sources */,
 				06BECAA11AF3123200192357 /* Mesh.cpp in Sources */,
 				06BECAB31AF3123200192357 /* ProgramManager.cpp in Sources */,
+				069FAD5E1CBBC6B600889EC0 /* Math.cpp in Sources */,
 				06BECAAE1AF3123200192357 /* MaterialDefinition.cpp in Sources */,
 				06BECAB91AF3123200192357 /* TextureManager.cpp in Sources */,
 			);
@@ -1184,6 +1256,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06F2D3EC1D219556008794C5 /* Ray.cpp in Sources */,
+				069FAD6D1CBBC6C600889EC0 /* RenderQueueBlock.cpp in Sources */,
 				06AC90351C3A959A00E5A473 /* FileLoader.cpp in Sources */,
 				06AC90371C3A959A00E5A473 /* FileManager.cpp in Sources */,
 				06AC90391C3A959A00E5A473 /* Image.cpp in Sources */,
@@ -1192,6 +1266,7 @@
 				06AC903F1C3A959A00E5A473 /* ShapeMeshFactory.cpp in Sources */,
 				06AC92731C3AB3F600E5A473 /* BundleFileLoader.mm in Sources */,
 				06AC921D1C3AAAA500E5A473 /* GameView.mm in Sources */,
+				069FAD5F1CBBC6B600889EC0 /* Math.cpp in Sources */,
 				06AC90411C3A959A00E5A473 /* Application.cpp in Sources */,
 				06AC90451C3A959A00E5A473 /* Context.cpp in Sources */,
 				06AC90491C3A959A00E5A473 /* Frustum.cpp in Sources */,
@@ -1199,6 +1274,8 @@
 				06AC904D1C3A959A00E5A473 /* Shapes.cpp in Sources */,
 				06AC904F1C3A959A00E5A473 /* String.cpp in Sources */,
 				06AC90511C3A959A00E5A473 /* AttributeDefinition.cpp in Sources */,
+				069FAD6A1CBBC6C600889EC0 /* RenderCamera.cpp in Sources */,
+				069FAD581CBBB8C700889EC0 /* AttributeTransformation.cpp in Sources */,
 				06AC90531C3A959A00E5A473 /* Base.cpp in Sources */,
 				06AC90551C3A959A00E5A473 /* ClearAction.cpp in Sources */,
 				06AC90571C3A959A00E5A473 /* Enums.cpp in Sources */,
@@ -1207,6 +1284,7 @@
 				06AC905D1C3A959A00E5A473 /* VertexDefinition.cpp in Sources */,
 				06AC905F1C3A959A00E5A473 /* FrameBuffer.cpp in Sources */,
 				06AC90621C3A959A00E5A473 /* Material.cpp in Sources */,
+				069FAD5A1CBBB8C700889EC0 /* BlendMode.cpp in Sources */,
 				06AC90641C3A959A00E5A473 /* MaterialDefinition.cpp in Sources */,
 				06AC90661C3A959A00E5A473 /* MaterialManager.cpp in Sources */,
 				06AC90681C3A959A00E5A473 /* Program.cpp in Sources */,
@@ -1220,6 +1298,7 @@
 				06AC90781C3A959A00E5A473 /* TextureDefinition.cpp in Sources */,
 				06AC907A1C3A959A00E5A473 /* TextureManager.cpp in Sources */,
 				06AC907C1C3A959A00E5A473 /* UniformValue.cpp in Sources */,
+				069FAD701CBBC6C600889EC0 /* RenderQueueInfo.cpp in Sources */,
 				06AC907E1C3A959A00E5A473 /* VertexArray.cpp in Sources */,
 				06AC90801C3A959A00E5A473 /* VertexBuffer.cpp in Sources */,
 				06AC90841C3A959A00E5A473 /* RenderCommand.cpp in Sources */,
@@ -1227,6 +1306,7 @@
 				06AC90881C3A959A00E5A473 /* RenderQueue.cpp in Sources */,
 				06AC908A1C3A959A00E5A473 /* LocalFileLoader.cpp in Sources */,
 				06AC908C1C3A959A00E5A473 /* StbImageLoader.cpp in Sources */,
+				069FAD731CBBC6C600889EC0 /* RenderQueueState.cpp in Sources */,
 				06AC90971C3A959A00E5A473 /* buffer.cpp in Sources */,
 				06AC90991C3A959A00E5A473 /* buffer_reader.cpp in Sources */,
 				06AC909B1C3A959A00E5A473 /* buffer_writer.cpp in Sources */,
@@ -1256,6 +1336,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1364,6 +1445,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				EXECUTABLE_PREFIX = lib;
@@ -1384,6 +1466,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_PREFIX = lib;
@@ -1428,6 +1511,7 @@
 				06AC902F1C3A94FF00E5A473 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

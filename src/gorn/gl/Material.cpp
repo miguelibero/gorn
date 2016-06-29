@@ -1,5 +1,6 @@
 #include <gorn/gl/Material.hpp>
 #include <gorn/gl/UniformValue.hpp>
+#include <string>
 
 namespace gorn
 {
