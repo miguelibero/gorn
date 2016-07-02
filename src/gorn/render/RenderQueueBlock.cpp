@@ -31,20 +31,16 @@ namespace gorn
 		_uniforms += cam.getUniformValues();
     }
 
-    void RenderQueueBlock::addDefinition(const RenderCommand& cmd)
-    {
-        if(_material != nullptr && _material->getProgram() != nullptr)
-        {
-			_definition += _material->getProgram()->getVertexDefinition();
-        }
-    }
-
     void RenderQueueBlock::addData(const RenderCommand& cmd,
         const glm::mat4& trans)
     {
 		_uniforms += cmd.getUniformValues();
 		auto rtrans = _inverse * trans;
-        cmd.getVertexData(_vertices, _elements, _definition, rtrans);
+		if(_material == nullptr && cmd.getMaterial() != nullptr)
+		{
+			_material = cmd.getMaterial();
+		}
+        cmd.dumpVertexData(_vertices, _elements, rtrans);
     }
 
 	bool RenderQueueBlock::supports(const RenderQueueState& state) const
@@ -78,14 +74,15 @@ namespace gorn
 		_blendMode.apply();
 
         VertexArray vao;
+		auto& def = _material->getProgram()->getVertexDefinition();
         auto usage = VertexBuffer::Usage::StaticDraw;
         auto elmsCount = _elements.size();
-        auto vertsCount = _vertices.size()/_definition.getElementSize();
+        auto vertsCount = _vertices.size()/def.getElementSize();
         vao.setMaterial(_material);
         vao.addVertexData(std::make_shared<VertexBuffer>(
             buffer(std::move(_vertices)), usage,
             VertexBuffer::Target::ArrayBuffer),
-            _definition);
+			def);
         vao.setElementData(std::make_shared<VertexBuffer>(
             buffer(std::move(_elements)), usage,
             VertexBuffer::Target::ElementArrayBuffer));

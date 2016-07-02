@@ -115,6 +115,7 @@ namespace gorn
 			auto offset = vdef.getElementSize();
 			auto& adef = itr->second;
 			vdef.setAttribute(itr->first)
+				.withName(adef.getName())
 				.withType(adef.getType())
 				.withCount(adef.getCount())
 				.withOffset(offset)

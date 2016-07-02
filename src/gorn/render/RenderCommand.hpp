@@ -120,8 +120,7 @@ namespace gorn
         const std::shared_ptr<Material>& getMaterial() const;
         DrawMode getDrawMode() const;
 
-        void getVertexData(buffer& data, Elements& elms,
-            const VertexDefinition& vdef,
+        void dumpVertexData(buffer& data, Elements& elms,
             const glm::mat4& transform=glm::mat4(1.0f)) const;
 
         const glm::mat4& getTransform() const;

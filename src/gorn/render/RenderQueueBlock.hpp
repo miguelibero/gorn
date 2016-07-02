@@ -21,7 +21,6 @@ namespace gorn
         typedef RenderCommand::Elements Elements;
     private:
         std::shared_ptr<Material> _material;
-        VertexDefinition _definition;
         buffer _vertices;
         Elements _elements;
 		UniformValueMap _uniforms;
@@ -39,7 +38,6 @@ namespace gorn
         bool supports(const RenderCommand& cmd) const;
 		bool supports(const RenderQueueState& cmd) const;
         void draw(Info& info);
-        void addDefinition(const RenderCommand& cmd);
         void addData(const RenderCommand& cmd, const glm::mat4& trans);
     };
 

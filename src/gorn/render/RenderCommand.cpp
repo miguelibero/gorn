@@ -286,10 +286,20 @@ namespace gorn
 		}
 	};
 
-    void RenderCommand::getVertexData(buffer& data, Elements& elms,
-        const VertexDefinition& vdef, const glm::mat4& transform) const
+    void RenderCommand::dumpVertexData(buffer& data, Elements& elms,
+		const glm::mat4& transform) const
     {
-        auto e = (elm_t)vdef.getElementSize();
+		if(_material == nullptr)
+		{
+			return;
+		}
+		auto prog = _material->getProgram();
+		if(prog == nullptr)
+		{
+			return;
+		}
+		auto& vdef = prog->getVertexDefinition();
+		elm_t e = vdef.getElementSize();
         if(e == 0)
         {
             return;

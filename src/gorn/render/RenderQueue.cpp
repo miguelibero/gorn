@@ -151,12 +151,6 @@ namespace gorn
 				{
 					block.draw(_tempInfo);
 					block = Block(cmd, cam, state, _uniformValues);
-					auto ditr = itr;
-					while (ditr != cmds.end() && block.supports(*ditr))
-					{
-						block.addDefinition(cmd);
-						++ditr;
-					}
 				}
 				else
 				{
