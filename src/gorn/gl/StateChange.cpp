@@ -34,9 +34,11 @@ namespace gorn
     bool StateChange::operator==(const StateChange& other) const
     {
         return true
-            && std::is_permutation(_tests.begin(),
+			&& _tests.size() == other._tests.size()
+			&& _masks.size() == other._masks.size()
+            && std::equal(_tests.begin(),
                 _tests.end(), other._tests.begin())
-            && std::is_permutation(_masks.begin(),
+            && std::equal(_masks.begin(),
                 _masks.end(), other._masks.begin());
     }
 

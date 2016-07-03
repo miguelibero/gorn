@@ -12,7 +12,9 @@ namespace gorn
 
 	bool Ray::hits(const Rect& rect) const
 	{
-		return false;
+		// TODO: improve
+		glm::vec3 pos;
+		return hits(rect, pos);
 	}
 
 	bool Ray::hits(const Rect& rect, glm::vec3& pos) const
