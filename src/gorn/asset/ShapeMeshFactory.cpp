@@ -10,40 +10,52 @@
 
 namespace gorn
 {
-    Mesh::Elements getPlaneElements(DrawMode mode)
+	static Mesh::Elements planeElementsQuads{
+		0, 2
+	};
+
+	static Mesh::Elements planeElementsTris{
+		0, 1, 2, 2, 3, 0
+	};
+
+	static Mesh::Elements planeElementsLines{
+		0, 1, 1, 2, 2, 3, 3, 0
+	};
+
+	static Mesh::Elements planeElementsPoints{
+		0, 1, 2, 3
+	};
+
+	static Mesh::Elements planeElementsEmpty{
+		0, 1, 2, 3
+	};
+
+    const Mesh::Elements& getPlaneElements(DrawMode mode)
     {
         switch(mode)
         {
         case DrawMode::Quads:
         {
-            return Mesh::Elements{
-                0, 2
-            };
+            return planeElementsQuads;
             break;
         }
         case DrawMode::Triangles:
         {
-            return Mesh::Elements{
-                0, 1, 2, 2, 3, 0 
-            };
+            return planeElementsTris;
             break;
         }
         case DrawMode::Lines:
         {
-            return Mesh::Elements{
-                0, 1, 1, 2, 2, 3, 3, 0
-            };
+            return planeElementsLines;
             break;
         }
         case DrawMode::Points:
         {
-            return Mesh::Elements{
-                0, 1, 2, 3
-            };
+            return planeElementsPoints;
             break;
         }
         default:
-            return Mesh::Elements{};
+            return planeElementsEmpty;
             break;
         }
     }
@@ -78,6 +90,14 @@ namespace gorn
 		}
 	}
 
+	void reserveCubesMesh(Mesh& mesh, size_t size, DrawMode mode)
+	{
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
+		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
+	}
+
     template<>
     Mesh ShapeMeshFactory::create(const Rect& rect, DrawMode mode)
     {
@@ -90,6 +110,11 @@ namespace gorn
         return create(frustum.shape(), mode);
     }
 
+	static std::vector<glm::vec2> planeTexCoords{
+		glm::vec2(1, 1), glm::vec2(0, 1),
+		glm::vec2(0, 0), glm::vec2(1, 0),
+	};
+
     template<>
     Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode)
     {
@@ -100,16 +125,13 @@ namespace gorn
 		std::vector<glm::vec3> norm{
 			n, n, n, n
 		};
-		std::vector<glm::vec2> tex{
-			glm::vec2(1, 1), glm::vec2(0, 1),
-			glm::vec2(0, 0), glm::vec2(1, 0),
-		};
+
         auto elms = getPlaneElements(mode);
 
         Mesh mesh;
         mesh.setVertices(AttributeKind::Position, std::move(pos));
         mesh.setVertices(AttributeKind::Normal, std::move(norm));
-		mesh.setVertices(AttributeKind::TexCoords, std::move(tex));
+		mesh.setVertices(AttributeKind::TexCoords, planeTexCoords);
         mesh.setElements(std::move(elms));
         mesh.setDrawMode(mode);
         return mesh;
@@ -120,6 +142,7 @@ namespace gorn
     {
 		Mesh mesh;
 		mesh.setDrawMode(mode);
+		reserveCubesMesh(mesh, 1, mode);
 		for(auto& side : cube.sides())
 		{
 			mesh += create(side, mode);
@@ -198,14 +221,6 @@ namespace gorn
 		mesh.setElements({ 0, 1 });
 		mesh.setDrawMode(mode);
 		return mesh;
-	}
-
-	void reserveCubesMesh(Mesh& mesh, size_t size, DrawMode mode)
-	{
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 24 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
-		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
 	}
 
 	template<>
