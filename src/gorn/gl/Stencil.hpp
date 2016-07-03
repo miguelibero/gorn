@@ -12,6 +12,7 @@ namespace gorn
         typedef StencilFunction Function;
         typedef StencilAction Action;
     private:
+		bool _enabled;
         Function _function;
         Action _failAction;
         Action _passAction;
@@ -29,6 +30,8 @@ namespace gorn
         bool operator==(const Stencil& other) const;
         bool operator!=(const Stencil& other) const;
 
+		void enable();
+		void disable();
         void apply();
 
         static Stencil current();

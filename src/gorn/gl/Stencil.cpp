@@ -5,6 +5,7 @@ namespace gorn
 {
 
     Stencil::Stencil():
+	_enabled(false),
     _function(Function::Always),
     _failAction(Action::Keep),
     _passAction(Action::Keep),
@@ -15,37 +16,55 @@ namespace gorn
 
     Stencil& Stencil::withFunction(Function f)
     {
+		_enabled = true;
         _function = f;
         return *this;
     }
 
     Stencil& Stencil::withFailAction(Action a)
     {
+		_enabled = true;
         _failAction = a;
         return *this;
     }
 
     Stencil& Stencil::withPassAction(Action a)
     {
+		_enabled = true;
         _passAction = a;
         return *this;
     }
 
     Stencil& Stencil::withMask(uint8_t mask)
     {
+		_enabled = true;
         _mask = mask;
         return *this;
     }
 
     Stencil& Stencil::withReferenceValue(int val)
     {
+		_enabled = true;
         _refValue = val;
         return *this;
     }
 
+	void Stencil::enable()
+	{
+		_enabled = true;
+	}
+
+	void Stencil::disable()
+	{
+		_enabled = false;
+	}
+
+
     bool Stencil::operator==(const Stencil& other) const
     {
-        return _function == other._function
+        return true
+			&& _enabled == other._enabled 
+			&& _function == other._function
             && _failAction == other._failAction
             && _passAction == other._passAction
             && _mask == other._mask
@@ -62,6 +81,10 @@ namespace gorn
         Stencil stencil;
         GLint val;
         glGetIntegerv(GL_STENCIL_FUNC, &val);
+		if(val == 0)
+		{
+			return stencil;
+		}
         stencil.withFunction(getStencilFunctionFromGl(val));
         glGetIntegerv(GL_STENCIL_WRITEMASK, &val);
         stencil.withMask(val);
@@ -76,6 +99,10 @@ namespace gorn
 
     void Stencil::apply()
     {
+		if(!_enabled)
+		{
+			return;
+		}
         glStencilFunc(getGlStencilFunction(_function), _refValue, 0xFF);
         checkGlError("setting stencil function");
         glStencilOp(getGlStencilAction(_failAction),
