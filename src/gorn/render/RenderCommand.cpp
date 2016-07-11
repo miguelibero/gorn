@@ -13,7 +13,9 @@ namespace gorn
     _transformMode(TransformStackAction::None),
 	_boundingStackAction(StackAction::None),
 	_layersStackAction(StackAction::None),
-	_blendStackAction(StackAction::None)
+	_blendStackAction(StackAction::None),
+	_stencilStackAction(StackAction::None),
+	_capabilitiesStackAction(StackAction::None)
     {
     }
 
@@ -107,8 +109,15 @@ namespace gorn
     RenderCommand& RenderCommand::withStencil(const Stencil& stencil)
     {
         _stencil = stencil;
+		_stencilStackAction = StackAction::Push;
         return *this;
     }
+
+	RenderCommand& RenderCommand::withStencilAction(StackAction action)
+	{
+		_stencilStackAction = action;
+		return *this;
+	}
 
     RenderCommand& RenderCommand::withClearAction(const ClearAction& clear)
     {
@@ -116,11 +125,18 @@ namespace gorn
         return *this;
     }
 
-    RenderCommand& RenderCommand::withStateChange(const StateChange& change)
+    RenderCommand& RenderCommand::withCapabilities(const Capabilities& caps)
     {
-        _stateChange = change;
+        _capabilities = caps;
+		_capabilitiesStackAction = StackAction::Push;
         return *this;
     }
+
+	RenderCommand& RenderCommand::withCapabilitiesAction(StackAction action)
+	{
+		_capabilitiesStackAction = action;
+		return *this;
+	}
 
 	RenderCommand& RenderCommand::withBlendMode(const BlendMode& mode)
 	{
@@ -220,15 +236,25 @@ namespace gorn
         return _stencil;
     }
 
+	RenderCommand::StackAction RenderCommand::getStencilStackAction() const
+	{
+		return _stencilStackAction;
+	}
+
     const ClearAction& RenderCommand::getClearAction() const
     {
         return _clearAction;
     }
 
-    const StateChange& RenderCommand::getStateChange() const
+    const Capabilities& RenderCommand::getCapabilities() const
     {
-        return _stateChange;
+        return _capabilities;
     }
+
+	RenderCommand::StackAction RenderCommand::getCapabilitiesStackAction() const
+	{
+		return _capabilitiesStackAction;
+	}
 
 	const BlendMode& RenderCommand::getBlendMode() const
 	{

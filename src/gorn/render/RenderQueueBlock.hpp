@@ -27,7 +27,7 @@ namespace gorn
         DrawMode _mode;
         Stencil _stencil;
         ClearAction _clearAction;
-        StateChange _stateChange;
+        Capabilities _capabilities;
 		glm::mat4 _transform;
 		glm::mat4 _inverse;
 		BlendMode _blendMode;

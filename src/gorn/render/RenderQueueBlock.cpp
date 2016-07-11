@@ -17,9 +17,9 @@ namespace gorn
     _material(cmd.getMaterial()),
     _uniforms(uniforms),
     _mode(cmd.getDrawMode()),
-    _stencil(cmd.getStencil()),
+    _stencil(state.getStencil()),
     _clearAction(cmd.getClearAction()),
-    _stateChange(cmd.getStateChange()),
+    _capabilities(state.getCapabilities()),
 	_transform(state.getTransform()),
 	_inverse(glm::inverse(_transform)),
     _blendMode(state.getBlendMode())
@@ -56,12 +56,12 @@ namespace gorn
 			&& (cmd.getMaterial() == _material || cmd.getMaterial() == nullptr)
 			&& cmd.getDrawMode() == _mode
 			&& cmd.getStencil() == _stencil
-			&& cmd.getStateChange() == _stateChange;
+			&& cmd.getCapabilities() == _capabilities;
     }
 
     void RenderQueueBlock::draw(Info& info)
     {
-        _stateChange.apply();
+		_capabilities.apply();
 		_stencil.apply();
 		_clearAction.apply();
 

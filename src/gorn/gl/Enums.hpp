@@ -44,15 +44,14 @@ namespace gorn
         Stencil
     };
 
-    enum class TestType
+    enum class CapabilityType
     {
-        Depth,
-        Stencil
+        DepthTest,
+        StencilTest
     };
 
     enum class MaskType
     {
-        Stencil,
         Depth,
         Red,
         Green,
@@ -111,7 +110,7 @@ namespace gorn
     GLenum getGlStencilAction(StencilAction act);
 
     GLbitfield getGlClearBufferBit(ClearType type);
-    GLenum getGlTest(TestType type);
+    GLenum getGlCapability(CapabilityType type);
 
 	GLenum getGlBlendFactor(BlendFactor factor);
 }

@@ -45,7 +45,7 @@
     <ClCompile Include="..\src\gorn\gl\ProgramUniformDefinition.cpp" />
     <ClCompile Include="..\src\gorn\gl\RenderBuffer.cpp" />
     <ClCompile Include="..\src\gorn\gl\Shader.cpp" />
-    <ClCompile Include="..\src\gorn\gl\StateChange.cpp" />
+    <ClCompile Include="..\src\gorn\gl\Capabilities.cpp" />
     <ClCompile Include="..\src\gorn\gl\Stencil.cpp" />
     <ClCompile Include="..\src\gorn\gl\Texture.cpp" />
     <ClCompile Include="..\src\gorn\gl\TextureDefinition.cpp" />
@@ -114,7 +114,7 @@
     <ClInclude Include="..\src\gorn\gl\ProgramUniformDefinition.hpp" />
     <ClInclude Include="..\src\gorn\gl\RenderBuffer.hpp" />
     <ClInclude Include="..\src\gorn\gl\Shader.hpp" />
-    <ClInclude Include="..\src\gorn\gl\StateChange.hpp" />
+    <ClInclude Include="..\src\gorn\gl\Capabilities.hpp" />
     <ClInclude Include="..\src\gorn\gl\Stencil.hpp" />
     <ClInclude Include="..\src\gorn\gl\Texture.hpp" />
     <ClInclude Include="..\src\gorn\gl\TextureDefinition.hpp" />

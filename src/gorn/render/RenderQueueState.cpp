@@ -12,6 +12,8 @@ namespace gorn
 		_layers.push(Layers());
 		_checkpoints.push(0);
 		_blendModes.push(BlendMode());
+		_stencils.push(Stencil());
+		_capabilities.push(Capabilities());
     }
 
 	void RenderQueueState::updateLayers(const Command& cmd)
@@ -45,6 +47,40 @@ namespace gorn
 		}
 		case RenderStackAction::Pop:
 			_blendModes.pop();
+			break;
+		default:
+			break;
+		}
+	}
+
+	void RenderQueueState::updateStencil(const Command& cmd)
+	{
+		switch (cmd.getStencilStackAction())
+		{
+		case RenderStackAction::Push:
+		{
+			_stencils.push(cmd.getStencil());
+			break;
+		}
+		case RenderStackAction::Pop:
+			_stencils.pop();
+			break;
+		default:
+			break;
+		}
+	}
+
+	void RenderQueueState::updateCapabilities(const Command& cmd)
+	{
+		switch (cmd.getCapabilitiesStackAction())
+		{
+		case RenderStackAction::Push:
+		{
+			_capabilities.push(cmd.getCapabilities());
+			break;
+		}
+		case RenderStackAction::Pop:
+			_capabilities.pop();
 			break;
 		default:
 			break;
@@ -131,5 +167,15 @@ namespace gorn
 	const BlendMode& RenderQueueState::getBlendMode() const
 	{
 		return _blendModes.top();
+	}
+
+	const Capabilities& RenderQueueState::getCapabilities() const
+	{
+		return _capabilities.top();
+	}
+
+	const Stencil& RenderQueueState::getStencil() const
+	{
+		return _stencils.top();
 	}
 }

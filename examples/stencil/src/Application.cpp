@@ -180,9 +180,9 @@ void StencilApplication::draw()
         UniformKind::Model, model);
     _vao.draw(36);
 
-    StateChange()
-        .withEnable(TestType::Stencil)
-        .withDisable(MaskType::Depth)
+    Capabilities()
+        .with(CapabilityType::StencilTest, true)
+        .with(CapabilityType::DepthTest, false)
         .apply();
 
     Stencil()
@@ -205,8 +205,8 @@ void StencilApplication::draw()
         .withMask(0x00)
         .apply();
 
-    StateChange()
-        .withEnable(MaskType::Depth)
+	Capabilities()
+        .with(CapabilityType::DepthTest, true)
         .apply();
 
     _vao.getMaterial()->setUniformValue(
@@ -220,8 +220,8 @@ void StencilApplication::draw()
 
     _vao.draw(36);
 
-    StateChange()
-        .withDisable(TestType::Stencil)
+	Capabilities()
+        .with(CapabilityType::StencilTest, false)
         .apply();
 }
 

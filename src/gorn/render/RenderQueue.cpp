@@ -147,6 +147,8 @@ namespace gorn
             else
             {
 				state.updateBlendMode(cmd);
+				state.updateCapabilities(cmd);
+				state.updateStencil(cmd);
 				if (!_batching || !block.supports(state) || !block.supports(cmd))
 				{
 					block.draw(_tempInfo);
