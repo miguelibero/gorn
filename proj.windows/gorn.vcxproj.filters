@@ -112,9 +112,6 @@
     <ClCompile Include="..\src\gorn\gl\Shader.cpp">
       <Filter>gl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\gl\StateChange.cpp">
-      <Filter>gl</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\gorn\gl\Stencil.cpp">
       <Filter>gl</Filter>
     </ClCompile>
@@ -185,6 +182,9 @@
       <Filter>gl</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gorn\gl\UniformKind.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\Capabilities.cpp">
       <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>
@@ -303,9 +303,6 @@
     <ClInclude Include="..\src\gorn\gl\Shader.hpp">
       <Filter>gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\gl\StateChange.hpp">
-      <Filter>gl</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\gorn\gl\Stencil.hpp">
       <Filter>gl</Filter>
     </ClInclude>
@@ -382,6 +379,9 @@
       <Filter>gl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\gorn\gl\UniformKind.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\Capabilities.hpp">
       <Filter>gl</Filter>
     </ClInclude>
   </ItemGroup>

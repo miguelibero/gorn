@@ -213,7 +213,7 @@ namespace gorn
             auto& v = itr->second;
             for(const Element& elm : elms)
             {
-                if(elm.has(n))
+                if(elm.has(n) && v.size() > elm.get(n))
                 {
                     auto& p = v.at(elm.get(n));
                     out.write(&p, sizeof(V));

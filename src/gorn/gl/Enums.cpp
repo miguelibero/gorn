@@ -210,13 +210,13 @@ namespace gorn
         }
     }
 
-    GLenum getGlTest(TestType type)
+    GLenum getGlCapability(CapabilityType type)
     {
         switch(type)
         {
-            case TestType::Stencil:
+            case CapabilityType::StencilTest:
                 return GL_STENCIL_TEST;
-            case TestType::Depth:
+            case CapabilityType::DepthTest:
                 return GL_DEPTH_TEST;
             default:
                 return 0;

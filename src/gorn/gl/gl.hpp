@@ -9,7 +9,7 @@
 #include <gorn/gl/RenderBuffer.hpp>
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>
-#include <gorn/gl/StateChange.hpp>
+#include <gorn/gl/Capabilities.hpp>
 #include <gorn/gl/BlendMode.hpp>
 #include <gorn/gl/VertexDefinition.hpp>
 #include <gorn/gl/VertexAttributeDefinition.hpp>

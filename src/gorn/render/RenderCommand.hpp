@@ -6,7 +6,7 @@
 #include <gorn/gl/Material.hpp>
 #include <gorn/gl/Stencil.hpp>
 #include <gorn/gl/ClearAction.hpp>
-#include <gorn/gl/StateChange.hpp>
+#include <gorn/gl/Capabilities.hpp>
 #include <gorn/gl/BlendMode.hpp>
 #include <gorn/base/Rect.hpp>
 #include <glm/glm.hpp>
@@ -66,12 +66,14 @@ namespace gorn
         Rect _boundingBox;
         Stencil _stencil;
         ClearAction _clearAction;
-        StateChange _stateChange;
+        Capabilities _capabilities;
 		BlendMode _blendMode;
 		Layers _layers;
 		StackAction _boundingStackAction;
 		StackAction _layersStackAction;
 		StackAction _blendStackAction;
+		StackAction _stencilStackAction;
+		StackAction _capabilitiesStackAction;
     public:
         RenderCommand();
 		RenderCommand& withUniformValue(const std::string& name, const UniformValue& value);
@@ -96,9 +98,13 @@ namespace gorn
         RenderCommand& withBounding(const Rect& rect);
         RenderCommand& withBoundingAction(StackAction action);
 
+		RenderCommand& withClearAction(const ClearAction& clear);
+
         RenderCommand& withStencil(const Stencil& stencil);
-        RenderCommand& withClearAction(const ClearAction& clear);
-        RenderCommand& withStateChange(const StateChange& change);
+		RenderCommand& withStencilAction(StackAction action);
+
+        RenderCommand& withCapabilities(const Capabilities& caps);
+		RenderCommand& withCapabilitiesAction(StackAction action);
 
 		RenderCommand& withBlendMode(const BlendMode& mode);
 		RenderCommand& withBlendModeAction(StackAction action);
@@ -130,9 +136,14 @@ namespace gorn
         StackAction getBoundingStackAction() const;
         const Rect& getBoundingBox() const;
 
+		const ClearAction& getClearAction() const;
+
         const Stencil& getStencil() const;
-        const ClearAction& getClearAction() const;
-        const StateChange& getStateChange() const;
+		StackAction getStencilStackAction() const;
+        
+        const Capabilities& getCapabilities() const;
+		StackAction getCapabilitiesStackAction() const;
+
 		const BlendMode& getBlendMode() const;
 		StackAction getBlendStackAction() const;
 
