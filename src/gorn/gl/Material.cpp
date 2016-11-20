@@ -9,10 +9,10 @@ namespace gorn
     {
     }
 
-    void Material::setTexture(const std::string& name,
+    void Material::setTexture(const UniformKind& kind,
         const std::shared_ptr<Texture>& texture)
     {
-        _textures[_program->getUniform(name)] = texture;
+        _textures[_program->getUniform(kind)] = texture;
     }
 
 	void Material::setUniformValues(const UniformValueMap& values)
@@ -26,10 +26,10 @@ namespace gorn
 		}
 	}
 
-    void Material::setUniformValue(const std::string& name,
+    void Material::setUniformValue(const UniformKind& kind,
         const UniformValue& value)
     {
-        _uniformValues[_program->getUniform(name)] = value;
+        _uniformValues[_program->getUniform(kind)] = value;
     }
 
     const glm::vec2& Material::getSize() const
@@ -67,6 +67,4 @@ namespace gorn
             itr->second.set(itr->first);
         }
     }
-
-
 }

@@ -1,6 +1,5 @@
 
 #include <gorn/render/RenderCamera.hpp>
-#include <gorn/render/RenderKinds.hpp>
 #include <gorn/base/Ray.hpp>
 #include <glm/gtx/transform.hpp>
 #include <algorithm>
@@ -31,9 +30,9 @@ namespace gorn
 		return *this;
 	}
 
-	RenderCamera& RenderCamera::withUniformValue(const std::string& name, const UniformValue& value)
+	RenderCamera& RenderCamera::withUniformValue(const UniformKind& kind, const UniformValue& value)
 	{
-		_uniformValues[name] = value;
+		_uniformValues[kind] = value;
 		return *this;
 	}
 
@@ -66,10 +65,10 @@ namespace gorn
 		}
 		_frustum = Frustum(_proj*_view);
 		_position = glm::vec3(glm::inverse(_view)[3]);
-		_uniformValues[UniformKind::View] = _view;
-		_uniformValues[UniformKind::Projection] = _proj;
-		_uniformValues[UniformKind::CameraPosition] = _position;
-		_uniformValues[UniformKind::Camera] = _frustum.getMatrix();
+		_uniformValues[UniformType::ViewTransform] = _view;
+		_uniformValues[UniformType::ProjectionTransform] = _proj;
+		_uniformValues[UniformType::CameraPosition] = _position;
+		_uniformValues[UniformType::CameraTransform] = _frustum.getMatrix();
 		_dirty = false;
 	}
 

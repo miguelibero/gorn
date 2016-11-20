@@ -12,6 +12,8 @@
 #include <gorn/gl/StateChange.hpp>
 #include <gorn/gl/BlendMode.hpp>
 #include <gorn/gl/VertexDefinition.hpp>
-#include <gorn/gl/AttributeDefinition.hpp>
+#include <gorn/gl/VertexAttributeDefinition.hpp>
+#include <gorn/gl/AttributeKind.hpp>
+#include <gorn/gl/UniformKind.hpp>
 
 #endif

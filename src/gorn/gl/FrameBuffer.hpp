@@ -6,6 +6,7 @@
 #include <gorn/gl/RenderBuffer.hpp>
 #include <gorn/gl/Enums.hpp>
 #include <memory>
+#include <unordered_map>
 
 namespace gorn
 {
@@ -18,8 +19,8 @@ namespace gorn
         typedef std::vector<std::shared_ptr<RenderBuffer>> RenderBuffers;
         static GLuint s_currentId;
         mutable GLuint _id;
-        std::map<AttachType,Textures> _textures;
-        std::map<AttachType,RenderBuffers> _renderBuffers;
+        std::unordered_map<AttachType,Textures> _textures;
+        std::unordered_map<AttachType,RenderBuffers> _renderBuffers;
 
         void cleanup();
         static void bindId(GLuint id);

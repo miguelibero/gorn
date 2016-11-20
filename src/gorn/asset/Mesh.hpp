@@ -2,7 +2,7 @@
 #define __gorn__Mesh__
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <buffer.hpp>
 #include <buffer_writer.hpp>
 #include <glm/glm.hpp>
@@ -17,17 +17,19 @@ namespace gorn
     class MeshElement
     {
     public:
+		typedef AttributeKind Kind;
         typedef RenderCommand::elm_t idx_t;
-        typedef std::map<std::string, idx_t> IndicesMap;
+        typedef std::unordered_map<Kind, idx_t> IndicesMap;
         static const idx_t npos;
     private:
         IndicesMap _indices;
         idx_t _defval;
     public:
         MeshElement(idx_t defval = npos) NOEXCEPT;
-        idx_t get(const std::string& name) const;
-        void set(const std::string& name, idx_t idx) NOEXCEPT;
-        bool has(const std::string& name) const NOEXCEPT;
+        idx_t get(const Kind& kind) const;
+        void set(const Kind& kind, idx_t idx) NOEXCEPT;
+		void set(idx_t* idxs, unsigned size) NOEXCEPT;
+        bool has(const Kind& kind) const NOEXCEPT;
         idx_t getDefault() const NOEXCEPT;
         bool hasDefault() const NOEXCEPT;
         void setDefault(idx_t defval) NOEXCEPT;
@@ -49,18 +51,19 @@ namespace gorn
         typedef std::vector<Element> Elements;
         typedef MeshElement::IndicesMap IndicesMap;
         typedef MeshElement::idx_t idx_t;
+		typedef AttributeKind Kind;
     private:
-        std::map<std::string, std::vector<V>> _data;
+        std::unordered_map<Kind, std::vector<V>> _data;
     public:
 
-        void set(const std::string& name,
+        void set(const Kind& kind,
             const std::vector<V>& vtx) NOEXCEPT;
-        void set(const std::string& name,
+        void set(const Kind& kind,
             std::vector<V>&& vtx) NOEXCEPT;
         const std::vector<V>& get(
-            const std::string& name) const;
-        bool has(const std::string& name) const NOEXCEPT;
-        void add(const std::string& name, const V& vtx) NOEXCEPT;
+			const Kind& kind) const;
+        bool has(const Kind& kind) const NOEXCEPT;
+        void add(const Kind& kind, const V& vtx) NOEXCEPT;
 
         void sizes(IndicesMap& sizes) const NOEXCEPT;
         void sizes(IndicesMap& sizes, idx_t value) const NOEXCEPT;
@@ -73,46 +76,46 @@ namespace gorn
         bool empty() const NOEXCEPT;
 
         void render(RenderCommand& cmd, const Elements& elms) const NOEXCEPT;
-		void reserve(const std::string& name, size_t size);
+		void reserve(const Kind& kind, size_t size);
     };
 
     template<typename V>
-    void MeshVertices<V>::set(const std::string& name,
+    void MeshVertices<V>::set(const Kind& kind,
         const std::vector<V>& vtx) NOEXCEPT
     {
-        _data[name] = vtx;
+        _data[kind] = vtx;
     }
 
     template<typename V>
-    void MeshVertices<V>::set(const std::string& name,
+    void MeshVertices<V>::set(const Kind& kind,
         std::vector<V>&& vtx) NOEXCEPT
     {
-        _data[name] = std::move(vtx);
+        _data[kind] = std::move(vtx);
     }
 
     template<typename V>
     const std::vector<V>& MeshVertices<V>::get(
-        const std::string& name) const
+		const Kind& kind) const
     {
-        return _data.at(name);
+        return _data.at(kind);
     }
 
     template<typename V>
-    bool MeshVertices<V>::has(const std::string& name) const NOEXCEPT
+    bool MeshVertices<V>::has(const Kind& kind) const NOEXCEPT
     {
-        return _data.find(name) != _data.end();
+        return _data.find(kind) != _data.end();
     }
 
     template<typename V>
-    void MeshVertices<V>::add(const std::string& name, const V& vtx) NOEXCEPT
+    void MeshVertices<V>::add(const Kind& kind, const V& vtx) NOEXCEPT
     {
-        _data[name].push_back(vtx);
+        _data[kind].push_back(vtx);
     }
 
 	template<typename V>
-	void MeshVertices<V>::reserve(const std::string& name, size_t size)
+	void MeshVertices<V>::reserve(const Kind& kind, size_t size)
 	{
-		_data[name].reserve(size);
+		_data[kind].reserve(size);
 	}
 
     template<typename V>
@@ -264,20 +267,20 @@ namespace gorn
         Mesh::Vertices<V>& getVertices() NOEXCEPT;
 
         template<typename V>
-        void setVertices(const std::string& name,
+        void setVertices(const AttributeKind& kind,
             const std::vector<V>& vtx) NOEXCEPT;
         template<typename V>
-        void setVertices(const std::string& name,
+        void setVertices(const AttributeKind& kind,
             std::vector<V>&& vtx) NOEXCEPT;
         template<typename V>
         const std::vector<V>& getVertices(
-            const std::string& name) const;
+			const AttributeKind& kind) const;
         template<typename V>
-        bool hasVertices(const std::string& name) const NOEXCEPT;
+        bool hasVertices(const AttributeKind& kind) const NOEXCEPT;
 		template<typename V>
-		void reserveVertices(const std::string& name, size_t size) NOEXCEPT;
+		void reserveVertices(const AttributeKind& kind, size_t size) NOEXCEPT;
         template<typename V>
-        void addVertex(const std::string& name, const V& vtx) NOEXCEPT;
+        void addVertex(const AttributeKind& kind, const V& vtx) NOEXCEPT;
 
         void setDrawMode(DrawMode mode) NOEXCEPT;
         DrawMode getDrawMode() const NOEXCEPT;
@@ -300,42 +303,42 @@ namespace gorn
     Mesh::Vertices<glm::vec3>& Mesh::getVertices() NOEXCEPT;
 
     template<typename V>
-    void Mesh::setVertices(const std::string& name,
+    void Mesh::setVertices(const AttributeKind& kind,
         const std::vector<V>& vtx) NOEXCEPT
     {
-        return getVertices<V>().set(name, vtx);
+        return getVertices<V>().set(kind, vtx);
     }
 
     template<typename V>
-    void Mesh::setVertices(const std::string& name,
+    void Mesh::setVertices(const AttributeKind& kind,
         std::vector<V>&& vtx) NOEXCEPT
     {
-        return getVertices<V>().set(name, std::move(vtx));
+        return getVertices<V>().set(kind, std::move(vtx));
     }
 
     template<typename V>
     const std::vector<V>& Mesh::getVertices(
-        const std::string& name) const
+		const AttributeKind& kind) const
     {
-        return getVertices<V>().get(name);
+        return getVertices<V>().get(kind);
     }
 
     template<typename V>
-    bool Mesh::hasVertices(const std::string& name) const NOEXCEPT
+    bool Mesh::hasVertices(const AttributeKind& kind) const NOEXCEPT
     {
-        return getVertices<V>().has(name);
+        return getVertices<V>().has(kind);
     }
 
 	template<typename V>
-	void Mesh::reserveVertices(const std::string& name, size_t size) NOEXCEPT
+	void Mesh::reserveVertices(const AttributeKind& kind, size_t size) NOEXCEPT
 	{
-		getVertices<V>().reserve(name, size);
+		getVertices<V>().reserve(kind, size);
 	}
 
     template<typename V>
-    void Mesh::addVertex(const std::string& name, const V& vtx) NOEXCEPT
+    void Mesh::addVertex(const AttributeKind& kind, const V& vtx) NOEXCEPT
     {
-        return getVertices<V>().add(name, vtx);
+        return getVertices<V>().add(kind, vtx);
     }
 
 }

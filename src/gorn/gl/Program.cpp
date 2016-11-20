@@ -1,7 +1,6 @@
 #include <gorn/gl/Program.hpp>
 #include <gorn/gl/ProgramDefinition.hpp>
 #include <gorn/gl/UniformValue.hpp>
-#include <gorn/render/RenderKinds.hpp>
 #include <gorn/base/Exception.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -94,44 +93,50 @@ namespace gorn
 
     void Program::loadDefinition(const Definition& def)
     {
-        for(auto itr = def.getAttributes().begin();
-            itr != def.getAttributes().end(); ++itr)
+        for(auto& adef : def.getAttributes())
         {
-            getAttribute(itr->second.getName());
+            getAttribute(adef.getKind());
         }
-        for(auto itr = def.getUniforms().begin();
-            itr != def.getUniforms().end(); ++itr)
+        for(auto& udef : def.getUniforms())
         {
-            auto id = getUniform(itr->second.getName());
-            _uniforms[itr->first] = id;
-            if(!itr->second.getDefaultValue().empty())
+            auto id = getUniform(udef.getKind());
+            _uniforms[udef.getKind()] = id;
+            if(!udef.getDefaultValue().empty())
             {
-                setUniformValue(id, itr->second.getDefaultValue());
+                setUniformValue(id, udef.getDefaultValue());
             }
         }
 		_vertexDefinition = def.getVertexDefinition();
     }
 
-	GLint Program::getAttribute(const std::string& name) const
+	GLint Program::getAttribute(const AttributeKind& kind) const
     {
-        auto itr = _attributes.find(name);
-        if(itr == _attributes.end())
-        {
-            GLint id = glGetAttribLocation(getId(), name.c_str());
-			itr = _attributes.insert(itr, { name, id });
-        }
-        return itr->second;
+		for (auto itr = _attributes.begin();
+			itr != _attributes.end(); ++itr)
+		{
+			if (itr->first.match(kind))
+			{
+				return itr->second;
+			}
+		}
+		auto id = glGetAttribLocation(getId(), kind.getName().c_str());
+		_attributes[kind] = id;
+		return id;
     }
 
-    GLint Program::getUniform(const std::string& name) const
+    GLint Program::getUniform(const UniformKind& kind) const
     {
-        auto itr = _uniforms.find(name);
-        if(itr == _uniforms.end())
-        {
-            GLint id = glGetUniformLocation(getId(), name.c_str());
-            itr = _uniforms.insert(itr, {name, id});
-        }
-        return itr->second;
+		for (auto itr = _uniforms.begin();
+			itr != _uniforms.end(); ++itr)
+		{
+			if (itr->first.match(kind))
+			{
+				return itr->second;
+			}
+		}
+		auto id = glGetUniformLocation(getId(), kind.getName().c_str());
+		_uniforms[kind] = id;
+		return id;
     }
 
 	const Program::AttributeMap& Program::getAttributes() const
@@ -144,30 +149,27 @@ namespace gorn
 		return _uniforms;
 	}
 
-    bool Program::hasAttribute(const std::string& name) const
+    bool Program::hasAttribute(const AttributeKind& kind) const
     {
-        return getAttribute(name) >= 0;
+        return getAttribute(kind) >= 0;
     }
 
-    bool Program::hasUniform(const std::string& name) const
+    bool Program::hasUniform(const UniformKind& name) const
     {
         return getUniform(name) >= 0;
     }
 
-    void Program::setUniformValue(const std::string& name,
+    void Program::setUniformValue(const UniformKind& kind,
         const UniformValue& value)
     {
-        setUniformValue(getUniform(name), value);
+        setUniformValue(getUniform(kind), value);
     }
 
     void Program::setUniformValue(const GLint& location,
         const UniformValue& value)
     {
-        if(location >= 0)
-        {
-            use();
-            value.set(location);
-        }
+        use();
+        value.set(location);
     }
 
 	const VertexDefinition& Program::getVertexDefinition() const

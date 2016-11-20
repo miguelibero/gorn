@@ -85,22 +85,22 @@ namespace gorn
         return _lod;
     }
 
-    const std::map<GLenum, GLint>& TextureDefinition::getIntParameters() const
+    const std::unordered_map<GLenum, GLint>& TextureDefinition::getIntParameters() const
     {
         return _intParams;
     }
 
-    const std::map<GLenum, GLfloat>& TextureDefinition::getFloatParameters() const
+    const std::unordered_map<GLenum, GLfloat>& TextureDefinition::getFloatParameters() const
     {
         return _floatParams;
     }
 
-    const std::map<GLenum, std::vector<GLint>>& TextureDefinition::getIntPointerParameters() const
+    const std::unordered_map<GLenum, std::vector<GLint>>& TextureDefinition::getIntPointerParameters() const
     {
         return _intVecParams;
     }
 
-    const std::map<GLenum, std::vector<GLfloat>>& TextureDefinition::getFloatPointerParameters() const
+    const std::unordered_map<GLenum, std::vector<GLfloat>>& TextureDefinition::getFloatPointerParameters() const
     {
         return _floatVecParams;
     }

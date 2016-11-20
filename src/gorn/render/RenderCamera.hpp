@@ -5,7 +5,6 @@
 #include <gorn/gl/BlendMode.hpp>
 #include <gorn/base/Frustum.hpp>
 #include <glm/glm.hpp>
-#include <map>
 
 namespace gorn
 {
@@ -25,7 +24,7 @@ namespace gorn
 		RenderCamera();
 		RenderCamera& withView(const glm::mat4& view);
 		RenderCamera& withProjection(const glm::mat4& proj);
-		RenderCamera& withUniformValue(const std::string& name, const UniformValue& value);
+		RenderCamera& withUniformValue(const UniformKind& kind, const UniformValue& value);
 		RenderCamera& withUniformValues(const UniformValueMap& values);
 		RenderCamera& withLayer(int layer);
 		RenderCamera& withLayers(const Layers& layers);

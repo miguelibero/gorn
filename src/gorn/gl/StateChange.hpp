@@ -3,15 +3,15 @@
 
 #include <gorn/gl/Enums.hpp>
 #include <glm/glm.hpp>
-#include <map>
+#include <unordered_map>
 
 namespace gorn
 {
     class StateChange
     {
     public:
-        typedef std::map<TestType,bool> TestChanges;
-        typedef std::map<MaskType,bool> MaskChanges;
+        typedef std::unordered_map<TestType, bool> TestChanges;
+        typedef std::unordered_map<MaskType, bool> MaskChanges;
     private:
         TestChanges _tests;
         MaskChanges _masks;

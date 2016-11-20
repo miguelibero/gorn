@@ -6,7 +6,7 @@
 #include <gorn/gl/ProgramAttributeDefinition.hpp>
 #include <gorn/gl/ProgramUniformDefinition.hpp>
 #include <string>
-#include <map>
+#include <vector>
 
 class buffer;
 
@@ -19,11 +19,11 @@ namespace gorn
     public:
         typedef ProgramAttributeDefinition Attribute;
         typedef ProgramUniformDefinition Uniform;
-        typedef std::map<std::string, Uniform> Uniforms;
-        typedef std::map<std::string, Attribute> Attributes;
+        typedef std::vector<Uniform> Uniforms;
+        typedef std::vector<Attribute> Attributes;
     private:
-        std::map<ShaderType, std::string> _shaderFiles;
-        std::map<ShaderType, buffer> _shaderData;
+        std::unordered_map<ShaderType, std::string> _shaderFiles;
+        std::unordered_map<ShaderType, buffer> _shaderData;
         Uniforms _uniforms;
         Attributes _attributes;
     public:
@@ -34,11 +34,8 @@ namespace gorn
         ProgramDefinition& withShaderData(ShaderType type,
             const std::string& data);
 
-        ProgramDefinition& withUniform(const std::string& alias,
-            const Uniform& uniform);
 		ProgramDefinition& withUniform(const Uniform& uniform);
-        ProgramDefinition& withAttribute(const std::string& alias,
-            const Attribute& attribute);
+        ProgramDefinition& withAttribute(const Attribute& attribute);
 
         bool hasShaderData(ShaderType type) const;
         const buffer& getShaderData(ShaderType type) const;

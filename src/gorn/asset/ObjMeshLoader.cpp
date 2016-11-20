@@ -2,7 +2,6 @@
 
 #include <gorn/asset/ObjMeshLoader.hpp>
 #include <gorn/asset/Mesh.hpp>
-#include <gorn/render/RenderKinds.hpp>
 #include <gorn/base/String.hpp>
 #include <gorn/base/Exception.hpp>
 #include <buffer.hpp>
@@ -58,7 +57,7 @@ namespace gorn
                 {
                     throw Exception("Position should contain 3 floats");
                 }
-                mesh.addVertex(AttributeKind::Position, glm::vec3(
+                mesh.addVertex(AttributeType::Position, glm::vec3(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2]),
                     String::convertTo<float>(parts[3])
@@ -70,7 +69,7 @@ namespace gorn
                 {
                     throw Exception("Normal should contain 3 floats");
                 }
-                mesh.addVertex(AttributeKind::Normal, glm::vec3(
+                mesh.addVertex(AttributeType::Normal, glm::vec3(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2]),
                     String::convertTo<float>(parts[3])
@@ -82,7 +81,7 @@ namespace gorn
                 {
                     throw Exception("Texture should contain 2 floats");
                 }
-                mesh.addVertex(AttributeKind::TexCoords, glm::vec2(
+                mesh.addVertex(AttributeType::TexCoords, glm::vec2(
                     String::convertTo<float>(parts[1]),
                     String::convertTo<float>(parts[2])
                 ));
@@ -101,18 +100,7 @@ namespace gorn
                             String::convertTo<MeshElement::idx_t>(part)-1);
                     }
                     Mesh::Element elm;
-                    if(fparts.size() > 0)
-                    {
-                        elm.set(AttributeKind::Position, fparts[0]);
-                    }
-                    if(fparts.size() > 1)
-                    {
-                        elm.set(AttributeKind::TexCoords, fparts[1]);
-                    }
-                    if(fparts.size() > 2)
-                    {
-                        elm.set(AttributeKind::Normal, fparts[2]);
-                    }
+					elm.set(fparts.data(), fparts.size());
                     elms.push_back(std::move(elm));
                 }
                 if(elms.size() == 4)

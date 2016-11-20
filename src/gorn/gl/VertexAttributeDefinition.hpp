@@ -1,8 +1,9 @@
-#ifndef __gorn__AttributeDefinition__
-#define __gorn__AttributeDefinition__
+#ifndef __gorn__VertexAttributeDefinition__
+#define __gorn__VertexAttributeDefinition__
 
 #include <gorn/gl/Enums.hpp>
 #include <gorn/gl/AttributeTransformation.hpp>
+#include <gorn/gl/AttributeKind.hpp>
 #include <string>
 #include <buffer.hpp>
 #include <glm/glm.hpp>
@@ -15,12 +16,13 @@ namespace gorn
     class VertexBuffer;
     class Program;
 
-    class AttributeDefinition
+    class VertexAttributeDefinition
     {
 	public:
 		typedef AttributeTransformation::Function Transformation;
+		typedef AttributeKind Kind;
     private:
-        std::string _name;
+		Kind _kind;
         bool _normalized;
         BasicType _type;
         size_t _count;
@@ -32,21 +34,20 @@ namespace gorn
 		buffer _defaultValue;
     public:
 
-        AttributeDefinition(const std::string& name="");
+        VertexAttributeDefinition(const Kind& kind = Kind());
 
-        AttributeDefinition& withName(const std::string& name);
-        AttributeDefinition& withType(BasicType type);
-        AttributeDefinition& withNormalized(bool enabled);
-        AttributeDefinition& withCount(size_t count);
-        AttributeDefinition& withStride(size_t stride);
-        AttributeDefinition& withOffset(size_t offset);
-        AttributeDefinition& withStride(size_t stride, BasicType type);
-        AttributeDefinition& withOffset(size_t offset, BasicType type);
-        AttributeDefinition& withTransformation(const Transformation& trans);
-		AttributeDefinition& withDefaultValue(const buffer& data);
+        VertexAttributeDefinition& withBasicType(BasicType type);
+        VertexAttributeDefinition& withNormalized(bool enabled);
+        VertexAttributeDefinition& withCount(size_t count);
+        VertexAttributeDefinition& withStride(size_t stride);
+        VertexAttributeDefinition& withOffset(size_t offset);
+        VertexAttributeDefinition& withStride(size_t stride, BasicType type);
+        VertexAttributeDefinition& withOffset(size_t offset, BasicType type);
+        VertexAttributeDefinition& withTransformation(const Transformation& trans);
+		VertexAttributeDefinition& withDefaultValue(const buffer& data);
     
-        const std::string& getName() const;
-        BasicType getType() const;
+        const Kind& getKind() const;
+        BasicType getBasicType() const;
         bool getNormalized() const;
         size_t getCount() const;
         size_t getStride() const;

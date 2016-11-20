@@ -52,7 +52,7 @@ void FramebufferApplication::load()
 
     _ctx.getMaterials().getDefinitions().get("kitten")
         .withProgram("sprite")
-        .withTexture(UniformKind::Texture0, "kitten.png");
+        .withTexture(UniformType::DiffuseTexture, "kitten.png");
 
     _ctx.getMaterials().getDefinitions().set("glass",
         MaterialDefinition().withProgram("glass"));
@@ -66,11 +66,11 @@ void FramebufferApplication::load()
 
     VertexDefinition vdef;
     vdef.setAttribute("position")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(2)
         .withStride(4, BasicType::Float);
     vdef.setAttribute("texCoords")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(2)
         .withStride(4, BasicType::Float)
         .withOffset(2, BasicType::Float);
@@ -105,7 +105,7 @@ void FramebufferApplication::load()
     auto fbtex = std::make_shared<Texture>();
     fbtex->setImage(Image(getSize()));
     _fbo.attach(fbtex);
-    _vao2.getMaterial()->setTexture(UniformKind::Texture0, fbtex);
+    _vao2.getMaterial()->setTexture(UniformType::DiffuseTexture, fbtex);
 }
 
 void FramebufferApplication::update(double dt)

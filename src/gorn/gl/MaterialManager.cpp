@@ -3,7 +3,6 @@
 #include <gorn/gl/TextureManager.hpp>
 #include <gorn/gl/MaterialDefinition.hpp>
 #include <gorn/gl/Material.hpp>
-#include <gorn/render/RenderKinds.hpp>
 
 namespace gorn
 {
@@ -14,7 +13,7 @@ namespace gorn
     {
         getDefinitions().set([](const std::string& name){
             return Definition()
-                .withTexture(UniformKind::Texture0, name);
+                .withTexture(UniformType::DiffuseTexture, name);
         });
     }
 

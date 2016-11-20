@@ -1,11 +1,12 @@
 #include <gorn/gl/Texture.hpp>
 #include <gorn/gl/Enums.hpp>
 #include <gorn/asset/Image.hpp>
+#include <unordered_map>
 
 namespace gorn
 {
-    std::map<GLenum, GLuint> Texture::s_currentIds;
-    std::map<size_t, GLuint> Texture::s_activeIds;
+    std::unordered_map<GLenum, GLuint> Texture::s_currentIds;
+    std::unordered_map<size_t, GLuint> Texture::s_activeIds;
 
     Texture::Texture(GLenum target):
     _id(0), _target(target)

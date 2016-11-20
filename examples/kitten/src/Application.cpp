@@ -68,13 +68,14 @@ void KittenApplication::load()
     _ctx.getPrograms().getDefinitions().get("shader")
         .withShaderFile(ShaderType::Vertex, "vsh:shader")
         .withShaderFile(ShaderType::Fragment, "fsh:shader")
-        .withUniform(UniformKind::Texture0, "texture")
-        .withUniform(UniformKind::Model, ProgramUniformDefinition(
-            "transform", getTransform(0.25f)));
+        .withUniform(UniformKind("texture", UniformType::DiffuseTexture))
+        .withUniform(ProgramUniformDefinition(
+			UniformKind("transform", UniformType::ModelTransform),
+            getTransform(0.25f)));
 
     _ctx.getMaterials().getDefinitions().get("kitten")
         .withProgram("shader")
-        .withTexture(UniformKind::Texture0, "tex:kitten");            
+        .withTexture(UniformType::DiffuseTexture, "tex:kitten");            
 
     _vao.setMaterial(_ctx.getMaterials().load("kitten"));
 
@@ -88,16 +89,16 @@ void KittenApplication::load()
 
     VertexDefinition vdef;
     vdef.setAttribute("position")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(2)
         .withStride(7, BasicType::Float);
     vdef.setAttribute("color")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(3)
         .withStride(7, BasicType::Float)
         .withOffset(2, BasicType::Float);
     vdef.setAttribute("texCoords")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(2)
         .withStride(7, BasicType::Float)
         .withOffset(5, BasicType::Float);
@@ -124,7 +125,7 @@ void KittenApplication::draw()
     glClear(GL_COLOR_BUFFER_BIT);
 
     _vao.getMaterial()->setUniformValue(
-        UniformKind::Model, getTransform(_time));
+        UniformType::ModelTransform, getTransform(_time));
     _vao.draw(6);
 }
 

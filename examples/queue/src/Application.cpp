@@ -62,21 +62,23 @@ void QueueApplication::load()
         .set("sprite", [](const std::string& name){
             return MaterialDefinition()
                 .withProgram("sprite")
-                .withTexture(UniformKind::Texture0, name);
+                .withTexture(UniformType::DiffuseTexture, name);
         });
 
     _ctx.getPrograms().getDefinitions().get("sprite")
-        .withUniform("texture", UniformKind::Texture0)
+        .withUniform(UniformKind("texture", UniformType::DiffuseTexture))
+		    .withUniform(UniformKind("model", UniformType::ModelTransform))
+		    .withUniform(UniformKind("cam", UniformType::CameraTransform))
         .withShaderFile(ShaderType::Vertex, "vsh:shader")
         .withShaderFile(ShaderType::Fragment, "fsh:shader")
-		.withAttribute(AttributeKind::Position,
-			ProgramAttributeDefinition()
-				.withCount(2)
-			.withType(BasicType::Float))
-		.withAttribute(AttributeKind::TexCoords,
-			ProgramAttributeDefinition()
+		.withAttribute(ProgramAttributeDefinition(
+			AttributeKind("position", AttributeType::Position))
 			.withCount(2)
-			.withType(BasicType::Float));
+			.withBasicType(BasicType::Float))
+		.withAttribute(ProgramAttributeDefinition(
+			AttributeKind("texCoords", AttributeType::TexCoords))
+			.withCount(2)
+			.withBasicType(BasicType::Float));
 }
 
 void QueueApplication::draw()
@@ -87,13 +89,13 @@ void QueueApplication::draw()
             .withType(ClearType::Color));
 
     _ctx.getQueue().addCommand("sprite:kitten")
-        .withAttribute(AttributeKind::Position, buffer{
+        .withAttribute(AttributeType::Position, buffer{
             -0.75f,  0.75f,
              0.25f,  0.75f,
              0.25f, -0.25f,
             -0.75f, -0.25f
         })
-        .withAttribute(AttributeKind::TexCoords, buffer{
+        .withAttribute(AttributeType::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
@@ -105,13 +107,13 @@ void QueueApplication::draw()
         });
 
     _ctx.getQueue().addCommand("sprite:kitten")
-        .withAttribute(AttributeKind::Position, buffer{
+        .withAttribute(AttributeType::Position, buffer{
              0.25f,  0.75f,
              0.75f,  0.75f,
              0.75f, -0.25f,
              0.25f, -0.25f
         })
-        .withAttribute(AttributeKind::TexCoords, buffer{
+        .withAttribute(AttributeType::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,
@@ -123,13 +125,13 @@ void QueueApplication::draw()
         });
 
     _ctx.getQueue().addCommand("sprite:puppy")
-        .withAttribute(AttributeKind::Position, buffer{
+        .withAttribute(AttributeType::Position, buffer{
             -0.25f,  0.25f,
              0.75f,  0.25f,
              0.75f, -0.75f,
             -0.25f, -0.75f
         })
-        .withAttribute(AttributeKind::TexCoords, buffer{
+        .withAttribute(AttributeType::TexCoords, buffer{
             0.0f, 1.0f,
             1.0f, 1.0f,
             1.0f, 0.0f,

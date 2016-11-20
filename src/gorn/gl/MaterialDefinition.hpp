@@ -4,14 +4,14 @@
 #include <gorn/gl/Base.hpp>
 #include <gorn/gl/UniformValue.hpp>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 namespace gorn
 {
     class MaterialDefinition
     {
     public:
-        typedef std::map<std::string, std::string> Textures;
+        typedef std::unordered_map<UniformKind, std::string> Textures;
     private:
         std::string _program;
         Textures _textures;
@@ -21,14 +21,10 @@ namespace gorn
         MaterialDefinition();
         MaterialDefinition& withProgram(
             const std::string& program);
-        MaterialDefinition& withTexture(
-            const std::string& name, const std::string& value);
-        MaterialDefinition& withTexture(
-            const std::string& value);
 		MaterialDefinition& withTexture(
-			unsigned int pos, const std::string& value);
+			const UniformKind& kind, const std::string& value);
         MaterialDefinition& withUniformValue(
-            const std::string& name, const UniformValue& value);
+			const UniformKind& kind, const UniformValue& value);
 
         const std::string& getProgram() const;
         const Textures& getTextures() const;

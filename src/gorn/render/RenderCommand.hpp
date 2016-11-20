@@ -50,7 +50,7 @@ namespace gorn
 		typedef RenderCommandAttribute Attribute;
         typedef RenderTransformStackAction TransformStackAction;
         typedef RenderStackAction StackAction;
-        typedef std::map<std::string, Attribute> AttributeMap;
+        typedef std::unordered_map<AttributeKind, Attribute> AttributeMap;
         typedef unsigned int elm_t;
         typedef std::vector<elm_t> Elements;
 		typedef std::vector<int> Layers;
@@ -76,13 +76,14 @@ namespace gorn
         RenderCommand();
 		RenderCommand& withUniformValue(const std::string& name, const UniformValue& value);
         RenderCommand& withMaterial(const std::shared_ptr<Material>& material);
-        RenderCommand& withAttribute(const std::string& name,
+        RenderCommand& withAttribute(const AttributeKind& kind,
             buffer&& data, size_t count = 0);
-        RenderCommand& withAttribute(const std::string& name,
+        RenderCommand& withAttribute(const AttributeKind& kind,
             const buffer& data, size_t count = 0);
-		RenderCommand& withRepeatAttribute(const std::string& name,
+
+		RenderCommand& withRepeatAttribute(const AttributeKind& kind,
 			buffer&& data);
-		RenderCommand& withRepeatAttribute(const std::string& name,
+		RenderCommand& withRepeatAttribute(const AttributeKind& kind,
 			const buffer& data);
 
         RenderCommand& withElements(Elements&& elms);

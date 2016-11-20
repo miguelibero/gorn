@@ -1,4 +1,5 @@
 #include <gorn/gl/VertexDefinition.hpp>
+#include <algorithm>
 
 namespace gorn
 {
@@ -9,7 +10,7 @@ namespace gorn
     VertexDefinition& VertexDefinition::operator+=(
         const VertexDefinition& other)
     {
-        _attributes.insert(other._attributes.begin(), other._attributes.end());
+		_attributes.insert(_attributes.end(), other._attributes.begin(), other._attributes.end());
         return *this;
     }
 
@@ -22,30 +23,30 @@ namespace gorn
     }
 
     VertexDefinition& VertexDefinition::withAttribute(
-        const AttributeDefinition& attr)
+        const Attribute& attr)
     {
-        _attributes[attr.getName()] = attr;
+        _attributes.push_back(attr);
         return *this;
     }
 
-    AttributeDefinition& VertexDefinition::setAttribute(const std::string& name)
+	VertexDefinition::Attribute& VertexDefinition::setAttribute(const AttributeKind& kind)
     {
-        auto itr = _attributes.find(name);
+		auto itr = std::find_if(_attributes.begin(), _attributes.end(), [&kind](const Attribute& attr){
+			return attr.getKind() == kind;
+		});
         if(itr == _attributes.end())
         {
-            itr = _attributes.insert(itr, {name, AttributeDefinition(name)});
+            itr = _attributes.insert(itr, kind);
         }
-        return itr->second;
+        return *itr;
     }
 
-    const std::map<std::string, AttributeDefinition>&
-        VertexDefinition::getAttributes() const
+    const VertexDefinition::Attributes& VertexDefinition::getAttributes() const
     {
         return _attributes;
     }
 
-    std::map<std::string, AttributeDefinition>&
-        VertexDefinition::getAttributes()
+	VertexDefinition::Attributes& VertexDefinition::getAttributes()
     {
         return _attributes;
     }
@@ -55,7 +56,7 @@ namespace gorn
         size_t size = 0;
         for(auto itr = _attributes.begin(); itr != _attributes.end(); ++itr)
         {
-            size +=  itr->second.getElementSize();
+            size +=  itr->getElementSize();
         }
         return size;
     }

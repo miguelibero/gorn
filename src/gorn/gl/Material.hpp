@@ -18,10 +18,10 @@ namespace gorn
     public:
         Material(const std::shared_ptr<Program>& program);
 
-        void setTexture(const std::string& name,
+        void setTexture(const UniformKind& kind,
             const std::shared_ptr<Texture>& texture);
 		void setUniformValues(const UniformValueMap& values);
-        void setUniformValue(const std::string& name,
+        void setUniformValue(const UniformKind& kind,
             const UniformValue& value);
 
         const glm::vec2& getSize() const;

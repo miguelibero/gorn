@@ -1,6 +1,5 @@
 #include <gorn/asset/Mesh.hpp>
 #include <gorn/base/Exception.hpp>
-#include <gorn/render/RenderKinds.hpp>
 #include <algorithm>
 #include <buffer_writer.hpp>
 
@@ -28,21 +27,37 @@ namespace gorn
         _defval = defval;
     }
 
-    MeshElement::idx_t MeshElement::get(const std::string& name) const
+    MeshElement::idx_t MeshElement::get(const Kind& kind) const
     {
-        return _indices.at(name);
+        return _indices.at(kind);
     }
 
-    bool MeshElement::has(const std::string& name) const NOEXCEPT
+    bool MeshElement::has(const Kind& kind) const NOEXCEPT
     {
-        auto itr = _indices.find(name);
+        auto itr = _indices.find(kind);
         return itr != _indices.end();
     }
 
-    void MeshElement::set(const std::string& name, idx_t idx) NOEXCEPT
+    void MeshElement::set(const Kind& kind, idx_t idx) NOEXCEPT
     {
-        _indices[name] = idx;
+        _indices[kind] = idx;
     }
+
+	void MeshElement::set(idx_t* idxs, unsigned size) NOEXCEPT
+	{
+		if (size > 0)
+		{
+			set(AttributeType::Position, idxs[0]);
+		}
+		if (size > 1)
+		{
+			set(AttributeType::TexCoords, idxs[1]);
+		}
+		if (size > 2)
+		{
+			set(AttributeType::Normal, idxs[2]);
+		}
+	}
 
     bool MeshElement::operator==(const MeshElement& other) const NOEXCEPT
     {
@@ -314,12 +329,12 @@ namespace gorn
 	Mesh Mesh::getNormalsMesh() const NOEXCEPT
 	{
 		Mesh mesh;
-		if(!getVertices<glm::vec3>().has(AttributeKind::Normal))
+		if(!getVertices<glm::vec3>().has(AttributeType::Normal))
 		{
 			return mesh;
 		}
-		auto& positions = getVertices<glm::vec3>().get(AttributeKind::Position);
-		auto& normals = getVertices<glm::vec3>().get(AttributeKind::Normal);
+		auto& positions = getVertices<glm::vec3>().get(AttributeType::Position);
+		auto& normals = getVertices<glm::vec3>().get(AttributeType::Normal);
 		Mesh::Elements elements;
 		std::vector<glm::vec3> npositions;
 		npositions.reserve(2 * positions.size());
@@ -335,7 +350,7 @@ namespace gorn
 		{
 			elements.push_back(i);
 		}
-		mesh.setVertices(AttributeKind::Position, std::move(npositions));
+		mesh.setVertices(AttributeType::Position, std::move(npositions));
 		mesh.setDrawMode(DrawMode::Lines);
 		mesh.setElements(std::move(elements));
 		return mesh;

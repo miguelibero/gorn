@@ -4,8 +4,8 @@
 namespace gorn
 {
     ProgramAttributeDefinition::ProgramAttributeDefinition(
-        const char* name):
-        _name(name), _transformation(AttributeTransformation::create(name)),
+		const Kind& kind):
+        _kind(kind), _transformation(AttributeTransformation::create(kind.getType())),
 		_count(0), _type(BasicType::None)
     {
     }
@@ -25,7 +25,7 @@ namespace gorn
     }
 
 	ProgramAttributeDefinition&
-		ProgramAttributeDefinition::withType(const BasicType& type)
+		ProgramAttributeDefinition::withBasicType(const BasicType& type)
 	{
 		_type = type;
 		return *this;
@@ -38,9 +38,9 @@ namespace gorn
 		return *this;
 	}
 
-	const std::string& ProgramAttributeDefinition::getName() const
+	const ProgramAttributeDefinition::Kind& ProgramAttributeDefinition::getKind() const
 	{
-		return _name;
+		return _kind;
 	}
 
 	const ProgramAttributeDefinition::Transformation& ProgramAttributeDefinition::getTransformation() const
@@ -53,7 +53,7 @@ namespace gorn
 		return _defaultValue;
 	}
 
-	BasicType ProgramAttributeDefinition::getType() const
+	BasicType ProgramAttributeDefinition::getBasicType() const
 	{
 		return _type;
 	}

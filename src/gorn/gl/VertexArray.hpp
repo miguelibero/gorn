@@ -5,14 +5,13 @@
 #include <gorn/gl/Base.hpp>
 #include <gorn/gl/UniformValue.hpp>
 #include <vector>
-#include <map>
 #include <memory>
 
 namespace gorn
 {
     class VertexBuffer;
     class VertexDefinition;
-    class AttributeDefinition;
+    class VertexAttributeDefinition;
     class Material;
     class Program;
 
@@ -43,7 +42,7 @@ namespace gorn
         void bind() const;
         static void unbind();
         void activate() const;
-        void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const AttributeDefinition& def);
+        void setAttribute(const std::shared_ptr<VertexBuffer>& vbo, const VertexAttributeDefinition& def);
         void addVertexData(const std::shared_ptr<VertexBuffer>& vbo, const VertexDefinition& def);
         void setElementData(const std::shared_ptr<VertexBuffer>& vbo, BasicType type=BasicType::UnsignedInteger);
         void setProgram(const std::shared_ptr<Program>& program);
@@ -52,7 +51,6 @@ namespace gorn
         const std::shared_ptr<Material>& getMaterial() const;
         void setUniformValue(const std::string& name, const UniformValue& value);
         void setUniformValue(const GLint& location, const UniformValue& value);
-        void setUniformValues(const UniformValueMap& values);
 
         void draw(size_t count, DrawMode mode, size_t offset=0);
         void draw(size_t count, size_t offset=0);

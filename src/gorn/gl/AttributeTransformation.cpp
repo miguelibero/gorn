@@ -1,6 +1,5 @@
 #include <gorn/gl/AttributeTransformation.hpp>
-#include <gorn/gl/AttributeDefinition.hpp>
-#include <gorn/render/RenderKinds.hpp>
+#include <gorn/gl/VertexAttributeDefinition.hpp>
 #include <buffer.hpp>
 
 namespace gorn
@@ -8,7 +7,7 @@ namespace gorn
 	void AttributeTransformation::position(const Definition& def, buffer& elms, const glm::mat4& trans)
 	{
 		auto n = elms.size() / def.getElementSize();
-		if (def.getType() == BasicType::Float)
+		if (def.getBasicType() == BasicType::Float)
 		{
 			if (def.getCount() == 3)
 			{
@@ -36,7 +35,7 @@ namespace gorn
 	void AttributeTransformation::normal(const Definition& def, buffer& elms, const glm::mat4& trans)
 	{
 		auto n = elms.size() / def.getElementSize();
-		if (def.getType() == BasicType::Float)
+		if (def.getBasicType() == BasicType::Float)
 		{
 			if (def.getCount() == 3)
 			{
@@ -52,13 +51,13 @@ namespace gorn
 		}
 	}
 
-	AttributeTransformation::Function AttributeTransformation::create(const std::string& name)
+	AttributeTransformation::Function AttributeTransformation::create(Type type)
 	{
-		if(name == AttributeKind::Position)
+		if(type == AttributeType::Position)
 		{
 			return position;
 		}
-		if (name == AttributeKind::Normal)
+		if (type == AttributeType::Normal)
 		{
 			return normal;
 		}

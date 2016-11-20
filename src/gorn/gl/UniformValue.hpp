@@ -2,10 +2,11 @@
 #define __gorn__UniformValue__
 
 #include <gorn/gl/Base.hpp>
+#include <gorn/gl/UniformKind.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <initializer_list>
 
 namespace gorn
@@ -87,7 +88,9 @@ namespace gorn
 	class UniformValueMap
 	{
 	private:
-		typedef std::map<std::string, UniformValue> Container;
+		typedef UniformKind Kind;
+		typedef UniformValue Value;
+		typedef std::unordered_map<Kind, Value> Container;
 	public:
 		typedef Container::iterator iterator;
 		typedef Container::const_iterator const_iterator;
@@ -97,16 +100,16 @@ namespace gorn
 		UniformValueMap();
 		UniformValueMap(const UniformValueMap& other);
 		UniformValueMap(std::initializer_list<Container::value_type> values);
-		void set(const std::string& k, const UniformValue& v);
-		bool remove(const std::string& k);
-		bool has(const std::string& k) const;
+		void set(const Kind& k, const Value& v);
+		bool remove(const Kind& k);
+		bool has(const Kind& k) const;
 
 		iterator begin();
 		iterator end();
 		const_iterator begin() const;
 		const_iterator end() const;
 
-		UniformValue& operator[](const std::string& k);
+		UniformValue& operator[](const Kind& k);
 		UniformValueMap operator+(const UniformValueMap& other) const;
 		UniformValueMap& operator+=(const UniformValueMap& other);
 		UniformValueMap operator-(const UniformValueMap& other) const;

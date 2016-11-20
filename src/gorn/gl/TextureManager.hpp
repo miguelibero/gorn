@@ -1,7 +1,7 @@
 #ifndef __gorn__TextureManager__
 #define __gorn__TextureManager__
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <functional>
 #include <gorn/base/DefinitionManager.hpp>
@@ -22,7 +22,7 @@ namespace gorn
         typedef TextureDefinition Definition;
         typedef DefinitionManager<TextureDefinition> Definitions;
     private:
-        std::map<std::string, std::shared_ptr<Texture>> _textures;
+        std::unordered_map<std::string, std::shared_ptr<Texture>> _textures;
         AssetManager<Image>& _images;
         Definitions _definitions;
 

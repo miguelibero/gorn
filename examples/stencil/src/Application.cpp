@@ -66,20 +66,24 @@ void StencilApplication::load()
     auto proj = glm::perspective(
             glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
 
-    _ctx.getPrograms().getDefinitions().get("shader")
-        .withUniform(UniformKind::Texture0, "texture")
-        .withUniform(UniformKind::Projection, ProgramUniformDefinition(
-            "proj", proj))
-        .withUniform(UniformKind::View, ProgramUniformDefinition(
-            "view", view))
-        .withUniform(UniformKind::Model, ProgramUniformDefinition(
-            "model", view))
-        .withUniform(UniformKind::Color, ProgramUniformDefinition(
-            "overrideColor", glm::vec3(1.0f, 1.0f, 1.0f)));
+	_ctx.getPrograms().getDefinitions().get("shader")
+		.withUniform(UniformKind("texture", UniformType::DiffuseTexture))
+		.withUniform(ProgramUniformDefinition(
+			UniformKind("proj", UniformType::ProjectionTransform), proj))
+		.withUniform(ProgramUniformDefinition(
+			UniformKind("view", UniformType::ViewTransform), view))
+		.withUniform(ProgramUniformDefinition(
+			UniformKind("model", UniformType::ModelTransform), view))
+		.withUniform(ProgramUniformDefinition(
+			UniformKind("overrideColor", UniformType::Color), glm::vec3(1.0f, 1.0f, 1.0f)))
+		.withAttribute(ProgramAttributeDefinition(
+			AttributeKind("position", AttributeType::Position))
+			.withCount(3)
+			.withBasicType(BasicType::Float));
 
     _ctx.getMaterials().getDefinitions().get("kitten")
         .withProgram("shader")
-        .withTexture(UniformKind::Texture0, "kitten.png");            
+        .withTexture(UniformType::DiffuseTexture, "kitten.png");            
 
     _vao.setMaterial(_ctx.getMaterials().load("kitten"));
 
@@ -138,16 +142,16 @@ void StencilApplication::load()
 
     VertexDefinition vdef;
     vdef.setAttribute("position")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(3)
         .withStride(8, BasicType::Float);
     vdef.setAttribute("color")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(3)
         .withStride(8, BasicType::Float)
         .withOffset(3, BasicType::Float);
     vdef.setAttribute("texCoords")
-        .withType(BasicType::Float)
+        .withBasicType(BasicType::Float)
         .withCount(2)
         .withStride(8, BasicType::Float)
         .withOffset(6, BasicType::Float);
@@ -172,12 +176,12 @@ void StencilApplication::draw()
         .apply();
 
     _vao.getMaterial()->setUniformValue(
-        UniformKind::Color, glm::vec3(1.0f, 1.0f, 1.0f));
+        UniformType::Color, glm::vec3(1.0f, 1.0f, 1.0f));
 
     auto model = getTransform((float)_time);
 
     _vao.getMaterial()->setUniformValue(
-        UniformKind::Model, model);
+        UniformType::ModelTransform, model);
     _vao.draw(36);
 
     StateChange()
@@ -210,13 +214,13 @@ void StencilApplication::draw()
         .apply();
 
     _vao.getMaterial()->setUniformValue(
-        UniformKind::Color, glm::vec3(0.3f, 0.3f, 0.3f));
+        UniformType::Color, glm::vec3(0.3f, 0.3f, 0.3f));
 
     model = glm::scale(glm::translate(model,
         glm::vec3(0.0f, 0.0f, -1.0f)),
         glm::vec3(1.0f, 1.0f, -1.0f));
     _vao.getMaterial()->setUniformValue(
-        UniformKind::Model, model);
+        UniformType::ModelTransform, model);
 
     _vao.draw(36);
 

@@ -7,7 +7,6 @@
 #include <gorn/gl/UniformValue.hpp>
 #include <glm/glm.hpp>
 #include <vector>
-#include <map>
 #include <mutex>
 
 class buffer;

@@ -1,7 +1,7 @@
 #ifndef __gorn__DefinitionManager__
 #define __gorn__DefinitionManager__
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <functional>
 #include <gorn/base/String.hpp>
@@ -16,8 +16,8 @@ namespace gorn
         typedef D Definition;
         typedef std::function<Definition(const std::string&)> Builder;
     private:
-        std::map<std::string, Definition> _definitions;
-        std::map<std::string, Builder> _builders;
+        std::unordered_map<std::string, Definition> _definitions;
+        std::unordered_map<std::string, Builder> _builders;
 
     public:
         DefinitionManager();

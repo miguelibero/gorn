@@ -1,15 +1,18 @@
 #ifndef __gorn__VertexDefinition__
 #define __gorn__VertexDefinition__
 
-#include <gorn/gl/AttributeDefinition.hpp>
-#include <map>
+#include <gorn/gl/VertexAttributeDefinition.hpp>
+#include <unordered_map>
 
 namespace gorn
 {
     class VertexDefinition
     {
+	public:
+		typedef VertexAttributeDefinition Attribute;
+		typedef std::vector<Attribute> Attributes;
     private:
-        std::map<std::string, AttributeDefinition> _attributes;
+		Attributes _attributes;
 
     public:
 
@@ -18,11 +21,11 @@ namespace gorn
         VertexDefinition& operator+=(const VertexDefinition& other);
         VertexDefinition operator+(const VertexDefinition& other) const;
 
-        VertexDefinition& withAttribute(const AttributeDefinition& attr);
-        AttributeDefinition& setAttribute(const std::string& name);
+        VertexDefinition& withAttribute(const Attribute& attr);
+        Attribute& setAttribute(const AttributeKind& kind);
 
-        const std::map<std::string, AttributeDefinition>& getAttributes() const;
-        std::map<std::string, AttributeDefinition>& getAttributes();
+        const Attributes& getAttributes() const;
+		Attributes& getAttributes();
 
         size_t getElementSize() const;
     };

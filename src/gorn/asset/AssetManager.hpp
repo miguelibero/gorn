@@ -5,7 +5,7 @@
 #include <string>
 #include <future>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <gorn/base/Config.hpp>
 #include <gorn/asset/AssetLoader.hpp>
 #include <gorn/asset/FileAssetLoader.hpp>
@@ -23,12 +23,12 @@ namespace gorn
         typedef DataAssetLoader<T> DataLoader;
         typedef FileAssetLoader<T> FileLoader;
         typedef std::vector<std::shared_ptr<Loader>> Loaders;
-        typedef std::map<std::string, std::shared_ptr<T>> Assets;
+        typedef std::unordered_map<std::string, std::shared_ptr<T>> Assets;
     private:
         std::shared_ptr<FileLoader> _files;
         Loaders _defaultLoaders;
-        std::map<std::string, Loaders> _loaders;
-        std::map<std::string, Loaders> _customLoaders;
+        std::unordered_map<std::string, Loaders> _loaders;
+        std::unordered_map<std::string, Loaders> _customLoaders;
         std::shared_ptr<Assets> _assets;
 
         Loaders getLoaders(const std::string& name) const NOEXCEPT;

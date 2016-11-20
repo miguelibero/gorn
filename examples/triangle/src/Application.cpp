@@ -56,13 +56,13 @@ void TriangleApplication::load()
         -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
     }, gorn::VertexBuffer::Usage::StaticDraw);
 
-    _vao.setAttribute(vbo, gorn::AttributeDefinition("position")
-        .withType(gorn::BasicType::Float)
+    _vao.setAttribute(vbo, gorn::VertexAttributeDefinition("position")
+        .withBasicType(gorn::BasicType::Float)
         .withCount(2)
         .withStride(5, gorn::BasicType::Float));
         
-    _vao.setAttribute(vbo, gorn::AttributeDefinition("color")
-        .withType(gorn::BasicType::Float)
+    _vao.setAttribute(vbo, gorn::VertexAttributeDefinition("color")
+        .withBasicType(gorn::BasicType::Float)
         .withCount(3)
         .withStride(5, gorn::BasicType::Float)
         .withOffset(2, gorn::BasicType::Float));

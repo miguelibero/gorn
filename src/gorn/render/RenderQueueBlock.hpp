@@ -5,7 +5,6 @@
 #include <gorn/gl/UniformValue.hpp>
 #include <glm/glm.hpp>
 #include <memory>
-#include <map>
 #include <buffer.hpp>
 
 namespace gorn

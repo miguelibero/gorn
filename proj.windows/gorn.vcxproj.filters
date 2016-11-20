@@ -70,9 +70,6 @@
     <ClCompile Include="..\src\gorn\gl\VertexDefinition.cpp">
       <Filter>gl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\gl\AttributeDefinition.cpp">
-      <Filter>gl</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\gorn\gl\Base.cpp">
       <Filter>gl</Filter>
     </ClCompile>
@@ -148,9 +145,6 @@
     <ClCompile Include="..\src\gorn\render\RenderCommand.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\render\RenderKinds.cpp">
-      <Filter>render</Filter>
-    </ClCompile>
     <ClCompile Include="..\lib\buffer\src\buffer.cpp">
       <Filter>lib\buffer</Filter>
     </ClCompile>
@@ -178,11 +172,20 @@
     <ClCompile Include="..\src\gorn\gl\BlendMode.cpp">
       <Filter>gl</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gorn\base\Ray.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\VertexAttributeDefinition.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\gorn\gl\AttributeTransformation.cpp">
       <Filter>gl</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gorn\base\Ray.cpp">
-      <Filter>base</Filter>
+    <ClCompile Include="..\src\gorn\gl\AttributeKind.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gorn\gl\UniformKind.cpp">
+      <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,9 +256,6 @@
       <Filter>gl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\gorn\gl\VertexDefinition.hpp">
-      <Filter>gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\gorn\gl\AttributeDefinition.hpp">
       <Filter>gl</Filter>
     </ClInclude>
     <ClInclude Include="..\src\gorn\gl\Base.hpp">
@@ -333,9 +333,6 @@
     <ClInclude Include="..\src\gorn\platform\StbImageLoader.hpp">
       <Filter>platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\render\RenderKinds.hpp">
-      <Filter>render</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\gorn\render\RenderQueue.hpp">
       <Filter>render</Filter>
     </ClInclude>
@@ -372,11 +369,20 @@
     <ClInclude Include="..\src\gorn\gl\BlendMode.hpp">
       <Filter>gl</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\gorn\base\Ray.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\VertexAttributeDefinition.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\gorn\gl\AttributeTransformation.hpp">
       <Filter>gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\gorn\base\Ray.hpp">
-      <Filter>base</Filter>
+    <ClInclude Include="..\src\gorn\gl\AttributeKind.hpp">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\gorn\gl\UniformKind.hpp">
+      <Filter>gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

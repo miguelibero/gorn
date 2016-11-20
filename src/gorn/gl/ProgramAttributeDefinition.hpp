@@ -5,6 +5,7 @@
 #include <buffer.hpp>
 #include <gorn/gl/Enums.hpp>
 #include <gorn/gl/AttributeTransformation.hpp>
+#include <gorn/gl/AttributeKind.hpp>
 
 namespace gorn
 {
@@ -12,25 +13,26 @@ namespace gorn
     {
 	public:
 		typedef AttributeTransformation::Function Transformation;
+		typedef AttributeKind Kind;
 	private:
-        std::string _name;
+		Kind _kind;
 		Transformation _transformation;
 		buffer _defaultValue;
 		size_t _count;
 		BasicType _type;
 
 	public:
-        ProgramAttributeDefinition(const char* name="");
+        ProgramAttributeDefinition(const Kind& kind = Kind());
 
 		ProgramAttributeDefinition& withDefaultValue(const buffer& data);
         ProgramAttributeDefinition& withTransformation(const Transformation& trans);
-		ProgramAttributeDefinition& withType(const BasicType& type);
+		ProgramAttributeDefinition& withBasicType(const BasicType& type);
 		ProgramAttributeDefinition& withCount(const size_t& count);
 
-		const std::string& getName() const;
+		const Kind& getKind() const;
 		const Transformation& getTransformation() const;
 		const buffer& getDefaultValue() const;
-		BasicType getType() const;
+		BasicType getBasicType() const;
 		size_t getCount() const;
     };
 }

@@ -3,15 +3,14 @@
 
 namespace gorn
 {
-    ProgramUniformDefinition::ProgramUniformDefinition(
-        const char* name):
-	_name(name)
-    {
-    }
+	ProgramUniformDefinition::ProgramUniformDefinition(const Kind& kind):
+	_kind(kind)
+	{
+	}
 
     ProgramUniformDefinition::ProgramUniformDefinition(
-        const std::string& name, const Value& value):
-	_name(name), _value(value)
+        const Kind& kind, const Value& value):
+	_kind(kind), _value(value)
     {
     }
 
@@ -22,9 +21,9 @@ namespace gorn
         return *this;
     }
 
-	const std::string& ProgramUniformDefinition::getName() const
+	const ProgramUniformDefinition::Kind& ProgramUniformDefinition::getKind() const
 	{
-		return _name;
+		return _kind;
 	}
 
 	const ProgramUniformDefinition::Value& ProgramUniformDefinition::getDefaultValue() const

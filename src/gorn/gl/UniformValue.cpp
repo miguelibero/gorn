@@ -337,12 +337,12 @@ namespace gorn
 	{
 	}
 
-	void UniformValueMap::set(const std::string& k, const UniformValue& v)
+	void UniformValueMap::set(const Kind& k, const Value& v)
 	{
 		_values[k] = v;
 	}
 
-	bool UniformValueMap::remove(const std::string& k)
+	bool UniformValueMap::remove(const Kind& k)
 	{
 		auto itr = _values.find(k);
 		if(itr != _values.end())
@@ -353,7 +353,7 @@ namespace gorn
 		return false;
 	}
 
-	bool UniformValueMap::has(const std::string& k) const
+	bool UniformValueMap::has(const Kind& k) const
 	{
 		return _values.find(k) != _values.end();
 	}
@@ -378,7 +378,7 @@ namespace gorn
 		return _values.end();
 	}
 
-	UniformValue& UniformValueMap::operator[](const std::string& k)
+	UniformValue& UniformValueMap::operator[](const Kind& k)
 	{
 		return _values[k];
 	}

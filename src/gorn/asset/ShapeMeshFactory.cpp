@@ -6,7 +6,6 @@
 #include <gorn/base/Rect.hpp>
 #include <gorn/base/Frustum.hpp>
 #include <gorn/base/Ray.hpp>
-#include <gorn/render/RenderKinds.hpp>
 
 namespace gorn
 {
@@ -107,9 +106,9 @@ namespace gorn
         auto elms = getPlaneElements(mode);
 
         Mesh mesh;
-        mesh.setVertices(AttributeKind::Position, std::move(pos));
-        mesh.setVertices(AttributeKind::Normal, std::move(norm));
-		mesh.setVertices(AttributeKind::TexCoords, std::move(tex));
+        mesh.setVertices(AttributeType::Position, std::move(pos));
+        mesh.setVertices(AttributeType::Normal, std::move(norm));
+		mesh.setVertices(AttributeType::TexCoords, std::move(tex));
         mesh.setElements(std::move(elms));
         mesh.setDrawMode(mode);
         return mesh;
@@ -180,9 +179,9 @@ namespace gorn
         }
         
         Mesh mesh;
-        mesh.setVertices(AttributeKind::Normal, positions);
-        mesh.setVertices(AttributeKind::Position, std::move(positions));
-        mesh.setVertices(AttributeKind::TexCoords, std::move(texCoords));
+        mesh.setVertices(AttributeType::Normal, positions);
+        mesh.setVertices(AttributeType::Position, std::move(positions));
+        mesh.setVertices(AttributeType::TexCoords, std::move(texCoords));
         mesh.setElements(std::move(elements));
         return std::move(mesh);
     } 
@@ -194,7 +193,7 @@ namespace gorn
 			ray.origin, ray.origin + ray.direction
 		};
 		Mesh mesh;
-		mesh.setVertices(AttributeKind::Position, std::move(pos));
+		mesh.setVertices(AttributeType::Position, std::move(pos));
 		mesh.setElements({ 0, 1 });
 		mesh.setDrawMode(mode);
 		return mesh;
@@ -202,9 +201,9 @@ namespace gorn
 
 	void reserveCubesMesh(Mesh& mesh, size_t size, DrawMode mode)
 	{
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 24 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 24 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, 24 * size);
 		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
 	}
 
@@ -224,9 +223,9 @@ namespace gorn
 	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<PlaneShape>& shapes, DrawMode mode)
 	{
 		auto size = shapes.size();
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 4 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 4 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, 4 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 4 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 4 * size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, 4 * size);
 		mesh.reserveElements(getPlaneElementsSize(mode) * size);
 	}
 
@@ -246,9 +245,9 @@ namespace gorn
 			vc += shape.rings*shape.sectors;
 			ec += (shape.rings-1)*(shape.sectors-1)*6;
 		}
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, vc);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Normal, vc);
-		mesh.reserveVertices<glm::vec3>(AttributeKind::TexCoords, vc);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Position, vc);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, vc);
+		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, vc);
 		mesh.reserveElements(ec);
 	}
 
@@ -256,7 +255,7 @@ namespace gorn
 	void ShapeMeshFactory::reserve(Mesh& mesh, const std::vector<Ray>& shapes, DrawMode mode)
 	{
 		auto size = shapes.size();
-		mesh.reserveVertices<glm::vec3>(AttributeKind::Position, 2*size);
+		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 2*size);
 		mesh.reserveElements(2*size);
 	}
 }

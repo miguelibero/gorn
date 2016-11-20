@@ -44,17 +44,27 @@ void FrustumApplication::load()
         .makeDefaultLoader<BundleFileLoader>("%s");
 #endif
 
+	_ctx.getPrograms().getDefinitions().get("shader")
+		.withUniform(UniformKind("color", UniformType::Color))
+		.withUniform(UniformKind("proj", UniformType::ProjectionTransform))
+		.withUniform(UniformKind("model", UniformType::ModelTransform))
+		.withUniform(UniformKind("view", UniformType::ViewTransform))
+		.withAttribute(ProgramAttributeDefinition(
+			AttributeKind("position", AttributeType::Position))
+			.withCount(3)
+			.withBasicType(BasicType::Float));
+
     _ctx.getMaterials().getDefinitions().set("in", MaterialDefinition()
         .withProgram("shader")
-        .withUniformValue(UniformKind::Color, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)));
+        .withUniformValue(UniformType::Color, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)));
 
     _ctx.getMaterials().getDefinitions().set("out", MaterialDefinition()
         .withProgram("shader")
-        .withUniformValue(UniformKind::Color, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+        .withUniformValue(UniformType::Color, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
 
     _ctx.getMaterials().getDefinitions().set("frustum", MaterialDefinition()
         .withProgram("shader")
-        .withUniformValue(UniformKind::Color, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)));
+        .withUniformValue(UniformType::Color, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)));
 
     auto proj = glm::perspective(
         glm::pi<float>()/6.0f,
@@ -67,9 +77,9 @@ void FrustumApplication::load()
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 1.0f ,0.0f)
     );
-    _ctx.getQueue().setProjectionTransform(proj);
-    _ctx.getQueue().setViewTransform(view);
-
+	auto& cam = _ctx.getQueue().addCamera();
+	cam.withProjection(proj);
+	cam.withView(view);
 
     _frustum = glm::ortho(-7.0f, 7.0f, -5.0f, 5.0f);
     _frustum = glm::perspective(
@@ -115,7 +125,7 @@ void FrustumApplication::draw()
             auto cmd = _sphereMesh.render();
             cmd.withMaterial(_ctx.getMaterials().load(in?"in":"out"));
             cmd.withTransform(glm::translate(glm::mat4(), p),
-                RenderCommand::TransformMode::SetGlobal);
+                RenderCommand::TransformStackAction::SetGlobal);
             _ctx.getQueue().addCommand(std::move(cmd));
         }
     }

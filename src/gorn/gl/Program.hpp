@@ -4,10 +4,11 @@
 #include <gorn/gl/Base.hpp>
 #include <gorn/gl/Shader.hpp>
 #include <gorn/gl/VertexDefinition.hpp>
+#include <gorn/gl/UniformKind.hpp>
 #include <glm/glm.hpp>
 #include <buffer.hpp>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace gorn
@@ -19,8 +20,8 @@ namespace gorn
     {
     public:
         typedef ProgramDefinition Definition;
-		typedef std::map<std::string, GLint> UniformMap;
-		typedef std::map<std::string, GLint> AttributeMap;
+		typedef std::unordered_map<UniformKind, GLint> UniformMap;
+		typedef std::unordered_map<AttributeKind, GLint> AttributeMap;
     private:
         static GLuint s_currentId;
         GLuint _id;
@@ -48,16 +49,16 @@ namespace gorn
 
         void loadDefinition(const Definition& def);
 
-		GLint getAttribute(const std::string& name) const;
-        GLint getUniform(const std::string& name) const;
+		GLint getAttribute(const AttributeKind& kind) const;
+        GLint getUniform(const UniformKind& name) const;
 
 		const AttributeMap& getAttributes() const;
 		const UniformMap& getUniforms() const;
 
-        bool hasAttribute(const std::string& name) const;
-        bool hasUniform(const std::string& name) const;
+        bool hasAttribute(const AttributeKind& kind) const;
+        bool hasUniform(const UniformKind& kind) const;
 
-        void setUniformValue(const std::string& name,
+        void setUniformValue(const UniformKind& kind,
             const UniformValue& value);
         void setUniformValue(const GLint& location,
             const UniformValue& value);

@@ -3,7 +3,7 @@
 
 #include <gorn/gl/Base.hpp>
 #include <glm/glm.hpp>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace gorn
@@ -13,8 +13,8 @@ namespace gorn
     class Texture
     {
     private:
-        static std::map<GLenum, GLuint> s_currentIds;
-        static std::map<size_t, GLuint> s_activeIds;
+        static std::unordered_map<GLenum, GLuint> s_currentIds;
+        static std::unordered_map<size_t, GLuint> s_activeIds;
         GLuint _id;
         GLenum _target;
         glm::vec2 _size;

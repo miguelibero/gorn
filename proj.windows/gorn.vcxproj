@@ -28,7 +28,9 @@
     <ClCompile Include="..\src\gorn\base\Rect.cpp" />
     <ClCompile Include="..\src\gorn\base\Shapes.cpp" />
     <ClCompile Include="..\src\gorn\base\String.cpp" />
-    <ClCompile Include="..\src\gorn\gl\AttributeDefinition.cpp" />
+    <ClCompile Include="..\src\gorn\gl\AttributeKind.cpp" />
+    <ClCompile Include="..\src\gorn\gl\UniformKind.cpp" />
+    <ClCompile Include="..\src\gorn\gl\VertexAttributeDefinition.cpp" />
     <ClCompile Include="..\src\gorn\gl\AttributeTransformation.cpp" />
     <ClCompile Include="..\src\gorn\gl\Base.cpp" />
     <ClCompile Include="..\src\gorn\gl\BlendMode.cpp" />
@@ -58,7 +60,6 @@
     <ClCompile Include="..\src\gorn\platform\StbImageLoader.cpp" />
     <ClCompile Include="..\src\gorn\render\RenderCamera.cpp" />
     <ClCompile Include="..\src\gorn\render\RenderCommand.cpp" />
-    <ClCompile Include="..\src\gorn\render\RenderKinds.cpp" />
     <ClCompile Include="..\src\gorn\render\RenderQueue.cpp" />
     <ClCompile Include="..\src\gorn\render\RenderQueueBlock.cpp" />
     <ClCompile Include="..\src\gorn\render\RenderQueueInfo.cpp" />
@@ -96,7 +97,9 @@
     <ClInclude Include="..\src\gorn\base\Rect.hpp" />
     <ClInclude Include="..\src\gorn\base\Shapes.hpp" />
     <ClInclude Include="..\src\gorn\base\String.hpp" />
-    <ClInclude Include="..\src\gorn\gl\AttributeDefinition.hpp" />
+    <ClInclude Include="..\src\gorn\gl\AttributeKind.hpp" />
+    <ClInclude Include="..\src\gorn\gl\UniformKind.hpp" />
+    <ClInclude Include="..\src\gorn\gl\VertexAttributeDefinition.hpp" />
     <ClInclude Include="..\src\gorn\gl\AttributeTransformation.hpp" />
     <ClInclude Include="..\src\gorn\gl\Base.hpp" />
     <ClInclude Include="..\src\gorn\gl\BlendMode.hpp" />
@@ -129,7 +132,6 @@
     <ClInclude Include="..\src\gorn\render\render.hpp" />
     <ClInclude Include="..\src\gorn\render\RenderCamera.hpp" />
     <ClInclude Include="..\src\gorn\render\RenderCommand.hpp" />
-    <ClInclude Include="..\src\gorn\render\RenderKinds.hpp" />
     <ClInclude Include="..\src\gorn\render\RenderQueue.hpp" />
     <ClInclude Include="..\src\gorn\render\RenderQueueBlock.hpp" />
     <ClInclude Include="..\src\gorn\render\RenderQueueInfo.hpp" />

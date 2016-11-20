@@ -2,6 +2,7 @@
 #define __gorn__ProgramUniformDefinition__
 
 #include <string>
+#include <gorn/gl/UniformKind.hpp>
 #include <gorn/gl/UniformValue.hpp>
 
 namespace gorn
@@ -9,19 +10,19 @@ namespace gorn
     struct ProgramUniformDefinition
     {
 	public:
+		typedef UniformKind Kind;
         typedef UniformValue Value;
 	private:
-        std::string _name;
+		Kind _kind;
         Value _value;
 
 	public:
-        ProgramUniformDefinition(const char* name);
-        ProgramUniformDefinition(const std::string& name = "",
-            const Value& value=Value());
+		ProgramUniformDefinition(const Kind& kind = Kind());
+        ProgramUniformDefinition(const Kind& kind, const Value& value);
 
         ProgramUniformDefinition& withDefaultValue(const Value& value);
 
-		const std::string& getName() const;
+		const Kind& getKind() const;
 		const Value& getDefaultValue() const;
     };
 }

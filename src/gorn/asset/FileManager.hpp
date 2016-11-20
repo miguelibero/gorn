@@ -5,7 +5,7 @@
 #include <string>
 #include <future>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <gorn/asset/FileLoader.hpp>
 #include <gorn/base/Config.hpp>
 
@@ -17,10 +17,10 @@ namespace gorn
     {
     public:
         typedef FileLoader Loader;
-        typedef std::map<std::string, buffer> Files;
+        typedef std::unordered_map<std::string, buffer> Files;
     private:
         std::shared_ptr<Files> _files;
-        std::map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
+        std::unordered_map<std::string, std::vector<std::shared_ptr<Loader>>> _loaders;
         std::future<buffer> load(const std::shared_ptr<Loader>& loader,
             const std::string& name, bool cache);
 

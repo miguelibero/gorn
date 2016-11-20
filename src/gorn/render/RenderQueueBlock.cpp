@@ -5,7 +5,6 @@
 #include <gorn/render/RenderQueue.hpp>
 #include <gorn/gl/VertexBuffer.hpp>
 #include <gorn/gl/VertexArray.hpp>
-#include <gorn/render/RenderKinds.hpp>
 
 namespace gorn
 {
@@ -87,14 +86,25 @@ namespace gorn
             buffer(std::move(_elements)), usage,
             VertexBuffer::Target::ElementArrayBuffer));
 
-        vao.setUniformValues(_uniforms);
-        vao.setUniformValue(UniformKind::Model, _transform);
-		if(_material->getProgram()->hasUniform(UniformKind::NormalMatrix))
+		for(auto itr = _uniforms.begin(); itr != _uniforms.end(); ++itr)
+		{
+			auto uniformId = _material->getProgram()->getUniform(itr->first);
+			if (uniformId >= 0)
+			{
+				vao.setUniformValue(uniformId, itr->second);
+			}
+		}
+		auto uniformId = _material->getProgram()->getUniform(UniformType::ModelTransform);
+		if (uniformId > 0)
+		{
+			vao.setUniformValue(uniformId, _transform);
+		}
+		uniformId = _material->getProgram()->getUniform(UniformType::NormalTransform);
+		if(uniformId > 0)
 		{
 			auto normal = glm::transpose(glm::inverse(glm::mat3(_transform)));
-			vao.setUniformValue(UniformKind::NormalMatrix, normal);
+			vao.setUniformValue(uniformId, normal);
 		}
-
         vao.draw(elmsCount, _mode);
         info.vertexCount += vertsCount;
         info.drawCalls++;

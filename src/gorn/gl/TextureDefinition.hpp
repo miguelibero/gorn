@@ -3,7 +3,7 @@
 
 #include <gorn/gl/Base.hpp>
 #include <gorn/asset/Image.hpp>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <memory>
@@ -19,10 +19,10 @@ namespace gorn
 		std::shared_ptr<Image> _image;
         GLenum _target;
         GLint _lod;
-        std::map<GLenum, GLint> _intParams;
-        std::map<GLenum, GLfloat> _floatParams;
-        std::map<GLenum, std::vector<GLint>> _intVecParams;
-        std::map<GLenum, std::vector<GLfloat>> _floatVecParams;
+        std::unordered_map<GLenum, GLint> _intParams;
+        std::unordered_map<GLenum, GLfloat> _floatParams;
+        std::unordered_map<GLenum, std::vector<GLint>> _intVecParams;
+        std::unordered_map<GLenum, std::vector<GLfloat>> _floatVecParams;
     public:
         TextureDefinition();
         TextureDefinition& withImage(const std::string& image);
@@ -39,10 +39,10 @@ namespace gorn
 		std::shared_ptr<Image> getImage() const;
         GLenum getTarget() const;
         GLint getLevelOfDetail() const;
-        const std::map<GLenum, GLint>& getIntParameters() const;
-        const std::map<GLenum, GLfloat>& getFloatParameters() const;
-        const std::map<GLenum, std::vector<GLint>>& getIntPointerParameters() const;
-        const std::map<GLenum, std::vector<GLfloat>>& getFloatPointerParameters() const;
+        const std::unordered_map<GLenum, GLint>& getIntParameters() const;
+        const std::unordered_map<GLenum, GLfloat>& getFloatParameters() const;
+        const std::unordered_map<GLenum, std::vector<GLint>>& getIntPointerParameters() const;
+        const std::unordered_map<GLenum, std::vector<GLfloat>>& getFloatPointerParameters() const;
 
     };
 }

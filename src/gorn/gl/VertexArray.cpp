@@ -144,9 +144,9 @@ namespace gorn
     }
 
     void VertexArray::setAttribute(const std::shared_ptr<VertexBuffer>& vbo,
-        const AttributeDefinition& def)
+        const VertexAttributeDefinition& def)
     {
-        if(def.getType() == BasicType::None)
+        if(def.getBasicType() == BasicType::None)
         {
             throw Exception("no type defined");
         }
@@ -157,7 +157,7 @@ namespace gorn
             itr = _vertexVbos.insert(itr, vbo);
         }
         auto program = getProgram();
-        GLint id = program->getAttribute(def.getName());
+        GLint id = program->getAttribute(def.getKind());
 
         bind();
         vbo->bind();
@@ -174,7 +174,7 @@ namespace gorn
             offset *= getBasicTypeSize(def.getOffsetType());
         }
         glVertexAttribPointer(id, (GLint)def.getCount(),
-            getGlBasicType(def.getType()),
+            getGlBasicType(def.getBasicType()),
             def.getNormalized(), (GLsizei)stride, (GLvoid*)offset);
 
         checkGlError("setting a vertex array attribute");
@@ -186,10 +186,9 @@ namespace gorn
     void VertexArray::addVertexData(const std::shared_ptr<VertexBuffer>& vbo,
         const VertexDefinition& def)
     {
-        for(auto itr = def.getAttributes().begin();
-            itr != def.getAttributes().end(); ++itr)
+        for(auto& adef : def.getAttributes())
         {
-            setAttribute(vbo, itr->second);
+            setAttribute(vbo, adef);
         }
     }
 
@@ -208,14 +207,6 @@ namespace gorn
         if(program != nullptr)
         {
             program->setUniformValue(location, value);
-        }
-    }
-
-    void VertexArray::setUniformValues(const UniformValueMap& values)
-    {
-        for(auto itr = values.begin(); itr != values.end(); ++itr)
-        {
-            setUniformValue(itr->first, itr->second);
         }
     }
 

@@ -3,22 +3,24 @@
 
 #include <glm/glm.hpp>
 #include <functional>
+#include <gorn/gl/AttributeKind.hpp>
 class buffer;
 
 namespace gorn
 {
-	class AttributeDefinition;
+	class VertexAttributeDefinition;
 
 	class AttributeTransformation
 	{
 	public:
-		typedef AttributeDefinition Definition;
-		typedef std::function<void(const AttributeDefinition& def, buffer& elms, const glm::mat4& transform)> Function;
+		typedef AttributeType Type;
+		typedef VertexAttributeDefinition Definition;
+		typedef std::function<void(const VertexAttributeDefinition& def, buffer& elms, const glm::mat4& transform)> Function;
 
 		AttributeTransformation() = delete;
 		static void position(const Definition& def, buffer& elms, const glm::mat4& trans);
 		static void normal(const Definition& def, buffer& elms, const glm::mat4& trans);
-		static Function create(const std::string& name);
+		static Function create(Type type);
 	};
 }
 
