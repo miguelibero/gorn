@@ -128,13 +128,13 @@ ctx.getQueue().addCommand("sprite:kitten")
          0.25f,  0.75f,
          0.25f, -0.25f,
         -0.75f, -0.25f
-    }, 2, BasicType::Float)
+    })
     .withAttribute(AttributeKind::TexCoords, buffer{
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, 2, BasicType::Float)
+    })
     .withElements({
         0, 1, 2,
         2, 3, 0
@@ -146,13 +146,13 @@ ctx.getQueue().addCommand("sprite:puppy")
          0.75f,  0.25f,
          0.75f, -0.75f,
         -0.25f, -0.75f
-    }, 2, BasicType::Float)
+    })
     .withAttribute(AttributeKind::TexCoords, buffer{
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f
-    }, 2, BasicType::Float)
+    })
     .withElements({
         0, 1, 2,
         2, 3, 0

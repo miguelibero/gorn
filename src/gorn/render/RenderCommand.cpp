@@ -363,8 +363,7 @@ namespace gorn
 			if(itr2 != _attributes.end())
 			{
 				attrData.data = &itr2->second.data;
-				auto count = itr2->second.count == 0 ? def.getCount() : itr2->second.count;
-				attrData.dataElmSize = count * def.getTypeSize();
+				attrData.dataElmSize = itr2->second.count * def.getTypeSize();
 				attrData.repeat = itr2->second.repeat;
 			}
 			else
