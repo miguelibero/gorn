@@ -100,7 +100,18 @@ namespace gorn
                             String::convertTo<MeshElement::idx_t>(part)-1);
                     }
                     Mesh::Element elm;
-					elm.set(fparts.data(), fparts.size());
+                    if(fparts.size() > 0)
+                    {
+                        elm.set(AttributeType::Position, fparts[0]);
+                    }
+                    if(fparts.size() > 1)
+                    {
+                        elm.set(AttributeType::TexCoords, fparts[1]);
+                    }
+                    if(fparts.size() > 2)
+                    {
+                        elm.set(AttributeType::Normal, fparts[2]);
+                    }
                     elms.push_back(std::move(elm));
                 }
                 if(elms.size() == 4)

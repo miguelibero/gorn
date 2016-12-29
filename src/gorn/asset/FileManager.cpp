@@ -27,6 +27,67 @@ namespace gorn
         addLoader(String::kDefaultTag, std::move(loader));
     }
 
+    void FileManager::setAlias(const std::string& name, const std::string& alias) NOEXCEPT
+    {
+        addFilter([name, alias](std::string& n) {
+            return n == name ? alias : n;
+        });
+    }
+
+    void FileManager::addFilter(const std::string& tag, const NameFilter& filter) NOEXCEPT
+    {
+        _filters[tag].push_back(filter);
+    }
+
+    void FileManager::addFilter(const NameFilter& filter) NOEXCEPT
+    {
+        addFilter(String::kDefaultTag, filter);
+    }
+
+    std::vector<FileManager::NameFilter>
+        FileManager::getFilters(const std::pair<std::string, std::string>& parts)
+        const NOEXCEPT
+    {
+        std::vector<NameFilter> filters;
+        if(parts.first != String::kDefaultTag)
+        {
+            auto itr = _filters.find(parts.first);
+            if(itr != _filters.end())
+            {
+                for(auto& filter : itr->second)
+                {
+                    filters.push_back(filter);
+                }
+            }
+        }
+        {
+            auto itr = _filters.find(String::kDefaultTag);
+            if(itr != _filters.end())
+            {
+                for(auto& filter : itr->second)
+                {
+                    filters.push_back(filter);
+                }
+            }
+        }
+        return filters;
+    }
+
+    std::string FileManager::applyFilters(const std::pair<std::string, std::string>& parts)
+        const
+    {
+        auto name = parts.second;
+        auto filters = getFilters(parts);
+        for(auto& filter : filters)
+        {
+            if(filter != nullptr)
+            {
+                filter(name);
+            }
+        }
+        return parts.first + String::kTagSeparator + name;
+    }
+
     std::vector<std::shared_ptr<FileManager::Loader>> FileManager::getLoaders(
         const std::pair<std::string,std::string>& parts) const NOEXCEPT
     {
@@ -57,13 +118,19 @@ namespace gorn
 
     bool FileManager::validate(const std::string& name) const NOEXCEPT
     {
-        auto itr = _files->find(name);
-        if(itr != _files->end())
+        auto files = _files;
+        auto itr = files->find(name);
+        if(itr != files->end())
         {
             return true;
         }
 
         auto parts = String::splitTag(name);
+        auto fname = applyFilters(parts);
+        if(fname != name)
+        {
+            return validate(fname);
+        }
         auto loaders = getLoaders(parts);
         for(auto& loader : loaders)
         {
@@ -77,8 +144,9 @@ namespace gorn
 
     std::future<buffer> FileManager::load(const std::string& name, bool cache) NOEXCEPT
     {
-        auto itr = _files->find(name);
-        if(itr != _files->end())
+        auto files = _files;
+        auto itr = files->find(name);
+        if(itr != files->end())
         {
             std::promise<buffer> p;
             p.set_value(itr->second);
@@ -86,6 +154,11 @@ namespace gorn
         }
 
         auto parts = String::splitTag(name);
+        auto fname = applyFilters(parts);
+        if(fname != name)
+        {
+            return load(fname, cache);
+        }
         auto loaders = getLoaders(parts);
         for(auto& loader : loaders)
         {

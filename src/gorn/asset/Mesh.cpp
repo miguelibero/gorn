@@ -43,22 +43,6 @@ namespace gorn
         _indices[kind] = idx;
     }
 
-	void MeshElement::set(idx_t* idxs, unsigned size) NOEXCEPT
-	{
-		if (size > 0)
-		{
-			set(AttributeType::Position, idxs[0]);
-		}
-		if (size > 1)
-		{
-			set(AttributeType::TexCoords, idxs[1]);
-		}
-		if (size > 2)
-		{
-			set(AttributeType::Normal, idxs[2]);
-		}
-	}
-
     bool MeshElement::operator==(const MeshElement& other) const NOEXCEPT
     {
         return _indices.size() == other._indices.size()

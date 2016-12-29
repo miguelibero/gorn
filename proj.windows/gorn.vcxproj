@@ -16,6 +16,7 @@
     <ClCompile Include="..\lib\buffer\src\buffer_writer.cpp" />
     <ClCompile Include="..\src\gorn\asset\FileLoader.cpp" />
     <ClCompile Include="..\src\gorn\asset\FileManager.cpp" />
+    <ClCompile Include="..\src\gorn\asset\FunctionFileLoader.cpp" />
     <ClCompile Include="..\src\gorn\asset\Image.cpp" />
     <ClCompile Include="..\src\gorn\asset\Mesh.cpp" />
     <ClCompile Include="..\src\gorn\asset\ObjMeshLoader.cpp" />
@@ -81,6 +82,7 @@
     </ClInclude>
     <ClInclude Include="..\src\gorn\asset\FileLoader.hpp" />
     <ClInclude Include="..\src\gorn\asset\FileManager.hpp" />
+    <ClInclude Include="..\src\gorn\asset\FunctionFileLoader.hpp" />
     <ClInclude Include="..\src\gorn\asset\Image.hpp" />
     <ClInclude Include="..\src\gorn\asset\Mesh.hpp" />
     <ClInclude Include="..\src\gorn\asset\ObjMeshLoader.hpp" />

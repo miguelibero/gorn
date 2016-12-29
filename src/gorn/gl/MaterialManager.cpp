@@ -17,6 +17,26 @@ namespace gorn
         });
     }
 
+    const ProgramManager& MaterialManager::getPrograms() const
+    {
+        return _programs;
+    }
+
+    ProgramManager& MaterialManager::getPrograms()
+    {
+        return _programs;
+    }
+
+    const TextureManager& MaterialManager::getTextures() const
+    {
+        return _textures;
+    }
+
+    TextureManager& MaterialManager::getTextures()
+    {
+        return _textures;
+    }
+
     const MaterialManager::Definitions& MaterialManager::getDefinitions() const
     {
         return _definitions;
@@ -91,6 +111,11 @@ namespace gorn
 		material->setUniformValues(def.getUniformValues());
         _materials.insert(itr, {name, material});
         return material;
+    }
+
+    void MaterialManager::preload(const std::string& name, std::shared_ptr<Material> material)
+    {
+        _materials[name] = material;
     }
 
 }

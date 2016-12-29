@@ -2,6 +2,7 @@
 #define __gorn__FileLoader__
 
 #include <string>
+#include <functional>
 #include <gorn/base/Config.hpp>
 
 class buffer;
@@ -23,7 +24,6 @@ namespace gorn
          */
         virtual buffer load(const std::string& name) const = 0;
     };
-
 }
 
 #endif

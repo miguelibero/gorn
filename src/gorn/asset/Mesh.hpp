@@ -28,7 +28,6 @@ namespace gorn
         MeshElement(idx_t defval = npos) NOEXCEPT;
         idx_t get(const Kind& kind) const;
         void set(const Kind& kind, idx_t idx) NOEXCEPT;
-		void set(idx_t* idxs, unsigned size) NOEXCEPT;
         bool has(const Kind& kind) const NOEXCEPT;
         idx_t getDefault() const NOEXCEPT;
         bool hasDefault() const NOEXCEPT;

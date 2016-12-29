@@ -28,12 +28,19 @@ namespace gorn
 
         MaterialManager(ProgramManager& programs, TextureManager& textures);
 
+        const ProgramManager& getPrograms() const;
+        ProgramManager& getPrograms();
+
+        const TextureManager& getTextures() const;
+        TextureManager& getTextures();
+
         const Definitions& getDefinitions() const;
         Definitions& getDefinitions();
 
         bool validate(const std::string& name) const;
         std::shared_ptr<Material> load(const std::string& name);
         glm::vec2 loadSize(const std::string& name);
+        void preload(const std::string& name, std::shared_ptr<Material> material);
     };
 
 }
