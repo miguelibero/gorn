@@ -93,7 +93,7 @@ namespace gorn
 	{
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 24 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 24 * size);
-		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, 24 * size);
+		mesh.reserveVertices<glm::vec2>(AttributeType::TexCoords, 24 * size);
 		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
 	}
 
@@ -109,7 +109,7 @@ namespace gorn
         return create(frustum.shape(), mode);
     }
 
-	static std::vector<glm::vec2> planeTexCoords{
+	static std::vector<glm::vec2> _planeTexCoords{
 		glm::vec2(1, 1), glm::vec2(0, 1),
 		glm::vec2(0, 0), glm::vec2(1, 0),
 	};
@@ -131,7 +131,7 @@ namespace gorn
 
         mesh.setVertices(AttributeType::Position, std::move(pos));
         mesh.setVertices(AttributeType::Normal, std::move(norm));
-		mesh.setVertices(AttributeType::TexCoords, std::move(planeTexCoords));
+		mesh.setVertices(AttributeType::TexCoords, _planeTexCoords);
 
         mesh.setElements(std::move(elms));
         mesh.setDrawMode(mode);

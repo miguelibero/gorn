@@ -14,9 +14,6 @@ namespace gorn
         typedef std::map<CapabilityType,bool> CapabilityChanges;
         typedef std::map<MaskType,bool> MaskChanges;
     private:
-		static CapabilityChanges _defaultCapabilities;
-		static MaskChanges _defaultMasks;
-
 		CapabilityChanges _capabilities;
         MaskChanges _masks;
 		float _lineWidth;

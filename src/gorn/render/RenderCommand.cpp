@@ -342,6 +342,7 @@ namespace gorn
 
 		bool finished = false;
 		std::vector<buffer> transAttrs;
+		transAttrs.reserve(vdef.getAttributes().size());
 		std::vector<RenderCommandAttributeVertexData> attrsData;
 		attrsData.reserve(vdef.getAttributes().size());
 		size_t tcount = 0;

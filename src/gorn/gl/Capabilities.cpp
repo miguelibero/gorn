@@ -1,21 +1,9 @@
 #include <gorn/gl/Capabilities.hpp>
 #include <algorithm>
+#include <array>
 
 namespace gorn
 {
-	Capabilities::CapabilityChanges Capabilities::_defaultCapabilities = {
-		{ CapabilityType::DepthTest, false },
-		{ CapabilityType::StencilTest, false }
-	};
-
-	Capabilities::MaskChanges Capabilities::_defaultMasks = {
-		{ MaskType::Depth, true },
-		{ MaskType::Red, true },
-		{ MaskType::Green, true },
-		{ MaskType::Blue, true },
-		{ MaskType::Alpha, true }
-	};
-
     Capabilities::Capabilities():
 	_lineWidth(1.0f)
     {
@@ -57,10 +45,16 @@ namespace gorn
         return !(*this == other);
     }
 
+    const Capabilities::MaskChanges defaultColorMasks = {
+        { MaskType::Red, true },
+        { MaskType::Green, true },
+        { MaskType::Blue, true },
+        { MaskType::Alpha, true }
+    };
+
     void Capabilities::apply() const
     {
-		auto caps = _capabilities;
-		caps.insert(_defaultCapabilities.begin(), _defaultCapabilities.end());
+		auto& caps = _capabilities;
 
         for(auto itr = caps.begin(); itr != caps.end(); ++itr)
         {
@@ -77,14 +71,22 @@ namespace gorn
                 }
             }
         }
-		auto masks = _masks;
-		masks.insert(_defaultMasks.begin(), _defaultMasks.end());
-        glDepthMask(masks[MaskType::Depth] ? GL_TRUE : GL_FALSE);
+
+		auto itr = _masks.find(MaskType::Depth);
+		if(itr != _masks.end())
+		{
+			glDepthMask(itr->second ? GL_TRUE : GL_FALSE);
+		}
+        auto colors = defaultColorMasks;
+        colors.insert(_masks.begin(), _masks.end());
         glColorMask(
-			masks[MaskType::Red] ? GL_TRUE : GL_FALSE,
-			masks[MaskType::Green] ? GL_TRUE : GL_FALSE,
-			masks[MaskType::Blue] ? GL_TRUE : GL_FALSE,
-			masks[MaskType::Alpha] ? GL_TRUE : GL_FALSE);
-		glLineWidth(_lineWidth);
+			colors[MaskType::Red] ? GL_TRUE : GL_FALSE,
+			colors[MaskType::Green] ? GL_TRUE : GL_FALSE,
+			colors[MaskType::Blue] ? GL_TRUE : GL_FALSE,
+			colors[MaskType::Alpha] ? GL_TRUE : GL_FALSE);
+		if(_lineWidth >= 0.0f)
+		{
+			glLineWidth(_lineWidth);
+		}
     }
 }
