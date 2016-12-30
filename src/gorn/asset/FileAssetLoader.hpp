@@ -60,7 +60,7 @@ namespace gorn
     {
         if(loader == nullptr)
         {
-            throw Exception("Cannot add an empty loader");
+            return;
         }
         _defaultLoaders.push_back(std::move(loader));
     }
@@ -71,7 +71,7 @@ namespace gorn
     {
         if(loader == nullptr)
         {
-            throw Exception("Cannot add an empty loader");
+            return;
         }
         _loaders[tag].push_back(std::move(loader));
     }
@@ -82,7 +82,7 @@ namespace gorn
     {
         if(loader == nullptr)
         {
-            throw Exception("Cannot add an empty loader");
+            return;
         }
         _customLoaders[name].push_back(std::move(loader));
     }

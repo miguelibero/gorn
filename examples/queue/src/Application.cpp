@@ -67,8 +67,6 @@ void QueueApplication::load()
 
     _ctx.getPrograms().getDefinitions().get("sprite")
         .withUniform(UniformKind("texture", UniformType::DiffuseTexture))
-		    .withUniform(UniformKind("model", UniformType::ModelTransform))
-		    .withUniform(UniformKind("cam", UniformType::CameraTransform))
         .withShaderFile(ShaderType::Vertex, "vsh:shader")
         .withShaderFile(ShaderType::Fragment, "fsh:shader")
 		.withAttribute(ProgramAttributeDefinition(
