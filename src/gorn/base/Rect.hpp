@@ -1,6 +1,7 @@
 #ifndef __gorn__Rect__
 #define __gorn__Rect__
 
+#include <array>
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -21,6 +22,7 @@ namespace gorn
     class Rect
     {
     public:
+        typedef std::array<glm::vec3, 8> Corners;
         typedef RectMatchType MatchType;
         glm::vec3 origin;
         glm::vec3 size;
@@ -34,6 +36,7 @@ namespace gorn
 
         std::vector<Rect> divide(const glm::vec3& divisions) const;
 
+        Corners corners() const;
         CubeShape shape() const;
         bool contains(const glm::vec3& point) const;
         bool contains(const glm::vec2& point) const;

@@ -11,6 +11,7 @@ namespace gorn
 {
     class Frustum;
     class PlaneShape;
+    class QuadShape;
     class CubeShape;
     class SphereShape;
 	class Ray;
@@ -50,6 +51,8 @@ namespace gorn
     Mesh ShapeMeshFactory::create(const Frustum& frustum, DrawMode mode);
     template<>
     Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode);
+    template<>
+    Mesh ShapeMeshFactory::create(const QuadShape& cube, DrawMode mode);
     template<>
     Mesh ShapeMeshFactory::create(const CubeShape& cube, DrawMode mode);
     template<>

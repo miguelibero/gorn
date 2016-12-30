@@ -9,57 +9,53 @@
 
 namespace gorn
 {
-	static Mesh::Elements planeElementsQuads{
+	static Mesh::Elements _quadElementsQuads{
 		0, 2
 	};
 
-	static Mesh::Elements planeElementsTris{
+	static Mesh::Elements _quadElementsTris{
 		0, 1, 2, 2, 3, 0
 	};
 
-	static Mesh::Elements planeElementsLines{
+	static Mesh::Elements _quadElementsLines{
 		0, 1, 1, 2, 2, 3, 3, 0
 	};
 
-	static Mesh::Elements planeElementsPoints{
+	static Mesh::Elements _quadElementsPoints{
 		0, 1, 2, 3
 	};
 
-	static Mesh::Elements planeElementsEmpty{
-		0, 1, 2, 3
-	};
-
-    const Mesh::Elements& getPlaneElements(DrawMode mode)
+    const Mesh::Elements& getQuadElements(DrawMode mode)
     {
         switch(mode)
         {
         case DrawMode::Quads:
         {
-            return planeElementsQuads;
+            return _quadElementsQuads;
             break;
         }
         case DrawMode::Triangles:
         {
-            return planeElementsTris;
+            return _quadElementsTris;
             break;
         }
         case DrawMode::Lines:
         {
-            return planeElementsLines;
+            return _quadElementsLines;
             break;
         }
         case DrawMode::Points:
         {
-            return planeElementsPoints;
+            return _quadElementsPoints;
             break;
         }
         default:
-            return planeElementsEmpty;
+            return _quadElementsPoints;
             break;
         }
     }
 
-	size_t getPlaneElementsSize(DrawMode mode)
+	size_t getQuadElementsSize(DrawMode mode)
 	{
 		switch (mode)
 		{
@@ -94,7 +90,7 @@ namespace gorn
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 24 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 24 * size);
 		mesh.reserveVertices<glm::vec2>(AttributeType::TexCoords, 24 * size);
-		mesh.getElements().reserve(getPlaneElementsSize(mode) * 6 * size);
+		mesh.getElements().reserve(getQuadElementsSize(mode) * 6 * size);
 	}
 
     template<>
@@ -117,15 +113,21 @@ namespace gorn
     template<>
     Mesh ShapeMeshFactory::create(const PlaneShape& plane, DrawMode mode)
     {
-		auto cs = plane.corners();
-		auto n = plane.normal();
+		return create(plane.quad(), mode);
+    }
+
+	template<>
+    Mesh ShapeMeshFactory::create(const QuadShape& quad, DrawMode mode)
+    {
+		auto cs = quad.corners;
+		auto n = quad.normal();
 		std::vector<glm::vec3> pos(cs.size());
 		std::move(cs.begin(), cs.end(), pos.begin());
 		std::vector<glm::vec3> norm{
 			n, n, n, n
 		};
 
-        auto elms = getPlaneElements(mode);
+        auto elms = getQuadElements(mode);
 
         Mesh mesh;
 
@@ -161,7 +163,7 @@ namespace gorn
         std::vector<glm::vec3> positions;
         std::vector<glm::vec2> texCoords;
         Mesh::Elements elements;
-      
+
         {
             positions.reserve(n);
             texCoords.reserve(n);
@@ -186,7 +188,7 @@ namespace gorn
                 }
             }
         }
-        
+
         {
             elements.reserve(n * 6);
             for (Mesh::idx_t r = 0; r < (Mesh::idx_t)sphere.rings - 1; r++)
@@ -202,14 +204,14 @@ namespace gorn
                 }
             }
         }
-        
+
         Mesh mesh;
         mesh.setVertices(AttributeType::Normal, positions);
         mesh.setVertices(AttributeType::Position, std::move(positions));
         mesh.setVertices(AttributeType::TexCoords, std::move(texCoords));
         mesh.setElements(std::move(elements));
         return std::move(mesh);
-    } 
+    }
 
 	template<>
 	Mesh ShapeMeshFactory::create(const Ray& ray, DrawMode mode)
@@ -243,7 +245,7 @@ namespace gorn
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 4 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 4 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, 4 * size);
-		mesh.getElements().reserve(getPlaneElementsSize(mode) * size);
+		mesh.getElements().reserve(getQuadElementsSize(mode) * size);
 	}
 
 	template<>
@@ -276,4 +278,3 @@ namespace gorn
 		mesh.getElements().reserve(2*size);
 	}
 }
-

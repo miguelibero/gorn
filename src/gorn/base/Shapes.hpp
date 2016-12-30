@@ -7,6 +7,7 @@
 namespace gorn
 {
 	class Rect;
+	class QuadShape;
 
     class PlaneShape
     {
@@ -29,25 +30,35 @@ namespace gorn
 
         Corners corners() const;
         glm::vec3 normal() const;
+		QuadShape quad() const;
     };
+
+	class QuadShape
+	{
+	public:
+		typedef std::array<glm::vec3, 4> Corners;
+		Corners corners;
+
+		QuadShape();
+		QuadShape(const Corners& cs);
+
+		PlaneShape plane() const;
+		glm::vec3 normal() const;
+	};
 
     class CubeShape
     {
     public:
 		typedef std::array<glm::vec3, 8> Corners;
-		typedef std::array<PlaneShape, 6> Sides;
-        PlaneShape front;
-        PlaneShape back;
+		typedef std::array<QuadShape, 6> Sides;
+
+		Corners corners;
 
         CubeShape();
-        CubeShape(const PlaneShape& front, const PlaneShape& back);
         CubeShape(const Corners& cs);
-
-        CubeShape& withFront(const PlaneShape& front);
-        CubeShape& withBack(const PlaneShape& back);
+		CubeShape(const PlaneShape& front, const PlaneShape& back);
 
 		Sides sides() const;
-		Corners corners() const;
     };
 
     class SphereShape

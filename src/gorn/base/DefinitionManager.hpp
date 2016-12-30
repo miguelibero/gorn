@@ -159,8 +159,8 @@ namespace gorn
     template<typename D>
     void DefinitionManager<D>::set(const std::string& name, const std::string& alias)
     {
-        set(name, [this]() {
-            return load(alias);
+        set(name, [this, alias]() {
+            return this->load(alias);
         });
     }
 

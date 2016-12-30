@@ -55,7 +55,7 @@ namespace gorn
         {
             idx += 4;
         }
-        return shape().corners()[idx];
+        return corners()[idx];
     }
 
 	bool Rect::empty() const
@@ -96,7 +96,7 @@ namespace gorn
         auto tmax = max();
         auto omin = other.min();
         auto omax = other.max();
-        return !( 
+        return !(
             tmax.x < omin.x ||
             omax.x < tmin.x ||
             tmax.y < omin.y ||
@@ -136,22 +136,23 @@ namespace gorn
         return size.x*size.y;
     }
 
+    Rect::Corners Rect::corners() const
+    {
+        return Corners{
+            glm::vec3(origin.x + size.x, origin.y + size.y, origin.z),
+            glm::vec3(origin.x,          origin.y + size.y, origin.z),
+            glm::vec3(origin.x,          origin.y,          origin.z),
+            glm::vec3(origin.x + size.x, origin.y,          origin.z),
+            glm::vec3(origin.x,          origin.y + size.y, origin.z + size.z),
+            glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
+            glm::vec3(origin.x + size.x, origin.y,          origin.z + size.z),
+            glm::vec3(origin.x,          origin.y,          origin.z + size.z)
+        };
+    }
+
     CubeShape Rect::shape() const
     {
-        return CubeShape(
-            PlaneShape({
-                glm::vec3(origin.x + size.x, origin.y + size.y, origin.z),
-                glm::vec3(origin.x,          origin.y + size.y, origin.z),
-                glm::vec3(origin.x,          origin.y,          origin.z),
-                glm::vec3(origin.x + size.x, origin.y,          origin.z)
-            }),
-            PlaneShape({
-				glm::vec3(origin.x,          origin.y + size.y, origin.z + size.z),
-				glm::vec3(origin.x + size.x, origin.y + size.y, origin.z + size.z),
-				glm::vec3(origin.x + size.x, origin.y,          origin.z + size.z),
-                glm::vec3(origin.x,          origin.y,          origin.z + size.z)
-            })
-        );
+        return CubeShape(corners());
     }
 
     Rect Rect::operator*(const glm::mat4& t) const
@@ -163,7 +164,7 @@ namespace gorn
 
     Rect& Rect::operator*=(const glm::mat4& t)
     {
-        auto cs = shape().corners();
+        auto cs = corners();
         glm::vec3 max;
         glm::vec3 min;
         bool init = false;
