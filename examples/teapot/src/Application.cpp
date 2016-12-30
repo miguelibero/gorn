@@ -47,28 +47,30 @@ void TeapotApplication::load()
 
     _ctx.getMaterials().getDefinitions()
         .set("metal", MaterialDefinition()
-            .withTexture(gorn::UniformKind::Texture0, "default.png")
+            .withTexture(gorn::UniformType::DiffuseTexture, "default.png")
             .withProgram("diffuse"));
 
     AssetManager<Mesh> meshes(_ctx.getFiles());
     meshes.makeDefaultDataLoader<ObjMeshLoader>();
 
-    _ctx.getQueue().setProjectionTransform(
-        glm::perspective(
-            glm::pi<float>()/6.0f,
+    _ctx.getQueue().addCamera()
+        .withProjection(glm::perspective(
+            glm::pi<float>() / 6.0f,
             4.0f / 3.0f,
             0.1f,
             400.0f
-        ));
-
-    _ctx.getQueue().setViewTransform(
-        glm::lookAt(
+        ))
+        .withView(glm::lookAt(
             glm::vec3(0.0f, 200.0f, 300.0f),
             glm::vec3(0.0f, 50.0f, 0.0f),
-            glm::vec3(0.0f, 1.0f ,0.0f)
+            glm::vec3(0.0f, 1.0f, 0.0f)
         ));
 
     _mesh = meshes.load("teapot.obj").get();
+
+    gorn::Capabilities()
+        .with(gorn::CapabilityType::DepthTest, true)
+        .apply();
 }
 
 void TeapotApplication::draw()

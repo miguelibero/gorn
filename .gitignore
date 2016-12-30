@@ -21,3 +21,4 @@ Release/
 *.xcworkspace/
 *.VC.opendb
 *.VC.db
+.vs/
