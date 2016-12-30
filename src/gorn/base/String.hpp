@@ -23,8 +23,7 @@ namespace gorn
             const std::string& sep, size_t max=npos);
 
         template<typename V>
-        static std::vector<V> splitConvert(const std::string& str,
-            const std::string& sep, size_t max=npos);
+        static std::vector<V> convertVector(const std::vector<std::string>& data);
 
         static void trim(std::string& str, const std::string& chrs=kWhitespaceChars);
         static void ltrim(std::string& str, const std::string& chrs=kWhitespaceChars);
@@ -38,15 +37,13 @@ namespace gorn
     };
 
     template<typename V>
-    std::vector<V> String::splitConvert(const std::string& str,
-        const std::string& sep, size_t max)
+    std::vector<V> String::convertVector(const std::vector<std::string>& sparts)
     {
-        auto sparts = split(str, sep, max);
         std::vector<V> parts;
         parts.reserve(sparts.size());
         for(auto& part : sparts)
         {
-            parts.push_back(String::convertTo<V>(part));
+            parts.push_back(convertTo<V>(part));
         }
         return parts;
     }

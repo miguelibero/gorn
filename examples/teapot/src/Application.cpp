@@ -1,6 +1,7 @@
 
 #include <gorn/gorn.hpp>
 #include <glm/gtx/transform.hpp>
+#include <iostream>
 
 using namespace gorn;
 
@@ -45,6 +46,19 @@ void TeapotApplication::load()
     _ctx.getImages()
         .makeDefaultDataLoader<StbImageLoader>();
 
+    _ctx.getPrograms().getDefinitions().get("diffuse")
+        .withUniform(UniformKind("texture", UniformType::DiffuseTexture))
+        .withUniform(UniformKind("proj", UniformType::ProjectionTransform))
+        .withUniform(UniformKind("view", UniformType::ViewTransform))
+        .withAttribute(ProgramAttributeDefinition(
+            AttributeKind("position", AttributeType::Position))
+            .withCount(3)
+            .withBasicType(BasicType::Float))
+        .withAttribute(ProgramAttributeDefinition(
+            AttributeKind("texCoords", AttributeType::TexCoords))
+            .withCount(2)
+            .withBasicType(BasicType::Float));
+
     _ctx.getMaterials().getDefinitions()
         .set("metal", MaterialDefinition()
             .withTexture(gorn::UniformType::DiffuseTexture, "default.png")
@@ -68,9 +82,11 @@ void TeapotApplication::load()
 
     _mesh = meshes.load("teapot.obj").get();
 
-    gorn::Capabilities()
-        .with(gorn::CapabilityType::DepthTest, true)
-        .apply();
+    std::cout << "finished loading mesh" << std::endl;
+    std::cout << "elements: " << _mesh->getElements().size() << std::endl;
+    std::cout << "positions: " << _mesh->getVertices<glm::vec3>(gorn::AttributeType::Position).size() << std::endl;
+    std::cout << "normals: " << _mesh->getVertices<glm::vec3>(gorn::AttributeType::Normal).size() << std::endl;
+    std::cout << "texCoords: " << _mesh->getVertices<glm::vec2>(gorn::AttributeType::TexCoords).size() << std::endl;
 }
 
 void TeapotApplication::draw()

@@ -6,19 +6,17 @@
 #include <gorn/base/Exception.hpp>
 #include <buffer.hpp>
 #include <buffer_reader.hpp>
-#include <string>
 #include <algorithm>
-#include <iostream>
 
 namespace gorn
 {
-    const char* kFacePrefix = "f";
-    const char* kPositionPrefix = "v";
-    const char* kNormalPrefix = "vn";
-    const char* kTexCoordPrefix = "vt";
-    const char* kComponentSeparator = " ";
-    const char* kFaceSeparator = "/";
-    const char  kCommentPrefix = '#';
+    const std::string kFacePrefix = "f";
+    const std::string kPositionPrefix = "v";
+    const std::string kNormalPrefix = "vn";
+    const std::string kTexCoordPrefix = "vt";
+    const std::string kComponentSeparator = " ";
+    const std::string kFaceSeparator = "/";
+    const char kCommentPrefix = '#';
 
     ObjMeshLoader::ObjMeshLoader() NOEXCEPT
     {
@@ -33,15 +31,19 @@ namespace gorn
     {
         buffer_reader in(data);
         std::string line;
-
         Mesh mesh;
-        while(in.read(line) > 0)
+        std::vector<std::vector<std::string>> faceLines;
+        std::vector<std::vector<std::string>> positionLines;
+        std::vector<std::vector<std::string>> normalLines;
+        std::vector<std::vector<std::string>> texCoordsLines;
+        while(!in.end())
         {
-            String::trim(line, " \t\r");
-            if(line.find(kCommentPrefix) == 0)
+            in.readline(line);
+            if(line.size() == 0 || line[0] == kCommentPrefix)
             {
                 continue;
             }
+            String::trim(line, " \t\r");
             auto parts = String::split(line, kComponentSeparator);
             parts.erase(std::remove_if(parts.begin(), parts.end(),
                 [](const std::string& part){
@@ -51,71 +53,88 @@ namespace gorn
             {
                 continue;
             }
-            if(parts.at(0) == kPositionPrefix)
+            auto prefix = parts[0];
+            parts.erase(parts.begin(), parts.begin()+1);
+            if(prefix == kFacePrefix)
             {
-                if(parts.size() < 4)
-                {
-                    throw Exception("Position should contain 3 floats");
-                }
-                mesh.addVertex(AttributeType::Position, glm::vec3(
-                    String::convertTo<float>(parts[1]),
-                    String::convertTo<float>(parts[2]),
-                    String::convertTo<float>(parts[3])
-                ));
+                faceLines.push_back(parts);
             }
-            else if(parts.at(0) == kNormalPrefix)
+            else if(prefix == kPositionPrefix)
             {
-                if(parts.size() < 4)
-                {
-                    throw Exception("Normal should contain 3 floats");
-                }
-                mesh.addVertex(AttributeType::Normal, glm::vec3(
-                    String::convertTo<float>(parts[1]),
-                    String::convertTo<float>(parts[2]),
-                    String::convertTo<float>(parts[3])
-                ));
+                positionLines.push_back(parts);
             }
-            else if(parts.at(0) == kTexCoordPrefix)
+            else if(prefix == kNormalPrefix)
             {
-                if(parts.size() < 3)
-                {
-                    throw Exception("Texture should contain 2 floats");
-                }
-                mesh.addVertex(AttributeType::TexCoords, glm::vec2(
-                    String::convertTo<float>(parts[1]),
-                    String::convertTo<float>(parts[2])
-                ));
+                normalLines.push_back(parts);
             }
-            else if(parts.at(0) == kFacePrefix)
+            else if(prefix == kTexCoordPrefix)
             {
-                std::vector<Mesh::Element> elms;
-                for(auto itr = parts.begin()+1; itr != parts.end(); ++itr)
-                {
-                    auto fsparts = String::split(*itr, kFaceSeparator);
-                    std::vector<MeshElement::idx_t> fparts;
-                    fparts.reserve(fsparts.size());
-                    for(auto& part : fsparts)
-                    {
-                        fparts.push_back(
-                            String::convertTo<MeshElement::idx_t>(part)-1);
-                    }
-                    Mesh::Element elm;
-                    if(fparts.size() > 0)
-                    {
-                        elm.set(AttributeType::Position, fparts[0]);
-                    }
-                    if(fparts.size() > 1)
-                    {
-                        elm.set(AttributeType::TexCoords, fparts[1]);
-                    }
-                    if(fparts.size() > 2)
-                    {
-                        elm.set(AttributeType::Normal, fparts[2]);
-                    }
-                    elms.push_back(std::move(elm));
-                }
-                mesh.addFace(elms);
+                texCoordsLines.push_back(parts);
             }
+        }
+        mesh.getElements().reserve(faceLines.size()*3);
+        for(auto& parts : faceLines)
+        {
+            std::vector<Mesh::Element> face;
+            face.resize(parts.size());
+            size_t i=0;
+            for(auto& part : parts)
+            {
+                auto& elm = face[i++];
+                auto eparts = String::convertVector<MeshElement::idx_t>(
+                    String::split(part, kFaceSeparator));
+                if(eparts.size() > 0)
+                {
+                    elm.set(AttributeType::Position, eparts[0]-1);
+                }
+                if(eparts.size() > 1)
+                {
+                    elm.set(AttributeType::TexCoords, eparts[1]-1);
+                }
+                if(eparts.size() > 2)
+                {
+                    elm.set(AttributeType::Normal, eparts[2]-1);
+                }
+            }
+            mesh.addFace(face);
+        }
+        mesh.reserveVertices<glm::vec3>(AttributeType::Position, positionLines.size());
+        for(auto& parts : positionLines)
+        {
+            if(parts.size() < 3)
+            {
+                throw Exception("Position should contain 3 floats");
+            }
+            mesh.addVertex(AttributeType::Position, glm::vec3(
+                String::convertTo<float>(parts[0]),
+                String::convertTo<float>(parts[1]),
+                String::convertTo<float>(parts[2])
+            ));
+        }
+        mesh.reserveVertices<glm::vec3>(AttributeType::Normal, normalLines.size());
+        for(auto& parts : normalLines)
+        {
+            if(parts.size() < 3)
+            {
+                throw Exception("Normal should contain 3 floats");
+            }
+            mesh.addVertex(AttributeType::Normal, glm::vec3(
+                String::convertTo<float>(parts[0]),
+                String::convertTo<float>(parts[1]),
+                String::convertTo<float>(parts[2])
+            ));
+        }
+        mesh.reserveVertices<glm::vec2>(AttributeType::TexCoords, texCoordsLines.size());
+        for(auto& parts : texCoordsLines)
+        {
+            if(parts.size() < 2)
+            {
+                throw Exception("Texture should contain 2 floats");
+            }
+            mesh.addVertex(AttributeType::TexCoords, glm::vec2(
+                String::convertTo<float>(parts[0]),
+                String::convertTo<float>(parts[1])
+            ));
         }
         return mesh;
     }
