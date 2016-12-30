@@ -114,26 +114,7 @@ namespace gorn
                     }
                     elms.push_back(std::move(elm));
                 }
-                if(elms.size() == 4)
-                {
-                    // convert quad to 2 tris
-                    mesh.addElement(elms.at(0));
-                    mesh.addElement(elms.at(1));
-                    mesh.addElement(elms.at(2));
-                    mesh.addElement(elms.at(2));
-                    mesh.addElement(elms.at(3));
-                    mesh.addElement(elms.at(0));
-                }
-                else if(elms.size() == 3)
-                {
-                    mesh.addElement(elms.at(0));
-                    mesh.addElement(elms.at(1));
-                    mesh.addElement(elms.at(2));
-                }
-                else
-                {
-                    throw Exception("Face should contain 3 or 4 elements");
-                }
+                mesh.addFace(elms);
             }
         }
         return mesh;

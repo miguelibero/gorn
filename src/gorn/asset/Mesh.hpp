@@ -255,10 +255,16 @@ namespace gorn
         bool empty() const NOEXCEPT;
 
         const Elements& getElements() const NOEXCEPT;
+        Elements& getElements() NOEXCEPT;
         void setElements(const Elements& elms) NOEXCEPT;
         void setElements(Elements&& elms) NOEXCEPT;
-        void addElement(const Element& elm) NOEXCEPT;
-		void reserveElements(size_t size) NOEXCEPT;
+
+        const Indices& getIndices() const NOEXCEPT;
+        Indices& getIndices() NOEXCEPT;
+        void setIndices(const Indices& idxs) NOEXCEPT;
+        void setIndices(Indices&& idxs) NOEXCEPT;
+
+        void addFace(const std::vector<Element>& face) NOEXCEPT;
 
         template<typename V>
         const Mesh::Vertices<V>& getVertices() const NOEXCEPT;

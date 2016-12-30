@@ -94,7 +94,7 @@ namespace gorn
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 24 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 24 * size);
 		mesh.reserveVertices<glm::vec2>(AttributeType::TexCoords, 24 * size);
-		mesh.reserveElements(getPlaneElementsSize(mode) * 6 * size);
+		mesh.getElements().reserve(getPlaneElementsSize(mode) * 6 * size);
 	}
 
     template<>
@@ -243,7 +243,7 @@ namespace gorn
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 4 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, 4 * size);
 		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, 4 * size);
-		mesh.reserveElements(getPlaneElementsSize(mode) * size);
+		mesh.getElements().reserve(getPlaneElementsSize(mode) * size);
 	}
 
 	template<>
@@ -265,7 +265,7 @@ namespace gorn
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, vc);
 		mesh.reserveVertices<glm::vec3>(AttributeType::Normal, vc);
 		mesh.reserveVertices<glm::vec3>(AttributeType::TexCoords, vc);
-		mesh.reserveElements(ec);
+		mesh.getElements().reserve(ec);
 	}
 
 	template<>
@@ -273,7 +273,7 @@ namespace gorn
 	{
 		auto size = shapes.size();
 		mesh.reserveVertices<glm::vec3>(AttributeType::Position, 2*size);
-		mesh.reserveElements(2*size);
+		mesh.getElements().reserve(2*size);
 	}
 }
 

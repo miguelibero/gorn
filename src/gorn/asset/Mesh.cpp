@@ -119,47 +119,99 @@ namespace gorn
         _drawMode = mode;
     }
 
-    void Mesh::setElements(const Elements& elms) NOEXCEPT
+    DrawMode Mesh::getDrawMode() const NOEXCEPT
     {
-        for(auto& elm : elms)
-        {
-            addElement(elm);
-        }
+        return _drawMode;
     }
 
-    void Mesh::setElements(Elements&& elms) NOEXCEPT
-    {
-        for(auto&& elm : elms)
-        {
-            addElement(std::move(elm));
-        }
-    }
 
     const Mesh::Elements& Mesh::getElements() const NOEXCEPT
     {
         return _elements;
     }
 
-    DrawMode Mesh::getDrawMode() const NOEXCEPT
+    Mesh::Elements& Mesh::getElements() NOEXCEPT
     {
-        return _drawMode;
+        return _elements;
     }
 
-    void Mesh::addElement(const Element& elm) NOEXCEPT
+    void Mesh::setElements(const Elements& elms) NOEXCEPT
     {
-        auto itr = std::find(_elements.begin(), _elements.end(), elm);
-        if(itr == _elements.end())
+        _elements = elms;
+    }
+
+    void Mesh::setElements(Elements&& elms) NOEXCEPT
+    {
+        _elements = std::move(elms);
+    }
+
+    const Mesh::Indices& Mesh::getIndices() const NOEXCEPT
+    {
+        return _indices;
+    }
+
+    Mesh::Indices& Mesh::getIndices() NOEXCEPT
+    {
+        return _indices;
+    }
+
+    void Mesh::setIndices(const Indices& idxs) NOEXCEPT
+    {
+        _indices = idxs;
+    }
+
+    void Mesh::setIndices(Indices&& idxs) NOEXCEPT
+    {
+        _indices = std::move(idxs);
+    }
+
+    void Mesh::addFace(const std::vector<Element>& face) NOEXCEPT
+    {
+        auto esize = _elements.size();
+        auto isize = _indices.size();
+        auto fsize = face.size();
+        _elements.reserve(esize + fsize);
+        _elements.insert(_elements.end(), face.begin(), face.begin()+fsize);
+
+        if(fsize <= 3)
         {
-            itr = _elements.insert(itr, elm);
+            _indices.resize(isize + fsize);
+            auto itr = _indices.begin() + isize;
+            for(idx_t i = 0; i < fsize; i++)
+            {
+                (*itr++) = esize + i;
+            }
         }
-        _indices.push_back((idx_t)std::distance(_elements.begin(), itr));
-    }
+        else
+        {
+            // convert polygon to triangles
+            _indices.resize(isize + (fsize-2)*3);
+            auto itr = _indices.begin() + isize;
 
-	void Mesh::reserveElements(size_t size) NOEXCEPT
-	{
-		_elements.reserve(size);
-		_indices.reserve(size);
-	}
+            (*itr++) = esize + 0;
+            (*itr++) = esize + 1;
+            (*itr++) = esize + 2;
+            if(fsize > 3)
+            {
+                (*itr++) = esize + 2;
+                (*itr++) = esize + 3;
+                (*itr++) = esize + (fsize == 4 ? 0 : 4);
+            }
+            for(idx_t i = 5; i < fsize; i++)
+            {
+                (*itr++) = esize + i - 1;
+                (*itr++) = esize + 2;
+                (*itr++) = esize + i;
+            }
+            if(fsize > 4)
+            {
+                (*itr++) = esize + fsize - 1;
+                (*itr++) = esize + 2;
+                (*itr++) = esize + 0;
+            }
+        }
+
+    }
 
     template<>
     const Mesh::Vertices<float>& Mesh::getVertices() const NOEXCEPT
