@@ -114,10 +114,10 @@ namespace gorn
         auto& cs = corners;
 		sides[0] = QuadShape({ cs[0], cs[1], cs[2], cs[3] });
         sides[1] = QuadShape({ cs[4], cs[5], cs[6], cs[7] });
-        sides[2] = QuadShape({ cs[4], cs[0], cs[1], cs[5] });
-        sides[3] = QuadShape({ cs[5], cs[1], cs[2], cs[6] });
-        sides[4] = QuadShape({ cs[6], cs[2], cs[3], cs[7] });
-        sides[5] = QuadShape({ cs[7], cs[3], cs[0], cs[4] });
+        sides[2] = QuadShape({ cs[0], cs[1], cs[4], cs[5] });
+        sides[3] = QuadShape({ cs[1], cs[4], cs[7], cs[2] });
+        sides[4] = QuadShape({ cs[5], cs[0], cs[3], cs[6] });
+        sides[5] = QuadShape({ cs[6], cs[7], cs[2], cs[3] });
 		return sides;
 	}
 
