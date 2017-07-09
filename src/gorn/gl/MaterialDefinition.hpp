@@ -29,6 +29,9 @@ namespace gorn
         const std::string& getProgram() const;
         const Textures& getTextures() const;
         const UniformValueMap& getUniformValues() const;
+
+		Textures& getTextures();
+		UniformValueMap& getUniformValues();
     };
 
 }

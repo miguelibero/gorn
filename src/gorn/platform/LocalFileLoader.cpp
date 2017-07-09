@@ -25,7 +25,7 @@ namespace gorn {
     {
         auto path = getPath(name);
         struct stat buffer;   
-        return (stat (path.c_str(), &buffer) == 0); 
+        return (stat(path.c_str(), &buffer) == 0); 
     }
 
     buffer LocalFileLoader::load(const std::string& name) const

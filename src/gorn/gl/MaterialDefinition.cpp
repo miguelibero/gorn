@@ -45,4 +45,14 @@ namespace gorn
         return _uniformValues;
     }
 
+	MaterialDefinition::Textures& MaterialDefinition::getTextures()
+	{
+		return _textures;
+	}
+
+	UniformValueMap& MaterialDefinition::getUniformValues()
+	{
+		return _uniformValues;
+	}
+
 }

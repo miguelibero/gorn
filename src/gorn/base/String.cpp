@@ -93,6 +93,20 @@ namespace gorn
         rtrim(str, chrs);
     }
 
+    const std::string _windowsDirectorySeparator = "\\";
+    const std::string _unixDirectorySeparator = "/";
+
+    void String::fixPath(std::string& path)
+    {
+        replaceAll(path, _windowsDirectorySeparator, _unixDirectorySeparator);
+    }
+
+    void String::combinePath(std::string& path, const std::string& base)
+    {
+        fixPath(path);
+		path = base + path;
+    }
+
     template<>
     int String::convertTo(const std::string& value)
     {

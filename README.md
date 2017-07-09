@@ -101,7 +101,7 @@ ctx.getFiles()
 ctx.getFiles()
     .makeLoader<LocalFileLoader>("fsh", "../%s.fsh");
 ctx.getPrograms().getDefinitions().get("sprite")
-    .withUniform("texture", UniformKind::Texture0)
+    .withUniform(UniformKind("texture", UniformType::DiffuseTexture))
     .withShaderFile(ShaderType::Vertex, "vsh:shader")
     .withShaderFile(ShaderType::Fragment, "fsh:shader");
 
@@ -115,39 +115,22 @@ and uniform values.
 Context render;
 render.getMaterials().getDefinitions().get("puppy")
     .withProgram("shader")
-    .withTexture(UniformKind::Texture0, "puppy.png");
+    .withTexture(UniformType::DiffuseTexture, "puppy.png");
 ```
 
 Support for render commands that are executed afterwards.
 
 ```c++
 Context ctx;
-ctx.getQueue().addCommand("sprite:kitten")
-    .withAttribute(AttributeKind::Position, buffer{
-        -0.75f,  0.75f,
-         0.25f,  0.75f,
-         0.25f, -0.25f,
-        -0.75f, -0.25f
-    })
-    .withAttribute(AttributeKind::TexCoords, buffer{
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,
-        0.0f, 0.0f
-    })
-    .withElements({
-        0, 1, 2,
-        2, 3, 0
-    });
 
 ctx.getQueue().addCommand("sprite:puppy")
-    .withAttribute(AttributeKind::Position, buffer{
+    .withAttribute(AttributeType::Position, buffer{
         -0.25f,  0.25f,
          0.75f,  0.25f,
          0.75f, -0.75f,
         -0.25f, -0.75f
     })
-    .withAttribute(AttributeKind::TexCoords, buffer{
+    .withAttribute(AttributeType::TexCoords, buffer{
         0.0f, 1.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,

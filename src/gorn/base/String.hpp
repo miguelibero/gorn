@@ -34,6 +34,9 @@ namespace gorn
 
         static std::pair<std::string,std::string> splitTag(const std::string& str);
         static bool addTag(std::string& str, const std::string& tag);
+
+        static void fixPath(std::string& path);
+        static void combinePath(std::string& path, const std::string& base);
     };
 
     template<typename V>
